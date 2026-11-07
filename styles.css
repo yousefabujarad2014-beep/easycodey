@@ -108,6 +108,18 @@ button { cursor: pointer; }
 
 /* ------------------------------ header ------------------------------ */
 
+.noscript-intro {
+  max-width: 720px;
+  margin: 32px auto;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+.noscript-intro h1 { margin-top: 0; font-size: 1.5rem; }
+.noscript-intro p { color: var(--ink-soft); line-height: 1.7; }
+
 .site-header {
   position: sticky;
   top: 0;
