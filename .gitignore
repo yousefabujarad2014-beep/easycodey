@@ -1,0 +1,10 @@
+.env
+node_modules/
+npm-debug.log*
+.DS_Store
+Thumbs.db
+*.log
+
+# Niet bij dit project horende bestanden en mappen
+fll folder 1/
+Easycode

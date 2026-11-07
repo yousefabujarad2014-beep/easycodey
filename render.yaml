@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: easycodey
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_BASE_URL
+        value: https://api.openai.com/v1
+      - key: ACCESS_CODE
+        sync: false
+      - key: RATE_LIMIT
+        value: 30
+      - key: DONATE_URL
+        sync: false
+      - key: DONATE_LABEL
+        sync: false
+      - key: DONATE_NOTE
+        sync: false
+      - key: SITE_URL
+        value: https://easycodey.onrender.com

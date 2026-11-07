@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Illustratie voor automatiseringsprojecten">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#04383a"/>
+      <stop offset="0.55" stop-color="#0ea5a4"/>
+      <stop offset="1" stop-color="#1f5eff"/>
+    </linearGradient>
+    <linearGradient id="gear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffefb"/>
+      <stop offset="1" stop-color="#c9f3ef"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="680" cy="70" r="170" fill="#ffffff" opacity="0.09"/>
+  <circle cx="110" cy="400" r="170" fill="#ffd43b" opacity="0.12"/>
+  <g transform="translate(250 118)">
+    <g fill="url(#gear)" opacity="0.96">
+      <path d="M120 0l14 34 34-14 10 30 37 2-4 36 34 14-18 32 26 26-28 24 10 36-36 8-2 37-36-6-16 33-30-20-24 27-26-26-32 18-12-35-37 2 2-37-34-12 18-32-26-26 28-24-10-36 36-8 2-37 36 6 16-33 30 20z" opacity="0.18"/>
+      <circle cx="120" cy="120" r="86"/>
+    </g>
+    <circle cx="120" cy="120" r="34" fill="#0ea5a4"/>
+    <text x="120" y="136" text-anchor="middle" font-family="Segoe UI Emoji, Apple Color Emoji, sans-serif" font-size="42">⚙️</text>
+  </g>
+  <g stroke="#ffffff" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.75">
+    <path d="M500 150h64l24 24"/>
+    <path d="M500 250h48l24-24"/>
+    <path d="M500 330h70l24 24"/>
+  </g>
+  <g fill="#ffd43b">
+    <circle cx="592" cy="178" r="9"/>
+    <circle cx="596" cy="222" r="9"/>
+    <circle cx="598" cy="358" r="9"/>
+  </g>
+</svg>

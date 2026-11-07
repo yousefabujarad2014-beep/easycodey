@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EasyCodey — Leer Python door te bouwen</title>
+  <meta name="description" content="EasyCodey: 161 Python-projecten met uitleg, code en een stappenplan. Bewaar je voortgang, probeer Python direct in je browser en vraag de AI-coach om hulp." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <link rel="canonical" href="https://easycodey.onrender.com/" />
+  <meta property="og:title" content="EasyCodey — Leer Python door te bouwen" />
+  <meta property="og:description" content="161 Python-projecten, stap voor stap uitgelegd. Met voortgang, een online Python-speelveld en een AI-coach." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://easycodey.onrender.com/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://easycodey.onrender.com/assets/covers/games.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="EasyCodey — Leer Python door te bouwen" />
+  <meta name="twitter:description" content="161 Python-projecten, stap voor stap uitgelegd. Probeer Python direct in je browser." />
+  <meta name="twitter:image" content="https://easycodey.onrender.com/assets/covers/games.svg" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "EasyCodey",
+      "alternateName": "EasyCodey Python",
+      "url": "https://easycodey.onrender.com/",
+      "description": "Nederlandstalige leerwebsite met 161 Python-projecten, stap-voor-stap uitleg, een online Python-speelveld en een AI-coach.",
+      "inLanguage": "nl-NL"
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>" />
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#/" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="#/" data-nav="home">Ideeën</a>
+        <a href="#/leerpad" data-nav="leerpad">Leerpad</a>
+        <a href="#/mijn-ideeen" data-nav="mijn-ideeen">Mijn ideeën</a>
+        <button class="nav-ai" type="button" data-action="open-ai">
+          <span class="ai-spark">✦</span> AI-coach
+        </button>
+      </nav>
+
+      <div class="header-tools">
+        <button class="icon-btn donate-icon" id="donate-header" type="button" data-action="open-donate" aria-label="Steun EasyCodey" title="Steun EasyCodey" hidden>♥</button>
+        <button class="icon-btn" type="button" data-action="theme" aria-label="Wissel licht/donker thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <button class="link-btn" type="button" data-action="open-playground">▶ Probeer Python</button>
+        <span aria-hidden="true" id="donate-footer-sep" hidden>·</span>
+        <button class="link-btn" id="donate-footer" type="button" data-action="open-donate" hidden>♥ Steun EasyCodey</button>
+      </p>
+    </div>
+  </footer>
+
+  <!-- AI paneel -->
+  <div class="ai-backdrop" data-action="close-ai" aria-hidden="true"></div>
+  <aside class="ai-panel" id="ai-panel" aria-label="AI-coach" aria-hidden="true">
+    <div class="ai-head">
+      <div class="ai-title">
+        <span class="ai-avatar">✦</span>
+        <div>
+          <strong>EasyCoach</strong>
+          <span class="ai-status" id="ai-status"><span class="dot"></span> AI-coach</span>
+        </div>
+      </div>
+      <div class="ai-head-tools">
+        <button class="icon-btn small" type="button" data-action="settings" aria-label="AI-instellingen" title="AI-instellingen">⚙</button>
+        <button class="icon-btn small" type="button" data-action="clear-chat" aria-label="Gesprek wissen" title="Gesprek wissen">↺</button>
+        <button class="icon-btn small" type="button" data-action="close-ai" aria-label="Sluit AI-coach">✕</button>
+      </div>
+    </div>
+
+    <div class="ai-context" id="ai-context" hidden></div>
+    <div class="ai-setup" id="ai-setup" hidden>
+      <p>De <strong>offline coach</strong> staat aan. Die geeft je een stappenplan op basis van je woorden.</p>
+      <p>Wil je echte AI-antwoorden? Voeg een OpenAI-sleutel toe.</p>
+      <button class="btn tiny" type="button" data-action="settings">Sleutel instellen</button>
+    </div>
+
+    <div class="ai-messages" id="ai-messages" aria-live="polite"></div>
+
+    <div class="ai-quick" id="ai-quick">
+      <button type="button" data-action="quick-prompt" data-prompt="Ik heb nog geen idee. Stel me drie vragen om een project te kiezen dat bij me past.">Geen idee?</button>
+      <button type="button" data-action="quick-prompt" data-prompt="Leg uit hoe ik een begin maak met Python en wat ik nodig heb.">Ik ben nieuw</button>
+      <button type="button" data-action="quick-prompt" data-prompt="Mijn code geeft een foutmelding. Help me stap voor stap met debuggen.">Foutmelding</button>
+      <button type="button" data-action="open-generator">✦ Eigen idee</button>
+    </div>
+
+    <form class="ai-composer" id="ai-form">
+      <textarea id="ai-input" rows="1" placeholder="Beschrijf je idee of stel een vraag…" aria-label="Bericht aan AI-coach"></textarea>
+      <button type="submit" class="send-btn" id="ai-send" aria-label="Verstuur bericht">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path>
+        </svg>
+      </button>
+    </form>
+    <p class="ai-note">AI kan fouten maken. Test je code altijd zelf.</p>
+  </aside>
+
+  <!-- Instellingen -->
+  <div class="modal-backdrop" id="settings-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="modal-head">
+        <h2 id="settings-title">AI-instellingen</h2>
+        <button class="icon-btn small" type="button" data-action="close-settings" aria-label="Sluiten">✕</button>
+      </div>
+      <p class="modal-lead">
+        De AI-coach gebruikt de OpenAI-API (of een andere OpenAI-compatibele dienst).
+        Je sleutel wordt alleen lokaal in deze browser opgeslagen en via deze server doorgestuurd.
+      </p>
+      <label class="field">
+        <span>API-sleutel</span>
+        <input type="password" id="cfg-key" placeholder="sk-…" autocomplete="off" spellcheck="false" />
+        <small id="cfg-key-hint">Leeg laten = offline coach gebruiken.</small>
+      </label>
+      <div class="field-row">
+        <label class="field">
+          <span>Model</span>
+          <input type="text" id="cfg-model" placeholder="gpt-4o-mini" autocomplete="off" spellcheck="false" />
+        </label>
+        <label class="field">
+          <span>API-basis-URL</span>
+          <input type="text" id="cfg-base" placeholder="https://api.openai.com/v1" autocomplete="off" spellcheck="false" />
+        </label>
+      </div>
+      <label class="field">
+        <span>Toegangscode (optioneel)</span>
+        <input type="password" id="cfg-access" placeholder="Alleen nodig als de server erom vraagt" autocomplete="off" spellcheck="false" />
+        <small>De beheerder kan de AI achter een toegangscode zetten.</small>
+      </label>
+      <div class="modal-actions">
+        <button class="btn ghost" type="button" data-action="close-settings">Annuleren</button>
+        <button class="btn" type="button" data-action="save-settings">Opslaan</button>
+      </div>
+      <p class="modal-fineprint">
+        Tip: op een gedeelde computer kun je de sleutel beter via een <code>.env</code>-bestand op de server zetten.
+        Zie de README.
+      </p>
+    </div>
+  </div>
+
+  <!-- AI-idee generator -->
+  <div class="modal-backdrop" id="generator-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="generator-title">
+      <div class="modal-head">
+        <h2 id="generator-title">AI-idee maken</h2>
+        <button class="icon-btn small" type="button" data-action="close-generator" aria-label="Sluiten">✕</button>
+      </div>
+      <p class="modal-lead">
+        Beschrijf kort wat je wilt maken. EasyCoach maakt een compleet project met uitleg, code en stappen.
+        Het project wordt daarna in je eigen lijst opgeslagen.
+      </p>
+      <form id="generator-form">
+        <label class="field">
+          <span>Wat wil je maken?</span>
+          <input id="gen-topic" type="text" placeholder="bijv. een budget-app, een game of een weer-dashboard" maxlength="120" required />
+        </label>
+        <div class="field-row">
+          <label class="field">
+            <span>Niveau</span>
+            <select id="gen-level" class="field-select">
+              <option>Beginner</option>
+              <option>Gemiddeld</option>
+              <option>Gevorderd</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Beschikbare tijd</span>
+            <select id="gen-time" class="field-select">
+              <option>30 min</option>
+              <option selected>45 min</option>
+              <option>60 min</option>
+              <option>90 min</option>
+              <option>2 uur</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Categorie (optioneel)</span>
+          <select id="gen-category" class="field-select">
+            <option value="">Laat EasyCoach kiezen</option>
+            <option>Games</option>
+            <option>Web</option>
+            <option>GUI</option>
+            <option>Data &amp; AI</option>
+            <option>Handige tools</option>
+            <option>Automatisering</option>
+            <option>Security</option>
+            <option>Wetenschap</option>
+            <option>Kunst &amp; Creatief</option>
+            <option>Onderwijs</option>
+          </select>
+        </label>
+        <p class="gen-status" id="gen-status" role="status" aria-live="polite"></p>
+        <div class="modal-actions">
+          <button class="btn ghost" type="button" data-action="close-generator">Annuleren</button>
+          <button class="btn brand" id="gen-submit" type="submit">✦ Maak project</button>
+        </div>
+      </form>
+      <p class="modal-fineprint">
+        Zonder API-sleutel gebruikt EasyCodey de offline generator. Je project blijft lokaal in deze browser bewaard.
+      </p>
+    </div>
+  </div>
+
+  <!-- Doneer-modal -->
+  <div class="modal-backdrop" id="donate-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="donate-title">
+      <div class="modal-head">
+        <h2 id="donate-title">Steun EasyCodey</h2>
+        <button class="icon-btn small" type="button" data-action="close-donate" aria-label="Sluiten">✕</button>
+      </div>
+      <p class="modal-lead">
+        EasyCodey is gratis en blijft dat. Geen account, geen advertenties en geen verkoop van gegevens.
+        Een donatie helpt om de site online te houden en nieuwe projecten toe te voegen.
+      </p>
+      <div class="donate-options" id="donate-options" hidden>
+        <a class="btn brand donate-main" id="donate-main" href="#" target="_blank" rel="noopener noreferrer">♥ Doneer</a>
+        <p class="donate-note" id="donate-note"></p>
+      </div>
+      <p class="donate-empty" id="donate-empty" hidden>
+        Er is nog geen doneerlink ingesteld. De beheerder kan dit instellen met de omgevingsvariabele
+        <code>DONATE_URL</code>.
+      </p>
+      <p class="modal-fineprint">
+        Je donatie loopt via de externe aanbieder die de beheerder heeft gekozen.
+        EasyCodey ontvangt of bewaart zelf geen betaalgegevens.
+      </p>
+    </div>
+  </div>
+
+  <!-- Python-speelveld -->
+  <div class="modal-backdrop" id="playground-modal" hidden>
+    <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="playground-title">
+      <div class="modal-head">
+        <h2 id="playground-title">Probeer Python</h2>
+        <button class="icon-btn small" type="button" data-action="close-playground" aria-label="Sluiten">✕</button>
+      </div>
+      <p class="modal-lead">
+        Typ Python en klik op <strong>Uitvoeren</strong>. De eerste keer wordt Python in je browser geladen
+        (ongeveer 10 MB). Je code wordt niet naar een server gestuurd.
+      </p>
+      <div class="playground-toolbar">
+        <label class="field playground-example-field">
+          <span>Voorbeeld</span>
+          <select id="playground-example" class="field-select">
+            <option value="hallo">Hallo wereld</option>
+            <option value="rekenen">Rekenen en variabelen</option>
+            <option value="loop">Herhalen met een loop</option>
+            <option value="lijst">Lijsten en sorteren</option>
+            <option value="functie">Een functie maken</option>
+            <option value="raad">Raad het getal (zonder input)</option>
+          </select>
+        </label>
+        <button class="btn ghost" type="button" data-action="playground-example">Voorbeeld laden</button>
+      </div>
+      <textarea id="playground-code" class="playground-code" spellcheck="false" aria-label="Python-code">print("Hallo EasyCodey!")</textarea>
+      <div class="playground-actions">
+        <button class="btn brand" id="playground-run" type="button" data-action="run-playground">▶ Uitvoeren</button>
+        <button class="btn ghost" type="button" data-action="clear-playground">Wissen</button>
+        <span class="playground-status" id="playground-status" role="status" aria-live="polite"></span>
+      </div>
+      <pre class="playground-output" id="playground-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
+      <p class="modal-fineprint">
+        Python draait via <code>Pyodide</code> (WebAssembly) in je browser. <code>input()</code> werkt niet.
+        Vermijd oneindige loops; die kun je alleen stoppen door het venster te sluiten.
+      </p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

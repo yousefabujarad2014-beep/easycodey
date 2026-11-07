@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Illustratie voor gameprojecten">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#241b4f"/>
+      <stop offset="0.55" stop-color="#3b2d7a"/>
+      <stop offset="1" stop-color="#ff6b4a"/>
+    </linearGradient>
+    <linearGradient id="pad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff7e8"/>
+      <stop offset="1" stop-color="#ffd9c9"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="118" cy="86" r="150" fill="#ffffff" opacity="0.07"/>
+  <circle cx="706" cy="380" r="190" fill="#ffd43b" opacity="0.12"/>
+  <g fill="#ffffff" opacity="0.1">
+    <rect x="56" y="300" width="42" height="42" rx="8"/>
+    <rect x="106" y="300" width="42" height="42" rx="8"/>
+    <rect x="56" y="250" width="42" height="42" rx="8"/>
+    <rect x="156" y="250" width="42" height="42" rx="8"/>
+  </g>
+  <g transform="rotate(-8 400 240)">
+    <rect x="270" y="160" width="260" height="150" rx="58" fill="url(#pad)" opacity="0.97"/>
+    <rect x="300" y="196" width="28" height="78" rx="10" fill="#3b2d7a"/>
+    <rect x="275" y="221" width="78" height="28" rx="10" fill="#3b2d7a"/>
+    <circle cx="470" cy="210" r="17" fill="#ff6b4a"/>
+    <circle cx="510" cy="245" r="17" fill="#ffd43b"/>
+    <circle cx="440" cy="255" r="17" fill="#1f5eff"/>
+    <rect x="376" y="232" width="42" height="14" rx="7" fill="#3b2d7a" opacity="0.5"/>
+  </g>
+  <text x="400" y="392" text-anchor="middle" font-family="Segoe UI Emoji, Apple Color Emoji, sans-serif" font-size="54">🎮</text>
+</svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Illustratie voor creatieve projecten">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b0a3f"/>
+      <stop offset="0.55" stop-color="#a21caf"/>
+      <stop offset="1" stop-color="#ff6b4a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="120" cy="80" r="170" fill="#ffffff" opacity="0.08"/>
+  <circle cx="690" cy="400" r="190" fill="#ffd43b" opacity="0.13"/>
+  <g>
+    <path d="M180 300c-34-42-8-104 42-108 20-58 104-62 128-8 54-10 92 36 70 82-16 34-60 44-94 34-30 36-108 44-146 0z" fill="#fffefb" opacity="0.95"/>
+    <circle cx="248" cy="252" r="18" fill="#ff6b4a"/>
+    <circle cx="298" cy="222" r="14" fill="#ffd43b"/>
+    <circle cx="336" cy="268" r="16" fill="#1f5eff"/>
+    <circle cx="270" cy="300" r="11" fill="#0f9d58"/>
+  </g>
+  <g transform="rotate(28 560 250)">
+    <rect x="532" y="120" width="26" height="190" rx="13" fill="#ffe9d8"/>
+    <rect x="532" y="120" width="26" height="52" rx="13" fill="#ff6b4a"/>
+    <path d="M532 310l13 46 13-46z" fill="#ffd43b"/>
+  </g>
+  <g fill="#ffffff" opacity="0.55">
+    <circle cx="650" cy="140" r="5"/><circle cx="684" cy="176" r="4"/><circle cx="620" cy="196" r="4"/>
+    <circle cx="160" cy="150" r="4"/><circle cx="196" cy="120" r="3"/>
+  </g>
+  <text x="400" y="410" text-anchor="middle" font-family="Segoe UI Emoji, Apple Color Emoji, sans-serif" font-size="44">🎨</text>
+</svg>

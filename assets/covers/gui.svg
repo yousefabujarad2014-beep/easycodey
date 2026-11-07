@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Illustratie voor GUI-projecten">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a1650"/>
+      <stop offset="0.55" stop-color="#6d3bd4"/>
+      <stop offset="1" stop-color="#d946ef"/>
+    </linearGradient>
+    <linearGradient id="win" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffefb"/>
+      <stop offset="1" stop-color="#f3e8ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="120" cy="80" r="160" fill="#ffffff" opacity="0.08"/>
+  <circle cx="710" cy="400" r="180" fill="#ffd43b" opacity="0.12"/>
+  <g transform="translate(180 92)">
+    <rect width="440" height="266" rx="20" fill="url(#win)" opacity="0.97"/>
+    <rect width="440" height="44" rx="20" fill="#e9d5ff"/>
+    <rect y="24" width="440" height="20" fill="#e9d5ff"/>
+    <circle cx="24" cy="22" r="7" fill="#ff6b4a"/>
+    <circle cx="47" cy="22" r="7" fill="#ffd43b"/>
+    <circle cx="70" cy="22" r="7" fill="#0f9d58"/>
+    <rect x="24" y="66" width="120" height="176" rx="12" fill="#f3e8ff"/>
+    <rect x="40" y="86" width="88" height="12" rx="6" fill="#7a3cff" opacity="0.55"/>
+    <rect x="40" y="110" width="66" height="10" rx="5" fill="#7a3cff" opacity="0.3"/>
+    <rect x="40" y="132" width="78" height="10" rx="5" fill="#7a3cff" opacity="0.3"/>
+    <rect x="40" y="154" width="58" height="10" rx="5" fill="#7a3cff" opacity="0.3"/>
+    <rect x="166" y="66" width="250" height="34" rx="10" fill="#ffffff" stroke="#e9d5ff" stroke-width="2"/>
+    <rect x="166" y="114" width="250" height="34" rx="10" fill="#ffffff" stroke="#e9d5ff" stroke-width="2"/>
+    <rect x="166" y="162" width="250" height="34" rx="10" fill="#ffffff" stroke="#e9d5ff" stroke-width="2"/>
+    <rect x="166" y="210" width="112" height="32" rx="16" fill="#7a3cff"/>
+    <rect x="290" y="210" width="126" height="32" rx="16" fill="#7a3cff" opacity="0.16"/>
+    <text x="222" y="286" text-anchor="middle" font-family="Segoe UI Emoji, Apple Color Emoji, sans-serif" font-size="40">🪟</text>
+  </g>
+</svg>
