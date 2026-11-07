@@ -5,6 +5,17 @@
 
 Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie naar GitHub en Render verloopt. Geheime waarden (tokens, sleutels, toegangscodes) staan **niet** in dit bestand.
 
+## Status: live
+
+| Onderdeel | Status |
+|---|---|
+| GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
+| GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
+| Laatste Pages-build | ✅ commit `514cade`, status `built` |
+| Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
+
+Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach. Het Python-speelveld werkt wel volledig.
+
 ---
 
 ## 1. Lokale hulpmiddelen
@@ -151,7 +162,7 @@ https://render.com/deploy?repo=https://github.com/<gebruikersnaam>/easycodey
 | `DONATE_URL` | Nee | Doneerlink (Ko-fi, Buy Me a Coffee, PayPal.me, Stripe). Zonder waarde blijft de knop verborgen. |
 | `DONATE_LABEL` | Nee | Tekst op de doneerknop. |
 | `DONATE_NOTE` | Nee | Toelichting in het doneervenster. |
-| `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://easycodey.onrender.com`. |
+| `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://yousefabujarad2014-beep.github.io/easycodey`. |
 | `PORT` | Automatisch | Render zet deze zelf. |
 | `HOST` | Nee | Standaard `0.0.0.0`; niet op `127.0.0.1` zetten. |
 

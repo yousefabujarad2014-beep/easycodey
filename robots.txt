@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://yousefabujarad2014-beep.github.io/easycodey/sitemap.xml

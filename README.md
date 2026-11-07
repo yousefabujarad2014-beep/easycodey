@@ -4,6 +4,14 @@ Leer Python door echte projecten te bouwen. EasyCodey is een Nederlandstalige we
 
 **161 projecten · 711 stappen · 10 categorieën · 3 niveaus**
 
+## Live website
+
+De site staat online op **GitHub Pages**:
+
+**https://yousefabujarad2014-beep.github.io/easycodey/**
+
+Op GitHub Pages werkt alles behalve de online AI-coach (daar is de Node-server voor nodig). De site valt daar automatisch terug op de offline coach. Het Python-speelveld en alle 161 projecten werken volledig.
+
 ## Snel starten
 
 Je hebt [Node.js](https://nodejs.org) nodig (versie 18 of nieuwer). Er zijn geen pakketten om te installeren en er is geen build-stap.
@@ -161,6 +169,18 @@ DONATE_NOTE=Elke bijdrage helpt om nieuwe projecten toe te voegen.
 3. Herstart de server.
 
 Zodra `DONATE_URL` is ingesteld, verschijnen het hartje in de header en de link in de footer. De site verwerkt zelf geen betalingen en bewaart geen betaalgegevens.
+
+Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config.json`:
+
+```json
+{
+  "donateUrl": "https://ko-fi.com/jouw-naam",
+  "donateLabel": "Doneer via Ko-fi",
+  "donateNote": "Elke bijdrage helpt om nieuwe projecten toe te voegen."
+}
+```
+
+Commit en push daarna. De site gebruikt `site-config.json` automatisch als `/api/config` niet beschikbaar is.
 
 ## Vindbaar op Google
 

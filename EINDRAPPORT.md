@@ -286,7 +286,7 @@ Gebruik niet `npm run build`; dat script bestaat bewust niet. `npm install` is v
 | `DONATE_URL` | Nee | Doneerlink. Zonder deze waarde blijft de doneerknop verborgen. |
 | `DONATE_LABEL` | Nee | Tekst op de doneerknop, standaard "Doneer". |
 | `DONATE_NOTE` | Nee | Extra toelichting in het doneervenster. |
-| `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://easycodey.onrender.com`. |
+| `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://yousefabujarad2014-beep.github.io/easycodey`. |
 | `PORT` | Automatisch | Render zet deze zelf; `server.js` gebruikt `process.env.PORT`. |
 | `HOST` | Nee | Standaard `0.0.0.0`; niet op `127.0.0.1` zetten op Render. |
 
@@ -339,17 +339,26 @@ Een eigen afbeelding toevoegen kan met een `image`-veld, bijvoorbeeld `assets/co
 
 ---
 
-## 9. Wat nog moet gebeuren
+## 9. Publicatie en wat nog moet gebeuren
 
-De site zelf is klaar. Alleen de publicatie ontbreekt nog:
+De site staat live:
 
-1. GitHub-repository maken en deze map uploaden (GitHub Desktop of Git installeren).
-2. Render Web Service of Blueprint koppelen.
-3. Build Command `npm install`, Start Command `npm start`.
-4. Env-variabelen instellen (`OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL`).
-5. Live-URL testen, inclusief AI-coach en mobiel.
-6. Optioneel: aangepast domein koppelen in Render.
-7. Site aanmelden bij Google Search Console en de sitemap insturen; zie `GOOGLE.md`.
+| Onderdeel | Status |
+|---|---|
+| GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey |
+| GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
+| Windows-snelkoppelingen | ✅ bureaublad + startmenu |
+| Python-speelveld op de live site | ✅ |
+| Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
+| Doneerlink | ⏳ wacht op de link van de gebruiker |
+
+Wat optioneel nog kan:
+
+1. Render Web Service of Blueprint koppelen voor de online AI-coach (`npm install`, `npm start`).
+2. `OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL` in Render instellen.
+3. Doneerlink invullen in `site-config.json` (Pages) en/of `DONATE_URL` (server).
+4. Site aanmelden bij Google Search Console en de sitemap insturen; zie `GOOGLE.md`.
+5. Optioneel: eigen domein koppelen.
 
 ---
 

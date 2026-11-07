@@ -119,28 +119,41 @@ export function renderMarkdown(value) {
     .join("");
 }
 
+function normalizeConfig(data) {
+  return {
+    hasServerKey: Boolean(data.hasServerKey),
+    model: String(data.model || ""),
+    accessCodeRequired: Boolean(data.accessCodeRequired),
+    donateUrl: String(data.donateUrl || ""),
+    donateLabel: String(data.donateLabel || ""),
+    donateNote: String(data.donateNote || "")
+  };
+}
+
+const EMPTY_CONFIG = {
+  hasServerKey: false,
+  model: "",
+  accessCodeRequired: false,
+  donateUrl: "",
+  donateLabel: "",
+  donateNote: ""
+};
+
 export async function fetchConfig() {
+  // Eerst de Node-server (lokaal/Render). Die kent ook de online AI-coach.
   try {
     const response = await fetch("/api/config", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error("config");
-    const data = await response.json();
-    return {
-      hasServerKey: Boolean(data.hasServerKey),
-      model: String(data.model || ""),
-      accessCodeRequired: Boolean(data.accessCodeRequired),
-      donateUrl: String(data.donateUrl || ""),
-      donateLabel: String(data.donateLabel || ""),
-      donateNote: String(data.donateNote || "")
-    };
+    return normalizeConfig(await response.json());
   } catch {
-    return {
-      hasServerKey: false,
-      model: "",
-      accessCodeRequired: false,
-      donateUrl: "",
-      donateLabel: "",
-      donateNote: ""
-    };
+    // GitHub Pages heeft geen server: gebruik de statische config voor donaties.
+    try {
+      const response = await fetch("site-config.json", { headers: { Accept: "application/json" } });
+      if (!response.ok) throw new Error("config");
+      return normalizeConfig(await response.json());
+    } catch {
+      return { ...EMPTY_CONFIG };
+    }
   }
 }
 

@@ -9,20 +9,20 @@ Dit document legt uit hoe je EasyCodey openbaar zet en ervoor zorgt dat Google d
 
 ## 1. Eerst publiceren
 
-Google kan alleen een site indexeren die op een publiek adres bereikbaar is. Gebruik daarvoor GitHub + Render, zoals beschreven in `PUBLICATIE.md`.
-
-Na de deploy krijg je een adres als:
+Google kan alleen een site indexeren die op een publiek adres bereikbaar is. EasyCodey staat al live op **GitHub Pages**:
 
 ```
-https://easycodey.onrender.com
+https://yousefabujarad2014-beep.github.io/easycodey/
 ```
 
-Controleer daarna of dit adres in de configuratie klopt:
+De repository staat op https://github.com/yousefabujarad2014-beep/easycodey en GitHub Pages bouwt automatisch vanaf branch `main`. Render is alleen nodig als je later de online AI-coach wilt aanzetten.
+
+Controleer of dit adres in de configuratie klopt:
 
 | Plek | Instelling |
 |---|---|
 | `index.html` | `canonical`, `og:url` en de JSON-LD-URL |
-| `server.js` | `SITE_URL` (standaard `https://easycodey.onrender.com`) |
+| `server.js` | `SITE_URL` (standaard `https://yousefabujarad2014-beep.github.io/easycodey`) |
 | Render | omgevingsvariabele `SITE_URL` |
 
 Als je een eigen domein gebruikt, pas je deze waarden aan naar bijvoorbeeld `https://easycodey.nl`.
@@ -31,18 +31,17 @@ Als je een eigen domein gebruikt, pas je deze waarden aan naar bijvoorbeeld `htt
 
 ## 2. Wat al klaar staat in de site
 
-- `robots.txt` wordt automatisch geserveerd en staat indexering toe.
-- `sitemap.xml` wordt automatisch geserveerd met de startpagina.
+- `robots.txt` en `sitemap.xml` staan als statische bestanden in de repository, zodat GitHub Pages ze serveert. De Node-server genereert ze daarnaast dynamisch met `SITE_URL`.
 - De startpagina heeft een titel, meta-description, canonical, Open Graph- en Twitter-kaarten.
 - Er staat gestructureerde data (JSON-LD) van het type `WebSite` in de pagina.
-- De server blokkeert documentatie, scripts en configuratiebestanden voor bezoekers.
+- De Node-server blokkeert documentatie, scripts en configuratiebestanden voor bezoekers. Op GitHub Pages zijn die bestanden wel bereikbaar; ze bevatten geen geheimen.
 - De site is mobielvriendelijk en laadt zonder build-stap.
 
 Controleren na de deploy:
 
 ```
-https://easycodey.onrender.com/robots.txt
-https://easycodey.onrender.com/sitemap.xml
+https://yousefabujarad2014-beep.github.io/easycodey/robots.txt
+https://yousefabujarad2014-beep.github.io/easycodey/sitemap.xml
 ```
 
 ---
@@ -73,7 +72,7 @@ https://easycodey.onrender.com/sitemap.xml
 EasyCodey gebruikt op dit moment routes met een `#`, bijvoorbeeld:
 
 ```
-https://easycodey.onrender.com/#/idee/raad-het-getal
+https://yousefabujarad2014-beep.github.io/easycodey/#/idee/raad-het-getal
 ```
 
 Alles na de `#` wordt niet naar de server gestuurd. Google indexeert daardoor in de praktijk alleen de startpagina, niet de 161 afzonderlijke projectpagina's.
