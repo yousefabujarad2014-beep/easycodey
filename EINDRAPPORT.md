@@ -286,6 +286,9 @@ Gebruik niet `npm run build`; dat script bestaat bewust niet. `npm install` is v
 | `DONATE_URL` | Nee | Doneerlink. Zonder deze waarde blijft de doneerknop verborgen. |
 | `DONATE_LABEL` | Nee | Tekst op de doneerknop, standaard "Doneer". |
 | `DONATE_NOTE` | Nee | Extra toelichting in het doneervenster. |
+| `DONATE_IBAN` | Nee | IBAN voor donaties per bankoverschrijving. |
+| `DONATE_NAME` | Nee | Naam van de rekeninghouder. |
+| `DONATE_BANK` | Nee | Banknaam, bijvoorbeeld `Belfius`. |
 | `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://yousefabujarad2014-beep.github.io/easycodey`. |
 | `PORT` | Automatisch | Render zet deze zelf; `server.js` gebruikt `process.env.PORT`. |
 | `HOST` | Nee | Standaard `0.0.0.0`; niet op `127.0.0.1` zetten op Render. |

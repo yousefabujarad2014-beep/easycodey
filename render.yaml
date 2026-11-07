@@ -25,5 +25,11 @@ services:
         sync: false
       - key: DONATE_NOTE
         sync: false
+      - key: DONATE_IBAN
+        sync: false
+      - key: DONATE_NAME
+        sync: false
+      - key: DONATE_BANK
+        value: Belfius
       - key: SITE_URL
         value: https://yousefabujarad2014-beep.github.io/easycodey

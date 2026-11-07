@@ -126,7 +126,10 @@ function normalizeConfig(data) {
     accessCodeRequired: Boolean(data.accessCodeRequired),
     donateUrl: String(data.donateUrl || ""),
     donateLabel: String(data.donateLabel || ""),
-    donateNote: String(data.donateNote || "")
+    donateNote: String(data.donateNote || ""),
+    donateIban: String(data.donateIban || ""),
+    donateName: String(data.donateName || ""),
+    donateBank: String(data.donateBank || "")
   };
 }
 
@@ -136,7 +139,10 @@ const EMPTY_CONFIG = {
   accessCodeRequired: false,
   donateUrl: "",
   donateLabel: "",
-  donateNote: ""
+  donateNote: "",
+  donateIban: "",
+  donateName: "",
+  donateBank: ""
 };
 
 export async function fetchConfig() {

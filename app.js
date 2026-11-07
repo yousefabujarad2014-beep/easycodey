@@ -51,7 +51,10 @@ let serverConfig = {
   accessCodeRequired: false,
   donateUrl: "",
   donateLabel: "",
-  donateNote: ""
+  donateNote: "",
+  donateIban: "",
+  donateName: "",
+  donateBank: ""
 };
 let aiMessages = [];
 let aiStreaming = false;
@@ -1056,16 +1059,55 @@ function closeGenerator() {
 
 /* ------------------------------ doneren ------------------------------ */
 
+function cleanIban(value) {
+  return String(value || "").replace(/[^a-z0-9]/gi, "").toUpperCase();
+}
+
+function isValidIban(value) {
+  const iban = cleanIban(value);
+  if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(iban)) return false;
+  const rearranged = iban.slice(4) + iban.slice(0, 4);
+  const digits = rearranged.replace(/[A-Z]/g, (letter) => String(letter.charCodeAt(0) - 55));
+  let remainder = 0;
+  for (const digit of digits) remainder = (remainder * 10 + Number(digit)) % 97;
+  return remainder === 1;
+}
+
+function formatIban(value) {
+  return cleanIban(value).replace(/(.{4})/g, "$1 ").trim();
+}
+
+async function copyIban() {
+  const text = formatIban(serverConfig.donateIban);
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = text;
+    document.body.append(area);
+    area.select();
+    document.execCommand("copy");
+    area.remove();
+  }
+  toast("IBAN gekopieerd.");
+}
+
 function applyDonateConfig() {
   const url = String(serverConfig.donateUrl || "").trim();
   const label = String(serverConfig.donateLabel || "").trim() || "Doneer";
   const noteText = String(serverConfig.donateNote || "").trim();
-  const configured = /^https?:\/\//i.test(url);
+  const hasUrl = /^https?:\/\//i.test(url);
+  const hasIban = isValidIban(serverConfig.donateIban);
+  const configured = hasUrl || hasIban;
 
   const header = document.querySelector("#donate-header");
   const footer = document.querySelector("#donate-footer");
   const separator = document.querySelector("#donate-footer-sep");
   const options = document.querySelector("#donate-options");
+  const ibanBlock = document.querySelector("#donate-iban");
+  const ibanValue = document.querySelector("#donate-iban-value");
+  const bank = document.querySelector("#donate-bank");
   const empty = document.querySelector("#donate-empty");
   const main = document.querySelector("#donate-main");
   const note = document.querySelector("#donate-note");
@@ -1074,17 +1116,28 @@ function applyDonateConfig() {
   if (footer) footer.hidden = !configured;
   if (separator) separator.hidden = !configured;
 
-  if (configured) {
+  if (hasUrl) {
     main.href = url;
     main.textContent = `♥ ${label}`;
     note.textContent = noteText;
     note.hidden = !noteText;
     options.hidden = false;
-    empty.hidden = true;
   } else {
     options.hidden = true;
-    empty.hidden = false;
   }
+
+  if (hasIban) {
+    ibanValue.textContent = formatIban(serverConfig.donateIban);
+    const bankName = String(serverConfig.donateBank || "").trim();
+    const holder = String(serverConfig.donateName || "").trim();
+    bank.textContent = [bankName, holder].filter(Boolean).join(" · ");
+    bank.hidden = !bank.textContent;
+    ibanBlock.hidden = false;
+  } else {
+    ibanBlock.hidden = true;
+  }
+
+  empty.hidden = configured;
 }
 
 function openDonate() {
@@ -1374,6 +1427,7 @@ document.addEventListener("click", (event) => {
     if (action === "close-generator") closeGenerator();
     if (action === "open-donate") openDonate();
     if (action === "close-donate") closeDonate();
+    if (action === "copy-iban") copyIban();
     if (action === "open-playground") openPlayground();
     if (action === "close-playground") closePlayground();
     if (action === "playground-example") loadPlaygroundExample();

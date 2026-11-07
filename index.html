@@ -251,12 +251,25 @@
         <a class="btn brand donate-main" id="donate-main" href="#" target="_blank" rel="noopener noreferrer">♥ Doneer</a>
         <p class="donate-note" id="donate-note"></p>
       </div>
+      <div class="donate-iban" id="donate-iban" hidden>
+        <p class="donate-iban-label" id="donate-iban-label">Rechtstreeks overschrijven</p>
+        <div class="donate-iban-row">
+          <code class="donate-iban-value" id="donate-iban-value">BE00 0000 0000 0000</code>
+          <button class="btn ghost tiny" type="button" data-action="copy-iban">Kopieer IBAN</button>
+        </div>
+        <p class="donate-bank" id="donate-bank"></p>
+        <ol class="donate-steps">
+          <li>Open je bankapp en kies <strong>Overschrijven</strong>.</li>
+          <li>Plak het IBAN en vul zelf een bedrag in.</li>
+          <li>Vermeld eventueel <strong>EasyCodey donatie</strong> als mededeling.</li>
+        </ol>
+      </div>
       <p class="donate-empty" id="donate-empty" hidden>
         Er is nog geen doneerlink ingesteld. De beheerder kan dit instellen met de omgevingsvariabele
-        <code>DONATE_URL</code>.
+        <code>DONATE_URL</code> of met <code>DONATE_IBAN</code>.
       </p>
       <p class="modal-fineprint">
-        Je donatie loopt via de externe aanbieder die de beheerder heeft gekozen.
+        Een overschrijving loopt rechtstreeks via jouw bank naar de rekening hierboven.
         EasyCodey ontvangt of bewaart zelf geen betaalgegevens.
       </p>
     </div>

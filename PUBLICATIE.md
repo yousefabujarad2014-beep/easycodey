@@ -162,6 +162,9 @@ https://render.com/deploy?repo=https://github.com/<gebruikersnaam>/easycodey
 | `DONATE_URL` | Nee | Doneerlink (Ko-fi, Buy Me a Coffee, PayPal.me, Stripe). Zonder waarde blijft de knop verborgen. |
 | `DONATE_LABEL` | Nee | Tekst op de doneerknop. |
 | `DONATE_NOTE` | Nee | Toelichting in het doneervenster. |
+| `DONATE_IBAN` | Nee | IBAN voor donaties per bankoverschrijving, bijvoorbeeld `BE69 0638 3621 2278`. |
+| `DONATE_NAME` | Nee | Naam van de rekeninghouder. |
+| `DONATE_BANK` | Nee | Banknaam, bijvoorbeeld `Belfius`. |
 | `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://yousefabujarad2014-beep.github.io/easycodey`. |
 | `PORT` | Automatisch | Render zet deze zelf. |
 | `HOST` | Nee | Standaard `0.0.0.0`; niet op `127.0.0.1` zetten. |

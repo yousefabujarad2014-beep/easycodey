@@ -176,11 +176,25 @@ Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config
 {
   "donateUrl": "https://ko-fi.com/jouw-naam",
   "donateLabel": "Doneer via Ko-fi",
-  "donateNote": "Elke bijdrage helpt om nieuwe projecten toe te voegen."
+  "donateNote": "Elke bijdrage helpt om nieuwe projecten toe te voegen.",
+  "donateIban": "BE69 0638 3621 2278",
+  "donateName": "Naam van de rekeninghouder",
+  "donateBank": "Belfius"
 }
 ```
 
 Commit en push daarna. De site gebruikt `site-config.json` automatisch als `/api/config` niet beschikbaar is.
+
+### Doneren per bankoverschrijving
+
+Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt EasyCodey ook een **IBAN**: de bezoeker ziet de rekening, kan het IBAN kopiëren en maakt zelf een overschrijving via de bankapp.
+
+- `donateIban`: het rekeningnummer, bijvoorbeeld `BE69 0638 3621 2278`.
+- `donateName`: optioneel, de naam van de rekeninghouder.
+- `donateBank`: optioneel, bijvoorbeeld `Belfius`.
+- Het IBAN wordt gevalideerd met de officiële mod-97-controle. Ongeldige nummers worden niet getoond.
+
+> Let op: een IBAN op een openbare website is voor iedereen zichtbaar. Gebruik bij voorkeur een aparte rekening of een doneerplatform als je je privérekening niet wilt delen.
 
 ## Vindbaar op Google
 

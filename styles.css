@@ -1574,6 +1574,54 @@ button { cursor: pointer; }
 .donate-options { display: flex; flex-direction: column; gap: 10px; }
 .donate-main { align-self: flex-start; text-decoration: none; }
 .donate-note { margin: 0; font-size: 0.82rem; color: var(--muted); }
+.donate-iban {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-2);
+}
+
+.donate-iban-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.donate-iban-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.donate-iban-value {
+  font-family: var(--mono);
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line-strong);
+  user-select: all;
+}
+
+.donate-bank { margin: 0; font-size: 0.8rem; color: var(--muted); }
+
+.donate-steps {
+  margin: 2px 0 0;
+  padding-left: 20px;
+  font-size: 0.83rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
 .donate-empty { font-size: 0.86rem; color: var(--muted); line-height: 1.6; }
 .donate-empty code {
   font-family: var(--mono);

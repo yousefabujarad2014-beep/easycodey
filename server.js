@@ -25,10 +25,21 @@ const ACCESS_CODE = String(process.env.ACCESS_CODE || "");
 const RATE_LIMIT = Number(process.env.RATE_LIMIT) || 30;
 const RATE_WINDOW = 60 * 60 * 1000;
 
-// Optionele doneerlink. Zonder DONATE_URL blijft de doneerknop verborgen.
-const DONATE_URL = String(process.env.DONATE_URL || "").trim();
-const DONATE_LABEL = String(process.env.DONATE_LABEL || "").trim();
-const DONATE_NOTE = String(process.env.DONATE_NOTE || "").trim();
+// Optionele doneergegevens. site-config.json is de gedeelde bron voor
+// GitHub Pages; omgevingsvariabelen hebben voorrang op de server.
+let siteConfig = {};
+try {
+  siteConfig = JSON.parse(readFileSync(path.join(root, "site-config.json"), "utf8"));
+} catch {
+  siteConfig = {};
+}
+
+const DONATE_URL = String(process.env.DONATE_URL || siteConfig.donateUrl || "").trim();
+const DONATE_LABEL = String(process.env.DONATE_LABEL || siteConfig.donateLabel || "").trim();
+const DONATE_NOTE = String(process.env.DONATE_NOTE || siteConfig.donateNote || "").trim();
+const DONATE_IBAN = String(process.env.DONATE_IBAN || siteConfig.donateIban || "").trim();
+const DONATE_NAME = String(process.env.DONATE_NAME || siteConfig.donateName || "").trim();
+const DONATE_BANK = String(process.env.DONATE_BANK || siteConfig.donateBank || "").trim();
 const SITE_URL = String(process.env.SITE_URL || "https://yousefabujarad2014-beep.github.io/easycodey").replace(/\/+$/, "");
 
 const MIME = {
@@ -356,7 +367,10 @@ const server = http.createServer(async (req, res) => {
       accessCodeRequired: Boolean(ACCESS_CODE),
       donateUrl: DONATE_URL,
       donateLabel: DONATE_LABEL,
-      donateNote: DONATE_NOTE
+      donateNote: DONATE_NOTE,
+      donateIban: DONATE_IBAN,
+      donateName: DONATE_NAME,
+      donateBank: DONATE_BANK
     });
   }
 
