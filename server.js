@@ -29,7 +29,7 @@ const RATE_WINDOW = 60 * 60 * 1000;
 const DONATE_URL = String(process.env.DONATE_URL || "").trim();
 const DONATE_LABEL = String(process.env.DONATE_LABEL || "").trim();
 const DONATE_NOTE = String(process.env.DONATE_NOTE || "").trim();
-const SITE_URL = String(process.env.SITE_URL || "https://easycodey.onrender.com").replace(/\/+$/, "");
+const SITE_URL = String(process.env.SITE_URL || "https://yousefabujarad2014-beep.github.io/easycodey").replace(/\/+$/, "");
 
 const MIME = {
   ".html": "text/html; charset=utf-8",

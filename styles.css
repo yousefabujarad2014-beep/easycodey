@@ -941,6 +941,21 @@ button { cursor: pointer; }
   color: #8d94a3;
 }
 
+.code-tools { display: flex; align-items: center; gap: 6px; }
+
+.code-play {
+  border: 1px solid #2c6b46;
+  background: #12351f;
+  color: #7ee2a8;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 7px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.code-play:hover { background: #17482a; color: #b6ffd2; }
+
 .code-copy {
   border: 1px solid #2c303a;
   background: #1c2028;

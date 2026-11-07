@@ -99,7 +99,10 @@ function codeBlock(code, language = "python") {
   return `<div class="code-block">
     <div class="code-head">
       <span class="code-lang">${e(language)}</span>
-      <button class="code-copy" type="button" data-action="copy-code">Kopieer</button>
+      <div class="code-tools">
+        <button class="code-play" type="button" data-action="play-code">▶ Speel</button>
+        <button class="code-copy" type="button" data-action="copy-code">Kopieer</button>
+      </div>
     </div>
     <pre><code>${e(code)}</code></pre>
   </div>`;
@@ -1139,10 +1142,17 @@ function loadPlaygroundExample() {
   playgroundCode.value = PLAYGROUND_EXAMPLES[key] || PLAYGROUND_EXAMPLES.hallo;
 }
 
-function openPlayground() {
-  if (!playgroundCode.value.trim()) loadPlaygroundExample();
+function openPlayground(initialCode = "") {
+  if (typeof initialCode === "string" && initialCode.trim()) {
+    playgroundCode.value = initialCode;
+  } else if (!playgroundCode.value.trim()) {
+    loadPlaygroundExample();
+  }
   playgroundModal.hidden = false;
-  window.setTimeout(() => playgroundCode.focus(), 80);
+  window.setTimeout(() => {
+    playgroundCode.focus();
+    playgroundCode.setSelectionRange(playgroundCode.value.length, playgroundCode.value.length);
+  }, 80);
 }
 
 function closePlayground() {
@@ -1182,6 +1192,12 @@ async function runPlayground() {
     pyodideLoaded = true;
     pyodide.setStdout({ batched: append });
     pyodide.setStderr({ batched: append });
+    pyodide.setStdin({
+      stdin: () => {
+        const value = window.prompt("Invoer voor je Python-programma:");
+        return value === null ? "" : value;
+      }
+    });
     playgroundStatus.textContent = "Bezig…";
     await pyodide.runPythonAsync(playgroundCode.value);
     if (!output.trim()) output = "(geen uitvoer)";
@@ -1363,6 +1379,11 @@ document.addEventListener("click", (event) => {
     if (action === "playground-example") loadPlaygroundExample();
     if (action === "run-playground") runPlayground();
     if (action === "clear-playground") clearPlayground();
+    if (action === "play-code") {
+      const block = actionEl.closest(".code-block");
+      const code = block?.querySelector("pre code")?.textContent || "";
+      openPlayground(code);
+    }
     if (action === "copy-code") copyCode(actionEl);
     if (action === "toggle-step") {
       store.toggleStep(actionEl.dataset.ideaId, Number(actionEl.dataset.stepIndex));

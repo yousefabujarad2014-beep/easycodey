@@ -26,4 +26,4 @@ services:
       - key: DONATE_NOTE
         sync: false
       - key: SITE_URL
-        value: https://easycodey.onrender.com
+        value: https://yousefabujarad2014-beep.github.io/easycodey
