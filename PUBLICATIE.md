@@ -1,6 +1,6 @@
 # EasyCodey — publicatie op GitHub en Render
 
-**Laatst bijgewerkt:** 7 november 2026
+**Laatst bijgewerkt:** 8 november 2026
 **Projectmap:** `C:\Users\Home\Desktop\FLL`
 
 Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie naar GitHub en Render verloopt. Geheime waarden (tokens, sleutels, toegangscodes) staan **niet** in dit bestand.
@@ -11,10 +11,11 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste Pages-build | ✅ commit `514cade`, status `built` |
+| Laatste Pages-build | ✅ laatste commit op `main`, Pages bouwt automatisch |
+| Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
 | Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
 
-Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach. Het Python-speelveld werkt wel volledig.
+Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
 
 ---
 
@@ -189,7 +190,10 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Met `ACCESS_CODE`: zonder code geen AI-antwoord.
 - [ ] Rate limiting geeft 429 na het maximum.
 - [ ] Python-speelveld opent en `print("Hallo")` geeft uitvoer.
-- [ ] Doneerknop verschijnt alleen met `DONATE_URL` en opent de juiste link.
+- [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
+- [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
+- [ ] Projectpagina: **Programmeer dit idee**, **Download .py** en **Kopieer alle code** werken.
+- [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
 - [ ] Mobiel en donker thema zien er goed uit.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
@@ -203,7 +207,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - De eerste aanvraag daarna kan 30–60 seconden duren.
 - Beperkt aantal gratis uren per maand.
 - Geen permanente schijf; gebruik geen server-side bestandsopslag voor gebruikersdata.
-- Voortgang en eigen projecten staan in `localStorage` van de browser en zijn per apparaat.
+- Voortgang, eigen projecten en editor-code staan in `localStorage` van de browser en zijn per apparaat.
+- De editor en het Python-speelveld laden Pyodide (±10 MB) de eerste keer vanaf een CDN.
 
 ---
 

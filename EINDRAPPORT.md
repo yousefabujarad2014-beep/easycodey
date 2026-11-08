@@ -1,8 +1,8 @@
 # EasyCodey — eindrapport
 
-**Datum:** 7 november 2026
+**Datum:** 8 november 2026
 **Map:** `C:\Users\Home\Desktop\FLL`
-**Status:** inhoudelijk klaar, klaar voor deployment
+**Status:** inhoudelijk klaar, live op GitHub Pages
 
 ---
 
@@ -65,6 +65,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - "Markeer als afgerond" en "Voortgang resetten".
 - Zijbalk met projectgegevens, vervolgprojecten en "Vraag AI om hulp".
 - Per stap: "Vraag AI over deze stap", inclusief project- en stapcontext.
+- Actiebalk met **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
+- **Programmeer dit idee** opent de editor met alle stappen als één programma, met commentaar per stap.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
 
 ### Leerpad (`#/leerpad`)
@@ -103,13 +105,24 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Ongeldige of onvolledige AI-antwoorden vallen terug op de offline generator.
 
 ### Python-speelveld
-- Bereikbaar via **▶ Probeer Python** in de hero en via de footer.
+- Bereikbaar via **▶ Snel proberen** in de hero en **Probeer Python** in de footer.
 - Python draait via Pyodide (WebAssembly) volledig in de browser.
 - De runtime wordt pas geladen als iemand het speelveld opent en op **Uitvoeren** klikt.
 - Zes voorbeelden: hallo wereld, rekenen, loops, lijsten, functies en "Raad het getal" zonder `input()`.
 - Uitvoer en foutmeldingen verschijnen direct in het paneel.
+- `input()` opent een invoer-pop-up.
 - Geen code of uitvoer gaat naar de server.
 - Bij een netwerkfout verschijnt een duidelijke melding; de rest van de site blijft werken.
+
+### Programmeer-editor (`#/programmeren`)
+- Volledige editor met een groot codeveld en een apart uitvoerpaneel.
+- **▶ Uitvoeren** en **Ctrl + Enter** voeren de code uit via dezelfde Pyodide-runtime.
+- **Download .py** bewaart het programma als Python-bestand.
+- **Kopieer** zet de code op het klembord.
+- Automatisch bewaren in `localStorage`; de code staat na herladen nog in de editor.
+- Voorbeelden laden, uitvoer wissen, **Tab** invoegen als vier spaties en de editor leegmaken.
+- **Projectcode opnieuw laden** en **Terug naar project** in de projectbalk.
+- Op mobiel staat de navigatie op een eigen scrollbare rij en wordt de editor één kolom.
 
 ### Donaties
 - Optionele doneerknop in de header en footer.
@@ -140,10 +153,10 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 FLL/
 ├── index.html                 Basislayout, header, AI-paneel, instellingen, generator
 ├── styles.css                 Alle styling, thema's, covers en responsive regels
-├── app.js                     Routing, filters, detailpagina, voortgang, events, AI-paneel
+├── app.js                     Routing, filters, detailpagina, editor, voortgang, events, AI-paneel
 ├── js/
 │   ├── ai.js                  Streaming, markdown, offline coach en generator
-│   └── store.js               localStorage: voortgang, instellingen, thema, eigen projecten
+│   └── store.js               localStorage: voortgang, instellingen, thema, editor, eigen projecten
 ├── data/
 │   ├── index.js               Datalaag: normaliseren, categorieën, covers, next-links
 │   ├── helper.js              Compacte helpers voor projecten en stappen
@@ -182,6 +195,17 @@ FLL/
 | Doneerknop met `DONATE_URL` | ✅ zichtbaar, link en label kloppen |
 | Python-speelveld (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
 | Speelveld sluiten en heropenen | ✅ werkt, runtime blijft geladen |
+| Programmeer-editor `#/programmeren` | ✅ editor, actieve nav, juiste titel |
+| Editor-uitvoer (headless Chrome, Pyodide) | ✅ `print("Editor test", 2 + 3)` geeft `Editor test 5` |
+| Editor automatisch bewaren | ✅ code staat direct in `localStorage` |
+| Editor na herladen | ✅ code blijft bewaard, ook bij een project |
+| Editor Ctrl + Enter | ✅ `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
+| Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
+| Projectacties op detailpagina | ✅ **Programmeer dit idee**, **Download .py**, **Kopieer alle code** |
+| Projectcode in de editor | ✅ alle stappen met commentaar en projectbanner |
+| Kopiëren naar klembord | ✅ volledige projectcode op het klembord |
+| Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
+| Mobiele navigatie en editorlayout | ✅ nav op eigen rij, editor één kolom |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
@@ -217,7 +241,7 @@ FLL/
 
 ## 5. Opslag en privacy
 
-- Voortgang, thema, AI-instellingen en eigen projecten staan in `localStorage` onder de sleutel `easycodey.v1`.
+- Voortgang, thema, AI-instellingen, eigen projecten en de editor-code staan in `localStorage` onder de sleutel `easycodey.v1`.
 - Er is geen account, geen database en geen server-side opslag van gebruikersdata.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg.
 - Eigen projecten verplaats je met exporteren/importeren op **Mijn ideeën**.
@@ -352,16 +376,16 @@ De site staat live:
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
 | Windows-snelkoppelingen | ✅ bureaublad + startmenu |
 | Python-speelveld op de live site | ✅ |
+| Programmeer-editor op de live site | ✅ |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
-| Doneerlink | ⏳ wacht op de link van de gebruiker |
+| Doneerlink | ✅ Belfius IBAN via `site-config.json` |
 
 Wat optioneel nog kan:
 
 1. Render Web Service of Blueprint koppelen voor de online AI-coach (`npm install`, `npm start`).
 2. `OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL` in Render instellen.
-3. Doneerlink invullen in `site-config.json` (Pages) en/of `DONATE_URL` (server).
-4. Site aanmelden bij Google Search Console en de sitemap insturen; zie `GOOGLE.md`.
-5. Optioneel: eigen domein koppelen.
+3. Site aanmelden bij Google Search Console en de sitemap insturen; zie `GOOGLE.md`.
+4. Optioneel: eigen domein koppelen.
 
 ---
 
@@ -373,6 +397,8 @@ Wat optioneel nog kan:
 - De offline coach is bewust algemeen en kan niet meedenken over willekeurige eigen code.
 - De rate limiter houdt tellers in het geheugen; na een herstart begint de telling opnieuw.
 - Er is geen automatische testrunner; `npm run check` controleert de data, niet de UI.
-- Het Python-speelveld heeft een eenmalige download van ongeveer 10 MB nodig en ondersteunt geen `input()`.
+- Het Python-speelveld en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
+- `input()` opent een pop-up. Een oneindige loop stopt pas als je het tabblad of venster sluit.
+- Editor-code staat per browser/apparaat in `localStorage`; er is geen account of synchronisatie.
 - Door de hash-routes indexeert Google alleen de startpagina, niet de losse projectpagina's.
-- Donaties lopen via een externe aanbieder; de site verwerkt zelf geen betalingen.
+- Donaties lopen via een bankoverschrijving of externe aanbieder; de site verwerkt zelf geen betalingen.

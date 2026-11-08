@@ -10,7 +10,7 @@ De site staat online op **GitHub Pages**:
 
 **https://yousefabujarad2014-beep.github.io/easycodey/**
 
-Op GitHub Pages werkt alles behalve de online AI-coach (daar is de Node-server voor nodig). De site valt daar automatisch terug op de offline coach. Het Python-speelveld en alle 161 projecten werken volledig.
+Op GitHub Pages werkt alles behalve de online AI-coach (daar is de Node-server voor nodig). De site valt daar automatisch terug op de offline coach. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
 
 ## Snel starten
 
@@ -39,6 +39,8 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **Offline coach**: werkt direct zonder API-sleutel. Herkent je onderwerp en geeft een stappenplan plus passende projecten.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.
+- **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
+- **Projectcode in de editor**: elk project heeft **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. Alle stappen komen als commentaar in de editor te staan.
 - **Doneren**: optionele doneerknop die je koppelt aan Ko-fi, Buy Me a Coffee, PayPal.me, Stripe of een eigen link.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd.
 - Licht/donker thema, skeleton-loading, toetsenbordnavigatie, confetti bij het afronden en een volledig responsieve layout.
@@ -50,10 +52,10 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 FLL/
 ├── index.html              Basislayout, header, AI-paneel, instellingen en generator
 ├── styles.css              Alle styling, thema's, covers en responsive regels
-├── app.js                  Routing, filters, voortgang, events en AI-paneel
+├── app.js                  Routing, filters, voortgang, editor, events en AI-paneel
 ├── js/
 │   ├── ai.js               Streaming, markdown, offline coach en generator
-│   └── store.js            Opslag van voortgang, instellingen, thema en eigen projecten
+│   └── store.js            Opslag van voortgang, instellingen, thema, editor en eigen projecten
 ├── data/
 │   ├── index.js            Centrale datalaag: normaliseren, covers en metadata
 │   ├── helper.js           Compacte helpers voor projecten en stappen
@@ -143,13 +145,25 @@ Beide zijn optioneel. Zonder `ACCESS_CODE` is de AI-coach openbaar bereikbaar zo
 
 ## Python uitproberen in de browser
 
-In de hero staat **▶ Probeer Python** en in de footer **Probeer Python**. Daarmee open je een speelveld waarin bezoekers direct Python kunnen typen en uitvoeren.
+In de hero staat **⌨ Programmeer zelf** (naar de editor) en **▶ Snel proberen** (speelveld). In de footer staan **Programmeer zelf** en **Probeer Python**. Voor echt werk is er de volledige editor op **`#/programmeren`**, ook bereikbaar via de navigatie.
+
+### Programmeer-editor
+
+- Grote code-editor met een apart uitvoerpaneel.
+- **▶ Uitvoeren** of **Ctrl + Enter** voert je code uit.
+- **Download .py** bewaart je programma als Python-bestand.
+- **Kopieer** zet de volledige code op je klembord.
+- Je code wordt automatisch lokaal bewaard (`localStorage`) en staat er na een herlaadbeurt nog.
+- Voorbeelden laden, uitvoer wissen en met **Tab** vier spaties invoegen.
+- Op een projectpagina staan **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. De editor laadt dan alle stappen als één programma, met een commentaarregel per stap.
+
+### Zo werkt het
 
 - Python draait via **Pyodide** (WebAssembly) in de browser.
 - De eerste keer wordt ongeveer 10 MB gedownload; daarna is het snel.
 - Code wordt niet naar de server gestuurd.
-- `input()` werkt niet en oneindige loops kun je alleen stoppen door het venster te sluiten.
-- Zonder internet blijft de rest van de site werken; alleen het speelveld kan dan niet laden.
+- `input()` opent een invoer-pop-up. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
+- Zonder internet blijft de rest van de site werken; alleen het speelveld en de editor kunnen dan niet laden.
 
 Er zijn voorbeelden ingebouwd: hallo wereld, rekenen, loops, lijsten, functies en een variant van "Raad het getal" zonder `input()`.
 
@@ -211,7 +225,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 
 ## Opslag en privacy
 
-- Voortgang, thema, AI-instellingen en eigen projecten staan in `localStorage` onder de sleutel `easycodey.v1`.
+- Voortgang, thema, AI-instellingen, eigen projecten en je editor-code staan in `localStorage` onder de sleutel `easycodey.v1`.
 - Bestaande voortgang van vóór de naamswijziging (`easycode.v1`) wordt automatisch overgezet.
 - Er is geen account en geen database.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg.
@@ -221,13 +235,15 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 
 1. `npm run check` — controleert alle projectdata.
 2. `npm start` en open http://localhost:4173.
-3. Test de routes `#/`, `#/leerpad`, `#/mijn-ideeen` en een projectpagina.
+3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
 4. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
 5. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
 6. Vink alle stappen af en controleer de confetti en de afgeronde status.
 7. Open de AI-coach zonder sleutel: je krijgt de offline coach.
 8. Stel eventueel een sleutel in via ⚙ en stel een vraag.
-9. Test op een smal scherm en wissel tussen licht en donker thema.
+9. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
+10. Open een project en test **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
+11. Test op een smal scherm en wissel tussen licht en donker thema.
 
 ## Deployen naar Render
 

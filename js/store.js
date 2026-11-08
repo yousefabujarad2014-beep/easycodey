@@ -11,7 +11,12 @@ const DEFAULT_STATE = {
     baseUrl: "",
     accessCode: ""
   },
-  customIdeas: []
+  customIdeas: [],
+  editor: {
+    code: "",
+    projectId: "",
+    updatedAt: 0
+  }
 };
 
 function clone(value) {
@@ -116,7 +121,12 @@ function readState() {
       ...parsed,
       settings: { ...DEFAULT_STATE.settings, ...(parsed.settings || {}) },
       progress: parsed.progress && typeof parsed.progress === "object" ? parsed.progress : {},
-      customIdeas: normalizeCustomIdeas(parsed.customIdeas)
+      customIdeas: normalizeCustomIdeas(parsed.customIdeas),
+      editor: {
+        code: typeof parsed.editor?.code === "string" ? parsed.editor.code : "",
+        projectId: typeof parsed.editor?.projectId === "string" ? parsed.editor.projectId : "",
+        updatedAt: Number(parsed.editor?.updatedAt) || 0
+      }
     };
   } catch {
     return clone(DEFAULT_STATE);
@@ -211,6 +221,29 @@ export function getStats(ideas) {
     stepsTotal,
     percent: stepsTotal ? Math.round((stepsDone / stepsTotal) * 100) : 0
   };
+}
+
+export function getEditorDraft() {
+  return {
+    code: typeof state.editor?.code === "string" ? state.editor.code : "",
+    projectId: typeof state.editor?.projectId === "string" ? state.editor.projectId : "",
+    updatedAt: Number(state.editor?.updatedAt) || 0
+  };
+}
+
+export function saveEditorDraft(code, projectId) {
+  state.editor = {
+    code: String(code ?? ""),
+    projectId: projectId === undefined ? getEditorDraft().projectId : String(projectId || ""),
+    updatedAt: Date.now()
+  };
+  persist();
+  return getEditorDraft();
+}
+
+export function clearEditorDraft() {
+  state.editor = { code: "", projectId: "", updatedAt: 0 };
+  persist();
 }
 
 export function getCustomIdeas() {

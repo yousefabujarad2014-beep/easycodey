@@ -111,6 +111,56 @@ function codeBlock(code, language = "python") {
   </div>`;
 }
 
+function combinedIdeaCode(idea) {
+  if (!idea) return "";
+  const header = [
+    `# ${idea.title} — EasyCodey`,
+    `# ${idea.summary}`,
+    `# ${idea.steps.length} stappen · ${idea.level} · ${idea.time}`,
+    ""
+  ].join("\n");
+
+  const steps = idea.steps.map((step, index) => {
+    const title = `# --- Stap ${index + 1}: ${step.title} ---`;
+    return `${title}\n${(step.code || "# (geen code bij deze stap)").trim()}`;
+  });
+
+  return `${header}\n${steps.join("\n\n")}\n`;
+}
+
+function downloadText(filename, text, type = "text/plain") {
+  const blob = new Blob([text], { type: `${type};charset=utf-8` });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function writeClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const area = document.createElement("textarea");
+      area.value = text;
+      area.style.position = "fixed";
+      area.style.opacity = "0";
+      document.body.append(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      return copied;
+    } catch {
+      return false;
+    }
+  }
+}
+
 function toast(message) {
   toastEl.textContent = message;
   toastEl.classList.add("show");
@@ -260,6 +310,12 @@ function route() {
     return;
   }
 
+  if (segments[0] === "programmeren") {
+    setNav("programmeren");
+    renderEditor(params);
+    return;
+  }
+
   if (segments[0] === "mijn-ideeen") {
     setNav("mijn-ideeen");
     renderMyIdeas();
@@ -334,10 +390,11 @@ function renderHome(params) {
         <h1>Kies een project.<br /><span class="grad">Bouw het echt.</span></h1>
         <p class="hero-sub">
           ${ideas.length} Python-projecten met uitleg, code en een stappenplan.
-          Bewaar je voortgang, filter op wat je wilt leren en vraag de AI-coach om hulp.
+          Bewaar je voortgang, programmeer zelf in de browser en vraag de AI-coach om hulp.
         </p>
         <div class="hero-actions">
-          <button class="btn brand" type="button" data-action="open-playground">▶ Probeer Python</button>
+          <a class="btn brand" href="#/programmeren">⌨ Programmeer zelf</a>
+          <button class="btn ghost" type="button" data-action="open-playground">▶ Snel proberen</button>
           <label class="search-box">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
@@ -621,6 +678,19 @@ function renderDetail(id) {
         <p class="detail-summary">${e(idea.summary)}</p>
       </div>
     </header>
+
+    <div class="idea-actions" aria-label="Projectcode gebruiken">
+      <button class="btn brand" type="button" data-action="program-idea" data-idea-id="${e(
+        idea.id
+      )}">⌨ Programmeer dit idee</button>
+      <button class="btn ghost" type="button" data-action="download-idea" data-idea-id="${e(
+        idea.id
+      )}">⤓ Download .py</button>
+      <button class="btn ghost" type="button" data-action="copy-idea-code" data-idea-id="${e(
+        idea.id
+      )}">Kopieer alle code</button>
+      <span class="idea-actions-note">Alle stappen komen als commentaar in de editor.</span>
+    </div>
 
     <div class="detail-grid">
       <div class="detail-main">
@@ -1221,6 +1291,20 @@ function clearPlayground() {
   playgroundCode.focus();
 }
 
+async function executePython(code, append) {
+  const pyodide = await loadPyodideRuntime();
+  pyodideLoaded = true;
+  pyodide.setStdout({ batched: append });
+  pyodide.setStderr({ batched: append });
+  pyodide.setStdin({
+    stdin: () => {
+      const value = window.prompt("Invoer voor je Python-programma:");
+      return value === null ? "" : value;
+    }
+  });
+  await pyodide.runPythonAsync(code);
+}
+
 async function runPlayground() {
   if (!playgroundCode.value.trim()) {
     playgroundStatus.className = "playground-status error";
@@ -1241,18 +1325,7 @@ async function runPlayground() {
   };
 
   try {
-    const pyodide = await loadPyodideRuntime();
-    pyodideLoaded = true;
-    pyodide.setStdout({ batched: append });
-    pyodide.setStderr({ batched: append });
-    pyodide.setStdin({
-      stdin: () => {
-        const value = window.prompt("Invoer voor je Python-programma:");
-        return value === null ? "" : value;
-      }
-    });
-    playgroundStatus.textContent = "Bezig…";
-    await pyodide.runPythonAsync(playgroundCode.value);
+    await executePython(playgroundCode.value, append);
     if (!output.trim()) output = "(geen uitvoer)";
     playgroundOutput.textContent = output;
     playgroundStatus.className = "playground-status";
@@ -1265,6 +1338,313 @@ async function runPlayground() {
   } finally {
     playgroundRun.disabled = false;
   }
+}
+
+/* ------------------------------ programmeer-editor ------------------------------ */
+
+const EDITOR_EXAMPLES = [
+  { key: "hallo", label: "Hallo wereld" },
+  { key: "rekenen", label: "Rekenen en variabelen" },
+  { key: "loop", label: "Herhalen met een loop" },
+  { key: "lijst", label: "Lijsten en sorteren" },
+  { key: "functie", label: "Een functie maken" },
+  { key: "raad", label: "Raad het getal (zonder input)" }
+];
+
+function editorExampleOptions(selected = "hallo") {
+  return EDITOR_EXAMPLES.map(
+    (item) =>
+      `<option value="${e(item.key)}"${item.key === selected ? " selected" : ""}>${e(item.label)}</option>`
+  ).join("");
+}
+
+function renderEditor(params) {
+  const projectId = params.get("project");
+  const project = projectId ? findIdea(projectId) : null;
+  const exampleKey = params.get("voorbeeld");
+  const hasExample = Boolean(exampleKey && PLAYGROUND_EXAMPLES[exampleKey]);
+
+  let code;
+  if (project) {
+    const draft = store.getEditorDraft();
+    if (draft.projectId === project.id && draft.code) {
+      code = draft.code;
+    } else {
+      code = combinedIdeaCode(project);
+      store.saveEditorDraft(code, project.id);
+    }
+  } else if (hasExample) {
+    code = PLAYGROUND_EXAMPLES[exampleKey];
+    store.saveEditorDraft(code, "");
+  } else {
+    const draft = store.getEditorDraft();
+    code = draft.code || PLAYGROUND_EXAMPLES.hallo;
+  }
+
+  document.title = project ? `${project.title} programmeren — EasyCodey` : "Programmeren — EasyCodey";
+
+  app.innerHTML = `<div class="editor-page">
+    <header class="editor-hero">
+      <div>
+        <p class="eyebrow">Jouw speelveld</p>
+        <h1>Programmeer op EasyCodey</h1>
+        <p>Schrijf Python, voer het meteen uit en bewaar je code in deze browser. Geen account nodig.</p>
+      </div>
+      <div class="editor-hero-actions">
+        <button class="btn brand" type="button" data-action="editor-run">▶ Uitvoeren</button>
+        <button class="btn ghost" type="button" data-action="editor-download">⤓ Download .py</button>
+        <button class="btn ghost" type="button" data-action="editor-copy">Kopieer</button>
+      </div>
+    </header>
+
+    ${
+      project
+        ? `<div class="editor-project">
+            <span class="editor-project-emoji" aria-hidden="true">${e(project.emoji)}</span>
+            <div>
+              <strong>${e(project.title)}</strong>
+              <span>Alle stappen staan als commentaar in de editor. Pas de code gerust aan.</span>
+            </div>
+            <button class="link-btn" type="button" data-action="editor-reload-project" data-idea-id="${e(
+              project.id
+            )}">Projectcode opnieuw laden</button>
+            <a class="btn ghost tiny" href="#/idee/${encodeURIComponent(project.id)}">Terug naar project</a>
+          </div>`
+        : ""
+    }
+
+    <div class="editor-layout">
+      <section class="editor-pane">
+        <div class="editor-toolbar">
+          <label class="field editor-example-field">
+            <span>Voorbeeld</span>
+            <select id="editor-example" class="field-select">${editorExampleOptions(
+              hasExample ? exampleKey : "hallo"
+            )}</select>
+          </label>
+          <button class="btn ghost tiny" type="button" data-action="editor-load-example">Voorbeeld laden</button>
+          <span class="editor-save-status" id="editor-save-status" role="status" aria-live="polite">Opgeslagen</span>
+        </div>
+        <label class="editor-code-label" for="editor-code">Python-code</label>
+        <textarea id="editor-code" class="editor-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Python-code"></textarea>
+        <div class="editor-hint-row">
+          <span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> om uit te voeren</span>
+          <button class="link-btn" type="button" data-action="editor-reset">Leegmaken</button>
+        </div>
+      </section>
+
+      <section class="editor-pane editor-output-pane">
+        <div class="editor-output-head">
+          <h2>Uitvoer</h2>
+          <div class="editor-output-tools">
+            <span class="playground-status" id="editor-status" role="status" aria-live="polite"></span>
+            <button class="btn ghost tiny" type="button" data-action="editor-clear-output">Wissen</button>
+          </div>
+        </div>
+        <pre class="editor-output" id="editor-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
+        <div class="editor-note">
+          <p>Python draait via <strong>Pyodide</strong> in je browser. De eerste keer wordt ongeveer 10 MB geladen.</p>
+          <p><code>input()</code> opent een invoer-pop-up. Een oneindige loop stopt pas als je het tabblad sluit.</p>
+        </div>
+      </section>
+    </div>
+  </div>`;
+
+  const textarea = document.querySelector("#editor-code");
+  const output = document.querySelector("#editor-output");
+  const saveStatus = document.querySelector("#editor-save-status");
+  if (!textarea) return;
+
+  textarea.value = code;
+  output.textContent = "Uitvoer verschijnt hier.";
+
+  textarea.addEventListener("input", () => {
+    store.saveEditorDraft(textarea.value);
+    saveStatus.textContent = "Opgeslagen";
+    saveStatus.className = "editor-save-status";
+  });
+
+  textarea.addEventListener("keydown", (event) => {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      textarea.setRangeText("    ", start, end, "end");
+      textarea.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      event.preventDefault();
+      runEditorCode();
+    }
+  });
+
+  if (project) toast(`Code van “${project.title}” staat in de editor.`);
+}
+
+async function runEditorCode() {
+  const textarea = document.querySelector("#editor-code");
+  const output = document.querySelector("#editor-output");
+  const status = document.querySelector("#editor-status");
+  const runButton = document.querySelector('[data-action="editor-run"]');
+  if (!textarea || !output || !status) return;
+
+  if (!textarea.value.trim()) {
+    status.className = "playground-status error";
+    status.textContent = "Typ eerst wat code.";
+    return;
+  }
+
+  store.saveEditorDraft(textarea.value);
+  if (runButton) runButton.disabled = true;
+  output.textContent = "";
+  output.classList.remove("error");
+  status.className = "playground-status busy";
+  status.textContent = pyodideLoaded ? "Bezig…" : "Python laden (eenmalig, ±10 MB)…";
+
+  let result = "";
+  const append = (text) => {
+    result += text + "\n";
+    output.textContent = result;
+  };
+
+  try {
+    await executePython(textarea.value, append);
+    if (!result.trim()) result = "(geen uitvoer)";
+    output.textContent = result;
+    status.className = "playground-status";
+    status.textContent = "Klaar.";
+  } catch (error) {
+    output.classList.add("error");
+    output.textContent = result + (result ? "\n" : "") + "Fout: " + (error?.message || String(error));
+    status.className = "playground-status error";
+    status.textContent = "Er ging iets mis.";
+  } finally {
+    if (runButton) runButton.disabled = false;
+  }
+}
+
+function loadEditorExample() {
+  const select = document.querySelector("#editor-example");
+  const textarea = document.querySelector("#editor-code");
+  if (!select || !textarea) return;
+  textarea.value = PLAYGROUND_EXAMPLES[select.value] || PLAYGROUND_EXAMPLES.hallo;
+  store.saveEditorDraft(textarea.value, "");
+
+  const banner = document.querySelector(".editor-project");
+  if (banner) {
+    banner.remove();
+    history.replaceState(null, "", "#/programmeren");
+    document.title = "Programmeren — EasyCodey";
+  }
+
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  textarea.focus();
+}
+
+function clearEditorOutput() {
+  const output = document.querySelector("#editor-output");
+  const status = document.querySelector("#editor-status");
+  if (output) {
+    output.textContent = "Uitvoer verschijnt hier.";
+    output.classList.remove("error");
+  }
+  if (status) {
+    status.textContent = "";
+    status.className = "playground-status";
+  }
+}
+
+function resetEditor() {
+  const textarea = document.querySelector("#editor-code");
+  if (!textarea) return;
+  if (textarea.value.trim() && !window.confirm("Weet je zeker dat je je code wilt wissen?")) return;
+  textarea.value = "";
+  store.clearEditorDraft();
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  textarea.focus();
+}
+
+function downloadEditorCode() {
+  const textarea = document.querySelector("#editor-code");
+  if (!textarea) return;
+  if (!textarea.value.trim()) {
+    toast("Er is nog geen code om te downloaden.");
+    return;
+  }
+
+  const projectId = new URLSearchParams(location.hash.split("?")[1] || "").get("project");
+  const idea = projectId ? findIdea(projectId) : null;
+  downloadText(idea ? `${slugify(idea.title)}.py` : "easycodey-programma.py", textarea.value, "text/x-python");
+  toast("Je code is gedownload.");
+}
+
+async function copyEditorCode(button) {
+  const textarea = document.querySelector("#editor-code");
+  if (!textarea?.value.trim()) return;
+  const copied = await writeClipboard(textarea.value);
+  if (!copied) {
+    toast("Kopiëren lukte niet.");
+    return;
+  }
+  if (button) {
+    const old = button.textContent;
+    button.textContent = "Gekopieerd!";
+    window.setTimeout(() => {
+      button.textContent = old;
+    }, 1500);
+  }
+  toast("Code gekopieerd.");
+}
+
+function programIdea(ideaId) {
+  const idea = findIdea(ideaId);
+  if (!idea) return;
+  const draft = store.getEditorDraft();
+  if (draft.projectId !== idea.id || !draft.code) {
+    store.saveEditorDraft(combinedIdeaCode(idea), idea.id);
+  }
+  navigate(`#/programmeren?project=${encodeURIComponent(idea.id)}`);
+}
+
+function reloadEditorProject(ideaId) {
+  const idea = findIdea(ideaId);
+  const textarea = document.querySelector("#editor-code");
+  if (!idea || !textarea) return;
+  if (
+    textarea.value.trim() &&
+    !window.confirm("Projectcode opnieuw laden? Je aanpassingen in de editor worden vervangen.")
+  ) {
+    return;
+  }
+  textarea.value = combinedIdeaCode(idea);
+  store.saveEditorDraft(textarea.value, idea.id);
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  toast("Projectcode opnieuw geladen.");
+}
+
+function downloadIdeaCode(ideaId) {
+  const idea = findIdea(ideaId);
+  if (!idea) return;
+  downloadText(`${slugify(idea.title)}.py`, combinedIdeaCode(idea), "text/x-python");
+  toast("Projectcode gedownload.");
+}
+
+async function copyIdeaCode(button, ideaId) {
+  const idea = findIdea(ideaId);
+  if (!idea) return;
+  const copied = await writeClipboard(combinedIdeaCode(idea));
+  if (!copied) {
+    toast("Kopiëren lukte niet.");
+    return;
+  }
+  if (button) {
+    const old = button.textContent;
+    button.textContent = "Gekopieerd!";
+    window.setTimeout(() => {
+      button.textContent = old;
+    }, 1500);
+  }
+  toast("Alle projectcode gekopieerd.");
 }
 
 function pickNextFor(category, limit = 3) {
@@ -1439,6 +1819,16 @@ document.addEventListener("click", (event) => {
       openPlayground(code);
     }
     if (action === "copy-code") copyCode(actionEl);
+    if (action === "editor-run") runEditorCode();
+    if (action === "editor-load-example") loadEditorExample();
+    if (action === "editor-clear-output") clearEditorOutput();
+    if (action === "editor-reset") resetEditor();
+    if (action === "editor-download") downloadEditorCode();
+    if (action === "editor-copy") copyEditorCode(actionEl);
+    if (action === "editor-reload-project") reloadEditorProject(actionEl.dataset.ideaId);
+    if (action === "program-idea") programIdea(actionEl.dataset.ideaId);
+    if (action === "download-idea") downloadIdeaCode(actionEl.dataset.ideaId);
+    if (action === "copy-idea-code") copyIdeaCode(actionEl, actionEl.dataset.ideaId);
     if (action === "toggle-step") {
       store.toggleStep(actionEl.dataset.ideaId, Number(actionEl.dataset.stepIndex));
       const idea = findIdea(actionEl.dataset.ideaId);
