@@ -191,6 +191,8 @@ EasyCodey is een installeerbare webapp. Je gebruikt dezelfde site en dezelfde vo
 3. Op Android: menu ⋮ → **App installeren** of **Toevoegen aan startscherm**.
 4. Op iPhone/iPad: **Deel** → **Zet op beginscherm**.
 
+Er is ook een aparte pagina **`/installeren/`** met een QR-code en uitleg per platform. Scan de QR-code met je Android-telefoon om de site meteen te openen.
+
 Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
 
 Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`.
@@ -243,7 +245,7 @@ Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt
 De site heeft alles wat Google nodig heeft om hem te indexeren:
 
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **163 URL's**: de startpagina, het projectoverzicht en alle **161 projectpagina's**.
+- `/sitemap.xml` bevat **164 URL's**: de startpagina, het projectoverzicht, de installatiepagina en alle **161 projectpagina's**.
 - Elk project heeft een echte pagina op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
 - `index.html` heeft een titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD.
@@ -266,7 +268,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 1. `npm run check` — controleert alle projectdata, het manifest, de offline-cache, de 161 vaste pagina's, het overzicht en de sitemap.
 2. `npm start` en open http://localhost:4173.
 3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
-4. Test de vaste pagina's: `/projecten/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
+4. Test de vaste pagina's: `/projecten/`, `/installeren/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
 5. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
 6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
 7. Vink alle stappen af en controleer de confetti en de afgeronde status.

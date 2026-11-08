@@ -145,7 +145,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Vindbaarheid
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **163 URL's**: startpagina, projectoverzicht en alle 161 projecten.
+- `/sitemap.xml` bevat **164 URL's**: startpagina, projectoverzicht, installatiepagina en alle 161 projecten.
 - Elk project heeft een vaste pagina op `/idee/<id>/` met eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht per categorie met zoekveld (`CollectionPage` + `ItemList`).
 - Titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD staan ook in `index.html`.
@@ -180,13 +180,15 @@ FLL/
 │   └── ideas-01.js t/m ideas-07.js
 ├── assets/covers/             10 lokale SVG-omslagen
 ├── assets/icons/              App-iconen: 192, 512, maskable en Apple
+├── assets/qr/                 QR-code naar de live site voor installatie op Android
 ├── assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
 ├── scripts/check-data.mjs     Controle van projectdata, manifest, offline-cache, pagina's en sitemap
-├── scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht en de sitemap
+├── scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht, de installatiepagina en de sitemap
 ├── scripts/make-icons.mjs     App-iconen opnieuw maken met headless Chrome
 ├── idee/<id>/index.html       161 vaste, indexeerbare projectpagina's
 ├── projecten/index.html       Overzicht van alle projecten per categorie
-├── sitemap.xml                Startpagina, overzicht en 161 projectpagina's (163 URL's)
+├── installeren/index.html     Installatie-uitleg per platform met QR-code
+├── sitemap.xml                Startpagina, overzicht, installeren en 161 projectpagina's (164 URL's)
 ├── server.js                  Statische server + AI-proxy (geen dependencies)
 ├── package.json               Scripts: start, dev, check, pages, build, icons
 ├── render.yaml                Render Blueprint
@@ -206,7 +208,7 @@ FLL/
 
 | Test | Resultaat |
 |---|---|
-| `npm run check` | ✅ 161 projecten, 711 stappen, 161 pagina's, 163 sitemap-URL's, 0 fouten |
+| `npm run check` | ✅ 161 projecten, 711 stappen, 161 pagina's, 164 sitemap-URL's, 0 fouten |
 | Datacontrole op dubbele id's, verplichte velden, stappen, tips, `next`-links en covers | ✅ |
 | Syntaxcontrole `node --check` op `app.js`, `server.js`, `js/ai.js`, `js/store.js` | ✅ |
 | Startpagina `/` | ✅ 200, `text/html` |
@@ -214,7 +216,7 @@ FLL/
 | Alle 10 categorie-covers | ✅ 200, `image/svg+xml` |
 | `/api/config` | ✅ 200, `application/json`, inclusief doneervelden |
 | `/robots.txt` | ✅ 200, `text/plain`, verwijst naar de sitemap |
-| `/sitemap.xml` | ✅ 200, geldige XML met 163 URL's en `SITE_URL` |
+| `/sitemap.xml` | ✅ 200, geldige XML met 164 URL's en `SITE_URL` |
 | Doneerknop zonder `DONATE_URL` | ✅ verborgen |
 | Doneerknop met `DONATE_URL` | ✅ zichtbaar, link en label kloppen |
 | Python-speelveld (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
@@ -247,10 +249,13 @@ FLL/
 | Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
 | Projectpagina zonder slash | ✅ 301 naar de map met slash |
 | Overzicht `/projecten/` | ✅ 161 links, 10 categorieën, zoekfilter en `CollectionPage` |
-| Sitemap lokaal | ✅ geldige XML, 163 URL's, productie-startpagina aanwezig |
+| Sitemap lokaal | ✅ geldige XML, 164 URL's, productie-startpagina aanwezig |
 | Speel dit idee vanaf vaste pagina | ✅ app opent met `?play=1`, volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
+| Installatiepagina `/installeren/` | ✅ 6 secties, 3 Android-stappen, eigen titel en canonical |
+| QR-code op installatiepagina | ✅ laadt als SVG en is zichtbaar op mobiel |
+| Installatiepagina mobiel | ✅ geen horizontale overflow, één kolom |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
@@ -426,7 +431,8 @@ De site staat live:
 | Programmeer-editor op de live site | ✅ |
 | Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache (live getest) |
 | 161 vaste projectpagina's + overzicht | ✅ `/idee/<id>/` en `/projecten/` |
-| Sitemap met 163 URL's | ✅ gegenereerd door `npm run pages` |
+| Installatiepagina met QR-code | ✅ `/installeren/` |
+| Sitemap met 164 URL's | ✅ gegenereerd door `npm run pages` |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
 | Doneerlink | ✅ Belfius IBAN via `site-config.json` |
 
@@ -434,7 +440,7 @@ Wat optioneel nog kan:
 
 1. Render Web Service of Blueprint koppelen voor de online AI-coach (`npm install`, `npm start`).
 2. `OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL` in Render instellen.
-3. Site aanmelden bij Google Search Console en de sitemap met 163 URL's insturen; zie `GOOGLE.md`.
+3. Site aanmelden bij Google Search Console en de sitemap met 164 URL's insturen; zie `GOOGLE.md`.
 4. Optioneel: eigen domein koppelen.
 
 ---

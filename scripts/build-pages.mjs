@@ -19,6 +19,7 @@ const SITE = "https://yousefabujarad2014-beep.github.io/easycodey";
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const IDEAS_DIR = path.join(root, "idee");
 const OVERVIEW_DIR = path.join(root, "projecten");
+const INSTALL_DIR = path.join(root, "installeren");
 
 const SUN_MOON = `<svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>`;
@@ -129,6 +130,8 @@ function footer(prefix) {
         <a class="link-btn" href="${prefix}">🏠 Startpagina</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}installeren/">📲 Installeren</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/programmeren">⌨ Programmeer zelf</a>
       </p>
@@ -478,6 +481,227 @@ function renderOverviewPage() {
 `;
 }
 
+function renderInstallPage() {
+  const prefix = "../";
+  const canonical = `${SITE}/installeren/`;
+  const title = "EasyCodey installeren als app — Android, iPhone en computer";
+  const description = trim(
+    "Installeer EasyCodey gratis als app op je Android-telefoon, iPhone, iPad, computer of Chromebook. Eigen icoon, eigen venster en offline Python. Geen winkel of account nodig.",
+    155
+  );
+  const qr = `${SITE}/assets/qr/easycodey-install.svg`;
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "HowTo",
+        name: "EasyCodey als app installeren",
+        description,
+        inLanguage: "nl-NL",
+        totalTime: "PT2M",
+        step: [
+          {
+            "@type": "HowToStep",
+            position: 1,
+            name: "Open EasyCodey",
+            text: "Open https://yousefabujarad2014-beep.github.io/easycodey/ in Chrome of Safari."
+          },
+          {
+            "@type": "HowToStep",
+            position: 2,
+            name: "Kies installeren",
+            text: "Op Android: menu ⋮ → App installeren. Op iPhone: Deel → Zet op beginscherm. Op de computer: het installatie-icoon in de adresbalk."
+          },
+          {
+            "@type": "HowToStep",
+            position: 3,
+            name: "Bevestig",
+            text: "EasyCodey krijgt een eigen icoon en opent daarna in een eigen venster."
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "EasyCodey", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Installeren", item: canonical }
+        ]
+      }
+    ]
+  };
+
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+  ${head({ title, description, canonical, image: qr, prefix, extraLd: ld })}
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  ${header(prefix)}
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="${prefix}">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Installeren</span>
+    </nav>
+
+    <header class="static-page-head">
+      <p class="eyebrow">Installeren</p>
+      <h1>Zet EasyCodey op je apparaat</h1>
+      <p class="static-lead">
+        EasyCodey is een installeerbare webapp. Je krijgt een eigen icoon en een eigen venster,
+        en na de eerste keer werkt de site ook offline. Geen app-store, account of download nodig.
+      </p>
+    </header>
+
+    <div class="install-hero">
+      <section class="panel install-qr">
+        <h2>Scan met je telefoon</h2>
+        <img src="${prefix}assets/qr/easycodey-install.svg" width="220" height="220" alt="QR-code die naar EasyCodey wijst" />
+        <p>Open de camera of Google Lens, scan de code en open de link in Chrome of Safari.</p>
+        <code>yousefabujarad2014-beep.github.io/easycodey</code>
+      </section>
+      <section class="panel install-highlights">
+        <h2>Waarom als app?</h2>
+        <ul class="tips">
+          <li>Je eigen icoon op het startscherm of bureaublad.</li>
+          <li>Een eigen venster zonder adresbalk.</li>
+          <li>Werkt offline na één keer online gebruiken.</li>
+          <li>Je voortgang en eigen projecten blijven bewaard.</li>
+          <li>Gratis, zonder account en zonder reclame.</li>
+        </ul>
+        <div class="static-actions">
+          <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>
+          <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">1</span> Android (Chrome)</h2>
+      <ol class="install-steps">
+        <li>
+          <strong>Open de site in Chrome</strong>
+          Scan de QR-code of typ het adres in de adresbalk.
+        </li>
+        <li>
+          <strong>Tik op het menu ⋮</strong>
+          Kies <em>App installeren</em> of <em>Toevoegen aan startscherm</em>.
+        </li>
+        <li>
+          <strong>Bevestig</strong>
+          EasyCodey staat nu tussen je apps en opent in een eigen venster.
+        </li>
+      </ol>
+      <p class="install-note">
+        Verschijnt <strong>App installeren</strong> niet? Gebruik Chrome of Edge, geen in-app browser,
+        en bezoek de site één keer online. Als laatste redmiddel werkt <em>Toevoegen aan startscherm</em> ook.
+      </p>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">2</span> iPhone of iPad (Safari)</h2>
+      <ol class="install-steps">
+        <li>
+          <strong>Open de site in Safari</strong>
+          Scan de QR-code of typ het adres in de adresbalk.
+        </li>
+        <li>
+          <strong>Tik op Deel</strong>
+          Dat is het vierkantje met het pijltje omhoog.
+        </li>
+        <li>
+          <strong>Kies Zet op beginscherm</strong>
+          Tik op <em>Voeg toe</em>. EasyCodey verschijnt op je beginscherm.
+        </li>
+      </ol>
+      <p class="install-note">iOS toont geen installatieprompt; <em>Zet op beginscherm</em> is de juiste manier.</p>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">3</span> Windows of macOS (Chrome of Edge)</h2>
+      <ol class="install-steps">
+        <li>
+          <strong>Open de site</strong>
+          Ga naar de live-URL in Chrome of Edge.
+        </li>
+        <li>
+          <strong>Klik op het installatie-icoon</strong>
+          Het staat rechts in de adresbalk, of gebruik het menu ⋮ → <em>App installeren</em>.
+        </li>
+        <li>
+          <strong>Bevestig</strong>
+          EasyCodey komt in het startmenu of in Launchpad en opent in een eigen venster.
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">4</span> Chromebook (Chrome)</h2>
+      <ol class="install-steps">
+        <li>
+          <strong>Open de site in Chrome</strong>
+          Ga naar de live-URL.
+        </li>
+        <li>
+          <strong>Kies Installeren</strong>
+          Gebruik het installatie-icoon in de adresbalk of het menu ⋮ → <em>App installeren</em>.
+        </li>
+        <li>
+          <strong>Open de app</strong>
+          EasyCodey staat in het launcher-menu en werkt daarna ook offline.
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">5</span> Wat werkt offline?</h2>
+      <table class="offline-table">
+        <thead>
+          <tr><th>Onderdeel</th><th>Offline</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Alle 161 projecten, uitleg, stappen en tips</td><td>✅</td></tr>
+          <tr><td>Vaste projectpagina's en het overzicht</td><td>✅ na één keer online bezoek</td></tr>
+          <tr><td>Voortgang, thema en eigen projecten</td><td>✅</td></tr>
+          <tr><td>Python-speelveld en editor</td><td>✅ na de eerste keer online</td></tr>
+          <tr><td>Offline AI-coach</td><td>✅</td></tr>
+          <tr><td>Online AI-coach (OpenAI)</td><td>❌ internet nodig</td></tr>
+          <tr><td>Doneren per bank</td><td>❌ internet nodig</td></tr>
+        </tbody>
+      </table>
+      <p class="static-note">
+        De service worker bewaart de app bij de eerste installatie. De Python-runtime (ongeveer 10 MB)
+        wordt bewaard zodra je hem één keer gebruikt. Daarna werken <strong>▶ Speel</strong>,
+        <strong>▶ Speel dit idee</strong> en de editor ook zonder internet.
+      </p>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">6</span> Hulp nodig?</h2>
+      <ul class="tips">
+        <li>Gebruik Chrome, Edge of Safari. Firefox en in-app browsers ondersteunen installeren minder goed.</li>
+        <li>Sluit incognito en open de site in een normaal tabblad.</li>
+        <li>Bezoek de site één keer online en wacht een paar seconden, zodat de service worker klaar is.</li>
+        <li>Werk je browser bij via de Play Store of App Store en herstart hem.</li>
+        <li>Je voortgang staat per apparaat en per browser. Er is geen account of synchronisatie.</li>
+      </ul>
+      <div class="static-actions">
+        <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>
+        <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
+      </div>
+    </section>
+  </main>
+
+  ${footer(prefix)}
+  ${THEME_SCRIPT}
+</body>
+</html>
+`;
+}
+
 function writeFile(file, content) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, content, "utf8");
@@ -504,10 +728,12 @@ for (const idea of IDEAS) {
 }
 
 writeFile(path.join(OVERVIEW_DIR, "index.html"), renderOverviewPage());
+writeFile(path.join(INSTALL_DIR, "index.html"), renderInstallPage());
 
 const urls = [
   { loc: `${SITE}/`, priority: "1.0", changefreq: "weekly" },
   { loc: `${SITE}/projecten/`, priority: "0.9", changefreq: "weekly" },
+  { loc: `${SITE}/installeren/`, priority: "0.7", changefreq: "monthly" },
   ...IDEAS.map((idea) => ({
     loc: `${SITE}/idee/${idea.id}/`,
     priority: "0.8",
@@ -534,5 +760,6 @@ writeFile(path.join(root, "sitemap.xml"), sitemap);
 
 console.log(`Projectpagina's: ${IDEAS.length}`);
 console.log(`Overzicht:       projecten/index.html`);
+console.log(`Installeren:     installeren/index.html`);
 console.log(`Sitemap:         ${urls.length} URL's`);
 if (removed) console.log(`Opgeruimd:       ${removed} verouderde projectmap(pen)`);

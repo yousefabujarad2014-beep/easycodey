@@ -32,8 +32,9 @@ Als je een eigen domein gebruikt, pas je deze waarden aan naar bijvoorbeeld `htt
 ## 2. Wat al klaar staat in de site
 
 - `robots.txt` en `sitemap.xml` staan als statische bestanden in de repository, zodat GitHub Pages ze serveert. De Node-server genereert ze daarnaast dynamisch met `SITE_URL`.
-- **Elk project heeft een eigen vaste pagina** op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD. De sitemap bevat **163 URL's**: de startpagina, het overzicht en alle 161 projecten.
+- **Elk project heeft een eigen vaste pagina** op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD. De sitemap bevat **164 URL's**: de startpagina, het overzicht, de installatiepagina en alle 161 projecten.
 - `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
+- `/installeren/` legt per platform uit hoe je de app installeert en bevat een QR-code naar de live site.
 - De startpagina heeft een titel, meta-description, canonical, Open Graph- en Twitter-kaarten.
 - Er staat gestructureerde data (JSON-LD) van het type `WebSite` in de startpagina, `LearningResource` + `BreadcrumbList` op elke projectpagina en `CollectionPage` op het overzicht.
 - De Node-server blokkeert documentatie, scripts en configuratiebestanden voor bezoekers. Op GitHub Pages zijn die bestanden wel bereikbaar; ze bevatten geen geheimen.
@@ -101,7 +102,7 @@ Na elke wijziging in `data/`:
 npm run build
 ```
 
-Dit genereert de 161 pagina's, het overzicht en de sitemap (163 URL's) en controleert alles.
+Dit genereert de 161 pagina's, het overzicht, de installatiepagina en de sitemap (164 URL's) en controleert alles.
 
 ### Let op
 
@@ -115,8 +116,9 @@ Dit genereert de 161 pagina's, het overzicht en de sitemap (163 URL's) en contro
 - [ ] Site is bereikbaar op de live-URL.
 - [ ] `SITE_URL` klopt in Render en in `index.html`.
 - [ ] `/robots.txt` toont de juiste sitemap-URL.
-- [ ] `/sitemap.xml` is geldige XML en bevat **163 URL's**.
+- [ ] `/sitemap.xml` is geldige XML en bevat **164 URL's**.
 - [ ] `/projecten/` toont alle 161 projecten.
+- [ ] `/installeren/` toont de QR-code en de uitleg per platform.
 - [ ] Een projectpagina zoals `/idee/raad-het-getal/` heeft een eigen titel en description.
 - [ ] Een projectpagina zonder slash (`/idee/raad-het-getal`) stuurt door naar de versie met slash.
 - [ ] Search Console is geverifieerd.

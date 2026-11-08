@@ -207,6 +207,25 @@ if (!existsSync(overviewFile)) {
   }
 }
 
+const installFile = path.join(root, "installeren", "index.html");
+if (!existsSync(installFile)) {
+  fail("Installatiepagina installeren/index.html ontbreekt (voer npm run pages uit).");
+} else {
+  const install = readFileSync(installFile, "utf8");
+  if (!install.includes(`<link rel="canonical" href="${SITE}/installeren/"`)) {
+    fail("Installatiepagina heeft niet de juiste canonical.");
+  }
+  if (!install.includes("assets/qr/easycodey-install.svg")) {
+    fail("Installatiepagina mist de QR-code.");
+  }
+  if (!install.includes("<h1>")) fail("Installatiepagina mist een <h1>.");
+  if (!install.includes('type="application/ld+json"')) fail("Installatiepagina mist JSON-LD.");
+}
+
+if (!existsSync(path.join(root, "assets", "qr", "easycodey-install.svg"))) {
+  fail("QR-code assets/qr/easycodey-install.svg ontbreekt.");
+}
+
 const sitemapFile = path.join(root, "sitemap.xml");
 if (!existsSync(sitemapFile)) {
   fail("sitemap.xml ontbreekt.");
@@ -215,10 +234,15 @@ if (!existsSync(sitemapFile)) {
   sitemapCount = (sitemap.match(/<loc>/g) || []).length;
   if (!sitemap.includes(`<loc>${SITE}/</loc>`)) fail("Sitemap mist de startpagina.");
   if (!sitemap.includes(`<loc>${SITE}/projecten/</loc>`)) fail("Sitemap mist de overzichtspagina.");
+  if (!sitemap.includes(`<loc>${SITE}/installeren/</loc>`)) fail("Sitemap mist de installatiepagina.");
   for (const idea of IDEAS) {
     if (!sitemap.includes(`<loc>${SITE}/idee/${idea.id}/</loc>`)) {
       fail(`Sitemap mist het project ${idea.id}.`);
     }
+  }
+  const expectedUrls = IDEAS.length + 3;
+  if (sitemapCount !== expectedUrls) {
+    fail(`Sitemap heeft ${sitemapCount} URL's; verwacht ${expectedUrls}.`);
   }
 }
 
@@ -235,7 +259,7 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
-console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht`);
+console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren`);
 console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
 for (const category of CATEGORIES) {

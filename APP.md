@@ -6,6 +6,8 @@ EasyCodey is een **installeerbare webapp** (PWA). Je installeert dezelfde site a
 
 Live: https://yousefabujarad2014-beep.github.io/easycodey/
 
+Installatiepagina met QR-code: https://yousefabujarad2014-beep.github.io/easycodey/installeren/
+
 ---
 
 ## 1. Installeren
