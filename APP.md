@@ -26,6 +26,16 @@ Je kunt ook op het **📲-icoon** in de header of op **📲 Installeer als app**
 2. Menu ⋮ → **App installeren** of **Toevoegen aan startscherm**.
 3. Bevestig.
 
+Je kunt ook op het **📲-icoon** in de header tikken. Verscheen de knop **Installeer nu**? Tik daar dan op; Chrome toont dan meteen het installatievenster.
+
+**Geen "App installeren" in het menu?**
+
+- Gebruik **Chrome** (of Edge/Samsung Internet), niet Firefox of een in-app browser.
+- Sluit incognito en open de site in een normaal tabblad.
+- Bezoek de site één keer online en wacht een paar seconden, zodat de service worker klaar is.
+- Werk Chrome bij via de Play Store en herstart de browser.
+- Als laatste redmiddel: menu ⋮ → **Toevoegen aan startscherm**. Je krijgt dan een snelkoppeling die ook zonder adresbalk opent.
+
 ### iPhone of iPad (Safari)
 
 1. Open de live site in Safari.
