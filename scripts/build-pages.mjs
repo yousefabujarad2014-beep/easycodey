@@ -16,10 +16,15 @@ import { IDEAS, CATEGORY_META, coverFor, minutesOf } from "../data/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SITE = "https://yousefabujarad2014-beep.github.io/easycodey";
+const CONTACT_PHONE_DISPLAY = "+32 466 47 66 52";
+const CONTACT_PHONE_TEL = "+32466476652";
+const CONTACT_WHATSAPP = "https://wa.me/32466476652";
+const CONTACT_EMAIL = "yousefabujarad2014@gmail.com";
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const IDEAS_DIR = path.join(root, "idee");
 const OVERVIEW_DIR = path.join(root, "projecten");
 const INSTALL_DIR = path.join(root, "installeren");
+const CONTACT_DIR = path.join(root, "contact");
 
 const SUN_MOON = `<svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>`;
@@ -107,10 +112,12 @@ function header(prefix) {
         <span class="logo-text">Easy<strong>Codey</strong></span>
       </a>
       <nav class="main-nav" aria-label="Hoofdnavigatie">
-        <a href="${prefix}">Ideeën</a>
+        <a href="${prefix}">Home</a>
+        <a href="${prefix}projecten/">Projecten</a>
         <a href="${prefix}#/leerpad">Leerpad</a>
         <a href="${prefix}#/programmeren">Programmeren</a>
         <a href="${prefix}#/mijn-ideeen">Mijn ideeën</a>
+        <a href="${prefix}contact/">Contact</a>
       </nav>
       <div class="header-tools">
         <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
@@ -132,6 +139,8 @@ function footer(prefix) {
         <a class="link-btn" href="${prefix}projecten/">📚 Alle projecten</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}installeren/">📲 Installeren</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}contact/">✉ Contact</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/programmeren">⌨ Programmeer zelf</a>
       </p>
@@ -702,6 +711,134 @@ function renderInstallPage() {
 `;
 }
 
+function renderContactPage() {
+  const prefix = "../";
+  const canonical = `${SITE}/contact/`;
+  const title = "Contact — EasyCodey";
+  const description = trim(
+    `Vragen, feedback of een idee voor EasyCodey? Mail ${CONTACT_EMAIL}, stuur een WhatsApp of bel ${CONTACT_PHONE_DISPLAY}.`,
+    155
+  );
+  const whatsappHref = `${CONTACT_WHATSAPP}?text=${encodeURIComponent("Hallo EasyCodey, ik heb een vraag.")}`;
+  const mailHref = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("EasyCodey")}`;
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ContactPage",
+        name: title,
+        description,
+        url: canonical,
+        inLanguage: "nl-NL",
+        isPartOf: { "@type": "WebSite", name: "EasyCodey", url: `${SITE}/` }
+      },
+      {
+        "@type": "Organization",
+        name: "EasyCodey",
+        url: `${SITE}/`,
+        email: CONTACT_EMAIL,
+        contactPoint: [
+          {
+            "@type": "ContactPoint",
+            contactType: "customer support",
+            telephone: CONTACT_PHONE_TEL,
+            email: CONTACT_EMAIL,
+            availableLanguage: ["nl", "en"]
+          }
+        ]
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "EasyCodey", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Contact", item: canonical }
+        ]
+      }
+    ]
+  };
+
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+  ${head({ title, description, canonical, image: `${SITE}/assets/icons/icon-512.png`, prefix, extraLd: ld })}
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  ${header(prefix)}
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="${prefix}">Home</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Contact</span>
+    </nav>
+
+    <header class="static-page-head">
+      <p class="eyebrow">Contact</p>
+      <h1>Neem contact op</h1>
+      <p class="static-lead">
+        Heb je een vraag, vond je een fout of heb je een idee voor een nieuw project?
+        Ik hoor het graag. Kies hieronder hoe je me wilt bereiken.
+      </p>
+    </header>
+
+    <div class="contact-grid">
+      <a class="panel contact-card contact-whatsapp" href="${esc(whatsappHref)}" target="_blank" rel="noopener">
+        <span class="contact-icon" aria-hidden="true">💬</span>
+        <h2>WhatsApp</h2>
+        <p>Snel een berichtje sturen. Het liefst met je vraag of een link naar het project.</p>
+        <span class="contact-value">${esc(CONTACT_PHONE_DISPLAY)}</span>
+      </a>
+
+      <a class="panel contact-card" href="tel:${esc(CONTACT_PHONE_TEL)}">
+        <span class="contact-icon" aria-hidden="true">📞</span>
+        <h2>Bellen of sms'en</h2>
+        <p>Liever even praten? Je kunt bellen of een sms sturen tijdens normale uren.</p>
+        <span class="contact-value">${esc(CONTACT_PHONE_DISPLAY)}</span>
+      </a>
+
+      <a class="panel contact-card" href="${esc(mailHref)}">
+        <span class="contact-icon" aria-hidden="true">✉️</span>
+        <h2>E-mail</h2>
+        <p>Voor langere vragen, feedback of samenwerkingen. Je krijgt zo snel mogelijk antwoord.</p>
+        <span class="contact-value">${esc(CONTACT_EMAIL)}</span>
+      </a>
+    </div>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">1</span> Waar kan ik mee helpen?</h2>
+      <ul class="tips">
+        <li>Een fout of iets dat niet werkt op de website of in de app.</li>
+        <li>Een idee voor een nieuw Python-project of een betere uitleg.</li>
+        <li>Een vraag over een project, de editor of het installeren van de app.</li>
+        <li>Een samenwerking, gastles of vraag over donaties.</li>
+      </ul>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">2</span> Goed om te weten</h2>
+      <ul class="tips">
+        <li>Ik antwoord meestal binnen één tot twee werkdagen.</li>
+        <li>Vermeld bij een fout je browser, je apparaat en het project waar het om gaat.</li>
+        <li>Je gegevens worden alleen gebruikt om je bericht te beantwoorden.</li>
+        <li>EasyCodey is gratis en heeft geen account nodig.</li>
+      </ul>
+      <div class="static-actions">
+        <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>
+        <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
+        <a class="btn ghost" href="${prefix}installeren/">📲 Installeren</a>
+      </div>
+    </section>
+  </main>
+
+  ${footer(prefix)}
+  ${THEME_SCRIPT}
+</body>
+</html>
+`;
+}
+
 function writeFile(file, content) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, content, "utf8");
@@ -729,11 +866,13 @@ for (const idea of IDEAS) {
 
 writeFile(path.join(OVERVIEW_DIR, "index.html"), renderOverviewPage());
 writeFile(path.join(INSTALL_DIR, "index.html"), renderInstallPage());
+writeFile(path.join(CONTACT_DIR, "index.html"), renderContactPage());
 
 const urls = [
   { loc: `${SITE}/`, priority: "1.0", changefreq: "weekly" },
   { loc: `${SITE}/projecten/`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE}/installeren/`, priority: "0.7", changefreq: "monthly" },
+  { loc: `${SITE}/contact/`, priority: "0.6", changefreq: "yearly" },
   ...IDEAS.map((idea) => ({
     loc: `${SITE}/idee/${idea.id}/`,
     priority: "0.8",
@@ -761,5 +900,6 @@ writeFile(path.join(root, "sitemap.xml"), sitemap);
 console.log(`Projectpagina's: ${IDEAS.length}`);
 console.log(`Overzicht:       projecten/index.html`);
 console.log(`Installeren:     installeren/index.html`);
+console.log(`Contact:         contact/index.html`);
 console.log(`Sitemap:         ${urls.length} URL's`);
 if (removed) console.log(`Opgeruimd:       ${removed} verouderde projectmap(pen)`);

@@ -245,9 +245,10 @@ Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt
 De site heeft alles wat Google nodig heeft om hem te indexeren:
 
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **164 URL's**: de startpagina, het projectoverzicht, de installatiepagina en alle **161 projectpagina's**.
+- `/sitemap.xml` bevat **165 URL's**: de startpagina, het projectoverzicht, de installatiepagina, de contactpagina en alle **161 projectpagina's**.
 - Elk project heeft een echte pagina op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
+- `/installeren/` en `/contact/` zijn vaste pagina's met eigen titel, description, canonical en JSON-LD.
 - `index.html` heeft een titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD.
 - De server blokkeert documentatie, scripts en configuratiebestanden.
 
@@ -268,7 +269,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 1. `npm run check` — controleert alle projectdata, het manifest, de offline-cache, de 161 vaste pagina's, het overzicht en de sitemap.
 2. `npm start` en open http://localhost:4173.
 3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
-4. Test de vaste pagina's: `/projecten/`, `/installeren/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
+4. Test de vaste pagina's: `/projecten/`, `/installeren/`, `/contact/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
 5. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
 6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
 7. Vink alle stappen af en controleer de confetti en de afgeronde status.

@@ -207,7 +207,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De app opent in een eigen venster met het EasyCodey-icoon.
 - [ ] Na één keer online gewerkt te hebben: site en Python werken offline.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
-- [ ] `/sitemap.xml` bevat 164 URL's: startpagina, overzicht, installatiepagina en 161 projecten.
+- [ ] `/sitemap.xml` bevat 165 URL's: startpagina, overzicht, installatiepagina, contactpagina en 161 projecten.
+- [ ] `/contact/` toont telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com**.
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
 - [ ] Site is aangemeld bij Google Search Console (zie `GOOGLE.md`).
 
@@ -300,7 +301,7 @@ Na de eerste succesvolle deploy:
 1. Open **https://search.google.com/search-console**.
 2. Voeg je live-URL toe als property.
 3. Verifieer met de HTML-tag of het HTML-bestand.
-4. Meld `sitemap.xml` aan (164 URL's).
+4. Meld `sitemap.xml` aan (165 URL's).
 5. Vraag indexering aan voor de startpagina en enkele projectpagina's.
 
 De volledige uitleg over de vaste projectpagina's, de app en de checklist staat in **`GOOGLE.md`**.

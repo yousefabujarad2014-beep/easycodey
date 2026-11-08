@@ -226,6 +226,21 @@ if (!existsSync(path.join(root, "assets", "qr", "easycodey-install.svg"))) {
   fail("QR-code assets/qr/easycodey-install.svg ontbreekt.");
 }
 
+const contactFile = path.join(root, "contact", "index.html");
+if (!existsSync(contactFile)) {
+  fail("Contactpagina contact/index.html ontbreekt (voer npm run pages uit).");
+} else {
+  const contact = readFileSync(contactFile, "utf8");
+  if (!contact.includes(`<link rel="canonical" href="${SITE}/contact/"`)) {
+    fail("Contactpagina heeft niet de juiste canonical.");
+  }
+  for (const value of ["+32 466 47 66 52", "wa.me/32466476652", "yousefabujarad2014@gmail.com"]) {
+    if (!contact.includes(value)) fail(`Contactpagina mist ${value}.`);
+  }
+  if (!contact.includes("<h1>")) fail("Contactpagina mist een <h1>.");
+  if (!contact.includes('type="application/ld+json"')) fail("Contactpagina mist JSON-LD.");
+}
+
 const sitemapFile = path.join(root, "sitemap.xml");
 if (!existsSync(sitemapFile)) {
   fail("sitemap.xml ontbreekt.");
@@ -235,12 +250,13 @@ if (!existsSync(sitemapFile)) {
   if (!sitemap.includes(`<loc>${SITE}/</loc>`)) fail("Sitemap mist de startpagina.");
   if (!sitemap.includes(`<loc>${SITE}/projecten/</loc>`)) fail("Sitemap mist de overzichtspagina.");
   if (!sitemap.includes(`<loc>${SITE}/installeren/</loc>`)) fail("Sitemap mist de installatiepagina.");
+  if (!sitemap.includes(`<loc>${SITE}/contact/</loc>`)) fail("Sitemap mist de contactpagina.");
   for (const idea of IDEAS) {
     if (!sitemap.includes(`<loc>${SITE}/idee/${idea.id}/</loc>`)) {
       fail(`Sitemap mist het project ${idea.id}.`);
     }
   }
-  const expectedUrls = IDEAS.length + 3;
+  const expectedUrls = IDEAS.length + 4;
   if (sitemapCount !== expectedUrls) {
     fail(`Sitemap heeft ${sitemapCount} URL's; verwacht ${expectedUrls}.`);
   }
@@ -259,7 +275,7 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
-console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren`);
+console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + contact`);
 console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
 for (const category of CATEGORIES) {

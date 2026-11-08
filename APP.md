@@ -8,6 +8,8 @@ Live: https://yousefabujarad2014-beep.github.io/easycodey/
 
 Installatiepagina met QR-code: https://yousefabujarad2014-beep.github.io/easycodey/installeren/
 
+Contact: https://yousefabujarad2014-beep.github.io/easycodey/contact/ — telefoon/WhatsApp **+32 466 47 66 52**, e-mail **yousefabujarad2014@gmail.com**
+
 ---
 
 ## 1. Installeren
