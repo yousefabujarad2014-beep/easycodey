@@ -11,9 +11,9 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste Pages-build | ✅ laatste commit op `main`, Pages bouwt automatisch |
+| Laatste Pages-build | ✅ commit `c0531f3`, build geslaagd |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
-| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache |
+| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache (live getest: 11/11) |
 | Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
 
 Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.

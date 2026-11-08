@@ -232,7 +232,11 @@ FLL/
 | **Speel dit idee** op een projectpagina | ✅ volledige code (24 regels) en directe Pyodide-uitvoer |
 | Site herladen zonder internet | ✅ laadt uit de cache |
 | Python uitvoeren zonder internet | ✅ werkt na eenmalig laden |
-| PWA-testsuite lokaal | ✅ 19/19 checks geslaagd |
+| PWA-testsuite lokaal | ✅ 20/20 checks geslaagd |
+| Chrome-installeerbaarheid | ✅ geen installability errors |
+| PWA-testsuite op de live site | ✅ 11/11 checks geslaagd |
+| Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
+| Live: offline-cache en offline Python | ✅ 33 bestanden, Pyodide werkt offline |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
@@ -404,7 +408,7 @@ De site staat live:
 | Windows-snelkoppelingen | ✅ bureaublad + startmenu |
 | Python-speelveld op de live site | ✅ |
 | Programmeer-editor op de live site | ✅ |
-| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache |
+| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache (live getest) |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
 | Doneerlink | ✅ Belfius IBAN via `site-config.json` |
 
