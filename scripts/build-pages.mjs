@@ -20,11 +20,16 @@ const CONTACT_PHONE_DISPLAY = "+32 466 47 66 52";
 const CONTACT_PHONE_TEL = "+32466476652";
 const CONTACT_WHATSAPP = "https://wa.me/32466476652";
 const CONTACT_EMAIL = "yousefabujarad2014@gmail.com";
+const DONATE_IBAN = "BE69 0638 3621 2278";
+const DONATE_NAME = "Yousef Abujarad (EasyCodey)";
+const DONATE_BANK = "Belfius";
+const DONATE_BIC = "GKCCBEBB";
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const IDEAS_DIR = path.join(root, "idee");
 const OVERVIEW_DIR = path.join(root, "projecten");
 const INSTALL_DIR = path.join(root, "installeren");
 const CONTACT_DIR = path.join(root, "contact");
+const DONATE_DIR = path.join(root, "doneren");
 
 const SUN_MOON = `<svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>`;
@@ -140,6 +145,8 @@ function footer(prefix) {
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}installeren/">📲 Installeren</a>
         <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}doneren/">♥ Doneren</a>
+        <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}contact/">✉ Contact</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/programmeren">⌨ Programmeer zelf</a>
@@ -151,19 +158,45 @@ function footer(prefix) {
 const THEME_SCRIPT = `<script>
     (function () {
       var button = document.getElementById("static-theme");
-      if (!button) return;
-      button.addEventListener("click", function () {
-        var root = document.documentElement;
-        var next = root.dataset.theme === "dark" ? "light" : "dark";
-        root.dataset.theme = next;
-        var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
-        try {
-          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
-          var state = raw ? JSON.parse(raw) : {};
-          state.theme = next;
-          localStorage.setItem("easycodey.v1", JSON.stringify(state));
-        } catch (error) {}
+      if (button) {
+        button.addEventListener("click", function () {
+          var root = document.documentElement;
+          var next = root.dataset.theme === "dark" ? "light" : "dark";
+          root.dataset.theme = next;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+          try {
+            var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+            var state = raw ? JSON.parse(raw) : {};
+            state.theme = next;
+            localStorage.setItem("easycodey.v1", JSON.stringify(state));
+          } catch (error) {}
+        });
+      }
+
+      document.querySelectorAll("[data-copy-iban]").forEach(function (copyButton) {
+        copyButton.addEventListener("click", function () {
+          var value = copyButton.getAttribute("data-copy-iban") || "";
+          var original = copyButton.textContent;
+          var done = function () {
+            copyButton.textContent = "Gekopieerd!";
+            setTimeout(function () { copyButton.textContent = original; }, 1800);
+          };
+          var fallback = function () {
+            var area = document.createElement("textarea");
+            area.value = value;
+            document.body.append(area);
+            area.select();
+            try { document.execCommand("copy"); } catch (error) {}
+            area.remove();
+            done();
+          };
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(value).then(done, fallback);
+          } else {
+            fallback();
+          }
+        });
       });
     })();
   </script>`;
@@ -839,6 +872,200 @@ function renderContactPage() {
 `;
 }
 
+function renderDonatePage() {
+  const prefix = "../";
+  const canonical = `${SITE}/doneren/`;
+  const title = "Doneren — Steun EasyCodey";
+  const description = trim(
+    `Steun EasyCodey met een vrijwillige overschrijving naar IBAN ${DONATE_IBAN} op naam van ${DONATE_NAME} bij ${DONATE_BANK}. Zo blijft de site gratis en advertentievrij.`,
+    155
+  );
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: title,
+        description,
+        url: canonical,
+        inLanguage: "nl-NL",
+        isPartOf: { "@type": "WebSite", name: "EasyCodey", url: `${SITE}/` }
+      },
+      {
+        "@type": "DonateAction",
+        name: "Doneer aan EasyCodey",
+        description: "Vrijwillige donatie per bankoverschrijving.",
+        url: canonical,
+        recipient: {
+          "@type": "Organization",
+          name: "EasyCodey",
+          url: `${SITE}/`
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "EasyCodey", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Doneren", item: canonical }
+        ]
+      }
+    ]
+  };
+
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+  ${head({ title, description, canonical, image: `${SITE}/assets/icons/icon-512.png`, prefix, extraLd: ld })}
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  ${header(prefix)}
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="${prefix}">Home</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Doneren</span>
+    </nav>
+
+    <header class="static-page-head">
+      <p class="eyebrow">Doneren</p>
+      <h1>Steun EasyCodey</h1>
+      <p class="static-lead">
+        EasyCodey is gratis en blijft gratis: geen account, geen advertenties en geen verkoop van gegevens.
+        Een vrijwillige donatie helpt om de site online te houden, het domein te betalen en nieuwe projecten te maken.
+      </p>
+    </header>
+
+    <div class="donate-hero">
+      <section class="panel">
+        <h2>Waarom doneren?</h2>
+        <p>
+          Alle 161 projecten, de uitleg, de programmeer-editor en de app zijn voor iedereen toegankelijk.
+          Er zit geen abonnement achter en je hoeft niets te kopen. Doneren is dus echt vrijwillig.
+        </p>
+        <ul class="tips">
+          <li>De site blijft gratis voor iedereen, ook zonder donatie.</li>
+          <li>Geen advertenties, geen tracking en geen verkoop van gegevens.</li>
+          <li>Nieuwe projecten, uitleg en tests kosten tijd en soms een klein bedrag.</li>
+          <li>Een donatie geeft geen extra functies of voorrang.</li>
+        </ul>
+        <div class="donate-amounts" aria-label="Voorbeelden van bedragen">
+          <span class="donate-amount">€3</span>
+          <span class="donate-amount">€5</span>
+          <span class="donate-amount">€10</span>
+          <span class="donate-amount">€25</span>
+        </div>
+        <p class="static-note">Kies zelf een bedrag. Ook €1 is welkom. Je kunt één keer of maandelijks overschrijven.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Rechtstreeks overschrijven</h2>
+        <div class="donate-iban">
+          <p class="donate-iban-label">IBAN</p>
+          <div class="donate-iban-row">
+            <code class="donate-iban-value">${esc(DONATE_IBAN)}</code>
+            <button class="btn ghost tiny" type="button" data-copy-iban="${esc(DONATE_IBAN)}">Kopieer IBAN</button>
+          </div>
+          <p class="donate-bank"><strong>${esc(DONATE_BANK)}</strong> · ${esc(DONATE_NAME)}</p>
+          <p class="donate-bank">BIC: <strong>${esc(DONATE_BIC)}</strong></p>
+          <p class="donate-bank">Mededeling: <strong>EasyCodey donatie</strong></p>
+        </div>
+        <p class="static-note">
+          Je overschrijving loopt rechtstreeks via jouw bank. EasyCodey verwerkt zelf geen betalingen
+          en bewaart geen betaalgegevens.
+        </p>
+      </section>
+    </div>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">1</span> Zo doneer je in 4 stappen</h2>
+      <ol class="donate-steps">
+        <li>Open de app van je bank en kies <strong>Overschrijven</strong> of <strong>Nieuwe betaling</strong>.</li>
+        <li>Vul het IBAN <strong>${esc(DONATE_IBAN)}</strong> in. De naam van de rekeninghouder is <strong>${esc(DONATE_NAME)}</strong>.</li>
+        <li>Vul zelf een bedrag in en zet eventueel <strong>EasyCodey donatie</strong> als mededeling.</li>
+        <li>Controleer de gegevens en bevestig met je bankapp of kaartlezer.</li>
+      </ol>
+      <p class="static-note">Je bank bevestigt de overschrijving. Bewaar die bevestiging als bewijs voor jezelf.</p>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">2</span> Waar gaat je geld naartoe?</h2>
+      <table class="offline-table">
+        <thead>
+          <tr><th>Doel</th><th>Uitleg</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Website online houden</td><td>GitHub Pages host de site gratis. Donaties betalen dus geen dure servers.</td></tr>
+          <tr><td>Eigen domein</td><td>Optioneel: <strong>easycodey.com</strong>, zodat je alleen "EasyCodey" hoeft te typen.</td></tr>
+          <tr><td>Ontwikkeling</td><td>Nieuwe projecten, uitleg, tests en onderhoud van de code.</td></tr>
+          <tr><td>App en offline werking</td><td>Iconen, service worker en lokale opslag blijven gratis voor iedereen.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">3</span> Transparantie</h2>
+      <ul class="tips">
+        <li>Donaties zijn vrijwillig. Je kunt EasyCodey gratis blijven gebruiken, met of zonder donatie.</li>
+        <li>Er is geen automatische incasso en geen abonnement. Jij kiest zelf of en wanneer je overschrijft.</li>
+        <li>De site verwerkt geen betalingen en bewaart geen IBAN-, kaart- of betaalgegevens van bezoekers.</li>
+        <li>Er is geen tegenprestatie: je krijgt geen extra functies, geen reclame verwijderd en geen fiscaal attest.</li>
+        <li>EasyCodey is geen vzw, stichting of erkend goed doel. Het is een persoonlijk project van ${esc(DONATE_NAME)}.</li>
+        <li>De naam en het IBAN staan openbaar op deze pagina. Dat is nodig om te kunnen overschrijven.</li>
+        <li>Een donatie wordt niet automatisch terugbetaald. Stuur een bericht als er iets misgaat.</li>
+      </ul>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">4</span> Veelgestelde vragen</h2>
+      <div class="donate-faq">
+        <details>
+          <summary>Is EasyCodey echt gratis?</summary>
+          <p>Ja. Alle projecten, de editor en de app zijn gratis. Er is geen account en geen betaalmuur.</p>
+        </details>
+        <details>
+          <summary>Moet ik doneren?</summary>
+          <p>Nee. Een donatie is volledig vrijwillig. De site blijft voor iedereen werken.</p>
+        </details>
+        <details>
+          <summary>Kan ik maandelijks doneren?</summary>
+          <p>Ja, via een doorlopende opdracht of periodieke overschrijving in je eigen bankapp. De site stelt dat niet automatisch in.</p>
+        </details>
+        <details>
+          <summary>Krijg ik een bevestiging of factuur?</summary>
+          <p>De bevestiging van je bank is je bewijs. EasyCodey stuurt geen aparte factuur.</p>
+        </details>
+        <details>
+          <summary>Waarom staat er een persoonlijke naam?</summary>
+          <p>EasyCodey is een persoonlijk project. De rekening staat op naam van ${esc(DONATE_NAME)}.</p>
+        </details>
+        <details>
+          <summary>Is mijn donatie aftrekbaar?</summary>
+          <p>Nee. EasyCodey is geen erkende vzw of goed doel, dus je krijgt geen fiscaal attest.</p>
+        </details>
+        <details>
+          <summary>Wat als ik per ongeluk te veel heb gestuurd?</summary>
+          <p>Stuur een bericht via de contactpagina. We bekijken samen wat er mogelijk is.</p>
+        </details>
+      </div>
+    </section>
+
+    <div class="static-actions">
+      <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>
+      <a class="btn ghost" href="${prefix}contact/">✉ Stel een vraag</a>
+      <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
+    </div>
+  </main>
+
+  ${footer(prefix)}
+  ${THEME_SCRIPT}
+</body>
+</html>
+`;
+}
+
 function writeFile(file, content) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   fs.writeFileSync(file, content, "utf8");
@@ -867,12 +1094,14 @@ for (const idea of IDEAS) {
 writeFile(path.join(OVERVIEW_DIR, "index.html"), renderOverviewPage());
 writeFile(path.join(INSTALL_DIR, "index.html"), renderInstallPage());
 writeFile(path.join(CONTACT_DIR, "index.html"), renderContactPage());
+writeFile(path.join(DONATE_DIR, "index.html"), renderDonatePage());
 
 const urls = [
   { loc: `${SITE}/`, priority: "1.0", changefreq: "weekly" },
   { loc: `${SITE}/projecten/`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE}/installeren/`, priority: "0.7", changefreq: "monthly" },
   { loc: `${SITE}/contact/`, priority: "0.6", changefreq: "yearly" },
+  { loc: `${SITE}/doneren/`, priority: "0.6", changefreq: "yearly" },
   ...IDEAS.map((idea) => ({
     loc: `${SITE}/idee/${idea.id}/`,
     priority: "0.8",
@@ -901,5 +1130,6 @@ console.log(`Projectpagina's: ${IDEAS.length}`);
 console.log(`Overzicht:       projecten/index.html`);
 console.log(`Installeren:     installeren/index.html`);
 console.log(`Contact:         contact/index.html`);
+console.log(`Doneren:         doneren/index.html`);
 console.log(`Sitemap:         ${urls.length} URL's`);
 if (removed) console.log(`Opgeruimd:       ${removed} verouderde projectmap(pen)`);

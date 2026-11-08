@@ -241,6 +241,22 @@ if (!existsSync(contactFile)) {
   if (!contact.includes('type="application/ld+json"')) fail("Contactpagina mist JSON-LD.");
 }
 
+const donateFile = path.join(root, "doneren", "index.html");
+if (!existsSync(donateFile)) {
+  fail("Doneerpagina doneren/index.html ontbreekt (voer npm run pages uit).");
+} else {
+  const donate = readFileSync(donateFile, "utf8");
+  if (!donate.includes(`<link rel="canonical" href="${SITE}/doneren/"`)) {
+    fail("Doneerpagina heeft niet de juiste canonical.");
+  }
+  for (const value of ["BE69 0638 3621 2278", "Yousef Abujarad (EasyCodey)", "Belfius", "GKCCBEBB", "EasyCodey donatie"]) {
+    if (!donate.includes(value)) fail(`Doneerpagina mist ${value}.`);
+  }
+  if (!donate.includes("<h1>")) fail("Doneerpagina mist een <h1>.");
+  if (!donate.includes('type="application/ld+json"')) fail("Doneerpagina mist JSON-LD.");
+  if (!donate.includes("DonateAction")) fail("Doneerpagina mist DonateAction JSON-LD.");
+}
+
 const sitemapFile = path.join(root, "sitemap.xml");
 if (!existsSync(sitemapFile)) {
   fail("sitemap.xml ontbreekt.");
@@ -251,12 +267,13 @@ if (!existsSync(sitemapFile)) {
   if (!sitemap.includes(`<loc>${SITE}/projecten/</loc>`)) fail("Sitemap mist de overzichtspagina.");
   if (!sitemap.includes(`<loc>${SITE}/installeren/</loc>`)) fail("Sitemap mist de installatiepagina.");
   if (!sitemap.includes(`<loc>${SITE}/contact/</loc>`)) fail("Sitemap mist de contactpagina.");
+  if (!sitemap.includes(`<loc>${SITE}/doneren/</loc>`)) fail("Sitemap mist de doneerpagina.");
   for (const idea of IDEAS) {
     if (!sitemap.includes(`<loc>${SITE}/idee/${idea.id}/</loc>`)) {
       fail(`Sitemap mist het project ${idea.id}.`);
     }
   }
-  const expectedUrls = IDEAS.length + 4;
+  const expectedUrls = IDEAS.length + 5;
   if (sitemapCount !== expectedUrls) {
     fail(`Sitemap heeft ${sitemapCount} URL's; verwacht ${expectedUrls}.`);
   }
@@ -275,7 +292,7 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
-console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + contact`);
+console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + contact + doneren`);
 console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
 for (const category of CATEGORIES) {

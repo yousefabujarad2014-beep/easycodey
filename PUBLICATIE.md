@@ -161,12 +161,12 @@ https://render.com/deploy?repo=https://github.com/<gebruikersnaam>/easycodey
 | `OPENAI_BASE_URL` | Nee | Standaard `https://api.openai.com/v1`. |
 | `ACCESS_CODE` | Nee | Vraagt bezoekers een toegangscode voor de AI-coach. |
 | `RATE_LIMIT` | Nee | Maximaal AI-verzoeken per uur per IP, standaard 30. |
-| `DONATE_URL` | Nee | Doneerlink (Ko-fi, Buy Me a Coffee, PayPal.me, Stripe). Zonder waarde blijft de knop verborgen. |
-| `DONATE_LABEL` | Nee | Tekst op de doneerknop. |
+| `DONATE_URL` | Nee | Optionele externe doneerlink (Ko-fi, Buy Me a Coffee, PayPal.me, Stripe). Zonder link blijft de doneerknop zichtbaar zolang er een geldig IBAN is. |
+| `DONATE_LABEL` | Nee | Tekst op de externe doneerknop. |
 | `DONATE_NOTE` | Nee | Toelichting in het doneervenster. |
-| `DONATE_IBAN` | Nee | IBAN voor donaties per bankoverschrijving, bijvoorbeeld `BE69 0638 3621 2278`. |
-| `DONATE_NAME` | Nee | Naam van de rekeninghouder. |
-| `DONATE_BANK` | Nee | Banknaam, bijvoorbeeld `Belfius`. |
+| `DONATE_IBAN` | Nee | IBAN voor donaties per bankoverschrijving, standaard `BE69 0638 3621 2278`. |
+| `DONATE_NAME` | Nee | Naam van de rekeninghouder, standaard `Yousef Abujarad (EasyCodey)`. |
+| `DONATE_BANK` | Nee | Banknaam, standaard `Belfius`. |
 | `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://yousefabujarad2014-beep.github.io/easycodey`. |
 | `PORT` | Automatisch | Render zet deze zelf. |
 | `HOST` | Nee | Standaard `0.0.0.0`; niet op `127.0.0.1` zetten. |
@@ -200,6 +200,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Projectpagina: **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code** werken.
 - [ ] **Speel dit idee** voert het volledige project uit in het speelveld.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
+- [ ] `/doneren/` toont IBAN **BE69 0638 3621 2278**, rekeninghouder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB** en de transparantie.
+- [ ] De doneerpagina linkt terug naar de app, contact en alle projecten.
 - [ ] Mobiel en donker thema zien er goed uit.
 - [ ] `/manifest.webmanifest` geeft 200 met `application/manifest+json`.
 - [ ] `/sw.js` geeft 200 en de service worker is actief in DevTools.
@@ -207,7 +209,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De app opent in een eigen venster met het EasyCodey-icoon.
 - [ ] Na één keer online gewerkt te hebben: site en Python werken offline.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
-- [ ] `/sitemap.xml` bevat 165 URL's: startpagina, overzicht, installatiepagina, contactpagina en 161 projecten.
+- [ ] `/sitemap.xml` bevat 166 URL's: startpagina, overzicht, installatiepagina, contactpagina, doneerpagina en 161 projecten.
 - [ ] `/contact/` toont telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com**.
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
 - [ ] Site is aangemeld bij Google Search Console (zie `GOOGLE.md`).
@@ -301,7 +303,7 @@ Na de eerste succesvolle deploy:
 1. Open **https://search.google.com/search-console**.
 2. Voeg je live-URL toe als property.
 3. Verifieer met de HTML-tag of het HTML-bestand.
-4. Meld `sitemap.xml` aan (165 URL's).
+4. Meld `sitemap.xml` aan (166 URL's).
 5. Vraag indexering aan voor de startpagina en enkele projectpagina's.
 
 De volledige uitleg over de vaste projectpagina's, de app en de checklist staat in **`GOOGLE.md`**.

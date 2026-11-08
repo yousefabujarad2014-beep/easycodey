@@ -10,6 +10,8 @@ Installatiepagina met QR-code: https://yousefabujarad2014-beep.github.io/easycod
 
 Contact: https://yousefabujarad2014-beep.github.io/easycodey/contact/ — telefoon/WhatsApp **+32 466 47 66 52**, e-mail **yousefabujarad2014@gmail.com**
 
+Doneren: https://yousefabujarad2014-beep.github.io/easycodey/doneren/ — IBAN **BE69 0638 3621 2278**, houder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB**
+
 ---
 
 ## 1. Installeren
@@ -60,7 +62,7 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Python-speelveld en editor | ✅ na de eerste keer online |
 | Offline AI-coach | ✅ |
 | Online AI-coach (OpenAI) | ❌ internet nodig |
-| Doneren per bank | ❌ internet nodig |
+| Doneren per bank (pagina `/doneren/`) | ❌ internet nodig |
 
 De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldingen) bij de eerste installatie. De Python-runtime (Pyodide, ongeveer 10 MB) wordt bewaard zodra je hem één keer gebruikt. Daarna werken **▶ Speel**, **▶ Speel dit idee** en de editor ook zonder internet.
 

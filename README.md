@@ -42,7 +42,7 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
 - **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
 - **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline.
-- **Doneren**: optionele doneerknop die je koppelt aan Ko-fi, Buy Me a Coffee, PayPal.me, Stripe of een eigen link.
+- **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd. Elk project heeft daarnaast een eigen vaste pagina op `/idee/<id>/` met eigen titel, description en JSON-LD.
 - Licht/donker thema, skeleton-loading, toetsenbordnavigatie, confetti bij het afronden en een volledig responsieve layout.
 - Lokale SVG-omslagen per categorie. Geen externe afbeeldingsdiensten.
@@ -68,7 +68,14 @@ FLL/
 ├── assets/icons/           App-iconen (192, 512, maskable en Apple)
 ├── assets/easycodey.ico     Icoon voor de Windows-snelkoppeling
 ├── scripts/check-data.mjs  Controle van de projectdata en de app-bestanden
+├── scripts/build-pages.mjs Genereert de vaste pagina's, het overzicht en de sitemap
 ├── scripts/make-icons.mjs  App-iconen opnieuw maken met headless Chrome
+├── idee/<id>/index.html    161 vaste, indexeerbare projectpagina's
+├── projecten/index.html    Overzicht van alle projecten
+├── installeren/index.html  Installatie-uitleg met QR-code
+├── contact/index.html      Contactpagina met telefoon, WhatsApp en e-mail
+├── doneren/index.html      Doneerpagina met IBAN, bank en transparantie
+├── sitemap.xml             Alle vaste pagina's en projecten
 ├── server.js               Statische server + AI-proxy (geen dependencies)
 ├── render.yaml             Render Blueprint
 ├── .env.example            Voorbeeldconfiguratie
@@ -199,9 +206,11 @@ Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`.
 
 ## Donaties instellen
 
-De doneerknop blijft verborgen tot je een doneerlink instelt. Dat voorkomt een dode knop voor bezoekers.
+De doneerknop verschijnt zodra er een **geldig IBAN** of een doneerlink is ingesteld. Met de meegeleverde `site-config.json` staat de knop dus aan. Bezoekers zien het IBAN, kunnen het kopiëren en maken zelf een overschrijving via hun bankapp.
 
-1. Maak een doneerlink bij bijvoorbeeld [Ko-fi](https://ko-fi.com), [Buy Me a Coffee](https://buymeacoffee.com), [PayPal.me](https://www.paypal.me) of een Stripe Payment Link.
+De volledige uitleg staat op de vaste pagina **`/doneren/`**: IBAN, naam van de rekeninghouder, bank, BIC, stappen, besteding en transparantie. De pagina wordt gegenereerd door `scripts/build-pages.mjs`.
+
+1. (Optioneel) Maak een doneerlink bij bijvoorbeeld [Ko-fi](https://ko-fi.com), [Buy Me a Coffee](https://buymeacoffee.com), [PayPal.me](https://www.paypal.me) of een Stripe Payment Link.
 2. Zet de link in `.env`:
 
 ```env
@@ -212,17 +221,17 @@ DONATE_NOTE=Elke bijdrage helpt om nieuwe projecten toe te voegen.
 
 3. Herstart de server.
 
-Zodra `DONATE_URL` is ingesteld, verschijnen het hartje in de header en de link in de footer. De site verwerkt zelf geen betalingen en bewaart geen betaalgegevens.
+Zodra een doneerlink of geldig IBAN is ingesteld, verschijnen het hartje in de header en de link in de footer. De site verwerkt zelf geen betalingen en bewaart geen betaalgegevens.
 
 Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config.json`:
 
 ```json
 {
-  "donateUrl": "https://ko-fi.com/jouw-naam",
-  "donateLabel": "Doneer via Ko-fi",
-  "donateNote": "Elke bijdrage helpt om nieuwe projecten toe te voegen.",
+  "donateUrl": "",
+  "donateLabel": "",
+  "donateNote": "Elke bijdrage helpt om EasyCodey online te houden en nieuwe projecten toe te voegen.",
   "donateIban": "BE69 0638 3621 2278",
-  "donateName": "Naam van de rekeninghouder",
+  "donateName": "Yousef Abujarad (EasyCodey)",
   "donateBank": "Belfius"
 }
 ```
@@ -234,8 +243,9 @@ Commit en push daarna. De site gebruikt `site-config.json` automatisch als `/api
 Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt EasyCodey ook een **IBAN**: de bezoeker ziet de rekening, kan het IBAN kopiëren en maakt zelf een overschrijving via de bankapp.
 
 - `donateIban`: het rekeningnummer, bijvoorbeeld `BE69 0638 3621 2278`.
-- `donateName`: optioneel, de naam van de rekeninghouder.
-- `donateBank`: optioneel, bijvoorbeeld `Belfius`.
+- `donateName`: de naam van de rekeninghouder, bijvoorbeeld `Yousef Abujarad (EasyCodey)`.
+- `donateBank`: de bank, bijvoorbeeld `Belfius`.
+- De vaste pagina `/doneren/` toont daarnaast de BIC `GKCCBEBB` en de mededeling **EasyCodey donatie**.
 - Het IBAN wordt gevalideerd met de officiële mod-97-controle. Ongeldige nummers worden niet getoond.
 
 > Let op: een IBAN op een openbare website is voor iedereen zichtbaar. Gebruik bij voorkeur een aparte rekening of een doneerplatform als je je privérekening niet wilt delen.
@@ -245,10 +255,10 @@ Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt
 De site heeft alles wat Google nodig heeft om hem te indexeren:
 
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **165 URL's**: de startpagina, het projectoverzicht, de installatiepagina, de contactpagina en alle **161 projectpagina's**.
+- `/sitemap.xml` bevat **166 URL's**: de startpagina, het projectoverzicht, de installatiepagina, de contactpagina, de doneerpagina en alle **161 projectpagina's**.
 - Elk project heeft een echte pagina op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
-- `/installeren/` en `/contact/` zijn vaste pagina's met eigen titel, description, canonical en JSON-LD.
+- `/installeren/`, `/contact/` en `/doneren/` zijn vaste pagina's met eigen titel, description, canonical en JSON-LD.
 - `index.html` heeft een titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD.
 - De server blokkeert documentatie, scripts en configuratiebestanden.
 
@@ -269,7 +279,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 1. `npm run check` — controleert alle projectdata, het manifest, de offline-cache, de 161 vaste pagina's, het overzicht en de sitemap.
 2. `npm start` en open http://localhost:4173.
 3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
-4. Test de vaste pagina's: `/projecten/`, `/installeren/`, `/contact/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
+4. Test de vaste pagina's: `/projecten/`, `/installeren/`, `/contact/`, `/doneren/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
 5. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
 6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
 7. Vink alle stappen af en controleer de confetti en de afgeronde status.

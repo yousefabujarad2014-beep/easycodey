@@ -137,15 +137,17 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Werkt op GitHub Pages zonder server; de service worker draait alleen via `https://` of `localhost`.
 
 ### Donaties
-- Optionele doneerknop in de header en footer.
-- De knop blijft verborgen tot `DONATE_URL` is ingesteld.
-- Link, label en toelichting komen via `/api/config` uit omgevingsvariabelen.
-- Ondersteunt elke https-link, bijvoorbeeld Ko-fi, Buy Me a Coffee, PayPal.me of Stripe.
+- Doneerknop in de header en footer, met een link naar de volledige pagina `/doneren/`.
+- De knop verschijnt zodra er een geldig IBAN of een externe doneerlink is ingesteld.
+- IBAN **BE69 0638 3621 2278**, houder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB**.
+- De pagina `/doneren/` legt uit hoe je overschrijft, waar het geld naartoe gaat en wat de transparantie is.
+- Link, label en toelichting komen via `/api/config` uit omgevingsvariabelen; op GitHub Pages uit `site-config.json`.
+- Ondersteunt daarnaast elke https-link, bijvoorbeeld Ko-fi, Buy Me a Coffee, PayPal.me of Stripe.
 - De site verwerkt zelf geen betalingen en bewaart geen betaalgegevens.
 
 ### Vindbaarheid
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **165 URL's**: startpagina, projectoverzicht, installatiepagina, contactpagina en alle 161 projecten.
+- `/sitemap.xml` bevat **166 URL's**: startpagina, projectoverzicht, installatiepagina, contactpagina, doneerpagina en alle 161 projecten.
 - Elk project heeft een vaste pagina op `/idee/<id>/` met eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht per categorie met zoekveld (`CollectionPage` + `ItemList`).
 - `/contact/` is de Nederlandstalige contactpagina met telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com** (`ContactPage` + `Organization`).
@@ -184,13 +186,14 @@ FLL/
 ├── assets/qr/                 QR-code naar de live site voor installatie op Android
 ├── assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
 ├── scripts/check-data.mjs     Controle van projectdata, manifest, offline-cache, pagina's en sitemap
-├── scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht, de installatie- en contactpagina en de sitemap
+├── scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht, de installatie-, contact- en doneerpagina en de sitemap
 ├── scripts/make-icons.mjs     App-iconen opnieuw maken met headless Chrome
 ├── idee/<id>/index.html       161 vaste, indexeerbare projectpagina's
 ├── projecten/index.html       Overzicht van alle projecten per categorie
 ├── installeren/index.html     Installatie-uitleg per platform met QR-code
 ├── contact/index.html         Nederlandstalige contactpagina met telefoon, WhatsApp en e-mail
-├── sitemap.xml                Startpagina, overzicht, installeren, contact en 161 projectpagina's (165 URL's)
+├── doneren/index.html         Doneerpagina met IBAN, rekeninghouder, bank, BIC en transparantie
+├── sitemap.xml                Startpagina, overzicht, installeren, contact, doneren en 161 projectpagina's (166 URL's)
 ├── server.js                  Statische server + AI-proxy (geen dependencies)
 ├── package.json               Scripts: start, dev, check, pages, build, icons
 ├── render.yaml                Render Blueprint
@@ -210,7 +213,7 @@ FLL/
 
 | Test | Resultaat |
 |---|---|
-| `npm run check` | ✅ 161 projecten, 711 stappen, 161 pagina's, 165 sitemap-URL's, 0 fouten |
+| `npm run check` | ✅ 161 projecten, 711 stappen, 161 pagina's, 166 sitemap-URL's, 0 fouten |
 | Datacontrole op dubbele id's, verplichte velden, stappen, tips, `next`-links en covers | ✅ |
 | Syntaxcontrole `node --check` op `app.js`, `server.js`, `js/ai.js`, `js/store.js` | ✅ |
 | Startpagina `/` | ✅ 200, `text/html` |
@@ -218,7 +221,7 @@ FLL/
 | Alle 10 categorie-covers | ✅ 200, `image/svg+xml` |
 | `/api/config` | ✅ 200, `application/json`, inclusief doneervelden |
 | `/robots.txt` | ✅ 200, `text/plain`, verwijst naar de sitemap |
-| `/sitemap.xml` | ✅ 200, geldige XML met 165 URL's en `SITE_URL` |
+| `/sitemap.xml` | ✅ 200, geldige XML met 166 URL's en `SITE_URL` |
 | Doneerknop zonder `DONATE_URL` | ✅ verborgen |
 | Doneerknop met `DONATE_URL` | ✅ zichtbaar, link en label kloppen |
 | Python-speelveld (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
@@ -247,11 +250,11 @@ FLL/
 | PWA-testsuite op de live site | ✅ 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | ✅ 33 bestanden, Pyodide werkt offline |
-| Vaste projectpagina's lokaal | ✅ 32/32 checks geslaagd |
+| Vaste pagina's lokaal | ✅ 70/70 checks geslaagd |
 | Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
 | Projectpagina zonder slash | ✅ 301 naar de map met slash |
 | Overzicht `/projecten/` | ✅ 161 links, 10 categorieën, zoekfilter en `CollectionPage` |
-| Sitemap lokaal | ✅ geldige XML, 165 URL's, productie-startpagina aanwezig |
+| Sitemap lokaal | ✅ geldige XML, 166 URL's, productie-startpagina aanwezig |
 | Speel dit idee vanaf vaste pagina | ✅ app opent met `?play=1`, volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
@@ -260,6 +263,9 @@ FLL/
 | Installatiepagina mobiel | ✅ geen horizontale overflow, één kolom |
 | Contactpagina `/contact/` | ✅ telefoon/WhatsApp, e-mail, eigen titel, canonical en JSON-LD |
 | Contactpagina mobiel | ✅ drie kaarten in één kolom, geen overflow |
+| Doneerpagina `/doneren/` | ✅ IBAN, rekeninghouder, bank, BIC, kopieerknop en JSON-LD (`DonateAction`) |
+| Doneerpagina mobiel | ✅ twee blokken in één kolom, geen overflow |
+| Doneermodal in de app | ✅ toont IBAN en houder en linkt naar `/doneren/` |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
@@ -363,12 +369,12 @@ Gebruik op Render `npm install` als build-stap. `npm run build` bestaat wel, maa
 | `OPENAI_BASE_URL` | Nee | OpenAI-compatibele basis-URL, standaard `https://api.openai.com/v1`. |
 | `ACCESS_CODE` | Nee | Vraagt bezoekers om een toegangscode voor de AI-coach. |
 | `RATE_LIMIT` | Nee | Maximaal aantal AI-verzoeken per uur per IP, standaard 30. |
-| `DONATE_URL` | Nee | Doneerlink. Zonder deze waarde blijft de doneerknop verborgen. |
-| `DONATE_LABEL` | Nee | Tekst op de doneerknop, standaard "Doneer". |
+| `DONATE_URL` | Nee | Optionele externe doneerlink. Zonder link blijft de doneerknop zichtbaar zolang er een geldig IBAN is. |
+| `DONATE_LABEL` | Nee | Tekst op de externe doneerknop, standaard "Doneer". |
 | `DONATE_NOTE` | Nee | Extra toelichting in het doneervenster. |
-| `DONATE_IBAN` | Nee | IBAN voor donaties per bankoverschrijving. |
-| `DONATE_NAME` | Nee | Naam van de rekeninghouder. |
-| `DONATE_BANK` | Nee | Banknaam, bijvoorbeeld `Belfius`. |
+| `DONATE_IBAN` | Nee | IBAN voor donaties per bankoverschrijving, standaard `BE69 0638 3621 2278`. |
+| `DONATE_NAME` | Nee | Naam van de rekeninghouder, standaard `Yousef Abujarad (EasyCodey)`. |
+| `DONATE_BANK` | Nee | Banknaam, standaard `Belfius`. |
 | `SITE_URL` | Nee | Publieke URL voor `robots.txt` en `sitemap.xml`, standaard `https://yousefabujarad2014-beep.github.io/easycodey`. |
 | `PORT` | Automatisch | Render zet deze zelf; `server.js` gebruikt `process.env.PORT`. |
 | `HOST` | Nee | Standaard `0.0.0.0`; niet op `127.0.0.1` zetten op Render. |
@@ -437,15 +443,16 @@ De site staat live:
 | 161 vaste projectpagina's + overzicht | ✅ `/idee/<id>/` en `/projecten/` |
 | Installatiepagina met QR-code | ✅ `/installeren/` |
 | Contactpagina | ✅ `/contact/` met telefoon/WhatsApp en e-mail |
-| Sitemap met 165 URL's | ✅ gegenereerd door `npm run pages` |
+| Doneerpagina | ✅ `/doneren/` met IBAN, houder, bank, BIC en transparantie |
+| Sitemap met 166 URL's | ✅ gegenereerd door `npm run pages` |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
-| Doneerlink | ✅ Belfius IBAN via `site-config.json` |
+| Doneren | ✅ Belfius IBAN via `site-config.json` en de doneerpagina |
 
 Wat optioneel nog kan:
 
 1. Render Web Service of Blueprint koppelen voor de online AI-coach (`npm install`, `npm start`).
 2. `OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL` in Render instellen.
-3. Site aanmelden bij Google Search Console en de sitemap met 165 URL's insturen; zie `GOOGLE.md`.
+3. Site aanmelden bij Google Search Console en de sitemap met 166 URL's insturen; zie `GOOGLE.md`.
 4. Optioneel: eigen domein koppelen.
 
 ---

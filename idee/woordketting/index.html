@@ -292,6 +292,8 @@ print(&quot;Computer kiest:&quot;, computer_woord(letter, gebruikt))</code></pre
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="../../installeren/">📲 Installeren</a>
         <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../doneren/">♥ Doneren</a>
+        <span aria-hidden="true">·</span>
         <a class="link-btn" href="../../contact/">✉ Contact</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
@@ -301,19 +303,45 @@ print(&quot;Computer kiest:&quot;, computer_woord(letter, gebruikt))</code></pre
   <script>
     (function () {
       var button = document.getElementById("static-theme");
-      if (!button) return;
-      button.addEventListener("click", function () {
-        var root = document.documentElement;
-        var next = root.dataset.theme === "dark" ? "light" : "dark";
-        root.dataset.theme = next;
-        var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
-        try {
-          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
-          var state = raw ? JSON.parse(raw) : {};
-          state.theme = next;
-          localStorage.setItem("easycodey.v1", JSON.stringify(state));
-        } catch (error) {}
+      if (button) {
+        button.addEventListener("click", function () {
+          var root = document.documentElement;
+          var next = root.dataset.theme === "dark" ? "light" : "dark";
+          root.dataset.theme = next;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+          try {
+            var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+            var state = raw ? JSON.parse(raw) : {};
+            state.theme = next;
+            localStorage.setItem("easycodey.v1", JSON.stringify(state));
+          } catch (error) {}
+        });
+      }
+
+      document.querySelectorAll("[data-copy-iban]").forEach(function (copyButton) {
+        copyButton.addEventListener("click", function () {
+          var value = copyButton.getAttribute("data-copy-iban") || "";
+          var original = copyButton.textContent;
+          var done = function () {
+            copyButton.textContent = "Gekopieerd!";
+            setTimeout(function () { copyButton.textContent = original; }, 1800);
+          };
+          var fallback = function () {
+            var area = document.createElement("textarea");
+            area.value = value;
+            document.body.append(area);
+            area.select();
+            try { document.execCommand("copy"); } catch (error) {}
+            area.remove();
+            done();
+          };
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(value).then(done, fallback);
+          } else {
+            fallback();
+          }
+        });
       });
     })();
   </script>
