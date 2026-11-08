@@ -1556,6 +1556,54 @@ button { cursor: pointer; }
   border-radius: 4px;
 }
 
+/* ------------------------------ app installeren ------------------------------ */
+
+.install-steps {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  counter-reset: install;
+}
+
+.install-steps li {
+  position: relative;
+  counter-increment: install;
+  padding: 12px 14px 12px 48px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.install-steps li::before {
+  content: counter(install);
+  position: absolute;
+  left: 13px;
+  top: 13px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--brand-ink);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.install-steps strong { display: block; color: var(--ink); font-size: 0.84rem; }
+
+.install-note {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 /* ------------------------------ doneren ------------------------------ */
 
 .donate-icon { color: #d64570; font-size: 1rem; }

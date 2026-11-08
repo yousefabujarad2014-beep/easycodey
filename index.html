@@ -9,6 +9,12 @@
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="author" content="EasyCodey" />
   <meta name="theme-color" content="#f7f5ef" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="EasyCodey" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/" />
   <meta property="og:title" content="EasyCodey — Leer Python door te bouwen" />
   <meta property="og:description" content="161 Python-projecten, stap voor stap uitgelegd. Met voortgang, een programmeer-editor en een AI-coach." />
@@ -37,6 +43,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
 </head>
 <body>
   <div class="page-glow" aria-hidden="true"></div>
@@ -72,6 +79,14 @@
 
       <div class="header-tools">
         <button class="icon-btn donate-icon" id="donate-header" type="button" data-action="open-donate" aria-label="Steun EasyCodey" title="Steun EasyCodey" hidden>♥</button>
+        <button class="icon-btn" id="install-header" type="button" data-action="install-app" aria-label="Installeer EasyCodey als app" title="Installeer als app">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+            <path d="M12 7v7"></path>
+            <path d="m9 11 3 3 3-3"></path>
+            <path d="M8 17h8"></path>
+          </svg>
+        </button>
         <button class="icon-btn" type="button" data-action="theme" aria-label="Wissel licht/donker thema">
           <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
             <circle cx="12" cy="12" r="4"></circle>
@@ -95,6 +110,8 @@
         <a class="link-btn" href="#/programmeren">⌨ Programmeer zelf</a>
         <span aria-hidden="true">·</span>
         <button class="link-btn" type="button" data-action="open-playground">▶ Probeer Python</button>
+        <span aria-hidden="true">·</span>
+        <button class="link-btn" id="install-footer" type="button" data-action="install-app">📲 Installeer als app</button>
         <span aria-hidden="true" id="donate-footer-sep" hidden>·</span>
         <button class="link-btn" id="donate-footer" type="button" data-action="open-donate" hidden>♥ Steun EasyCodey</button>
       </p>
@@ -328,6 +345,43 @@
         invoer-pop-up. Vermijd oneindige loops; die kun je alleen stoppen door het venster te sluiten.
         Gebruik <strong>▶ Speel</strong> bij een codeblok om dat stuk code direct uit te proberen.
       </p>
+    </div>
+  </div>
+
+  <!-- App installeren -->
+  <div class="modal-backdrop" id="install-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="install-title">
+      <div class="modal-head">
+        <h2 id="install-title">EasyCodey als app</h2>
+        <button class="icon-btn small" type="button" data-action="close-install" aria-label="Sluiten">✕</button>
+      </div>
+      <p class="modal-lead">
+        Zet EasyCodey op je computer of telefoon. De app krijgt een eigen icoon, opent in een eigen venster
+        en werkt na de eerste keer ook offline. Je voortgang blijft gewoon bewaard.
+      </p>
+      <ol class="install-steps">
+        <li>
+          <strong>Chrome of Edge op de computer</strong>
+          Klik rechtsboven in de adresbalk op het installatie-icoon, of gebruik het menu ⋮ →
+          <em>App installeren</em>.
+        </li>
+        <li>
+          <strong>Android (Chrome)</strong>
+          Menu ⋮ → <em>App installeren</em> of <em>Toevoegen aan startscherm</em>.
+        </li>
+        <li>
+          <strong>iPhone of iPad (Safari)</strong>
+          Tik op <em>Deel</em> → <em>Zet op beginscherm</em>.
+        </li>
+      </ol>
+      <p class="install-note">
+        Zodra je browser de app kan installeren, verschijnt hieronder de knop <strong>Installeer nu</strong>.
+        Python werkt offline nadat je het één keer hebt gebruikt.
+      </p>
+      <div class="modal-actions">
+        <button class="btn brand" type="button" id="install-now" data-action="install-now" hidden>📲 Installeer nu</button>
+        <button class="btn ghost" type="button" data-action="close-install">Sluiten</button>
+      </div>
     </div>
   </div>
 

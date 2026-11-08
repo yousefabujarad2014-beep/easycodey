@@ -40,7 +40,8 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
-- **Projectcode in de editor**: elk project heeft **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. Alle stappen komen als commentaar in de editor te staan.
+- **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
+- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline.
 - **Doneren**: optionele doneerknop die je koppelt aan Ko-fi, Buy Me a Coffee, PayPal.me, Stripe of een eigen link.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd.
 - Licht/donker thema, skeleton-loading, toetsenbordnavigatie, confetti bij het afronden en een volledig responsieve layout.
@@ -53,6 +54,9 @@ FLL/
 ├── index.html              Basislayout, header, AI-paneel, instellingen en generator
 ├── styles.css              Alle styling, thema's, covers en responsive regels
 ├── app.js                  Routing, filters, voortgang, editor, events en AI-paneel
+├── manifest.webmanifest    App-manifest: naam, iconen, snelkoppelingen en venster
+├── sw.js                   Service worker: offline-cache en app-shell
+├── offline.html            Pagina die verschijnt als je offline bent
 ├── js/
 │   ├── ai.js               Streaming, markdown, offline coach en generator
 │   └── store.js            Opslag van voortgang, instellingen, thema, editor en eigen projecten
@@ -61,11 +65,14 @@ FLL/
 │   ├── helper.js           Compacte helpers voor projecten en stappen
 │   └── ideas-01.js t/m ideas-07.js
 ├── assets/covers/          Tien lokale SVG-omslagen
+├── assets/icons/           App-iconen (192, 512, maskable en Apple)
 ├── assets/easycodey.ico     Icoon voor de Windows-snelkoppeling
-├── scripts/check-data.mjs  Controle van de projectdata
+├── scripts/check-data.mjs  Controle van de projectdata en de app-bestanden
+├── scripts/make-icons.mjs  App-iconen opnieuw maken met headless Chrome
 ├── server.js               Statische server + AI-proxy (geen dependencies)
 ├── render.yaml             Render Blueprint
 ├── .env.example            Voorbeeldconfiguratie
+├── APP.md                  EasyCodey als app installeren en offline gebruiken
 ├── EINDRAPPORT.md          Overzicht van de oplevering en testresultaten
 ├── PUBLICATIE.md           Stap-voor-stap publicatie op GitHub en Render
 ├── GOOGLE.md               Site openbaar maken en laten indexeren door Google
@@ -163,9 +170,23 @@ In de hero staat **⌨ Programmeer zelf** (naar de editor) en **▶ Snel probere
 - De eerste keer wordt ongeveer 10 MB gedownload; daarna is het snel.
 - Code wordt niet naar de server gestuurd.
 - `input()` opent een invoer-pop-up. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
-- Zonder internet blijft de rest van de site werken; alleen het speelveld en de editor kunnen dan niet laden.
+- Na de eerste keer bewaart de service worker de Python-runtime, zodat de editor en het speelveld ook offline werken.
+- Op een projectpagina voert **▶ Speel dit idee** meteen het volledige project uit; **⌨ Programmeer dit idee** opent dezelfde code in de editor.
 
 Er zijn voorbeelden ingebouwd: hallo wereld, rekenen, loops, lijsten, functies en een variant van "Raad het getal" zonder `input()`.
+
+## Als app installeren (PWA)
+
+EasyCodey is een installeerbare webapp. Je gebruikt dezelfde site en dezelfde voortgang, maar met een eigen icoon en een eigen venster.
+
+1. Open de live site in **Chrome** of **Edge**.
+2. Klik in de header op het **installatie-icoon** of gebruik het menu ⋮ → **App installeren**.
+3. Op Android: menu ⋮ → **App installeren** of **Toevoegen aan startscherm**.
+4. Op iPhone/iPad: **Deel** → **Zet op beginscherm**.
+
+Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
+
+Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`.
 
 ## Donaties instellen
 
@@ -233,7 +254,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 
 ## Lokaal testen
 
-1. `npm run check` — controleert alle projectdata.
+1. `npm run check` — controleert alle projectdata, het manifest en de offline-cache.
 2. `npm start` en open http://localhost:4173.
 3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
 4. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
@@ -242,8 +263,10 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 7. Open de AI-coach zonder sleutel: je krijgt de offline coach.
 8. Stel eventueel een sleutel in via ⚙ en stel een vraag.
 9. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
-10. Open een project en test **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
-11. Test op een smal scherm en wissel tussen licht en donker thema.
+10. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
+11. Open **📲 Installeer als app** en controleer de uitleg. In DevTools → Application moet de service worker actief zijn.
+12. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
+13. Test op een smal scherm en wissel tussen licht en donker thema.
 
 ## Deployen naar Render
 

@@ -43,6 +43,10 @@ const playgroundCode = document.querySelector("#playground-code");
 const playgroundOutput = document.querySelector("#playground-output");
 const playgroundStatus = document.querySelector("#playground-status");
 const playgroundRun = document.querySelector("#playground-run");
+const installModal = document.querySelector("#install-modal");
+const installHeader = document.querySelector("#install-header");
+const installFooter = document.querySelector("#install-footer");
+const installNowBtn = document.querySelector("#install-now");
 const toastEl = document.querySelector("#toast");
 
 let serverConfig = {
@@ -58,6 +62,7 @@ let serverConfig = {
 };
 let aiMessages = [];
 let aiStreaming = false;
+let deferredInstallPrompt = null;
 let greetingShown = false;
 let currentContext = null;
 let homeBound = false;
@@ -680,7 +685,10 @@ function renderDetail(id) {
     </header>
 
     <div class="idea-actions" aria-label="Projectcode gebruiken">
-      <button class="btn brand" type="button" data-action="program-idea" data-idea-id="${e(
+      <button class="btn brand" type="button" data-action="play-idea" data-idea-id="${e(
+        idea.id
+      )}">▶ Speel dit idee</button>
+      <button class="btn ghost" type="button" data-action="program-idea" data-idea-id="${e(
         idea.id
       )}">⌨ Programmeer dit idee</button>
       <button class="btn ghost" type="button" data-action="download-idea" data-idea-id="${e(
@@ -689,7 +697,7 @@ function renderDetail(id) {
       <button class="btn ghost" type="button" data-action="copy-idea-code" data-idea-id="${e(
         idea.id
       )}">Kopieer alle code</button>
-      <span class="idea-actions-note">Alle stappen komen als commentaar in de editor.</span>
+      <span class="idea-actions-note">Speel het hele programma of open alle stappen in de editor.</span>
     </div>
 
     <div class="detail-grid">
@@ -1606,6 +1614,13 @@ function programIdea(ideaId) {
   navigate(`#/programmeren?project=${encodeURIComponent(idea.id)}`);
 }
 
+async function playIdea(ideaId) {
+  const idea = findIdea(ideaId);
+  if (!idea) return;
+  openPlayground(combinedIdeaCode(idea));
+  await runPlayground();
+}
+
 function reloadEditorProject(ideaId) {
   const idea = findIdea(ideaId);
   const textarea = document.querySelector("#editor-code");
@@ -1810,6 +1825,9 @@ document.addEventListener("click", (event) => {
     if (action === "copy-iban") copyIban();
     if (action === "open-playground") openPlayground();
     if (action === "close-playground") closePlayground();
+    if (action === "install-app") openInstall();
+    if (action === "close-install") closeInstall();
+    if (action === "install-now") installApp();
     if (action === "playground-example") loadPlaygroundExample();
     if (action === "run-playground") runPlayground();
     if (action === "clear-playground") clearPlayground();
@@ -1827,6 +1845,7 @@ document.addEventListener("click", (event) => {
     if (action === "editor-copy") copyEditorCode(actionEl);
     if (action === "editor-reload-project") reloadEditorProject(actionEl.dataset.ideaId);
     if (action === "program-idea") programIdea(actionEl.dataset.ideaId);
+    if (action === "play-idea") playIdea(actionEl.dataset.ideaId);
     if (action === "download-idea") downloadIdeaCode(actionEl.dataset.ideaId);
     if (action === "copy-idea-code") copyIdeaCode(actionEl, actionEl.dataset.ideaId);
     if (action === "toggle-step") {
@@ -1998,6 +2017,7 @@ document.addEventListener("keydown", (event) => {
     else if (!generatorModal.hidden) closeGenerator();
     else if (!donateModal.hidden) closeDonate();
     else if (!playgroundModal.hidden) closePlayground();
+    else if (!installModal.hidden) closeInstall();
     else if (aiPanel.classList.contains("open")) closeAI();
   }
 
@@ -2009,10 +2029,88 @@ document.addEventListener("keydown", (event) => {
 
 window.addEventListener("hashchange", route);
 
+/* ------------------------------ app / PWA ------------------------------ */
+
+function isStandaloneApp() {
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.matchMedia("(display-mode: minimal-ui)").matches ||
+    window.navigator.standalone === true
+  );
+}
+
+function updateInstallUI() {
+  const standalone = isStandaloneApp();
+  if (installHeader) installHeader.hidden = standalone;
+  if (installFooter) installFooter.hidden = standalone;
+  if (installNowBtn) installNowBtn.hidden = !deferredInstallPrompt;
+}
+
+function openInstall() {
+  updateInstallUI();
+  installModal.hidden = false;
+}
+
+function closeInstall() {
+  installModal.hidden = true;
+}
+
+async function installApp() {
+  if (!deferredInstallPrompt) {
+    installModal.hidden = false;
+    return;
+  }
+  const promptEvent = deferredInstallPrompt;
+  deferredInstallPrompt = null;
+  promptEvent.prompt();
+  const choice = await promptEvent.userChoice.catch(() => null);
+  updateInstallUI();
+  if (choice?.outcome === "accepted") {
+    installModal.hidden = true;
+    toast("EasyCodey wordt geïnstalleerd.");
+  } else {
+    toast("Installatie geannuleerd. Je kunt het later opnieuw proberen.");
+  }
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+  const { protocol, hostname } = window.location;
+  const allowed = protocol === "https:" || hostname === "localhost" || hostname === "127.0.0.1";
+  if (!allowed) return;
+  navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {
+    // Zonder service worker blijft de site gewoon werken.
+  });
+}
+
+function initPWA() {
+  updateInstallUI();
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    updateInstallUI();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    updateInstallUI();
+    toast("EasyCodey staat als app op je apparaat.");
+  });
+
+  const standaloneQuery = window.matchMedia("(display-mode: standalone)");
+  if (typeof standaloneQuery.addEventListener === "function") {
+    standaloneQuery.addEventListener("change", updateInstallUI);
+  }
+
+  registerServiceWorker();
+}
+
 /* ------------------------------ start ------------------------------ */
 
 async function init() {
   initTheme();
+  initPWA();
   route();
   serverConfig = await fetchConfig();
   updateAIStatus();

@@ -65,7 +65,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - "Markeer als afgerond" en "Voortgang resetten".
 - Zijbalk met projectgegevens, vervolgprojecten en "Vraag AI om hulp".
 - Per stap: "Vraag AI over deze stap", inclusief project- en stapcontext.
-- Actiebalk met **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
+- Actiebalk met **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
+- **Speel dit idee** voert het volledige project meteen uit in het Python-speelveld.
 - **Programmeer dit idee** opent de editor met alle stappen als één programma, met commentaar per stap.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
 
@@ -124,6 +125,17 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - **Projectcode opnieuw laden** en **Terug naar project** in de projectbalk.
 - Op mobiel staat de navigatie op een eigen scrollbare rij en wordt de editor één kolom.
 
+### Installeerbare app (PWA)
+- `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeën**.
+- Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
+- `sw.js` bewaart de app-shell (33 bestanden) bij de eerste installatie.
+- **Network-first** voor navigatie, **stale-while-revalidate** voor statische bestanden en **cache-first** voor de CDN.
+- De Python-runtime en lettertypen komen in een aparte runtime-cache, zodat Python na de eerste keer offline werkt.
+- `offline.html` verschijnt als een pagina niet in de cache staat.
+- **📲 Installeer als app** in de header en footer, met uitleg per platform en een **Installeer nu**-knop zodra de browser dat ondersteunt.
+- In een geïnstalleerde app verdwijnt de installeerknop en opent de site in een eigen venster.
+- Werkt op GitHub Pages zonder server; de service worker draait alleen via `https://` of `localhost`.
+
 ### Donaties
 - Optionele doneerknop in de header en footer.
 - De knop blijft verborgen tot `DONATE_URL` is ingesteld.
@@ -154,6 +166,9 @@ FLL/
 ├── index.html                 Basislayout, header, AI-paneel, instellingen, generator
 ├── styles.css                 Alle styling, thema's, covers en responsive regels
 ├── app.js                     Routing, filters, detailpagina, editor, voortgang, events, AI-paneel
+├── manifest.webmanifest       App-manifest: naam, iconen, snelkoppelingen, venster
+├── sw.js                      Service worker: offline-cache en app-shell
+├── offline.html               Offline-pagina
 ├── js/
 │   ├── ai.js                  Streaming, markdown, offline coach en generator
 │   └── store.js               localStorage: voortgang, instellingen, thema, editor, eigen projecten
@@ -162,14 +177,17 @@ FLL/
 │   ├── helper.js              Compacte helpers voor projecten en stappen
 │   └── ideas-01.js t/m ideas-07.js
 ├── assets/covers/             10 lokale SVG-omslagen
+├── assets/icons/              App-iconen: 192, 512, maskable en Apple
 ├── assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
-├── scripts/check-data.mjs     Controle van alle projectdata
+├── scripts/check-data.mjs     Controle van projectdata, manifest en offline-cache
+├── scripts/make-icons.mjs     App-iconen opnieuw maken met headless Chrome
 ├── server.js                  Statische server + AI-proxy (geen dependencies)
-├── package.json               Scripts: start, dev, check
+├── package.json               Scripts: start, dev, check, icons
 ├── render.yaml                Render Blueprint
 ├── .env.example               Voorbeeldconfiguratie
 ├── .gitignore                 Sluit .env, node_modules en logs uit
 ├── README.md                  Handleiding voor gebruik en deployment
+├── APP.md                     EasyCodey als app installeren en offline gebruiken
 ├── EINDRAPPORT.md             Overzicht van de oplevering en testresultaten
 ├── PUBLICATIE.md              Stap-voor-stap publicatie op GitHub en Render
 ├── GOOGLE.md                  Openbaar maken en laten indexeren door Google
@@ -201,12 +219,20 @@ FLL/
 | Editor na herladen | ✅ code blijft bewaard, ook bij een project |
 | Editor Ctrl + Enter | ✅ `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
 | Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
-| Projectacties op detailpagina | ✅ **Programmeer dit idee**, **Download .py**, **Kopieer alle code** |
+| Projectacties op detailpagina | ✅ **Speel dit idee**, **Programmeer dit idee**, **Download .py**, **Kopieer alle code** |
 | Projectcode in de editor | ✅ alle stappen met commentaar en projectbanner |
 | Kopiëren naar klembord | ✅ volledige projectcode op het klembord |
 | Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
 | Mobiele navigatie en editorlayout | ✅ nav op eigen rij, editor één kolom |
 | Live GitHub Pages: editor, hero-link en projectacties | ✅ 9/9 live checks geslaagd |
+| Manifest, iconen en snelkoppelingen | ✅ 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
+| Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
+| Offline-cache gevuld | ✅ 33 bestanden |
+| Installatie-uitleg in de app | ✅ 3 platformstappen, sluit correct |
+| **Speel dit idee** op een projectpagina | ✅ volledige code (24 regels) en directe Pyodide-uitvoer |
+| Site herladen zonder internet | ✅ laadt uit de cache |
+| Python uitvoeren zonder internet | ✅ werkt na eenmalig laden |
+| PWA-testsuite lokaal | ✅ 19/19 checks geslaagd |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
@@ -378,6 +404,7 @@ De site staat live:
 | Windows-snelkoppelingen | ✅ bureaublad + startmenu |
 | Python-speelveld op de live site | ✅ |
 | Programmeer-editor op de live site | ✅ |
+| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
 | Doneerlink | ✅ Belfius IBAN via `site-config.json` |
 
@@ -397,9 +424,12 @@ Wat optioneel nog kan:
 - AI-antwoorden kunnen fouten bevatten; de site vraagt gebruikers code altijd zelf te testen.
 - De offline coach is bewust algemeen en kan niet meedenken over willekeurige eigen code.
 - De rate limiter houdt tellers in het geheugen; na een herstart begint de telling opnieuw.
-- Er is geen automatische testrunner; `npm run check` controleert de data, niet de UI.
+- Er is geen automatische testrunner; `npm run check` controleert de data en de app-bestanden, niet de UI.
 - Het Python-speelveld en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
 - `input()` opent een pop-up. Een oneindige loop stopt pas als je het tabblad of venster sluit.
 - Editor-code staat per browser/apparaat in `localStorage`; er is geen account of synchronisatie.
+- De geïnstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.
+- Offline werkt alles behalve de online AI-coach en doneren; de offline coach blijft beschikbaar.
+- De service worker werkt alleen via `https://` of `localhost`, niet als los bestand (`file://`).
 - Door de hash-routes indexeert Google alleen de startpagina, niet de losse projectpagina's.
 - Donaties lopen via een bankoverschrijving of externe aanbieder; de site verwerkt zelf geen betalingen.

@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -107,6 +107,55 @@ for (const category of CATEGORIES) {
   if (!CATEGORY_META[category]?.emoji) warnings.push(`Categorie "${category}" heeft geen emoji.`);
 }
 
+/* PWA: manifest, service worker en offline-cache. */
+
+const manifestPath = path.join(root, "manifest.webmanifest");
+if (!existsSync(manifestPath)) {
+  fail("manifest.webmanifest ontbreekt.");
+} else {
+  try {
+    const manifest = JSON.parse(readFileSync(manifestPath, "utf8"));
+    if (manifest.display !== "standalone") fail("Het manifest moet display \"standalone\" gebruiken.");
+    if (manifest.start_url !== "./") fail("Het manifest moet start_url \"./\" gebruiken.");
+    if (!Array.isArray(manifest.icons) || manifest.icons.length < 2) {
+      fail("Het manifest heeft minimaal twee app-iconen nodig.");
+    } else {
+      for (const icon of manifest.icons) {
+        const iconPath = path.join(root, String(icon.src || "").replace(/^\.\//, ""));
+        if (!existsSync(iconPath)) fail(`App-icoon ontbreekt: ${icon.src}`);
+      }
+      if (!manifest.icons.some((icon) => String(icon.purpose || "").includes("maskable"))) {
+        fail("Het manifest mist een maskable icoon.");
+      }
+    }
+  } catch (error) {
+    fail(`manifest.webmanifest is geen geldige JSON: ${error.message}`);
+  }
+}
+
+if (!existsSync(path.join(root, "sw.js"))) fail("sw.js ontbreekt.");
+if (!existsSync(path.join(root, "offline.html"))) fail("offline.html ontbreekt.");
+
+const indexHtml = readFileSync(path.join(root, "index.html"), "utf8");
+if (!indexHtml.includes('rel="manifest"')) fail("index.html linkt niet naar het manifest.");
+if (!indexHtml.includes("apple-touch-icon")) fail("index.html mist het apple-touch-icoon.");
+
+const swSource = readFileSync(path.join(root, "sw.js"), "utf8");
+let offlineFileCount = 0;
+const shellBlock = swSource.match(/const SHELL = \[([\s\S]*?)\];/);
+if (!shellBlock) {
+  fail("sw.js heeft geen SHELL-lijst.");
+} else {
+  const shellFiles = [...shellBlock[1].matchAll(/"([^"]+)"/g)].map((match) => match[1]);
+  offlineFileCount = shellFiles.length;
+  if (shellFiles.length < 20) fail(`De offline-cache is te klein (${shellFiles.length} bestanden).`);
+  for (const file of shellFiles) {
+    if (!existsSync(path.join(root, file.replace(/^\.\//, "")))) {
+      fail(`Offline-cache verwijst naar een onbekend bestand: ${file}`);
+    }
+  }
+}
+
 const counts = {};
 for (const idea of IDEAS) counts[idea.category] = (counts[idea.category] || 0) + 1;
 
@@ -119,6 +168,7 @@ console.log("EasyCodey datacontrole");
 console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
+console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
 console.log("");
 for (const category of CATEGORIES) {
   console.log(`  ${String(counts[category] || 0).padStart(3)}  ${CATEGORY_META[category].emoji} ${category}`);

@@ -1,0 +1,64 @@
+{
+  "id": "./",
+  "name": "EasyCodey — Leer Python door te bouwen",
+  "short_name": "EasyCodey",
+  "description": "161 Nederlandstalige Python-projecten met uitleg, code en een stappenplan. Speel elk idee direct, programmeer zelf in de browser en werk offline verder.",
+  "lang": "nl",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f7f5ef",
+  "theme_color": "#f7f5ef",
+  "categories": ["education", "productivity", "developer"],
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/icon-maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Programmeren",
+      "short_name": "Programmeren",
+      "description": "Open de Python-editor",
+      "url": "./#/programmeren",
+      "icons": [{ "src": "./assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Leerpad",
+      "short_name": "Leerpad",
+      "description": "Bekijk het leerpad per niveau",
+      "url": "./#/leerpad"
+    },
+    {
+      "name": "Mijn ideeën",
+      "short_name": "Mijn ideeën",
+      "description": "Open je eigen projecten",
+      "url": "./#/mijn-ideeen"
+    }
+  ],
+  "prefer_related_applications": false
+}

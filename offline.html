@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Offline — EasyCodey</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/icons/icon-192.png" />
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f7f5ef;
+      --panel: #ffffff;
+      --ink: #15150f;
+      --muted: #5f5d52;
+      --brand: #1f5eff;
+      --line: rgba(21, 21, 15, 0.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0c0c0e;
+        --panel: #141419;
+        --ink: #f4f2ea;
+        --muted: #a8a598;
+        --brand: #6d8dff;
+        --line: rgba(244, 242, 234, 0.14);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    main {
+      width: min(460px, 100%);
+      padding: 34px 30px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      text-align: center;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.08);
+    }
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      margin: 0 auto 18px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #3b74ff, #0a2fae);
+      color: #fff;
+      font: 700 30px/1 "Consolas", monospace;
+    }
+    .mark span { color: #ffd43b; }
+    h1 { margin: 0 0 8px; font-size: 24px; letter-spacing: -0.02em; }
+    p { margin: 0 0 10px; color: var(--muted); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 22px; }
+    a, button {
+      font: inherit;
+      font-weight: 600;
+      border-radius: 12px;
+      padding: 11px 18px;
+      cursor: pointer;
+      text-decoration: none;
+      border: 1px solid transparent;
+    }
+    .primary { background: var(--brand); color: #fff; }
+    .ghost { background: transparent; border-color: var(--line); color: var(--ink); }
+    small { display: block; margin-top: 20px; color: var(--muted); font-size: 12.5px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="mark" aria-hidden="true">&gt;<span>_</span></div>
+    <h1>Je bent offline</h1>
+    <p>EasyCodey heeft nu geen internetverbinding.</p>
+    <p>Pagina's die je al eerder opende, blijven werken. Python werkt offline zodra je het één keer hebt gebruikt.</p>
+    <div class="actions">
+      <button class="primary" type="button" onclick="location.reload()">Opnieuw proberen</button>
+      <a class="ghost" href="./">Naar de startpagina</a>
+    </div>
+    <small>EasyCodey — leren door te bouwen</small>
+  </main>
+</body>
+</html>

@@ -13,9 +13,10 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
 | Laatste Pages-build | ✅ laatste commit op `main`, Pages bouwt automatisch |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
+| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache |
 | Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
 
-Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
+Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
 
 ---
 
@@ -192,12 +193,20 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Python-speelveld opent en `print("Hallo")` geeft uitvoer.
 - [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
 - [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
-- [ ] Projectpagina: **Programmeer dit idee**, **Download .py** en **Kopieer alle code** werken.
+- [ ] Projectpagina: **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code** werken.
+- [ ] **Speel dit idee** voert het volledige project uit in het speelveld.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
 - [ ] Mobiel en donker thema zien er goed uit.
+- [ ] `/manifest.webmanifest` geeft 200 met `application/manifest+json`.
+- [ ] `/sw.js` geeft 200 en de service worker is actief in DevTools.
+- [ ] **📲 Installeer als app** toont de uitleg; op Chrome/Edge verschijnt **Installeer nu**.
+- [ ] De app opent in een eigen venster met het EasyCodey-icoon.
+- [ ] Na één keer online gewerkt te hebben: site en Python werken offline.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
 - [ ] Site is aangemeld bij Google Search Console (zie `GOOGLE.md`).
+
+> **Na een update:** de service worker kan één keer nog de oude versie tonen. Herlaad de pagina of sluit en heropen de app. Bij een grote wijziging verhoog je `VERSION` in `sw.js`; de oude cache wordt dan opgeruimd.
 
 ---
 

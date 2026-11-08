@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="EasyCodey">
+  <defs>
+    <linearGradient id="easycodey-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3b74ff" />
+      <stop offset="1" stop-color="#0a2fae" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#easycodey-bg)" />
+  <g fill="none" stroke="#ffffff" stroke-width="36" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 168 L252 256 L150 344" />
+  </g>
+  <rect x="282" y="320" width="116" height="36" rx="18" fill="#ffd43b" />
+</svg>
