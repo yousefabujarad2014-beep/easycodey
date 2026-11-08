@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Verkoopdashboard — Python-project — EasyCodey</title>
+  <meta name="description" content="Analyseer verkopen per product en maand. Je leert data groeperen, totalen berekenen en een tekstueel dashboard maken. Je kunt hetzelfde patroon gebruiken…" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/idee/verkoop-dashboard/" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png" />
+  <meta property="og:title" content="Verkoopdashboard — Python-project — EasyCodey" />
+  <meta property="og:description" content="Analyseer verkopen per product en maand. Je leert data groeperen, totalen berekenen en een tekstueel dashboard maken. Je kunt hetzelfde patroon gebruiken…" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yousefabujarad2014-beep.github.io/easycodey/idee/verkoop-dashboard/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/data-ai.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Verkoopdashboard — Python-project — EasyCodey" />
+  <meta name="twitter:description" content="Analyseer verkopen per product en maand. Je leert data groeperen, totalen berekenen en een tekstueel dashboard maken. Je kunt hetzelfde patroon gebruiken…" />
+  <meta name="twitter:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/data-ai.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "name": "Verkoopdashboard",
+      "description": "Analyseer verkopen per product en maand.",
+      "url": "https://yousefabujarad2014-beep.github.io/easycodey/idee/verkoop-dashboard/",
+      "image": "https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/data-ai.svg",
+      "inLanguage": "nl-NL",
+      "learningResourceType": "Project",
+      "educationalLevel": "Gemiddeld",
+      "teaches": [
+        "dict",
+        "groeperen",
+        "totalen",
+        "rapport"
+      ],
+      "timeRequired": "PT75M",
+      "isAccessibleForFree": true,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "EasyCodey",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Alle projecten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/projecten/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Verkoopdashboard",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/idee/verkoop-dashboard/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../../" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="../../">Ideeën</a>
+        <a href="../../#/leerpad">Leerpad</a>
+        <a href="../../#/programmeren">Programmeren</a>
+        <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+      </nav>
+      <div class="header-tools">
+        <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="../../">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/">Alle projecten</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/#categorie-data-ai">Data &amp; AI</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Verkoopdashboard</span>
+    </nav>
+
+    <article class="static-project">
+      <header class="detail-hero static-hero">
+        <div class="detail-cover">
+          <img src="../../assets/covers/data-ai.svg" alt="Omslagillustratie voor Verkoopdashboard" width="800" height="450" />
+          <span class="detail-cover-emoji" aria-hidden="true">🏪</span>
+          <span class="detail-cover-cat">🤖 Data &amp; AI</span>
+        </div>
+        <div class="detail-hero-body">
+          <h1>Verkoopdashboard</h1>
+          <div class="detail-meta">
+            <span class="meta-pill">🤖 Data &amp; AI</span>
+            <span class="meta-pill">🎚 Gemiddeld</span>
+            <span class="meta-pill">⏱ 75 min</span>
+            <span class="meta-pill">5 stappen</span>
+          </div>
+          <p class="detail-summary">Analyseer verkopen per product en maand.</p>
+          <div class="static-actions">
+            <a class="btn brand" href="../../#/idee/verkoop-dashboard?play=1">▶ Speel dit idee</a>
+            <a class="btn ghost" href="../../#/idee/verkoop-dashboard">Open in EasyCodey</a>
+            <a class="btn ghost" href="../../#/programmeren?project=verkoop-dashboard">⌨ Programmeer dit idee</a>
+          </div>
+          <p class="static-note">
+            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            Je voortgang wordt lokaal in je browser bewaard.
+          </p>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <div class="detail-main">
+          <section class="panel">
+            <h2><span class="h2-num">1</span> Waar gaat dit over?</h2>
+            <p>Je leert data groeperen, totalen berekenen en een tekstueel dashboard maken. Je kunt hetzelfde patroon gebruiken voor elke verkooplijst.</p>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">2</span> Wat leer je?</h2>
+            <div class="learn-grid"><span class="learn-item">dict</span><span class="learn-item">groeperen</span><span class="learn-item">totalen</span><span class="learn-item">rapport</span></div>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">3</span> Stap voor stap</h2>
+            <div class="steps static-steps">
+          <article class="static-step" id="stap-1">
+            <div class="static-step-head">
+              <span class="step-num">Stap 1</span>
+              <h3 class="step-title">Maak de data</h3>
+            </div>
+            <p>Gebruik een lijst met dictionaries als eenvoudige dataset.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>verkopen = [
+    {&quot;product&quot;: &quot;Appel&quot;, &quot;maand&quot;: &quot;jan&quot;, &quot;aantal&quot;: 12, &quot;prijs&quot;: 0.5},
+    {&quot;product&quot;: &quot;Peer&quot;, &quot;maand&quot;: &quot;jan&quot;, &quot;aantal&quot;: 8, &quot;prijs&quot;: 0.6},
+    {&quot;product&quot;: &quot;Appel&quot;, &quot;maand&quot;: &quot;feb&quot;, &quot;aantal&quot;: 20, &quot;prijs&quot;: 0.5},
+]</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-2">
+            <div class="static-step-head">
+              <span class="step-num">Stap 2</span>
+              <h3 class="step-title">Bereken omzet per product</h3>
+            </div>
+            <p>Vermenigvuldig aantal met prijs.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>from collections import defaultdict
+
+omzet = defaultdict(float)
+for rij in verkopen:
+    omzet[rij[&quot;product&quot;]] += rij[&quot;aantal&quot;] * rij[&quot;prijs&quot;]
+
+print(dict(omzet))</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-3">
+            <div class="static-step-head">
+              <span class="step-num">Stap 3</span>
+              <h3 class="step-title">Groepeer per maand</h3>
+            </div>
+            <p>Een tweede dictionary laat de trend zien.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>per_maand = defaultdict(float)
+for rij in verkopen:
+    per_maand[rij[&quot;maand&quot;]] += rij[&quot;aantal&quot;] * rij[&quot;prijs&quot;]</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-4">
+            <div class="static-step-head">
+              <span class="step-num">Stap 4</span>
+              <h3 class="step-title">Maak een ranglijst</h3>
+            </div>
+            <p>Sorteer producten op omzet.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>for product, bedrag in sorted(omzet.items(), key=lambda paar: paar[1], reverse=True):
+    print(f&quot;{product:&lt;8} € {bedrag:.2f}&quot;)</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-5">
+            <div class="static-step-head">
+              <span class="step-num">Stap 5</span>
+              <h3 class="step-title">Voeg een totaal toe</h3>
+            </div>
+            <p>Tel alle omzet op en toon de beste maand.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>totaal = sum(omzet.values())
+beste_maand = max(per_maand, key=per_maand.get)
+print(f&quot;Totaal: € {totaal:.2f}, beste maand: {beste_maand}&quot;)</code></pre>
+          </div>
+          </article>
+            </div>
+          </section>
+
+          <section class="panel">
+          <h2><span class="h2-num">4</span> Tips</h2>
+          <ul class="tips"><li>Controleer of prijzen inclusief of exclusief btw zijn.</li><li>Rond pas op het einde af.</li></ul>
+        </section>
+        </div>
+
+        <aside class="detail-side">
+          <div class="side-card">
+            <h3>Over dit project</h3>
+            <div class="side-fact"><span>Categorie</span><strong>Data &amp; AI</strong></div>
+            <div class="side-fact"><span>Niveau</span><strong>Gemiddeld</strong></div>
+            <div class="side-fact"><span>Tijdsduur</span><strong>75 min</strong></div>
+            <div class="side-fact"><span>Stappen</span><strong>5</strong></div>
+          </div>
+
+          <div class="side-card">
+            <h3>Hierna doen</h3>
+            <div class="next-list">
+            <a class="next-item" href="../budget-tracker/">
+              <span class="next-emoji" aria-hidden="true">💰</span>
+              <span>Budget-tracker met grafiek</span>
+            </a>
+            <a class="next-item" href="../sudoku-oplosser/">
+              <span class="next-emoji" aria-hidden="true">🧩</span>
+              <span>Sudoku-oplosser</span>
+            </a>
+            </div>
+          </div>
+
+          <div class="side-card static-side-cta">
+            <h3>Zelf proberen</h3>
+            <p>Open het project in de app, speel de code en vink je stappen af.</p>
+            <a class="btn brand" href="../../#/idee/verkoop-dashboard?play=1">▶ Start dit project</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <a class="link-btn" href="../../">🏠 Startpagina</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var button = document.getElementById("static-theme");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+        try {
+          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+          var state = raw ? JSON.parse(raw) : {};
+          state.theme = next;
+          localStorage.setItem("easycodey.v1", JSON.stringify(state));
+        } catch (error) {}
+      });
+    })();
+  </script>
+</body>
+</html>

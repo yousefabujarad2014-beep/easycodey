@@ -8,6 +8,8 @@
     "start": "node server.js",
     "dev": "node server.js",
     "check": "node scripts/check-data.mjs",
+    "pages": "node scripts/build-pages.mjs",
+    "build": "node scripts/build-pages.mjs && node scripts/check-data.mjs",
     "icons": "node scripts/make-icons.mjs"
   },
   "engines": {

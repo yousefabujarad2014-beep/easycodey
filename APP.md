@@ -51,6 +51,7 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Onderdeel | Offline |
 |---|---|
 | Alle 161 projecten, uitleg, stappen en tips | ✅ |
+| Vaste projectpagina's `/idee/<id>/` en `/projecten/` | ✅ na één keer online bezoek |
 | Voortgang, thema en eigen projecten | ✅ |
 | Python-speelveld en editor | ✅ na de eerste keer online |
 | Offline AI-coach | ✅ |
@@ -118,8 +119,8 @@ Het script start zelf een tijdelijke headless Chrome. Staat Chrome ergens anders
 
 - **Chrome DevTools → Application → Manifest**: naam, iconen en start-URL moeten groen zijn.
 - **Application → Service Workers**: status *activated and is running*.
-- **Application → Cache Storage**: `easycodey-v1-shell` en `easycodey-v1-runtime`.
+- **Application → Cache Storage**: `easycodey-v2-shell` en `easycodey-v2-runtime`.
 - **Lighthouse → Progressive Web App**: controleert installeerbaarheid en offline werking.
-- `npm run check` controleert het manifest, de service worker en alle offline-bestanden.
+- `npm run check` controleert het manifest, de service worker, alle offline-bestanden, de 161 vaste pagina's en de sitemap.
 
 > **Let op:** een service worker werkt alleen via `https://` of `http://localhost`. Open de site dus niet als los bestand (`file://`).

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Muziek-generator — Python-project — EasyCodey</title>
+  <meta name="description" content="Schrijf een kort muziekstuk als WAV-bestand. Je leert hoe geluid als getallen werkt: samples, frequenties en een WAV-header. Je genereert echte tonen…" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/idee/muziek-generator/" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png" />
+  <meta property="og:title" content="Muziek-generator — Python-project — EasyCodey" />
+  <meta property="og:description" content="Schrijf een kort muziekstuk als WAV-bestand. Je leert hoe geluid als getallen werkt: samples, frequenties en een WAV-header. Je genereert echte tonen…" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yousefabujarad2014-beep.github.io/easycodey/idee/muziek-generator/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/kunst.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Muziek-generator — Python-project — EasyCodey" />
+  <meta name="twitter:description" content="Schrijf een kort muziekstuk als WAV-bestand. Je leert hoe geluid als getallen werkt: samples, frequenties en een WAV-header. Je genereert echte tonen…" />
+  <meta name="twitter:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/kunst.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "name": "Muziek-generator",
+      "description": "Schrijf een kort muziekstuk als WAV-bestand.",
+      "url": "https://yousefabujarad2014-beep.github.io/easycodey/idee/muziek-generator/",
+      "image": "https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/kunst.svg",
+      "inLanguage": "nl-NL",
+      "learningResourceType": "Project",
+      "educationalLevel": "Gevorderd",
+      "teaches": [
+        "wave",
+        "wiskunde",
+        "frequenties",
+        "bestanden"
+      ],
+      "timeRequired": "PT120M",
+      "isAccessibleForFree": true,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "EasyCodey",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Alle projecten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/projecten/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Muziek-generator",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/idee/muziek-generator/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../../" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="../../">Ideeën</a>
+        <a href="../../#/leerpad">Leerpad</a>
+        <a href="../../#/programmeren">Programmeren</a>
+        <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+      </nav>
+      <div class="header-tools">
+        <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="../../">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/">Alle projecten</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/#categorie-kunst-creatief">Kunst &amp; Creatief</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Muziek-generator</span>
+    </nav>
+
+    <article class="static-project">
+      <header class="detail-hero static-hero">
+        <div class="detail-cover">
+          <img src="../../assets/covers/kunst.svg" alt="Omslagillustratie voor Muziek-generator" width="800" height="450" />
+          <span class="detail-cover-emoji" aria-hidden="true">🎵</span>
+          <span class="detail-cover-cat">🎨 Kunst &amp; Creatief</span>
+        </div>
+        <div class="detail-hero-body">
+          <h1>Muziek-generator</h1>
+          <div class="detail-meta">
+            <span class="meta-pill">🎨 Kunst &amp; Creatief</span>
+            <span class="meta-pill">🎚 Gevorderd</span>
+            <span class="meta-pill">⏱ 2 uur</span>
+            <span class="meta-pill">5 stappen</span>
+          </div>
+          <p class="detail-summary">Schrijf een kort muziekstuk als WAV-bestand.</p>
+          <div class="static-actions">
+            <a class="btn brand" href="../../#/idee/muziek-generator?play=1">▶ Speel dit idee</a>
+            <a class="btn ghost" href="../../#/idee/muziek-generator">Open in EasyCodey</a>
+            <a class="btn ghost" href="../../#/programmeren?project=muziek-generator">⌨ Programmeer dit idee</a>
+          </div>
+          <p class="static-note">
+            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            Je voortgang wordt lokaal in je browser bewaard.
+          </p>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <div class="detail-main">
+          <section class="panel">
+            <h2><span class="h2-num">1</span> Waar gaat dit over?</h2>
+            <p>Je leert hoe geluid als getallen werkt: samples, frequenties en een WAV-header. Je genereert echte tonen zonder externe bibliotheek.</p>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">2</span> Wat leer je?</h2>
+            <div class="learn-grid"><span class="learn-item">wave</span><span class="learn-item">wiskunde</span><span class="learn-item">frequenties</span><span class="learn-item">bestanden</span></div>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">3</span> Stap voor stap</h2>
+            <div class="steps static-steps">
+          <article class="static-step" id="stap-1">
+            <div class="static-step-head">
+              <span class="step-num">Stap 1</span>
+              <h3 class="step-title">Maak één toon</h3>
+            </div>
+            <p>Een sinusgolf met een vaste frequentie klinkt als een toon.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>import math
+import wave
+import struct
+
+FREQ = 440
+RATE = 44100
+duur = 1.0
+
+samples = [
+    int(32767 * 0.3 * math.sin(2 * math.pi * FREQ * i / RATE))
+    for i in range(int(RATE * duur))
+]</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-2">
+            <div class="static-step-head">
+              <span class="step-num">Stap 2</span>
+              <h3 class="step-title">Schrijf een WAV-bestand</h3>
+            </div>
+            <p>De wave-module schrijft de header en de samples.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>with wave.open(&quot;toon.wav&quot;, &quot;w&quot;) as bestand:
+    bestand.setnchannels(1)
+    bestand.setsampwidth(2)
+    bestand.setframerate(RATE)
+    for sample in samples:
+        bestand.writeframes(struct.pack(&quot;&lt;h&quot;, sample))</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-3">
+            <div class="static-step-head">
+              <span class="step-num">Stap 3</span>
+              <h3 class="step-title">Maak een melodie</h3>
+            </div>
+            <p>Zet meerdere noten achter elkaar.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>noten = [523.25, 587.33, 659.25, 523.25]
+alles = []
+
+for freq in noten:
+    for i in range(int(RATE * 0.4)):
+        alles.append(int(32767 * 0.25 * math.sin(2 * math.pi * freq * i / RATE)))</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-4">
+            <div class="static-step-head">
+              <span class="step-num">Stap 4</span>
+              <h3 class="step-title">Voeg een fade toe</h3>
+            </div>
+            <p>Een fade voorkomt klikken aan het begin en einde.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>def met_fade(samples, lengte=2000):
+    for i in range(min(lengte, len(samples))):
+        samples[i] = int(samples[i] * i / lengte)
+        samples[-i - 1] = int(samples[-i - 1] * i / lengte)
+    return samples</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-5">
+            <div class="static-step-head">
+              <span class="step-num">Stap 5</span>
+              <h3 class="step-title">Experimenteer met akkoorden</h3>
+            </div>
+            <p>Tel twee frequenties op voor een rijkere klank.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>def toon(freq, duur=0.5):
+    return [
+        int(32767 * 0.18 * (math.sin(2 * math.pi * freq * i / RATE)
+                            + math.sin(2 * math.pi * freq * 1.5 * i / RATE)))
+        for i in range(int(RATE * duur))
+    ]</code></pre>
+          </div>
+          </article>
+            </div>
+          </section>
+
+          <section class="panel">
+          <h2><span class="h2-num">4</span> Tips</h2>
+          <ul class="tips"><li>Houd het volume laag; harde samples kunnen vervormen.</li><li>Gebruik een fade om klikken te voorkomen.</li></ul>
+        </section>
+        </div>
+
+        <aside class="detail-side">
+          <div class="side-card">
+            <h3>Over dit project</h3>
+            <div class="side-fact"><span>Categorie</span><strong>Kunst &amp; Creatief</strong></div>
+            <div class="side-fact"><span>Niveau</span><strong>Gevorderd</strong></div>
+            <div class="side-fact"><span>Tijdsduur</span><strong>2 uur</strong></div>
+            <div class="side-fact"><span>Stappen</span><strong>5</strong></div>
+          </div>
+
+          <div class="side-card">
+            <h3>Hierna doen</h3>
+            <div class="next-list">
+            <a class="next-item" href="../turtle-schilderij/">
+              <span class="next-emoji" aria-hidden="true">🐢</span>
+              <span>Turtle-schilderij</span>
+            </a>
+            <a class="next-item" href="../ascii-kunst/">
+              <span class="next-emoji" aria-hidden="true">🔤</span>
+              <span>ASCII-kunst</span>
+            </a>
+            </div>
+          </div>
+
+          <div class="side-card static-side-cta">
+            <h3>Zelf proberen</h3>
+            <p>Open het project in de app, speel de code en vink je stappen af.</p>
+            <a class="btn brand" href="../../#/idee/muziek-generator?play=1">▶ Start dit project</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <a class="link-btn" href="../../">🏠 Startpagina</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var button = document.getElementById("static-theme");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+        try {
+          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+          var state = raw ? JSON.parse(raw) : {};
+          state.theme = next;
+          localStorage.setItem("easycodey.v1", JSON.stringify(state));
+        } catch (error) {}
+      });
+    })();
+  </script>
+</body>
+</html>

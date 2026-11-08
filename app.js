@@ -304,8 +304,12 @@ function route() {
   }
 
   if (segments[0] === "idee" && segments[1]) {
+    const ideaId = decodeURIComponent(segments[1]);
     setNav("home");
-    renderDetail(decodeURIComponent(segments[1]));
+    renderDetail(ideaId);
+    if (params.get("play") === "1" && findIdea(ideaId)) {
+      window.setTimeout(() => playIdea(ideaId), 0);
+    }
     return;
   }
 
@@ -697,7 +701,9 @@ function renderDetail(id) {
       <button class="btn ghost" type="button" data-action="copy-idea-code" data-idea-id="${e(
         idea.id
       )}">Kopieer alle code</button>
-      <span class="idea-actions-note">Speel het hele programma of open alle stappen in de editor.</span>
+      <span class="idea-actions-note">Speel het hele programma of open alle stappen in de editor. <a href="idee/${encodeURIComponent(
+        idea.id
+      )}/">Vaste projectpagina</a></span>
     </div>
 
     <div class="detail-grid">

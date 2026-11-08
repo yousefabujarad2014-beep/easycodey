@@ -121,7 +121,7 @@ EasyCodey heeft **geen build-stap**.
 - **Start Command:** `npm start`
 - **Runtime:** Node
 
-Gebruik niet `npm run build`; dat script bestaat bewust niet. `npm install` is veilig omdat er geen dependencies zijn.
+Gebruik op Render `npm install` als build-stap. `npm run build` bestaat wel, maar genereert alleen de vaste pagina's en sitemap; die staan al in de repository. `npm install` is veilig omdat er geen dependencies zijn.
 
 ### Optie A — Blueprint (aanbevolen)
 
@@ -178,6 +178,10 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 ## 6. Na de deploy testen
 
 - [ ] Startpagina laadt met 161 projecten en covers.
+- [ ] `/projecten/` toont alle 161 projecten, gegroepeerd per categorie.
+- [ ] `/idee/<id>/` toont een eigen titel, description en canonical.
+- [ ] `/idee/<id>` zonder slash stuurt door naar `/idee/<id>/`.
+- [ ] **Speel dit idee** op een vaste pagina opent de app met `?play=1` en voert de code uit.
 - [ ] Zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren werken.
 - [ ] Filters staan in de URL en blijven na verversen bewaard.
 - [ ] Projectpagina toont stappen, code en tips.
@@ -203,6 +207,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De app opent in een eigen venster met het EasyCodey-icoon.
 - [ ] Na één keer online gewerkt te hebben: site en Python werken offline.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
+- [ ] `/sitemap.xml` bevat 163 URL's: startpagina, overzicht en 161 projecten.
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
 - [ ] Site is aangemeld bij Google Search Console (zie `GOOGLE.md`).
 
@@ -269,9 +274,9 @@ gh auth setup-git
 # Tools in deze sessie
 $env:Path = "$env:LOCALAPPDATA\Programs\EasyCodeTools\gh\bin;$env:LOCALAPPDATA\Programs\EasyCodeTools\git\cmd;$env:Path"
 
-# Projectcontrole
+# Projectcontrole en pagina's genereren
 cd C:\Users\Home\Desktop\FLL
-npm run check
+npm run build
 npm start
 
 # GitHub
@@ -295,7 +300,7 @@ Na de eerste succesvolle deploy:
 1. Open **https://search.google.com/search-console**.
 2. Voeg je live-URL toe als property.
 3. Verifieer met de HTML-tag of het HTML-bestand.
-4. Meld `sitemap.xml` aan.
-5. Vraag indexering aan voor de startpagina.
+4. Meld `sitemap.xml` aan (163 URL's).
+5. Vraag indexering aan voor de startpagina en enkele projectpagina's.
 
-De volledige uitleg, checklist en de beperking van hash-routes staan in **`GOOGLE.md`**.
+De volledige uitleg over de vaste projectpagina's, de app en de checklist staat in **`GOOGLE.md`**.

@@ -43,7 +43,7 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
 - **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline.
 - **Doneren**: optionele doneerknop die je koppelt aan Ko-fi, Buy Me a Coffee, PayPal.me, Stripe of een eigen link.
-- **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd.
+- **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd. Elk project heeft daarnaast een eigen vaste pagina op `/idee/<id>/` met eigen titel, description en JSON-LD.
 - Licht/donker thema, skeleton-loading, toetsenbordnavigatie, confetti bij het afronden en een volledig responsieve layout.
 - Lokale SVG-omslagen per categorie. Geen externe afbeeldingsdiensten.
 
@@ -111,10 +111,17 @@ Wil je een eigen afbeelding gebruiken? Voeg een `image`-veld toe met een lokaal 
 Na het toevoegen:
 
 ```bash
-npm run check
+npm run build
 ```
 
-De controle kijkt op dubbele id's, ontbrekende velden, kapotte tekencodering, te weinig stappen, ongeldige `next`-links en ontbrekende covers.
+`npm run build` doet twee dingen:
+
+1. `npm run pages` — genereert `idee/<id>/index.html` voor elk project, `projecten/index.html` en `sitemap.xml`.
+2. `npm run check` — controleert alle projectdata, het manifest, de offline-cache, de vaste pagina's, het overzicht en de sitemap.
+
+De controle kijkt op dubbele id's, ontbrekende velden, kapotte tekencodering, te weinig stappen, ongeldige `next`-links, ontbrekende covers, ontbrekende projectpagina's en URL's die niet in de sitemap staan.
+
+> Voer `npm run pages` (of `npm run build`) opnieuw uit na **elke** wijziging in `data/`. Anders verouderen de vaste pagina's en de sitemap.
 
 ## AI-coach instellen
 
@@ -236,13 +243,15 @@ Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt
 De site heeft alles wat Google nodig heeft om hem te indexeren:
 
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat de startpagina.
+- `/sitemap.xml` bevat **163 URL's**: de startpagina, het projectoverzicht en alle **161 projectpagina's**.
+- Elk project heeft een echte pagina op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
+- `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
 - `index.html` heeft een titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD.
 - De server blokkeert documentatie, scripts en configuratiebestanden.
 
-Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.md)**.
+De interactieve app blijft de hash-SPA. De vaste pagina's linken met `?play=1` terug naar de app, zodat een bezoeker vanuit Google direct het project kan spelen.
 
-> Let op: de app gebruikt `#`-routes. Google indexeert daardoor alleen de startpagina, niet de 161 losse projectpagina's. Zie `GOOGLE.md` voor de mogelijke upgrade naar echte paden.
+Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.md)**.
 
 ## Opslag en privacy
 
@@ -254,19 +263,20 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 
 ## Lokaal testen
 
-1. `npm run check` — controleert alle projectdata, het manifest en de offline-cache.
+1. `npm run check` — controleert alle projectdata, het manifest, de offline-cache, de 161 vaste pagina's, het overzicht en de sitemap.
 2. `npm start` en open http://localhost:4173.
 3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
-4. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
-5. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
-6. Vink alle stappen af en controleer de confetti en de afgeronde status.
-7. Open de AI-coach zonder sleutel: je krijgt de offline coach.
-8. Stel eventueel een sleutel in via ⚙ en stel een vraag.
-9. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
-10. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
-11. Open **📲 Installeer als app** en controleer de uitleg. In DevTools → Application moet de service worker actief zijn.
-12. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
-13. Test op een smal scherm en wissel tussen licht en donker thema.
+4. Test de vaste pagina's: `/projecten/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
+5. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
+6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
+7. Vink alle stappen af en controleer de confetti en de afgeronde status.
+8. Open de AI-coach zonder sleutel: je krijgt de offline coach.
+9. Stel eventueel een sleutel in via ⚙ en stel een vraag.
+10. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
+11. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
+12. Open **📲 Installeer als app** en controleer de uitleg. In DevTools → Application moet de service worker actief zijn.
+13. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
+14. Test op een smal scherm en wissel tussen licht en donker thema.
 
 ## Deployen naar Render
 
@@ -275,7 +285,7 @@ EasyCodey heeft **geen build-stap**. De juiste instellingen zijn:
 - **Build Command:** `npm install`
 - **Start Command:** `npm start`
 
-`npm install` is veilig: er zijn geen dependencies, maar Render verwacht een build-stap. Gebruik niet `npm run build`; dat script bestaat bewust niet.
+`npm install` is veilig: er zijn geen dependencies, maar Render verwacht een build-stap. `npm run build` bestaat wel, maar is **niet** nodig op Render: het genereert de vaste pagina's en sitemap, die al in de repository staan. Gebruik op Render dus `npm install` als build-stap.
 
 ### Via GitHub (aanbevolen)
 

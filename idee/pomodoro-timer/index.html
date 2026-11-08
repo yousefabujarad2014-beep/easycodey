@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Pomodoro-timer met tkinter — Python-project — EasyCodey</title>
+  <meta name="description" content="Een echte desktop-app met een aftellende klok en start- en stopknop. Je eerste grafische programma. Met tkinter maak je een venster, labels en knoppen…" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/idee/pomodoro-timer/" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png" />
+  <meta property="og:title" content="Pomodoro-timer met tkinter — Python-project — EasyCodey" />
+  <meta property="og:description" content="Een echte desktop-app met een aftellende klok en start- en stopknop. Je eerste grafische programma. Met tkinter maak je een venster, labels en knoppen…" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yousefabujarad2014-beep.github.io/easycodey/idee/pomodoro-timer/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/gui.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Pomodoro-timer met tkinter — Python-project — EasyCodey" />
+  <meta name="twitter:description" content="Een echte desktop-app met een aftellende klok en start- en stopknop. Je eerste grafische programma. Met tkinter maak je een venster, labels en knoppen…" />
+  <meta name="twitter:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/gui.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "name": "Pomodoro-timer met tkinter",
+      "description": "Een echte desktop-app met een aftellende klok en start- en stopknop.",
+      "url": "https://yousefabujarad2014-beep.github.io/easycodey/idee/pomodoro-timer/",
+      "image": "https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/gui.svg",
+      "inLanguage": "nl-NL",
+      "learningResourceType": "Project",
+      "educationalLevel": "Gemiddeld",
+      "teaches": [
+        "tkinter",
+        "after()",
+        "functies",
+        "global",
+        "event loop"
+      ],
+      "timeRequired": "PT70M",
+      "isAccessibleForFree": true,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "EasyCodey",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Alle projecten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/projecten/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Pomodoro-timer met tkinter",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/idee/pomodoro-timer/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../../" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="../../">Ideeën</a>
+        <a href="../../#/leerpad">Leerpad</a>
+        <a href="../../#/programmeren">Programmeren</a>
+        <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+      </nav>
+      <div class="header-tools">
+        <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="../../">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/">Alle projecten</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/#categorie-gui">GUI</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Pomodoro-timer met tkinter</span>
+    </nav>
+
+    <article class="static-project">
+      <header class="detail-hero static-hero">
+        <div class="detail-cover">
+          <img src="../../assets/covers/gui.svg" alt="Omslagillustratie voor Pomodoro-timer met tkinter" width="800" height="450" />
+          <span class="detail-cover-emoji" aria-hidden="true">🍅</span>
+          <span class="detail-cover-cat">🪟 GUI</span>
+        </div>
+        <div class="detail-hero-body">
+          <h1>Pomodoro-timer met tkinter</h1>
+          <div class="detail-meta">
+            <span class="meta-pill">🪟 GUI</span>
+            <span class="meta-pill">🎚 Gemiddeld</span>
+            <span class="meta-pill">⏱ 70 min</span>
+            <span class="meta-pill">5 stappen</span>
+          </div>
+          <p class="detail-summary">Een echte desktop-app met een aftellende klok en start- en stopknop.</p>
+          <div class="static-actions">
+            <a class="btn brand" href="../../#/idee/pomodoro-timer?play=1">▶ Speel dit idee</a>
+            <a class="btn ghost" href="../../#/idee/pomodoro-timer">Open in EasyCodey</a>
+            <a class="btn ghost" href="../../#/programmeren?project=pomodoro-timer">⌨ Programmeer dit idee</a>
+          </div>
+          <p class="static-note">
+            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            Je voortgang wordt lokaal in je browser bewaard.
+          </p>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <div class="detail-main">
+          <section class="panel">
+            <h2><span class="h2-num">1</span> Waar gaat dit over?</h2>
+            <p>Je eerste grafische programma. Met tkinter maak je een venster, labels en knoppen. De timer telt af met behulp van after(), de manier waarop tkinter taken uitstelt zonder je venster te bevriezen.</p>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">2</span> Wat leer je?</h2>
+            <div class="learn-grid"><span class="learn-item">tkinter</span><span class="learn-item">after()</span><span class="learn-item">functies</span><span class="learn-item">global</span><span class="learn-item">event loop</span></div>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">3</span> Stap voor stap</h2>
+            <div class="steps static-steps">
+          <article class="static-step" id="stap-1">
+            <div class="static-step-head">
+              <span class="step-num">Stap 1</span>
+              <h3 class="step-title">Maak je eerste venster</h3>
+            </div>
+            <p>tkinter zit standaard bij Python, je hoeft niets te installeren. Elk programma begint met een hoofdvenster en eindigt met mainloop(), dat het venster openhoudt.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>import tkinter as tk
+
+root = tk.Tk()
+root.title(&quot;Pomodoro&quot;)
+root.geometry(&quot;320x220&quot;)
+
+tijd = tk.Label(root, text=&quot;25:00&quot;, font=(&quot;Segoe UI&quot;, 42, &quot;bold&quot;))
+tijd.pack(pady=20)
+
+root.mainloop()</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-2">
+            <div class="static-step-head">
+              <span class="step-num">Stap 2</span>
+              <h3 class="step-title">Laat de klok aftellen</h3>
+            </div>
+            <p>after(1000, tick) vraagt tkinter om tick() over één seconde opnieuw aan te roepen. Zo blijft het venster reageren tijdens het aftellen.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>seconden = 25 * 60
+loopt = False
+
+def tick():
+    global seconden
+    if not loopt:
+        return
+
+    if seconden &gt; 0:
+        seconden -= 1
+        minuten, rest = divmod(seconden, 60)
+        tijd.config(text=f&quot;{minuten:02d}:{rest:02d}&quot;)
+        root.after(1000, tick)
+    else:
+        tijd.config(text=&quot;Klaar!&quot;)</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-3">
+            <div class="static-step-head">
+              <span class="step-num">Stap 3</span>
+              <h3 class="step-title">Voeg start- en stopknoppen toe</h3>
+            </div>
+            <p>De knoppen roepen functies aan. Met de variabele loopt voorkom je dat er twee timers tegelijk lopen als je twee keer op start klikt.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>def start():
+    global loopt
+    if not loopt:
+        loopt = True
+        tick()
+
+
+def stop():
+    global loopt
+    loopt = False
+
+
+tk.Button(root, text=&quot;Start&quot;, width=10, command=start).pack(side=&quot;left&quot;, padx=24)
+tk.Button(root, text=&quot;Stop&quot;, width=10, command=stop).pack(side=&quot;right&quot;, padx=24)</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-4">
+            <div class="static-step-head">
+              <span class="step-num">Stap 4</span>
+              <h3 class="step-title">Wissel werk en pauze af</h3>
+            </div>
+            <p>Na 25 minuten werken volgt 5 minuten pauze. Houd bij in welke fase je zit en reset de seconden als de fase voorbij is. Zo wordt het een echte pomodoro.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>werk_seconden = 25 * 60
+pauze_seconden = 5 * 60
+is_werk = True
+
+# In tick(), als seconden 0 is:
+if is_werk:
+    is_werk = False
+    seconden = pauze_seconden
+    tijd.config(text=&quot;Pauze&quot;)
+else:
+    is_werk = True
+    seconden = werk_seconden
+    tijd.config(text=&quot;Werken&quot;)</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-5">
+            <div class="static-step-head">
+              <span class="step-num">Stap 5</span>
+              <h3 class="step-title">Maak het af met een melding</h3>
+            </div>
+            <p>Een venster dat piept of van kleur verandert voelt pas af. Op Windows kun je winsound gebruiken; op andere systemen print je een melding of gebruik je een belletje van tkinter.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>import sys
+
+def meld():
+    root.bell()
+    if sys.platform == &quot;win32&quot;:
+        import winsound
+        winsound.MessageBeep()
+
+# Roep meld() aan wanneer een fase eindigt:
+# tijd.config(text=&quot;Klaar!&quot;)
+# meld()</code></pre>
+          </div>
+          </article>
+            </div>
+          </section>
+
+          <section class="panel">
+          <h2><span class="h2-num">4</span> Tips</h2>
+          <ul class="tips"><li>Gebruik root.after() nooit in een lange while-loop, anders bevriest het venster.</li><li>Maak de timer instelbaar met een Entry-veld voor werk- en pauzetijd.</li><li>Test de timer met 5 seconden in plaats van 25 minuten.</li></ul>
+        </section>
+        </div>
+
+        <aside class="detail-side">
+          <div class="side-card">
+            <h3>Over dit project</h3>
+            <div class="side-fact"><span>Categorie</span><strong>GUI</strong></div>
+            <div class="side-fact"><span>Niveau</span><strong>Gemiddeld</strong></div>
+            <div class="side-fact"><span>Tijdsduur</span><strong>70 min</strong></div>
+            <div class="side-fact"><span>Stappen</span><strong>5</strong></div>
+          </div>
+
+          <div class="side-card">
+            <h3>Hierna doen</h3>
+            <div class="next-list">
+            <a class="next-item" href="../snake/">
+              <span class="next-emoji" aria-hidden="true">🐍</span>
+              <span>Snake met pygame</span>
+            </a>
+            <a class="next-item" href="../pong/">
+              <span class="next-emoji" aria-hidden="true">🏓</span>
+              <span>Pong met pygame</span>
+            </a>
+            </div>
+          </div>
+
+          <div class="side-card static-side-cta">
+            <h3>Zelf proberen</h3>
+            <p>Open het project in de app, speel de code en vink je stappen af.</p>
+            <a class="btn brand" href="../../#/idee/pomodoro-timer?play=1">▶ Start dit project</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <a class="link-btn" href="../../">🏠 Startpagina</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var button = document.getElementById("static-theme");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+        try {
+          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+          var state = raw ? JSON.parse(raw) : {};
+          state.theme = next;
+          localStorage.setItem("easycodey.v1", JSON.stringify(state));
+        } catch (error) {}
+      });
+    })();
+  </script>
+</body>
+</html>

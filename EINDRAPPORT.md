@@ -145,8 +145,10 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Vindbaarheid
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` wordt dynamisch opgebouwd met `SITE_URL`.
-- Titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD staan in `index.html`.
+- `/sitemap.xml` bevat **163 URL's**: startpagina, projectoverzicht en alle 161 projecten.
+- Elk project heeft een vaste pagina op `/idee/<id>/` met eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
+- `/projecten/` is een indexeerbaar overzicht per categorie met zoekveld (`CollectionPage` + `ItemList`).
+- Titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD staan ook in `index.html`.
 - Documentatie en scripts zijn niet publiek bereikbaar.
 - Uitleg staat in `GOOGLE.md`.
 
@@ -179,10 +181,14 @@ FLL/
 ├── assets/covers/             10 lokale SVG-omslagen
 ├── assets/icons/              App-iconen: 192, 512, maskable en Apple
 ├── assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
-├── scripts/check-data.mjs     Controle van projectdata, manifest en offline-cache
+├── scripts/check-data.mjs     Controle van projectdata, manifest, offline-cache, pagina's en sitemap
+├── scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht en de sitemap
 ├── scripts/make-icons.mjs     App-iconen opnieuw maken met headless Chrome
+├── idee/<id>/index.html       161 vaste, indexeerbare projectpagina's
+├── projecten/index.html       Overzicht van alle projecten per categorie
+├── sitemap.xml                Startpagina, overzicht en 161 projectpagina's (163 URL's)
 ├── server.js                  Statische server + AI-proxy (geen dependencies)
-├── package.json               Scripts: start, dev, check, icons
+├── package.json               Scripts: start, dev, check, pages, build, icons
 ├── render.yaml                Render Blueprint
 ├── .env.example               Voorbeeldconfiguratie
 ├── .gitignore                 Sluit .env, node_modules en logs uit
@@ -200,7 +206,7 @@ FLL/
 
 | Test | Resultaat |
 |---|---|
-| `npm run check` | ✅ 161 projecten, 711 stappen, 0 fouten |
+| `npm run check` | ✅ 161 projecten, 711 stappen, 161 pagina's, 163 sitemap-URL's, 0 fouten |
 | Datacontrole op dubbele id's, verplichte velden, stappen, tips, `next`-links en covers | ✅ |
 | Syntaxcontrole `node --check` op `app.js`, `server.js`, `js/ai.js`, `js/store.js` | ✅ |
 | Startpagina `/` | ✅ 200, `text/html` |
@@ -208,7 +214,7 @@ FLL/
 | Alle 10 categorie-covers | ✅ 200, `image/svg+xml` |
 | `/api/config` | ✅ 200, `application/json`, inclusief doneervelden |
 | `/robots.txt` | ✅ 200, `text/plain`, verwijst naar de sitemap |
-| `/sitemap.xml` | ✅ 200, geldige XML met `SITE_URL` |
+| `/sitemap.xml` | ✅ 200, geldige XML met 163 URL's en `SITE_URL` |
 | Doneerknop zonder `DONATE_URL` | ✅ verborgen |
 | Doneerknop met `DONATE_URL` | ✅ zichtbaar, link en label kloppen |
 | Python-speelveld (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
@@ -237,6 +243,14 @@ FLL/
 | PWA-testsuite op de live site | ✅ 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | ✅ 33 bestanden, Pyodide werkt offline |
+| Vaste projectpagina's lokaal | ✅ 32/32 checks geslaagd |
+| Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
+| Projectpagina zonder slash | ✅ 301 naar de map met slash |
+| Overzicht `/projecten/` | ✅ 161 links, 10 categorieën, zoekfilter en `CollectionPage` |
+| Sitemap lokaal | ✅ geldige XML, 163 URL's, productie-startpagina aanwezig |
+| Speel dit idee vanaf vaste pagina | ✅ app opent met `?play=1`, volledige code en Pyodide-uitvoer |
+| Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
+| Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
@@ -297,11 +311,13 @@ Open daarna **http://localhost:4173**.
 
 Op Windows kan ook `start-easycodey.bat` worden gebruikt.
 
-Datacontrole:
+Datacontrole en pagina's genereren:
 
 ```bash
-npm run check
+npm run build
 ```
+
+`npm run build` = `npm run pages` (161 vaste pagina's, overzicht en sitemap) + `npm run check` (alle controles).
 
 ---
 
@@ -312,7 +328,7 @@ EasyCodey heeft **geen build-stap**.
 - **Build Command:** `npm install`
 - **Start Command:** `npm start`
 
-Gebruik niet `npm run build`; dat script bestaat bewust niet. `npm install` is veilig omdat er geen dependencies zijn.
+Gebruik op Render `npm install` als build-stap. `npm run build` bestaat wel, maar genereert alleen de vaste pagina's en sitemap; die staan al in de repository. `npm install` is veilig omdat er geen dependencies zijn.
 
 ### Via GitHub (aanbevolen)
 
@@ -388,10 +404,10 @@ idea(
 Daarna:
 
 ```bash
-npm run check
+npm run build
 ```
 
-De controle kijkt op dubbele id's, ontbrekende velden, kapotte tekencodering, te weinig stappen, ongeldige `next`-links en ontbrekende covers.
+`npm run build` genereert de vaste pagina's en de sitemap en controleert daarna op dubbele id's, ontbrekende velden, kapotte tekencodering, te weinig stappen, ongeldige `next`-links, ontbrekende covers, ontbrekende projectpagina's en URL's die niet in de sitemap staan.
 
 Een eigen afbeelding toevoegen kan met een `image`-veld, bijvoorbeeld `assets/covers/mijn-project.svg`. Zonder `image` gebruikt EasyCodey de cover van de categorie.
 
@@ -409,6 +425,8 @@ De site staat live:
 | Python-speelveld op de live site | ✅ |
 | Programmeer-editor op de live site | ✅ |
 | Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache (live getest) |
+| 161 vaste projectpagina's + overzicht | ✅ `/idee/<id>/` en `/projecten/` |
+| Sitemap met 163 URL's | ✅ gegenereerd door `npm run pages` |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
 | Doneerlink | ✅ Belfius IBAN via `site-config.json` |
 
@@ -416,7 +434,7 @@ Wat optioneel nog kan:
 
 1. Render Web Service of Blueprint koppelen voor de online AI-coach (`npm install`, `npm start`).
 2. `OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL` in Render instellen.
-3. Site aanmelden bij Google Search Console en de sitemap insturen; zie `GOOGLE.md`.
+3. Site aanmelden bij Google Search Console en de sitemap met 163 URL's insturen; zie `GOOGLE.md`.
 4. Optioneel: eigen domein koppelen.
 
 ---
@@ -435,5 +453,6 @@ Wat optioneel nog kan:
 - De geïnstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.
 - Offline werkt alles behalve de online AI-coach en doneren; de offline coach blijft beschikbaar.
 - De service worker werkt alleen via `https://` of `localhost`, niet als los bestand (`file://`).
-- Door de hash-routes indexeert Google alleen de startpagina, niet de losse projectpagina's.
+- De vaste projectpagina's worden statisch gegenereerd. Na een datawijziging moet je `npm run pages` of `npm run build` opnieuw uitvoeren.
+- De hash-routes van de interactieve app staan niet in de sitemap; Google indexeert de vaste pagina's op `/idee/<id>/`.
 - Donaties lopen via een bankoverschrijving of externe aanbieder; de site verwerkt zelf geen betalingen.

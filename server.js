@@ -297,8 +297,9 @@ const BLOCKED_DIRS = new Set(["scripts", ".git"]);
 async function serveStatic(req, res, pathname) {
   let rel = decodeURIComponent(pathname);
   if (rel === "/" || rel === "") rel = "/index.html";
+  if (rel.endsWith("/")) rel += "index.html";
 
-  const safePath = path.normalize(path.join(root, rel));
+  let safePath = path.normalize(path.join(root, rel));
   if (safePath !== root && !safePath.startsWith(root + path.sep)) {
     return sendJson(res, 403, { error: "Verboden pad." });
   }
@@ -315,8 +316,18 @@ async function serveStatic(req, res, pathname) {
   }
 
   try {
-    const info = await stat(safePath);
+    let info = await stat(safePath);
     if (info.isDirectory()) {
+      // Net als GitHub Pages: een map zonder slash verwijst naar de map met slash.
+      if (!pathname.endsWith("/")) {
+        res.writeHead(301, { Location: `${pathname}/` });
+        res.end();
+        return;
+      }
+      safePath = path.join(safePath, "index.html");
+      info = await stat(safePath);
+    }
+    if (!info.isFile()) {
       return sendJson(res, 404, { error: "Niet gevonden." });
     }
     const data = await readFile(safePath);
@@ -352,13 +363,21 @@ const server = http.createServer(async (req, res) => {
   }
 
   if (url.pathname === "/sitemap.xml") {
-    res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" });
-    return res.end(
-      `<?xml version="1.0" encoding="UTF-8"?>\n` +
-        `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-        `  <url>\n    <loc>${SITE_URL}/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n` +
-        `</urlset>\n`
-    );
+    try {
+      let xml = await readFile(path.join(root, "sitemap.xml"), "utf8");
+      const canonical = "https://yousefabujarad2014-beep.github.io/easycodey";
+      if (SITE_URL !== canonical) xml = xml.split(canonical).join(SITE_URL);
+      res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" });
+      return res.end(xml);
+    } catch {
+      res.writeHead(200, { "Content-Type": "application/xml; charset=utf-8" });
+      return res.end(
+        `<?xml version="1.0" encoding="UTF-8"?>\n` +
+          `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+          `  <url>\n    <loc>${SITE_URL}/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n` +
+          `</urlset>\n`
+      );
+    }
   }
 
   if (url.pathname === "/api/config") {

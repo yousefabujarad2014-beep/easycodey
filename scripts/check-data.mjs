@@ -10,8 +10,18 @@ import {
 } from "../data/index.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const SITE = "https://yousefabujarad2014-beep.github.io/easycodey";
 const errors = [];
 const warnings = [];
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
 
 const requiredStrings = ["id", "title", "emoji", "category", "level", "time", "summary", "description"];
 const validLevels = new Set(LEVELS);
@@ -156,6 +166,62 @@ if (!shellBlock) {
   }
 }
 
+/* Vaste projectpagina's, overzicht en sitemap. */
+
+const ideasDir = path.join(root, "idee");
+const overviewFile = path.join(root, "projecten", "index.html");
+let pageCount = 0;
+let sitemapCount = 0;
+
+for (const idea of IDEAS) {
+  const file = path.join(ideasDir, idea.id, "index.html");
+  if (!existsSync(file)) {
+    fail(`Projectpagina ontbreekt: idee/${idea.id}/index.html (voer npm run pages uit).`);
+    continue;
+  }
+  pageCount += 1;
+  const html = readFileSync(file, "utf8");
+  const canonical = `${SITE}/idee/${idea.id}/`;
+  if (!html.includes(`<link rel="canonical" href="${canonical}"`)) {
+    fail(`Projectpagina ${idea.id} heeft niet de juiste canonical.`);
+  }
+  const expectedTitle = escapeHtml(`${idea.title} — Python-project — EasyCodey`);
+  if (!html.includes(`<title>${expectedTitle}</title>`)) {
+    fail(`Projectpagina ${idea.id} heeft niet de juiste <title>.`);
+  }
+  if (!/<meta name="description" content="[^"]+"/.test(html)) {
+    fail(`Projectpagina ${idea.id} mist een meta-description.`);
+  }
+  if (!html.includes("<h1>")) fail(`Projectpagina ${idea.id} mist een <h1>.`);
+  if (!html.includes('type="application/ld+json"')) fail(`Projectpagina ${idea.id} mist JSON-LD.`);
+}
+
+if (!existsSync(overviewFile)) {
+  fail("Overzichtspagina projecten/index.html ontbreekt (voer npm run pages uit).");
+} else {
+  const overview = readFileSync(overviewFile, "utf8");
+  for (const idea of IDEAS) {
+    if (!overview.includes(`href="../idee/${idea.id}/"`)) {
+      fail(`Overzichtspagina mist een link naar ${idea.id}.`);
+    }
+  }
+}
+
+const sitemapFile = path.join(root, "sitemap.xml");
+if (!existsSync(sitemapFile)) {
+  fail("sitemap.xml ontbreekt.");
+} else {
+  const sitemap = readFileSync(sitemapFile, "utf8");
+  sitemapCount = (sitemap.match(/<loc>/g) || []).length;
+  if (!sitemap.includes(`<loc>${SITE}/</loc>`)) fail("Sitemap mist de startpagina.");
+  if (!sitemap.includes(`<loc>${SITE}/projecten/</loc>`)) fail("Sitemap mist de overzichtspagina.");
+  for (const idea of IDEAS) {
+    if (!sitemap.includes(`<loc>${SITE}/idee/${idea.id}/</loc>`)) {
+      fail(`Sitemap mist het project ${idea.id}.`);
+    }
+  }
+}
+
 const counts = {};
 for (const idea of IDEAS) counts[idea.category] = (counts[idea.category] || 0) + 1;
 
@@ -169,6 +235,8 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
+console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht`);
+console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
 for (const category of CATEGORIES) {
   console.log(`  ${String(counts[category] || 0).padStart(3)}  ${CATEGORY_META[category].emoji} ${category}`);

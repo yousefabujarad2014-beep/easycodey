@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Tekst-avontuur — Python-project — EasyCodey</title>
+  <meta name="description" content="Bouw een verhaal waarin de speler zelf kiest wat er gebeurt. Je maakt een interactief verhaal met kamers, keuzes en een schat. Alle scènes staan in een…" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/idee/tekst-avontuur/" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png" />
+  <meta property="og:title" content="Tekst-avontuur — Python-project — EasyCodey" />
+  <meta property="og:description" content="Bouw een verhaal waarin de speler zelf kiest wat er gebeurt. Je maakt een interactief verhaal met kamers, keuzes en een schat. Alle scènes staan in een…" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yousefabujarad2014-beep.github.io/easycodey/idee/tekst-avontuur/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/games.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Tekst-avontuur — Python-project — EasyCodey" />
+  <meta name="twitter:description" content="Bouw een verhaal waarin de speler zelf kiest wat er gebeurt. Je maakt een interactief verhaal met kamers, keuzes en een schat. Alle scènes staan in een…" />
+  <meta name="twitter:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/games.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "name": "Tekst-avontuur",
+      "description": "Bouw een verhaal waarin de speler zelf kiest wat er gebeurt.",
+      "url": "https://yousefabujarad2014-beep.github.io/easycodey/idee/tekst-avontuur/",
+      "image": "https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/games.svg",
+      "inLanguage": "nl-NL",
+      "learningResourceType": "Project",
+      "educationalLevel": "Gemiddeld",
+      "teaches": [
+        "dict",
+        "while",
+        "input()",
+        "state",
+        "functies"
+      ],
+      "timeRequired": "PT75M",
+      "isAccessibleForFree": true,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "EasyCodey",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Alle projecten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/projecten/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Tekst-avontuur",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/idee/tekst-avontuur/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../../" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="../../">Ideeën</a>
+        <a href="../../#/leerpad">Leerpad</a>
+        <a href="../../#/programmeren">Programmeren</a>
+        <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+      </nav>
+      <div class="header-tools">
+        <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="../../">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/">Alle projecten</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/#categorie-games">Games</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Tekst-avontuur</span>
+    </nav>
+
+    <article class="static-project">
+      <header class="detail-hero static-hero">
+        <div class="detail-cover">
+          <img src="../../assets/covers/games.svg" alt="Omslagillustratie voor Tekst-avontuur" width="800" height="450" />
+          <span class="detail-cover-emoji" aria-hidden="true">🗺️</span>
+          <span class="detail-cover-cat">🎮 Games</span>
+        </div>
+        <div class="detail-hero-body">
+          <h1>Tekst-avontuur</h1>
+          <div class="detail-meta">
+            <span class="meta-pill">🎮 Games</span>
+            <span class="meta-pill">🎚 Gemiddeld</span>
+            <span class="meta-pill">⏱ 75 min</span>
+            <span class="meta-pill">4 stappen</span>
+          </div>
+          <p class="detail-summary">Bouw een verhaal waarin de speler zelf kiest wat er gebeurt.</p>
+          <div class="static-actions">
+            <a class="btn brand" href="../../#/idee/tekst-avontuur?play=1">▶ Speel dit idee</a>
+            <a class="btn ghost" href="../../#/idee/tekst-avontuur">Open in EasyCodey</a>
+            <a class="btn ghost" href="../../#/programmeren?project=tekst-avontuur">⌨ Programmeer dit idee</a>
+          </div>
+          <p class="static-note">
+            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            Je voortgang wordt lokaal in je browser bewaard.
+          </p>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <div class="detail-main">
+          <section class="panel">
+            <h2><span class="h2-num">1</span> Waar gaat dit over?</h2>
+            <p>Je maakt een interactief verhaal met kamers, keuzes en een schat. Alle scènes staan in een woordenboek, zodat je nieuwe stukken verhaal kunt toevoegen zonder de code te herschrijven. Een geweldig project om logisch te leren denken.</p>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">2</span> Wat leer je?</h2>
+            <div class="learn-grid"><span class="learn-item">dict</span><span class="learn-item">while</span><span class="learn-item">input()</span><span class="learn-item">state</span><span class="learn-item">functies</span></div>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">3</span> Stap voor stap</h2>
+            <div class="steps static-steps">
+          <article class="static-step" id="stap-1">
+            <div class="static-step-head">
+              <span class="step-num">Stap 1</span>
+              <h3 class="step-title">Beschrijf je scènes als data</h3>
+            </div>
+            <p>Elke scène heeft een tekst en keuzes die naar een andere scène verwijzen. De sleutels van de keuzes zijn de woorden die de speler typt.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>scenes = {
+    &quot;start&quot;: {
+        &quot;tekst&quot;: &quot;Je staat bij een donker bos. Links een pad, rechts een rivier.&quot;,
+        &quot;opties&quot;: {&quot;links&quot;: &quot;bos&quot;, &quot;rechts&quot;: &quot;rivier&quot;},
+    },
+    &quot;bos&quot;: {
+        &quot;tekst&quot;: &quot;Tussen de bomen vind je een oude kist.&quot;,
+        &quot;opties&quot;: {&quot;open&quot;: &quot;schat&quot;, &quot;terug&quot;: &quot;start&quot;},
+    },
+    &quot;rivier&quot;: {
+        &quot;tekst&quot;: &quot;Een boot ligt klaar. Hij brengt je naar een eiland.&quot;,
+        &quot;opties&quot;: {&quot;instappen&quot;: &quot;schat&quot;, &quot;terug&quot;: &quot;start&quot;},
+    },
+    &quot;schat&quot;: {
+        &quot;tekst&quot;: &quot;Je hebt de schat gevonden. Je wint!&quot;,
+        &quot;opties&quot;: {},
+    },
+}</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-2">
+            <div class="static-step-head">
+              <span class="step-num">Stap 2</span>
+              <h3 class="step-title">Toon de huidige scène</h3>
+            </div>
+            <p>De variabele huidige onthoudt waar de speler is. Elke ronde zoek je die scène op in het woordenboek en print je de tekst en opties.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>huidige = &quot;start&quot;
+
+while True:
+    scene = scenes[huidige]
+    print()
+    print(scene[&quot;tekst&quot;])
+
+    if not scene[&quot;opties&quot;]:
+        break
+
+    for optie in scene[&quot;opties&quot;]:
+        print(&quot;-&quot;, optie)
+
+    keuze = input(&quot;Wat doe je? &quot;).lower()
+    if keuze in scene[&quot;opties&quot;]:
+        huidige = scene[&quot;opties&quot;][keuze]
+    else:
+        print(&quot;Dat kan niet. Kies een van de opties.&quot;)</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-3">
+            <div class="static-step-head">
+              <span class="step-num">Stap 3</span>
+              <h3 class="step-title">Voeg levens en voorwerpen toe</h3>
+            </div>
+            <p>Een avontuur wordt spannender met gevolgen. Houd levens en een inventory bij buiten de loop. Een verkeerde keuze kost bijvoorbeeld een leven.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>levens = 3
+inventory = []
+
+# In de loop, na een keuze:
+if keuze == &quot;open&quot;:
+    inventory.append(&quot;oude sleutel&quot;)
+    print(&quot;Je vindt een oude sleutel.&quot;)
+elif keuze == &quot;instappen&quot;:
+    levens -= 1
+    print(&quot;De boot lekt! Je verliest een leven.&quot;)
+
+if levens &lt;= 0:
+    print(&quot;Game over.&quot;)
+    break</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-4">
+            <div class="static-step-head">
+              <span class="step-num">Stap 4</span>
+              <h3 class="step-title">Maak je eigen verhaal</h3>
+            </div>
+            <p>Kopieer het patroon en voeg drie nieuwe scènes toe. Zorg dat elke scène minstens één uitweg heeft, anders zit de speler vast.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>scenes[&quot;grot&quot;] = {
+    &quot;tekst&quot;: &quot;Het is donker in de grot. Je hoort water druppelen.&quot;,
+    &quot;opties&quot;: {&quot;verder&quot;: &quot;schat&quot;, &quot;terug&quot;: &quot;start&quot;},
+}
+
+scenes[&quot;start&quot;][&quot;opties&quot;][&quot;grot&quot;] = &quot;grot&quot;
+
+print(&quot;Nieuwe route toegevoegd!&quot;)</code></pre>
+          </div>
+          </article>
+            </div>
+          </section>
+
+          <section class="panel">
+          <h2><span class="h2-num">4</span> Tips</h2>
+          <ul class="tips"><li>Teken je verhaal eerst op papier; dat voorkomt dat spelers vastlopen.</li><li>Lowercase alle invoer met .lower() zodat &#39;Open&#39; en &#39;open&#39; hetzelfde werken.</li><li>Bewaar scènes in een JSON-bestand als je verhaal heel groot wordt.</li></ul>
+        </section>
+        </div>
+
+        <aside class="detail-side">
+          <div class="side-card">
+            <h3>Over dit project</h3>
+            <div class="side-fact"><span>Categorie</span><strong>Games</strong></div>
+            <div class="side-fact"><span>Niveau</span><strong>Gemiddeld</strong></div>
+            <div class="side-fact"><span>Tijdsduur</span><strong>75 min</strong></div>
+            <div class="side-fact"><span>Stappen</span><strong>4</strong></div>
+          </div>
+
+          <div class="side-card">
+            <h3>Hierna doen</h3>
+            <div class="next-list">
+            <a class="next-item" href="../quiz-spel/">
+              <span class="next-emoji" aria-hidden="true">❓</span>
+              <span>Quizspel</span>
+            </a>
+            <a class="next-item" href="../galgje/">
+              <span class="next-emoji" aria-hidden="true">🪢</span>
+              <span>Galgje</span>
+            </a>
+            <a class="next-item" href="../boter-kaas-eieren/">
+              <span class="next-emoji" aria-hidden="true">⭕</span>
+              <span>Boter-kaas-en-eieren</span>
+            </a>
+            </div>
+          </div>
+
+          <div class="side-card static-side-cta">
+            <h3>Zelf proberen</h3>
+            <p>Open het project in de app, speel de code en vink je stappen af.</p>
+            <a class="btn brand" href="../../#/idee/tekst-avontuur?play=1">▶ Start dit project</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <a class="link-btn" href="../../">🏠 Startpagina</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var button = document.getElementById("static-theme");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+        try {
+          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+          var state = raw ? JSON.parse(raw) : {};
+          state.theme = next;
+          localStorage.setItem("easycodey.v1", JSON.stringify(state));
+        } catch (error) {}
+      });
+    })();
+  </script>
+</body>
+</html>

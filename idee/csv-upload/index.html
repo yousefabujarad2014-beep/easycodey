@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>CSV uploaden — Python-project — EasyCodey</title>
+  <meta name="description" content="Laat een gebruiker een CSV uploaden en toon een samenvatting. Je leert bestanduploads veilig verwerken en CSV parsen. Je toont alleen een voorbeeld en…" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/idee/csv-upload/" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png" />
+  <meta property="og:title" content="CSV uploaden — Python-project — EasyCodey" />
+  <meta property="og:description" content="Laat een gebruiker een CSV uploaden en toon een samenvatting. Je leert bestanduploads veilig verwerken en CSV parsen. Je toont alleen een voorbeeld en…" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yousefabujarad2014-beep.github.io/easycodey/idee/csv-upload/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/web.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CSV uploaden — Python-project — EasyCodey" />
+  <meta name="twitter:description" content="Laat een gebruiker een CSV uploaden en toon een samenvatting. Je leert bestanduploads veilig verwerken en CSV parsen. Je toont alleen een voorbeeld en…" />
+  <meta name="twitter:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/web.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "name": "CSV uploaden",
+      "description": "Laat een gebruiker een CSV uploaden en toon een samenvatting.",
+      "url": "https://yousefabujarad2014-beep.github.io/easycodey/idee/csv-upload/",
+      "image": "https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/web.svg",
+      "inLanguage": "nl-NL",
+      "learningResourceType": "Project",
+      "educationalLevel": "Gemiddeld",
+      "teaches": [
+        "flask",
+        "csv",
+        "upload",
+        "validatie"
+      ],
+      "timeRequired": "PT75M",
+      "isAccessibleForFree": true,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "EasyCodey",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Alle projecten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/projecten/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "CSV uploaden",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/idee/csv-upload/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../../" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="../../">Ideeën</a>
+        <a href="../../#/leerpad">Leerpad</a>
+        <a href="../../#/programmeren">Programmeren</a>
+        <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+      </nav>
+      <div class="header-tools">
+        <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="../../">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/">Alle projecten</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/#categorie-web">Web</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">CSV uploaden</span>
+    </nav>
+
+    <article class="static-project">
+      <header class="detail-hero static-hero">
+        <div class="detail-cover">
+          <img src="../../assets/covers/web.svg" alt="Omslagillustratie voor CSV uploaden" width="800" height="450" />
+          <span class="detail-cover-emoji" aria-hidden="true">📤</span>
+          <span class="detail-cover-cat">🌐 Web</span>
+        </div>
+        <div class="detail-hero-body">
+          <h1>CSV uploaden</h1>
+          <div class="detail-meta">
+            <span class="meta-pill">🌐 Web</span>
+            <span class="meta-pill">🎚 Gemiddeld</span>
+            <span class="meta-pill">⏱ 75 min</span>
+            <span class="meta-pill">4 stappen</span>
+          </div>
+          <p class="detail-summary">Laat een gebruiker een CSV uploaden en toon een samenvatting.</p>
+          <div class="static-actions">
+            <a class="btn brand" href="../../#/idee/csv-upload?play=1">▶ Speel dit idee</a>
+            <a class="btn ghost" href="../../#/idee/csv-upload">Open in EasyCodey</a>
+            <a class="btn ghost" href="../../#/programmeren?project=csv-upload">⌨ Programmeer dit idee</a>
+          </div>
+          <p class="static-note">
+            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            Je voortgang wordt lokaal in je browser bewaard.
+          </p>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <div class="detail-main">
+          <section class="panel">
+            <h2><span class="h2-num">1</span> Waar gaat dit over?</h2>
+            <p>Je leert bestanduploads veilig verwerken en CSV parsen. Je toont alleen een voorbeeld en slaat het bestand tijdelijk op.</p>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">2</span> Wat leer je?</h2>
+            <div class="learn-grid"><span class="learn-item">flask</span><span class="learn-item">csv</span><span class="learn-item">upload</span><span class="learn-item">validatie</span></div>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">3</span> Stap voor stap</h2>
+            <div class="steps static-steps">
+          <article class="static-step" id="stap-1">
+            <div class="static-step-head">
+              <span class="step-num">Stap 1</span>
+              <h3 class="step-title">Maak een uploadformulier</h3>
+            </div>
+            <p>Gebruik multipart en beperk de bestandstypes.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>@app.get(&quot;/&quot;)
+def home():
+    return &quot;&quot;&quot;
+      &lt;form method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+        &lt;input type=&quot;file&quot; name=&quot;bestand&quot; accept=&quot;.csv&quot; required&gt;
+        &lt;button&gt;Uploaden&lt;/button&gt;
+      &lt;/form&gt;
+    &quot;&quot;&quot;</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-2">
+            <div class="static-step-head">
+              <span class="step-num">Stap 2</span>
+              <h3 class="step-title">Lees de CSV</h3>
+            </div>
+            <p>Decodeer als utf-8 en gebruik DictReader.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>import csv
+import io
+
+@app.post(&quot;/&quot;)
+def upload():
+    bestand = request.files.get(&quot;bestand&quot;)
+    if not bestand or not bestand.filename.endswith(&quot;.csv&quot;):
+        return &quot;Upload een CSV-bestand&quot;, 400
+
+    tekst = bestand.read().decode(&quot;utf-8&quot;)
+    rijen = list(csv.DictReader(io.StringIO(tekst)))
+    return f&quot;&lt;p&gt;{len(rijen)} rijen gevonden.&lt;/p&gt;&quot;</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-3">
+            <div class="static-step-head">
+              <span class="step-num">Stap 3</span>
+              <h3 class="step-title">Toon een voorbeeld</h3>
+            </div>
+            <p>Laat de eerste regels zien in een tabel.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>koppen = list(rijen[0].keys()) if rijen else []
+thead = &quot;&quot;.join(f&quot;&lt;th&gt;{kop}&lt;/th&gt;&quot; for kop in koppen)
+body = &quot;&quot;.join(
+    &quot;&lt;tr&gt;&quot; + &quot;&quot;.join(f&quot;&lt;td&gt;{rij[kop]}&lt;/td&gt;&quot; for kop in koppen) + &quot;&lt;/tr&gt;&quot;
+    for rij in rijen[:5]
+)
+return f&quot;&lt;table&gt;&lt;tr&gt;{thead}&lt;/tr&gt;{body}&lt;/table&gt;&quot;</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-4">
+            <div class="static-step-head">
+              <span class="step-num">Stap 4</span>
+              <h3 class="step-title">Beperk de grootte</h3>
+            </div>
+            <p>Voorkom dat iemand een enorm bestand uploadt.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>app.config[&quot;MAX_CONTENT_LENGTH&quot;] = 2 * 1024 * 1024</code></pre>
+          </div>
+          </article>
+            </div>
+          </section>
+
+          <section class="panel">
+          <h2><span class="h2-num">4</span> Tips</h2>
+          <ul class="tips"><li>Escape celwaarden voordat je ze in HTML zet.</li><li>Bewaar uploads niet permanent zonder opschoning.</li></ul>
+        </section>
+        </div>
+
+        <aside class="detail-side">
+          <div class="side-card">
+            <h3>Over dit project</h3>
+            <div class="side-fact"><span>Categorie</span><strong>Web</strong></div>
+            <div class="side-fact"><span>Niveau</span><strong>Gemiddeld</strong></div>
+            <div class="side-fact"><span>Tijdsduur</span><strong>75 min</strong></div>
+            <div class="side-fact"><span>Stappen</span><strong>4</strong></div>
+          </div>
+
+          <div class="side-card">
+            <h3>Hierna doen</h3>
+            <div class="next-list">
+            <a class="next-item" href="../weer-app/">
+              <span class="next-emoji" aria-hidden="true">🌤️</span>
+              <span>Weer-app met een echte API</span>
+            </a>
+            <a class="next-item" href="../webscraper/">
+              <span class="next-emoji" aria-hidden="true">🕷️</span>
+              <span>Webscraper voor nieuwskoppen</span>
+            </a>
+            </div>
+          </div>
+
+          <div class="side-card static-side-cta">
+            <h3>Zelf proberen</h3>
+            <p>Open het project in de app, speel de code en vink je stappen af.</p>
+            <a class="btn brand" href="../../#/idee/csv-upload?play=1">▶ Start dit project</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <a class="link-btn" href="../../">🏠 Startpagina</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var button = document.getElementById("static-theme");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+        try {
+          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+          var state = raw ? JSON.parse(raw) : {};
+          state.theme = next;
+          localStorage.setItem("easycodey.v1", JSON.stringify(state));
+        } catch (error) {}
+      });
+    })();
+  </script>
+</body>
+</html>

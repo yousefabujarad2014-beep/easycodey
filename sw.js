@@ -1,7 +1,7 @@
 /* EasyCodey service worker — installeerbare app en offline modus.
    Bij een grote wijziging: verhoog VERSION, dan wordt de oude cache opgeruimd. */
 
-const VERSION = "easycodey-v1";
+const VERSION = "easycodey-v2";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 

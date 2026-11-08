@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f5ef" />
+  <title>Wachtwoordsterkte meten — Python-project — EasyCodey</title>
+  <meta name="description" content="Beoordeel hoe sterk een wachtwoord is. Je schrijft een functie die lengte, cijfers, hoofdletters en symbolen controleert. Je leert waarom sommige…" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="author" content="EasyCodey" />
+  <link rel="canonical" href="https://yousefabujarad2014-beep.github.io/easycodey/idee/wachtwoord-sterkt/" />
+  <link rel="manifest" href="../../manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/icons/icon-192.png" />
+  <meta property="og:title" content="Wachtwoordsterkte meten — Python-project — EasyCodey" />
+  <meta property="og:description" content="Beoordeel hoe sterk een wachtwoord is. Je schrijft een functie die lengte, cijfers, hoofdletters en symbolen controleert. Je leert waarom sommige…" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://yousefabujarad2014-beep.github.io/easycodey/idee/wachtwoord-sterkt/" />
+  <meta property="og:site_name" content="EasyCodey" />
+  <meta property="og:locale" content="nl_NL" />
+  <meta property="og:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/security.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Wachtwoordsterkte meten — Python-project — EasyCodey" />
+  <meta name="twitter:description" content="Beoordeel hoe sterk een wachtwoord is. Je schrijft een functie die lengte, cijfers, hoofdletters en symbolen controleert. Je leert waarom sommige…" />
+  <meta name="twitter:image" content="https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/security.svg" />
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "LearningResource",
+      "name": "Wachtwoordsterkte meten",
+      "description": "Beoordeel hoe sterk een wachtwoord is.",
+      "url": "https://yousefabujarad2014-beep.github.io/easycodey/idee/wachtwoord-sterkt/",
+      "image": "https://yousefabujarad2014-beep.github.io/easycodey/assets/covers/security.svg",
+      "inLanguage": "nl-NL",
+      "learningResourceType": "Project",
+      "educationalLevel": "Beginner",
+      "teaches": [
+        "strings",
+        "functies",
+        "regex",
+        "security"
+      ],
+      "timeRequired": "PT40M",
+      "isAccessibleForFree": true,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "EasyCodey",
+        "url": "https://yousefabujarad2014-beep.github.io/easycodey/"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "EasyCodey",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Alle projecten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/projecten/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Wachtwoordsterkte meten",
+          "item": "https://yousefabujarad2014-beep.github.io/easycodey/idee/wachtwoord-sterkt/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../styles.css" />
+  <script>
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="../../" aria-label="EasyCodey home">
+        <span class="logo-mark">🐍</span>
+        <span class="logo-text">Easy<strong>Codey</strong></span>
+      </a>
+      <nav class="main-nav" aria-label="Hoofdnavigatie">
+        <a href="../../">Ideeën</a>
+        <a href="../../#/leerpad">Leerpad</a>
+        <a href="../../#/programmeren">Programmeren</a>
+        <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+      </nav>
+      <div class="header-tools">
+        <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="../../">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/">Alle projecten</a>
+      <span aria-hidden="true">›</span>
+      <a href="../../projecten/#categorie-security">Security</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Wachtwoordsterkte meten</span>
+    </nav>
+
+    <article class="static-project">
+      <header class="detail-hero static-hero">
+        <div class="detail-cover">
+          <img src="../../assets/covers/security.svg" alt="Omslagillustratie voor Wachtwoordsterkte meten" width="800" height="450" />
+          <span class="detail-cover-emoji" aria-hidden="true">🔒</span>
+          <span class="detail-cover-cat">🔐 Security</span>
+        </div>
+        <div class="detail-hero-body">
+          <h1>Wachtwoordsterkte meten</h1>
+          <div class="detail-meta">
+            <span class="meta-pill">🔐 Security</span>
+            <span class="meta-pill">🎚 Beginner</span>
+            <span class="meta-pill">⏱ 40 min</span>
+            <span class="meta-pill">5 stappen</span>
+          </div>
+          <p class="detail-summary">Beoordeel hoe sterk een wachtwoord is.</p>
+          <div class="static-actions">
+            <a class="btn brand" href="../../#/idee/wachtwoord-sterkt?play=1">▶ Speel dit idee</a>
+            <a class="btn ghost" href="../../#/idee/wachtwoord-sterkt">Open in EasyCodey</a>
+            <a class="btn ghost" href="../../#/programmeren?project=wachtwoord-sterkt">⌨ Programmeer dit idee</a>
+          </div>
+          <p class="static-note">
+            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            Je voortgang wordt lokaal in je browser bewaard.
+          </p>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+        <div class="detail-main">
+          <section class="panel">
+            <h2><span class="h2-num">1</span> Waar gaat dit over?</h2>
+            <p>Je schrijft een functie die lengte, cijfers, hoofdletters en symbolen controleert. Je leert waarom sommige wachtwoorden snel te raden zijn.</p>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">2</span> Wat leer je?</h2>
+            <div class="learn-grid"><span class="learn-item">strings</span><span class="learn-item">functies</span><span class="learn-item">regex</span><span class="learn-item">security</span></div>
+          </section>
+
+          <section class="panel">
+            <h2><span class="h2-num">3</span> Stap voor stap</h2>
+            <div class="steps static-steps">
+          <article class="static-step" id="stap-1">
+            <div class="static-step-head">
+              <span class="step-num">Stap 1</span>
+              <h3 class="step-title">Controleer de lengte</h3>
+            </div>
+            <p>Lengte is de belangrijkste factor, maar niet de enige.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>def score(wachtwoord):
+    punten = 0
+    if len(wachtwoord) &gt;= 8:
+        punten += 1
+    if len(wachtwoord) &gt;= 14:
+        punten += 1
+    return punten
+
+print(score(&quot;appel&quot;))</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-2">
+            <div class="static-step-head">
+              <span class="step-num">Stap 2</span>
+              <h3 class="step-title">Controleer de tekens</h3>
+            </div>
+            <p>Gebruik any() om te kijken of er cijfers, hoofdletters en symbolen zijn.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>def heeft_soorten(wachtwoord):
+    return {
+        &quot;cijfer&quot;: any(t.isdigit() for t in wachtwoord),
+        &quot;hoofdletter&quot;: any(t.isupper() for t in wachtwoord),
+        &quot;kleine letter&quot;: any(t.islower() for t in wachtwoord),
+        &quot;symbool&quot;: any(not t.isalnum() for t in wachtwoord),
+    }
+
+print(heeft_soorten(&quot;Appel123!&quot;))</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-3">
+            <div class="static-step-head">
+              <span class="step-num">Stap 3</span>
+              <h3 class="step-title">Maak een eindscore</h3>
+            </div>
+            <p>Tel de soorten tekens op en geef een label terug.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>def beoordeel(wachtwoord):
+    soorten = heeft_soorten(wachtwoord)
+    punten = len(wachtwoord) // 4 + sum(soorten.values())
+
+    if punten &gt;= 7:
+        return &quot;sterk&quot;
+    if punten &gt;= 5:
+        return &quot;redelijk&quot;
+    return &quot;zwak&quot;
+
+print(beoordeel(&quot;Appel123!&quot;))</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-4">
+            <div class="static-step-head">
+              <span class="step-num">Stap 4</span>
+              <h3 class="step-title">Herken veelgebruikte wachtwoorden</h3>
+            </div>
+            <p>Een lang wachtwoord kan alsnog in een lijst met bekende wachtwoorden staan.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>veelgebruikt = {&quot;wachtwoord&quot;, &quot;123456&quot;, &quot;qwerty&quot;, &quot;welkom123&quot;}
+
+def is_veelgebruikt(wachtwoord):
+    return wachtwoord.lower() in veelgebruikt</code></pre>
+          </div>
+          </article>
+          <article class="static-step" id="stap-5">
+            <div class="static-step-head">
+              <span class="step-num">Stap 5</span>
+              <h3 class="step-title">Toon advies</h3>
+            </div>
+            <p>Geef concrete tips in plaats van alleen een cijfer.</p>
+            <div class="code-block">
+            <div class="code-head"><span class="code-lang">python</span></div>
+            <pre><code>if is_veelgebruikt(wachtwoord):
+    advies = &quot;Kies een ander wachtwoord; deze staat in bekende lijsten.&quot;
+elif beoordeel(wachtwoord) == &quot;zwak&quot;:
+    advies = &quot;Maak het langer en voeg een cijfer en symbool toe.&quot;
+else:
+    advies = &quot;Goed bezig. Gebruik per site een uniek wachtwoord.&quot;</code></pre>
+          </div>
+          </article>
+            </div>
+          </section>
+
+          <section class="panel">
+          <h2><span class="h2-num">4</span> Tips</h2>
+          <ul class="tips"><li>Test met een paar voorbeelden en controleer de uitkomst handmatig.</li><li>Gebruik nooit een echt wachtwoord in je testbestand.</li></ul>
+        </section>
+        </div>
+
+        <aside class="detail-side">
+          <div class="side-card">
+            <h3>Over dit project</h3>
+            <div class="side-fact"><span>Categorie</span><strong>Security</strong></div>
+            <div class="side-fact"><span>Niveau</span><strong>Beginner</strong></div>
+            <div class="side-fact"><span>Tijdsduur</span><strong>40 min</strong></div>
+            <div class="side-fact"><span>Stappen</span><strong>5</strong></div>
+          </div>
+
+          <div class="side-card">
+            <h3>Hierna doen</h3>
+            <div class="next-list">
+            <a class="next-item" href="../caesar-cipher/">
+              <span class="next-emoji" aria-hidden="true">🏛️</span>
+              <span>Caesar-vercijfering</span>
+            </a>
+            <a class="next-item" href="../hash-vergelijker/">
+              <span class="next-emoji" aria-hidden="true">#️⃣</span>
+              <span>Hashes vergelijken</span>
+            </a>
+            </div>
+          </div>
+
+          <div class="side-card static-side-cta">
+            <h3>Zelf proberen</h3>
+            <p>Open het project in de app, speel de code en vink je stappen af.</p>
+            <a class="btn brand" href="../../#/idee/wachtwoord-sterkt?play=1">▶ Start dit project</a>
+          </div>
+        </aside>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-actions">
+        <a class="link-btn" href="../../">🏠 Startpagina</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../projecten/">📚 Alle projecten</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/programmeren">⌨ Programmeer zelf</a>
+      </p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var button = document.getElementById("static-theme");
+      if (!button) return;
+      button.addEventListener("click", function () {
+        var root = document.documentElement;
+        var next = root.dataset.theme === "dark" ? "light" : "dark";
+        root.dataset.theme = next;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+        try {
+          var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+          var state = raw ? JSON.parse(raw) : {};
+          state.theme = next;
+          localStorage.setItem("easycodey.v1", JSON.stringify(state));
+        } catch (error) {}
+      });
+    })();
+  </script>
+</body>
+</html>
