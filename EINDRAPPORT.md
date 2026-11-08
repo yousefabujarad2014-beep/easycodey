@@ -206,6 +206,7 @@ FLL/
 | Kopiëren naar klembord | ✅ volledige projectcode op het klembord |
 | Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
 | Mobiele navigatie en editorlayout | ✅ nav op eigen rij, editor één kolom |
+| Live GitHub Pages: editor, hero-link en projectacties | ✅ 9/9 live checks geslaagd |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
 | Toegangscode zonder code | ✅ 401 met `access-code` |
