@@ -144,6 +144,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - **Download .py** bewaart het programma als Python-bestand.
 - **Kopieer** zet de code op het klembord.
 - Automatisch bewaren in `localStorage`; de code staat na herladen nog in de editor.
+- Editor-code is gekoppeld aan het project waarvoor je hem opende. Typ je daarna in de algemene editor (`#/programmeren`), dan wordt die code niet per ongeluk aan het oude project gekoppeld; **Programmeer dit idee** laadt altijd de juiste projectcode.
 - Voorbeelden laden, uitvoer wissen, **Tab** invoegen als vier spaties en de editor leegmaken.
 - **Projectcode opnieuw laden** en **Terug naar project** in de projectbalk.
 - Op mobiel staat de navigatie op een eigen scrollbare rij en wordt de editor één kolom.
@@ -256,6 +257,7 @@ FLL/
 | Programmeer-editor `#/programmeren` | ✅ editor, actieve nav, juiste titel |
 | Editor-uitvoer (headless Chrome, Pyodide) | ✅ `print("Editor test", 2 + 3)` geeft `Editor test 5` |
 | Editor automatisch bewaren | ✅ code staat direct in `localStorage` |
+| Editor: projectcode na eigen code | ✅ algemene editorcode wordt niet aan het oude project gekoppeld |
 | Editor na herladen | ✅ code blijft bewaard, ook bij een project |
 | Editor Ctrl + Enter | ✅ `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
 | Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
