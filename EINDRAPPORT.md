@@ -288,6 +288,7 @@ FLL/
 | PWA-testsuite op de live site | ✅ 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | ✅ 34 bestanden, Pyodide werkt offline |
+| Live: wachtwoordaccount en chatknop | ✅ 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | ✅ 27/27 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates en HTTPS |
 | Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | ✅ `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
