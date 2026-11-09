@@ -97,14 +97,23 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Geïmporteerde projecten worden gevalideerd en schoongemaakt: ongeldige velden, categorieën en niveaus worden hersteld en projecten met minder dan 3 geldige stappen worden geweigerd.
 - Duidelijke waarschuwing dat projecten per browser/apparaat zijn opgeslagen.
 
-### Optioneel profiel (`#/profiel`)
-- Een profiel is **optioneel**; zonder profiel werkt EasyCodey gewoon als gast.
-- Registreren met een naam en een PIN van 4 tot 12 cijfers; inloggen, uitloggen en een profiel verwijderen.
-- Elk profiel heeft eigen voortgang, eigen projecten en eigen editor-code via `easycodey.v1.profile.<id>`.
+### Optioneel account (`#/profiel`)
+- Een account is **optioneel**; zonder account werkt EasyCodey gewoon als gast.
+- Snel aanmelden zoals bij Kahoot: een naam en een wachtwoord van 4 tot 64 tekens, geen e-mail.
+- Inloggen op naam + wachtwoord, met **Toon/Verberg** voor het wachtwoordveld; uitloggen en een account verwijderen.
+- Elk account heeft eigen voortgang, eigen projecten en eigen editor-code via `easycodey.v1.profile.<id>`.
 - Bij het aanmaken kun je de huidige gastvoortgang meenemen.
+- Oude accounts met een PIN blijven werken: de PIN wordt automatisch als wachtwoord gelezen.
 - **Back-up downloaden** bewaart voortgang, eigen projecten en editor-code als JSON; **Back-up herstellen** zet het bestand terug.
 - De header heeft een **👤-icoon** en de footer een link **Mijn profiel**.
-- Duidelijke uitleg dat profielen alleen op dit apparaat staan en dat de PIN geen sterke beveiliging is.
+- Duidelijke uitleg dat accounts alleen op dit apparaat staan en dat het wachtwoord geen sterke beveiliging is.
+
+### Chatknop na inloggen
+- Zodra een account actief is, verschijnt een chatknop in de header, een link in de footer en een zwevende knop rechtsonder.
+- Op `#/profiel` staat een grote **Chat met EasyCoach**-kaart.
+- De knop werkt op Android en op de laptop en opent het bestaande AI-paneel.
+- De begroeting en het gebruikersavatar gebruiken de naam en initiaal van het actieve account.
+- Zonder actief account blijven alle chatknoppen verborgen.
 
 ### AI-coach EasyCoach
 - Zijpaneel met streaming antwoorden.
@@ -154,7 +163,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
 - `sw.js` bewaart de app-shell (34 bestanden) bij de eerste installatie.
 - **Network-first** voor navigatie én same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
-- De service worker registreert met `updateViaCache: "none"`, controleert bij het starten en elke 30 minuten, en neemt een nieuwe versie automatisch over.
+- De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`) en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
 - **↻ App bijwerken** in het installatievenster verwijdert de oude service worker en caches en herlaadt de nieuwste versie.
 - HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Het installatievenster en de installatiepagina leggen uit dat je altijd de beveiligde live-link moet gebruiken.
 - De Python-runtime en lettertypen komen in een aparte runtime-cache, zodat Python na de eerste keer offline werkt.
@@ -279,7 +288,7 @@ FLL/
 | PWA-testsuite op de live site | ✅ 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | ✅ 34 bestanden, Pyodide werkt offline |
-| Nieuwe flows lokaal | ✅ 17/17 checks: invoerhulp, app-entry, profielen, back-up, updateknop en HTTPS |
+| Nieuwe flows lokaal | ✅ 27/27 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates en HTTPS |
 | Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | ✅ `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
 | Vaste pagina's lokaal | ✅ 70/70 checks geslaagd |
@@ -334,10 +343,10 @@ FLL/
 ## 5. Opslag en privacy
 
 - Voortgang, thema, AI-instellingen, eigen projecten en de editor-code staan in `localStorage`.
-- Zonder profiel gebruikt de site de gastsleutel `easycodey.v1`; met een profiel `easycodey.v1.profile.<id>`.
-- Profielen staan onder `easycodey.profiles.v1`, het actieve profiel onder `easycodey.activeProfile.v1`.
-- Er is **geen account op een server, geen database en geen server-side opslag** van gebruikersdata. Profielen leven alleen op het apparaat.
-- De PIN houdt profielen op hetzelfde apparaat uit elkaar, maar is geen sterke beveiliging.
+- Zonder account gebruikt de site de gastsleutel `easycodey.v1`; met een account `easycodey.v1.profile.<id>`.
+- Accounts staan onder `easycodey.profiles.v1`, het actieve account onder `easycodey.activeProfile.v1`.
+- Er is **geen account op een server, geen database en geen server-side opslag** van gebruikersdata. Accounts leven alleen op het apparaat.
+- Het wachtwoord houdt accounts op hetzelfde apparaat uit elkaar, maar is geen sterke beveiliging.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Met **Back-up downloaden/herstellen** op `#/profiel` verplaats je voortgang, eigen projecten en editor-code.
 - Eigen projecten kun je daarnaast exporteren/importeren op **Mijn ideeën**.

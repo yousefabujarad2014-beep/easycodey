@@ -31,7 +31,8 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **161 projecten** van Beginner tot Gevorderd, verdeeld over Games, Web, GUI, Data & AI, Handige tools, Automatisering, Security, Wetenschap, Kunst & Creatief en Onderwijs.
 - Elke opdracht heeft een omslagafbeelding, uitleg, een stappenplan met code per stap, tips en vervolgprojecten.
 - **Voortgang bijhouden**: vink stappen af. Je voortgang wordt lokaal in je browser opgeslagen (`localStorage`).
-- **Optioneel profiel** (`#/profiel`): maak een profiel met naam en PIN als meerdere mensen hetzelfde apparaat gebruiken. Elk profiel heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder profiel werkt alles gewoon als gast.
+- **Optioneel account** (`#/profiel`): meld je snel aan zoals bij Kahoot, met alleen een naam en een wachtwoord. Elk account heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder account werkt alles gewoon als gast.
+- **Chat met je coach**: zodra je bent ingelogd verschijnt er een chatknop in de header, in de footer en als zwevende knop. Op Android en laptop opent die direct EasyCoach. Je profielpagina heeft daarnaast een grote chatkaart.
 - **Back-up**: download je profieldata als JSON en zet die op een ander apparaat weer terug.
 - **Zoeken en filteren** op trefwoord, categorie, niveau, tijdsduur, meerdere vaardigheden, alleen niet-afgeronde projecten en sorteren.
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
@@ -44,7 +45,7 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm (het tekstvak met de drie puntjes). Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
 - **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
-- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. Een ingebouwde **App bijwerken**-knop haalt de nieuwste versie op.
+- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Een ingebouwde **App bijwerken**-knop haalt de nieuwste versie handmatig op.
 - **Chique huisstijl**: warm ivoor, diepgroen en goud, met Fraunces voor koppen, verfijnde kaarten en donkere code- en footerblokken. Het logo is een eigen monogram (diepgroen vierkant, gouden rand en ivoren **E**).
 - **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd. Elk project heeft daarnaast een eigen vaste pagina op `/idee/<id>/` met eigen titel, description en JSON-LD.
@@ -276,10 +277,11 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 
 - Voortgang, thema, AI-instellingen, eigen projecten en je editor-code staan in `localStorage`.
 - Zonder profiel gebruik je de gastsleutel `easycodey.v1`.
-- Met een profiel gebruikt elk profiel een eigen sleutel: `easycodey.v1.profile.<id>`. De profielen zelf staan onder `easycodey.profiles.v1`; het actieve profiel onder `easycodey.activeProfile.v1`.
+- Met een account gebruikt elk account een eigen sleutel: `easycodey.v1.profile.<id>`. De accounts zelf staan onder `easycodey.profiles.v1`; het actieve account onder `easycodey.activeProfile.v1`.
 - Bestaande voortgang van vóór de naamswijziging (`easycode.v1`) wordt automatisch overgezet.
-- Er is **geen account op een server en geen database**. Profielen leven alleen op dit apparaat.
-- Een profiel is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als beveiliging. De PIN houdt profielen uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat.
+- Er is **geen account op een server en geen database**. Accounts leven alleen op dit apparaat.
+- Een account is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als beveiliging. Het wachtwoord houdt accounts uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat.
+- Oude accounts met een PIN blijven werken: de PIN wordt bij het inlezen automatisch als wachtwoord gelezen.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Gebruik **Back-up downloaden** en **Back-up herstellen** op `#/profiel` om voortgang, eigen projecten en editor-code mee te nemen. Op **Mijn ideeën** kun je daarnaast alleen je eigen projecten exporteren/importeren.
 
@@ -296,8 +298,8 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 9. Stel eventueel een sleutel in via ⚙ en stel een vraag.
 10. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
 11. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
-12. Maak op `#/profiel` een profiel, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**.
-13. Open **📲 Installeer als app** en controleer de uitleg en de knop **App bijwerken**. In DevTools → Application moet de service worker actief zijn.
+12. Maak op `#/profiel` een account met naam en wachtwoord, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**. Controleer dat de chatknop verschijnt zodra je ingelogd bent.
+13. Open **📲 Installeer als app** en controleer de uitleg en de knop **App bijwerken**. In DevTools → Application moet de service worker actief zijn. Bij een nieuwe versie moet de app zichzelf bijwerken.
 14. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
 15. Test op een smal scherm en wissel tussen licht en donker thema. Controleer dat er geen horizontale scrollbalk is.
 

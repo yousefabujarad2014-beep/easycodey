@@ -13,10 +13,11 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
 | Laatste code-build | ✅ commit `79f7935`, build geslaagd |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
-| Optionele profielen | ✅ `#/profiel`, lokale profielen en JSON-back-up |
+| Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord en JSON-back-up |
+| Chatknop na inloggen | ✅ header, footer, zwevende knop en chatkaart op het profiel |
 | Invoerhulp | ✅ uitleg bij `input()` in speelveld en op projectpagina's |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
-| Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **App bijwerken** |
+| Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache, **automatische updates** en **App bijwerken** |
 | Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
 
 Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
@@ -201,9 +202,11 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
 - [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
 - [ ] Invoerhulp is zichtbaar bij het speelveld en op een projectpagina; `input()` toont een venster bovenaan met een tekstvak.
-- [ ] `#/profiel` laadt en legt uit dat een account optioneel is.
-- [ ] Profiel aanmaken, uitloggen, inloggen en een foute PIN geven de juiste melding.
-- [ ] Elk profiel heeft eigen voortgang; **Back-up downloaden** en **Back-up herstellen** werken.
+- [ ] `#/profiel` laadt en legt uit dat je geen e-mail nodig hebt.
+- [ ] Account aanmaken met naam + wachtwoord, uitloggen, opnieuw inloggen en een fout wachtwoord geven de juiste melding.
+- [ ] Na inloggen verschijnt de chatknop in de header, in de footer en als zwevende knop; op mobiel en laptop.
+- [ ] De chatknop opent EasyCoach; de chatkaart op `#/profiel` werkt ook.
+- [ ] Elk account heeft eigen voortgang; **Back-up downloaden** en **Back-up herstellen** werken.
 - [ ] Header en footer linken naar **Mijn profiel**.
 - [ ] Projectpagina: **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code** werken.
 - [ ] **Speel dit idee** voert het volledige project uit in het speelveld.
@@ -214,7 +217,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `/manifest.webmanifest` geeft 200 met `application/manifest+json`.
 - [ ] `/sw.js` geeft 200 en de service worker is actief in DevTools.
 - [ ] **📲 Installeer als app** toont de uitleg; op Chrome/Edge verschijnt **Installeer nu**.
-- [ ] Het installatievenster toont **App bijwerken** en de beveiligde live-link.
+- [ ] Het installatievenster toont **App bijwerken**, de automatische update-uitleg en de beveiligde live-link.
+- [ ] De app controleert automatisch op updates bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent.
 - [ ] De app opent in een eigen venster met het EasyCodey-icoon en het nieuwe logo.
 - [ ] Na één keer online gewerkt te hebben: site en Python werken offline.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
@@ -223,7 +227,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
 - [ ] Site is aangemeld bij Google Search Console (zie `GOOGLE.md`).
 
-> **Na een update:** code en styles worden network-first opgehaald en een nieuwe service worker neemt automatisch over. Zie je toch een oude of onveilige versie, open dan de beveiligde live-link en gebruik **App bijwerken** in het installatievenster. Bij een grote wijziging verhoog je `VERSION` in `sw.js`; de oude cache wordt dan opgeruimd.
+> **Na een update:** code en styles worden network-first opgehaald. De app controleert bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent. Een nieuwe service worker neemt automatisch over en de pagina herlaadt. Zie je toch een oude of onveilige versie, open dan de beveiligde live-link en gebruik **App bijwerken** in het installatievenster. Bij een grote wijziging verhoog je `VERSION` in `sw.js`; de oude cache wordt dan opgeruimd.
 
 ---
 
@@ -243,7 +247,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - Geen tokens, wachtwoorden of API-sleutels in de repository.
 - `.env`, `node_modules/` en logbestanden zijn uitgesloten via `.gitignore`.
 - De server blokkeert publieke toegang tot `server.js`, `package.json`, `render.yaml`, alle `*.md`, `.env*`, `scripts/` en `.git/`.
-- Profielen staan alleen lokaal in `localStorage`. Er is geen account op een server en geen database. De PIN is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als sterke beveiliging.
+- Accounts staan alleen lokaal in `localStorage`. Er is geen account op een server en geen database. Het wachtwoord is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als sterke beveiliging.
 - Een GitHub-token of Render-API-sleutel wordt nooit in dit document of in de projectmap opgeslagen.
 - Deel een eenmalige device-code niet en gebruik hem alleen op GitHub.
 

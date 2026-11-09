@@ -170,7 +170,12 @@ function readProfiles() {
       .map((profile) => ({
         id: profile.id,
         name: String(profile.name).slice(0, 40),
-        pin: typeof profile.pin === "string" ? profile.pin : "",
+        password:
+          typeof profile.password === "string"
+            ? profile.password
+            : typeof profile.pin === "string"
+              ? profile.pin
+              : "",
         createdAt: Number(profile.createdAt) || Date.now(),
         lastLoginAt: Number(profile.lastLoginAt) || 0
       }));
@@ -196,8 +201,8 @@ function readActiveProfileId() {
   }
 }
 
-function hashPin(pin) {
-  const text = `easycodey:${pin}`;
+function hashSecret(secret) {
+  const text = `easycodey:${secret}`;
   let hash = 2166136261;
   for (let index = 0; index < text.length; index += 1) {
     hash ^= text.charCodeAt(index);
@@ -242,25 +247,28 @@ export function getActiveProfile() {
   return safeProfile(profiles.find((profile) => profile.id === activeProfileId));
 }
 
-export function registerProfile(name, pin, options = {}) {
+export function registerProfile(name, password, options = {}) {
   const cleanName = String(name || "").trim().replace(/\s+/g, " ").slice(0, 40);
-  const cleanPin = String(pin || "").trim();
+  const cleanPassword = String(password || "").trim();
 
   if (cleanName.length < 2) {
     return { ok: false, error: "Kies een naam van minstens 2 tekens." };
   }
-  if (!/^\d{4,12}$/.test(cleanPin)) {
-    return { ok: false, error: "Kies een PIN van 4 tot 12 cijfers." };
+  if (cleanPassword.length < 4) {
+    return { ok: false, error: "Kies een wachtwoord van minstens 4 tekens." };
+  }
+  if (cleanPassword.length > 64) {
+    return { ok: false, error: "Kies een wachtwoord van maximaal 64 tekens." };
   }
   if (profiles.some((profile) => profile.name.toLowerCase() === cleanName.toLowerCase())) {
-    return { ok: false, error: "Er bestaat al een profiel met deze naam." };
+    return { ok: false, error: "Er bestaat al een account met deze naam." };
   }
 
   const guestData = options.copyGuest === false ? clone(DEFAULT_STATE) : readStateFromKey(STORAGE_KEY);
   const profile = {
     id: `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
     name: cleanName,
-    pin: hashPin(cleanPin),
+    password: hashSecret(cleanPassword),
     createdAt: Date.now(),
     lastLoginAt: Date.now()
   };
@@ -280,13 +288,13 @@ export function registerProfile(name, pin, options = {}) {
   return { ok: true, profile: safeProfile(profile), copiedGuestData: options.copyGuest !== false };
 }
 
-export function loginProfile(id, pin) {
+export function loginProfile(id, password) {
   const profile = profiles.find((item) => item.id === id);
   if (!profile) {
-    return { ok: false, error: "Profiel niet gevonden." };
+    return { ok: false, error: "Account niet gevonden." };
   }
-  if (profile.pin !== hashPin(String(pin || "").trim())) {
-    return { ok: false, error: "Die PIN klopt niet. Probeer opnieuw." };
+  if (profile.password !== hashSecret(String(password || "").trim())) {
+    return { ok: false, error: "Dat wachtwoord klopt niet. Probeer opnieuw." };
   }
 
   activeProfileId = profile.id;
@@ -302,6 +310,18 @@ export function loginProfile(id, pin) {
   return { ok: true, profile: safeProfile(profile) };
 }
 
+export function loginProfileByName(name, password) {
+  const cleanName = String(name || "").trim().toLowerCase();
+  if (!cleanName) {
+    return { ok: false, error: "Vul je naam in." };
+  }
+  const profile = profiles.find((item) => item.name.toLowerCase() === cleanName);
+  if (!profile) {
+    return { ok: false, error: "Geen account met deze naam. Maak er eerst een aan." };
+  }
+  return loginProfile(profile.id, password);
+}
+
 export function logoutProfile() {
   activeProfileId = "";
   try {
@@ -313,13 +333,13 @@ export function logoutProfile() {
   return { ok: true };
 }
 
-export function deleteProfile(id, pin) {
+export function deleteProfile(id, password) {
   const profile = profiles.find((item) => item.id === id);
   if (!profile) {
-    return { ok: false, error: "Profiel niet gevonden." };
+    return { ok: false, error: "Account niet gevonden." };
   }
-  if (profile.pin !== hashPin(String(pin || "").trim())) {
-    return { ok: false, error: "Die PIN klopt niet." };
+  if (profile.password !== hashSecret(String(password || "").trim())) {
+    return { ok: false, error: "Dat wachtwoord klopt niet." };
   }
 
   profiles = profiles.filter((item) => item.id !== id);

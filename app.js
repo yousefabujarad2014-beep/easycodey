@@ -294,6 +294,7 @@ function navigate(hash) {
 }
 
 function route() {
+  syncProfileChatUI();
   const { segments, params } = parseRoute();
   currentContext = null;
   renderAIContext();
@@ -367,94 +368,158 @@ function renderProfile() {
   const profiles = store.getProfiles();
   const stats = store.getStats(allIdeas());
   const initial = active ? active.name.trim().charAt(0).toUpperCase() : "?";
+
   const profileOptions = profiles
-    .map((profile) => `<option value="${e(profile.id)}">${e(profile.name)}</option>`)
+    .map((profile) => `<option value="${e(profile.name)}"></option>`)
     .join("");
 
+  const profileChips = profiles.length
+    ? `<div class="profile-quick" aria-label="Kies je account">
+        ${profiles
+          .map((profile) => {
+            const letter = profile.name.trim().charAt(0).toUpperCase();
+            return `<button class="profile-chip" type="button" data-action="profile-pick" data-profile-name="${e(profile.name)}">
+              <span class="profile-chip-avatar" aria-hidden="true">${e(letter)}</span>
+              <span>${e(profile.name)}</span>
+            </button>`;
+          })
+          .join("")}
+      </div>`
+    : "";
+
+  const activePanel = active
+    ? `<section class="panel profile-card profile-player">
+        <div class="profile-identity">
+          <span class="profile-avatar" aria-hidden="true">${e(initial)}</span>
+          <div>
+            <p class="profile-kicker">Ingelogd op dit apparaat</p>
+            <h2>${e(active.name)}</h2>
+            <p class="muted">Account gemaakt op ${e(profileDate(active.createdAt))}</p>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="stat"><strong>${stats.completed}</strong><span>projecten afgerond</span></div>
+          <div class="stat"><strong>${stats.percent}%</strong><span>totale voortgang</span></div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn ghost" type="button" data-action="profile-logout">Uitloggen</button>
+          <button class="btn ghost" type="button" data-action="profile-delete">Account verwijderen</button>
+        </div>
+        <p class="static-note">
+          Je account staat op dit apparaat. Gebruik hieronder een back-up om je voortgang
+          naar een ander apparaat te verplaatsen.
+        </p>
+      </section>
+      <section class="panel profile-card profile-chat-card">
+        <div class="profile-chat-head">
+          <span class="profile-chat-avatar" aria-hidden="true">✦</span>
+          <div>
+            <p class="profile-kicker">Jouw coach</p>
+            <h2>Chat met EasyCoach</h2>
+          </div>
+        </div>
+        <p class="profile-text">
+          Stel een vraag over Python, je project of een foutmelding. Je kunt chatten op je
+          laptop en op je telefoon, gewoon vanuit de app.
+        </p>
+        <button class="btn brand profile-chat-button" type="button" data-action="open-ai">
+          <span aria-hidden="true">💬</span> Chat met EasyCoach
+        </button>
+        <p class="profile-chat-hint">Je vindt de chat ook rechtsboven in de app.</p>
+      </section>`
+    : `<section class="panel profile-card profile-join">
+        <div class="profile-card-head">
+          <span class="profile-step" aria-hidden="true">1</span>
+          <div>
+            <h2>Doe mee</h2>
+            <p class="profile-text">Al een account? Log snel in.</p>
+          </div>
+        </div>
+        ${profileChips}
+        ${
+          profiles.length
+            ? `<form class="profile-form" id="profile-login-form">
+                <label class="field">
+                  <span>Naam</span>
+                  <input id="profile-login-name" type="text" maxlength="40" autocomplete="username" list="profile-names" placeholder="Jouw naam" />
+                  <datalist id="profile-names">${profileOptions}</datalist>
+                </label>
+                <label class="field">
+                  <span>Wachtwoord</span>
+                  <span class="password-field">
+                    <input id="profile-login-password" type="password" autocomplete="current-password" placeholder="Jouw wachtwoord" />
+                    <button class="password-toggle" type="button" data-action="toggle-password" data-target="profile-login-password" aria-label="Toon wachtwoord">Toon</button>
+                  </span>
+                </label>
+                <p class="form-error" id="profile-login-error" role="alert" hidden></p>
+                <button class="btn brand btn-block" type="submit">Doe mee →</button>
+              </form>`
+            : `<p class="profile-text">Nog geen account. Maak er hiernaast eentje aan — je bent in 10 seconden klaar.</p>`
+        }
+      </section>
+      <section class="panel profile-card profile-join profile-join-new">
+        <div class="profile-card-head">
+          <span class="profile-step gold" aria-hidden="true">2</span>
+          <div>
+            <h2>Nieuw account</h2>
+            <p class="profile-text">Kies een naam en wachtwoord. Klaar.</p>
+          </div>
+        </div>
+        <form class="profile-form" id="profile-register-form">
+          <label class="field">
+            <span>Naam</span>
+            <input id="profile-register-name" type="text" maxlength="40" autocomplete="nickname" placeholder="Bijv. Yousef" />
+          </label>
+          <label class="field">
+            <span>Wachtwoord</span>
+            <span class="password-field">
+              <input id="profile-register-password" type="password" autocomplete="new-password" placeholder="Minstens 4 tekens" />
+              <button class="password-toggle" type="button" data-action="toggle-password" data-target="profile-register-password" aria-label="Toon wachtwoord">Toon</button>
+            </span>
+          </label>
+          <p class="field-hint">Cijfers, letters of een mix. Geen e-mail nodig.</p>
+          <label class="profile-check">
+            <input id="profile-register-copy" type="checkbox" checked />
+            <span>Neem mijn huidige voortgang mee</span>
+          </label>
+          <p class="form-error" id="profile-register-error" role="alert" hidden></p>
+          <button class="btn brand btn-block" type="submit">Maak mijn account</button>
+        </form>
+      </section>`;
+
   app.innerHTML = `
-    <section class="static-page-head profile-head">
-      <p class="eyebrow">Optioneel account</p>
-      <h1>Mijn profiel</h1>
-      <p class="static-lead">
-        Bewaar je voortgang, eigen projecten en editor-code per persoon. Een profiel is optioneel:
-        je kunt EasyCodey ook gewoon zonder profiel gebruiken.
-      </p>
+    <section class="profile-hero ${active ? "profile-hero-in" : ""}">
+      <div class="profile-hero-copy">
+        <p class="eyebrow">${active ? "Welkom terug" : "Doe mee"}</p>
+        <h1>${active ? `Hoi, ${e(active.name)}.` : "Doe mee met EasyCodey."}</h1>
+        <p class="static-lead">
+          ${
+            active
+              ? "Je voortgang, eigen projecten en editor-code staan klaar. Je coach is één tik weg."
+              : "Kies een naam en wachtwoord. Geen e-mail, geen gedoe. Je voortgang blijft op dit apparaat."
+          }
+        </p>
+        <div class="profile-hero-points">
+          <span>✓ Geen e-mail nodig</span>
+          <span>✓ Eigen voortgang</span>
+          <span>✓ Chat met je coach</span>
+        </div>
+      </div>
+      <div class="profile-hero-badge" aria-hidden="true">
+        <span class="profile-hero-avatar">${active ? e(initial) : "E"}</span>
+        <span class="profile-hero-spark">✦</span>
+      </div>
     </section>
 
     <div class="profile-grid">
-      ${
-        active
-          ? `<section class="panel profile-card">
-              <div class="profile-identity">
-                <span class="profile-avatar" aria-hidden="true">${e(initial)}</span>
-                <div>
-                  <p class="profile-kicker">Ingelogd op dit apparaat</p>
-                  <h2>${e(active.name)}</h2>
-                  <p class="muted">Profiel gemaakt op ${e(profileDate(active.createdAt))}</p>
-                </div>
-              </div>
-              <div class="profile-stats">
-                <div class="stat"><strong>${stats.completed}</strong><span>projecten afgerond</span></div>
-                <div class="stat"><strong>${stats.percent}%</strong><span>totale voortgang</span></div>
-              </div>
-              <div class="profile-actions">
-                <button class="btn ghost" type="button" data-action="profile-logout">Uitloggen</button>
-                <button class="btn ghost" type="button" data-action="profile-delete">Profiel verwijderen</button>
-              </div>
-              <p class="static-note">
-                Je profiel staat op dit apparaat. Gebruik hieronder een back-up om je voortgang
-                naar een ander apparaat te verplaatsen.
-              </p>
-            </section>`
-          : `<section class="panel profile-card">
-              <h2>Inloggen</h2>
-              ${
-                profiles.length
-                  ? `<form class="profile-form" id="profile-login-form">
-                      <label class="field">
-                        <span>Profiel</span>
-                        <select id="profile-login-id">${profileOptions}</select>
-                      </label>
-                      <label class="field">
-                        <span>PIN</span>
-                        <input id="profile-login-pin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="4 tot 12 cijfers" />
-                      </label>
-                      <p class="form-error" id="profile-login-error" role="alert" hidden></p>
-                      <button class="btn brand" type="submit">Inloggen</button>
-                    </form>`
-                  : `<p class="muted">Je hebt nog geen profiel. Maak er hiernaast één aan.</p>`
-              }
-            </section>
-            <section class="panel profile-card">
-              <h2>Nieuw profiel</h2>
-              <p class="profile-text">
-                Kies een naam en een PIN. Je huidige voortgang kan meteen mee in het nieuwe profiel.
-              </p>
-              <form class="profile-form" id="profile-register-form">
-                <label class="field">
-                  <span>Naam</span>
-                  <input id="profile-register-name" type="text" maxlength="40" autocomplete="nickname" placeholder="Bijv. Yousef" />
-                </label>
-                <label class="field">
-                  <span>PIN</span>
-                  <input id="profile-register-pin" type="password" inputmode="numeric" autocomplete="new-password" placeholder="4 tot 12 cijfers" />
-                </label>
-                <label class="profile-check">
-                  <input id="profile-register-copy" type="checkbox" checked />
-                  <span>Neem mijn huidige voortgang mee</span>
-                </label>
-                <p class="form-error" id="profile-register-error" role="alert" hidden></p>
-                <button class="btn brand" type="submit">Profiel maken</button>
-              </form>
-            </section>`
-      }
+      ${activePanel}
     </div>
 
     <section class="panel profile-backup">
       <h2>Back-up en verhuizen</h2>
       <p class="profile-text">
         Download je voortgang als bestand en zet hem op een ander apparaat weer terug.
-        Zo verhuis je je profiel zonder server of account.
+        Zo verhuis je je account zonder server of e-mail.
       </p>
       <div class="profile-actions">
         <button class="btn ghost" type="button" data-action="profile-backup">⤓ Back-up downloaden</button>
@@ -462,8 +527,8 @@ function renderProfile() {
         <input id="profile-restore-file" type="file" accept="application/json,.json" hidden />
       </div>
       <p class="static-note">
-        Je gegevens worden alleen in deze browser opgeslagen. Je PIN houdt profielen uit elkaar,
-        maar is geen beveiliging tegen iemand die toegang heeft tot dit apparaat.
+        Je gegevens worden alleen in deze browser opgeslagen. Je wachtwoord houdt accounts uit elkaar,
+        maar is geen sterke beveiliging tegen iemand die toegang heeft tot dit apparaat.
       </p>
     </section>
   `;
@@ -478,10 +543,39 @@ function showProfileError(id, message) {
   element.hidden = false;
 }
 
+function syncProfileChatUI() {
+  const active = store.getActiveProfile();
+  const name = active ? active.name : "";
+  const show = Boolean(active);
+  const headerChat = document.querySelector("#chat-header");
+  const fab = document.querySelector("#chat-fab");
+  const footerChat = document.querySelector("#chat-footer");
+  const footerSep = document.querySelector("#chat-footer-sep");
+  const dot = document.querySelector("#profile-dot");
+
+  [headerChat, fab, footerChat, footerSep, dot].forEach((element) => {
+    if (element) element.hidden = !show;
+  });
+
+  if (headerChat) {
+    const label = show ? `Chat met EasyCoach — ${name}` : "Chat met EasyCoach";
+    headerChat.setAttribute("title", label);
+    headerChat.setAttribute("aria-label", label);
+  }
+  if (fab) {
+    fab.setAttribute("aria-label", show ? `Chat met EasyCoach — ${name}` : "Chat met EasyCoach");
+  }
+
+  const profileLink = document.querySelector('.header-tools a[href$="#/profiel"]');
+  if (profileLink) {
+    profileLink.setAttribute("title", show ? `Mijn profiel — ${name}` : "Mijn profiel");
+  }
+}
+
 function handleProfileLogin() {
-  const id = document.querySelector("#profile-login-id")?.value || "";
-  const pin = document.querySelector("#profile-login-pin")?.value || "";
-  const result = store.loginProfile(id, pin);
+  const name = document.querySelector("#profile-login-name")?.value || "";
+  const password = document.querySelector("#profile-login-password")?.value || "";
+  const result = store.loginProfileByName(name, password);
   if (!result.ok) {
     showProfileError("profile-login-error", result.error);
     return;
@@ -491,9 +585,9 @@ function handleProfileLogin() {
 
 function handleProfileRegister() {
   const name = document.querySelector("#profile-register-name")?.value || "";
-  const pin = document.querySelector("#profile-register-pin")?.value || "";
+  const password = document.querySelector("#profile-register-password")?.value || "";
   const copyGuest = Boolean(document.querySelector("#profile-register-copy")?.checked);
-  const result = store.registerProfile(name, pin, { copyGuest });
+  const result = store.registerProfile(name, password, { copyGuest });
   if (!result.ok) {
     showProfileError("profile-register-error", result.error);
     return;
@@ -1154,6 +1248,7 @@ function renderAIContext() {
 function openAI(context = null) {
   currentContext = context;
   renderAIContext();
+  document.body.classList.add("ai-open");
   aiPanel.classList.add("open");
   aiBackdrop.classList.add("open");
   aiPanel.setAttribute("aria-hidden", "false");
@@ -1163,6 +1258,7 @@ function openAI(context = null) {
 }
 
 function closeAI() {
+  document.body.classList.remove("ai-open");
   aiPanel.classList.remove("open");
   aiBackdrop.classList.remove("open");
   aiPanel.setAttribute("aria-hidden", "true");
@@ -1174,7 +1270,9 @@ function appendAIMessage(role, content, { typing = false, keep = true } = {}) {
   wrapper.className = `msg ${role}`;
   const avatar = document.createElement("div");
   avatar.className = "msg-avatar";
-  avatar.textContent = role === "user" ? "J" : "✦";
+  const active = store.getActiveProfile();
+  const userInitial = active ? active.name.trim().charAt(0).toUpperCase() : "J";
+  avatar.textContent = role === "user" ? userInitial : "✦";
   const body = document.createElement("div");
   body.className = "msg-body";
   body.innerHTML = typing
@@ -1190,9 +1288,11 @@ function appendAIMessage(role, content, { typing = false, keep = true } = {}) {
 function ensureGreeting() {
   if (greetingShown) return;
   greetingShown = true;
+  const active = store.getActiveProfile();
+  const hello = active ? `Hoi ${active.name}` : "Hoi";
   appendAIMessage(
     "assistant",
-    `## Hoi, ik ben EasyCoach
+    `## ${hello}, ik ben EasyCoach
 
 Ik help je met Python, je project en je fouten. Je kunt mij vragen:
 - "Leg stap 2 van dit project uit."
@@ -2060,12 +2160,31 @@ document.addEventListener("click", (event) => {
       store.logoutProfile();
       location.reload();
     }
+    if (action === "profile-pick") {
+      const name = actionEl.dataset.profileName || "";
+      const input = document.querySelector("#profile-login-name");
+      if (input) {
+        input.value = name;
+        input.focus();
+      }
+      document.querySelector("#profile-login-password")?.focus();
+    }
+    if (action === "toggle-password") {
+      const target = document.getElementById(actionEl.dataset.target || "");
+      if (target) {
+        const show = target.type === "password";
+        target.type = show ? "text" : "password";
+        actionEl.textContent = show ? "Verberg" : "Toon";
+        actionEl.setAttribute("aria-label", show ? "Verberg wachtwoord" : "Toon wachtwoord");
+        target.focus();
+      }
+    }
     if (action === "profile-delete") {
       const active = store.getActiveProfile();
       if (!active) return;
-      const pin = window.prompt(`Typ je PIN om het profiel "${active.name}" te verwijderen:`);
-      if (pin === null) return;
-      const result = store.deleteProfile(active.id, pin);
+      const password = window.prompt(`Typ je wachtwoord om het account "${active.name}" te verwijderen:`);
+      if (password === null) return;
+      const result = store.deleteProfile(active.id, password);
       if (!result.ok) {
         toast(result.error);
         return;
@@ -2370,9 +2489,12 @@ function registerServiceWorker() {
       const activateWaiting = () => {
         if (registration.waiting) registration.waiting.postMessage("SKIP_WAITING");
       };
+      const checkForUpdate = () => {
+        activateWaiting();
+        registration.update().catch(() => {});
+      };
 
-      activateWaiting();
-      registration.update().catch(() => {});
+      checkForUpdate();
 
       registration.addEventListener("updatefound", () => {
         const worker = registration.installing;
@@ -2385,8 +2507,14 @@ function registerServiceWorker() {
         });
       });
 
-      // Controleer af en toe op een nieuwe versie, ook als de app lang open blijft.
-      window.setInterval(() => registration.update().catch(() => {}), 30 * 60 * 1000);
+      // Automatisch bijwerken: bij de start, elke 15 minuten, bij terugkeer naar de app
+      // en zodra het toestel weer online is. Zo blijft de app op Android en laptop actueel.
+      window.setInterval(checkForUpdate, 15 * 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") checkForUpdate();
+      });
+      window.addEventListener("focus", checkForUpdate);
+      window.addEventListener("online", checkForUpdate);
     })
     .catch(() => {
       // Zonder service worker blijft de site gewoon werken.
