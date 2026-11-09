@@ -11,7 +11,7 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste Pages-build | ✅ commit `79f7935`, build geslaagd |
+| Laatste code-build | ✅ commit `79f7935`, build geslaagd |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
 | Optionele profielen | ✅ `#/profiel`, lokale profielen en JSON-back-up |
 | Invoerhulp | ✅ uitleg bij `input()` in speelveld en op projectpagina's |
