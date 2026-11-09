@@ -1,5 +1,7 @@
 const STORAGE_KEY = "easycodey.v1";
 const LEGACY_STORAGE_KEY = "easycode.v1";
+const PROFILES_KEY = "easycodey.profiles.v1";
+const ACTIVE_PROFILE_KEY = "easycodey.activeProfile.v1";
 
 const DEFAULT_STATE = {
   version: 1,
@@ -107,43 +109,270 @@ function normalizeCustomIdeas(value) {
 
 let migratedFromLegacy = false;
 
-function readState() {
-  try {
-    let raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      raw = localStorage.getItem(LEGACY_STORAGE_KEY);
-      migratedFromLegacy = Boolean(raw);
+function stateKey(profileId = activeProfileId) {
+  return profileId ? `${STORAGE_KEY}.profile.${profileId}` : STORAGE_KEY;
+}
+
+function normalizeState(parsed) {
+  const source = parsed && typeof parsed === "object" ? parsed : {};
+  return {
+    ...clone(DEFAULT_STATE),
+    ...source,
+    settings: { ...DEFAULT_STATE.settings, ...(source.settings || {}) },
+    progress: source.progress && typeof source.progress === "object" ? source.progress : {},
+    customIdeas: normalizeCustomIdeas(source.customIdeas),
+    editor: {
+      code: typeof source.editor?.code === "string" ? source.editor.code : "",
+      projectId: typeof source.editor?.projectId === "string" ? source.editor.projectId : "",
+      updatedAt: Number(source.editor?.updatedAt) || 0
     }
-    if (!raw) return clone(DEFAULT_STATE);
-    const parsed = JSON.parse(raw);
-    return {
-      ...clone(DEFAULT_STATE),
-      ...parsed,
-      settings: { ...DEFAULT_STATE.settings, ...(parsed.settings || {}) },
-      progress: parsed.progress && typeof parsed.progress === "object" ? parsed.progress : {},
-      customIdeas: normalizeCustomIdeas(parsed.customIdeas),
-      editor: {
-        code: typeof parsed.editor?.code === "string" ? parsed.editor.code : "",
-        projectId: typeof parsed.editor?.projectId === "string" ? parsed.editor.projectId : "",
-        updatedAt: Number(parsed.editor?.updatedAt) || 0
-      }
-    };
+  };
+}
+
+function readStateFromKey(key) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? normalizeState(JSON.parse(raw)) : clone(DEFAULT_STATE);
   } catch {
     return clone(DEFAULT_STATE);
   }
 }
 
+function writeStateToKey(profileId, value) {
+  try {
+    localStorage.setItem(stateKey(profileId), JSON.stringify(value));
+  } catch {
+    // Opslag kan geblokkeerd zijn (privémodus). De site blijft dan werken.
+  }
+}
+
+function readState() {
+  try {
+    let raw = localStorage.getItem(stateKey());
+    if (!raw && !activeProfileId) {
+      raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+      migratedFromLegacy = Boolean(raw);
+    }
+    if (!raw) return clone(DEFAULT_STATE);
+    return normalizeState(JSON.parse(raw));
+  } catch {
+    return clone(DEFAULT_STATE);
+  }
+}
+
+function readProfiles() {
+  try {
+    const raw = localStorage.getItem(PROFILES_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((profile) => profile && typeof profile.id === "string" && typeof profile.name === "string")
+      .map((profile) => ({
+        id: profile.id,
+        name: String(profile.name).slice(0, 40),
+        pin: typeof profile.pin === "string" ? profile.pin : "",
+        createdAt: Number(profile.createdAt) || Date.now(),
+        lastLoginAt: Number(profile.lastLoginAt) || 0
+      }));
+  } catch {
+    return [];
+  }
+}
+
+function saveProfiles() {
+  try {
+    localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
+  } catch {
+    // Zonder opslag werkt het gastprofiel gewoon verder.
+  }
+}
+
+function readActiveProfileId() {
+  try {
+    const id = localStorage.getItem(ACTIVE_PROFILE_KEY) || "";
+    return profiles.some((profile) => profile.id === id) ? id : "";
+  } catch {
+    return "";
+  }
+}
+
+function hashPin(pin) {
+  const text = `easycodey:${pin}`;
+  let hash = 2166136261;
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function safeProfile(profile) {
+  if (!profile) return null;
+  return {
+    id: profile.id,
+    name: profile.name,
+    createdAt: profile.createdAt,
+    lastLoginAt: profile.lastLoginAt
+  };
+}
+
+let profiles = readProfiles();
+let activeProfileId = readActiveProfileId();
 let state = readState();
 
 // Oude opslag (van vóór de naamswijziging) direct kopiëren naar de nieuwe sleutel.
 if (migratedFromLegacy) persist();
 
 function persist() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch {
-    // Opslag kan geblokkeerd zijn (privémodus). De site blijft dan werken.
+  writeStateToKey(activeProfileId, state);
+}
+
+/* ------------------------------ optionele profielen ------------------------------
+   Profielen leven bewust op dit apparaat. Zo blijven voortgang en eigen projecten
+   gescheiden per gebruiker, zonder dat er een account op een server nodig is.
+   Met de back-up kun je alles naar een ander apparaat verplaatsen. */
+
+export function getProfiles() {
+  return profiles
+    .map(safeProfile)
+    .sort((a, b) => (b.lastLoginAt || b.createdAt) - (a.lastLoginAt || a.createdAt));
+}
+
+export function getActiveProfile() {
+  return safeProfile(profiles.find((profile) => profile.id === activeProfileId));
+}
+
+export function registerProfile(name, pin, options = {}) {
+  const cleanName = String(name || "").trim().replace(/\s+/g, " ").slice(0, 40);
+  const cleanPin = String(pin || "").trim();
+
+  if (cleanName.length < 2) {
+    return { ok: false, error: "Kies een naam van minstens 2 tekens." };
   }
+  if (!/^\d{4,12}$/.test(cleanPin)) {
+    return { ok: false, error: "Kies een PIN van 4 tot 12 cijfers." };
+  }
+  if (profiles.some((profile) => profile.name.toLowerCase() === cleanName.toLowerCase())) {
+    return { ok: false, error: "Er bestaat al een profiel met deze naam." };
+  }
+
+  const guestData = options.copyGuest === false ? clone(DEFAULT_STATE) : readStateFromKey(STORAGE_KEY);
+  const profile = {
+    id: `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    name: cleanName,
+    pin: hashPin(cleanPin),
+    createdAt: Date.now(),
+    lastLoginAt: Date.now()
+  };
+
+  profiles = [profile, ...profiles];
+  saveProfiles();
+  writeStateToKey(profile.id, guestData);
+  activeProfileId = profile.id;
+  try {
+    localStorage.setItem(ACTIVE_PROFILE_KEY, profile.id);
+  } catch {
+    // Geen opslag: het profiel werkt dan alleen in deze sessie.
+  }
+  state = readState();
+  persist();
+
+  return { ok: true, profile: safeProfile(profile), copiedGuestData: options.copyGuest !== false };
+}
+
+export function loginProfile(id, pin) {
+  const profile = profiles.find((item) => item.id === id);
+  if (!profile) {
+    return { ok: false, error: "Profiel niet gevonden." };
+  }
+  if (profile.pin !== hashPin(String(pin || "").trim())) {
+    return { ok: false, error: "Die PIN klopt niet. Probeer opnieuw." };
+  }
+
+  activeProfileId = profile.id;
+  profile.lastLoginAt = Date.now();
+  saveProfiles();
+  try {
+    localStorage.setItem(ACTIVE_PROFILE_KEY, profile.id);
+  } catch {
+    // Zonder opslag blijft het profiel actief tot je de pagina sluit.
+  }
+  state = readState();
+
+  return { ok: true, profile: safeProfile(profile) };
+}
+
+export function logoutProfile() {
+  activeProfileId = "";
+  try {
+    localStorage.removeItem(ACTIVE_PROFILE_KEY);
+  } catch {
+    // Negeer: er is dan niets om op te ruimen.
+  }
+  state = readState();
+  return { ok: true };
+}
+
+export function deleteProfile(id, pin) {
+  const profile = profiles.find((item) => item.id === id);
+  if (!profile) {
+    return { ok: false, error: "Profiel niet gevonden." };
+  }
+  if (profile.pin !== hashPin(String(pin || "").trim())) {
+    return { ok: false, error: "Die PIN klopt niet." };
+  }
+
+  profiles = profiles.filter((item) => item.id !== id);
+  saveProfiles();
+  try {
+    localStorage.removeItem(stateKey(id));
+  } catch {
+    // Negeer: het profiel is al uit de lijst verwijderd.
+  }
+
+  if (activeProfileId === id) {
+    activeProfileId = "";
+    try {
+      localStorage.removeItem(ACTIVE_PROFILE_KEY);
+    } catch {
+      // Negeer.
+    }
+  }
+  state = readState();
+  return { ok: true };
+}
+
+export function exportBackup() {
+  const profile = getActiveProfile();
+  return {
+    app: "EasyCodey",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    profile: profile?.name || "Gast",
+    data: clone(state)
+  };
+}
+
+export function importBackup(value) {
+  const source = value && typeof value === "object" && value.data && typeof value.data === "object" ? value.data : value;
+  if (!source || typeof source !== "object") {
+    return { ok: false, error: "Dit bestand lijkt geen EasyCodey-back-up." };
+  }
+
+  const normalized = normalizeState(source);
+  state = {
+    ...state,
+    progress: normalized.progress,
+    customIdeas: normalized.customIdeas,
+    editor: normalized.editor
+  };
+  persist();
+
+  return {
+    ok: true,
+    progress: Object.keys(state.progress).length,
+    ideas: state.customIdeas.length
+  };
 }
 
 export function getTheme() {

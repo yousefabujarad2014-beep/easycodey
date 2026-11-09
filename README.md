@@ -31,6 +31,8 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **161 projecten** van Beginner tot Gevorderd, verdeeld over Games, Web, GUI, Data & AI, Handige tools, Automatisering, Security, Wetenschap, Kunst & Creatief en Onderwijs.
 - Elke opdracht heeft een omslagafbeelding, uitleg, een stappenplan met code per stap, tips en vervolgprojecten.
 - **Voortgang bijhouden**: vink stappen af. Je voortgang wordt lokaal in je browser opgeslagen (`localStorage`).
+- **Optioneel profiel** (`#/profiel`): maak een profiel met naam en PIN als meerdere mensen hetzelfde apparaat gebruiken. Elk profiel heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder profiel werkt alles gewoon als gast.
+- **Back-up**: download je profieldata als JSON en zet die op een ander apparaat weer terug.
 - **Zoeken en filteren** op trefwoord, categorie, niveau, tijdsduur, meerdere vaardigheden, alleen niet-afgeronde projecten en sorteren.
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
 - **Leerpad** met alle projecten per niveau en een categorie-filter.
@@ -39,9 +41,11 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **Offline coach**: werkt direct zonder API-sleutel. Herkent je onderwerp en geeft een stappenplan plus passende projecten.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.
+- **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm (het tekstvak met de drie puntjes). Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
 - **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
-- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline.
+- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. Een ingebouwde **App bijwerken**-knop haalt de nieuwste versie op.
+- **Chique huisstijl**: warm ivoor, diepgroen en goud, met Fraunces voor koppen, verfijnde kaarten en donkere code- en footerblokken. Het logo is een eigen monogram (diepgroen vierkant, gouden rand en ivoren **E**).
 - **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd. Elk project heeft daarnaast een eigen vaste pagina op `/idee/<id>/` met eigen titel, description en JSON-LD.
 - Licht/donker thema, skeleton-loading, toetsenbordnavigatie, confetti bij het afronden en een volledig responsieve layout.
@@ -65,7 +69,7 @@ FLL/
 │   ├── helper.js           Compacte helpers voor projecten en stappen
 │   └── ideas-01.js t/m ideas-07.js
 ├── assets/covers/          Tien lokale SVG-omslagen
-├── assets/icons/           App-iconen (192, 512, maskable en Apple)
+├── assets/icons/           Logo en app-iconen (SVG, 192, 512, maskable en Apple)
 ├── assets/easycodey.ico     Icoon voor de Windows-snelkoppeling
 ├── scripts/check-data.mjs  Controle van de projectdata en de app-bestanden
 ├── scripts/build-pages.mjs Genereert de vaste pagina's, het overzicht en de sitemap
@@ -183,7 +187,7 @@ In de hero staat **⌨ Programmeer zelf** (naar de editor) en **▶ Snel probere
 - Python draait via **Pyodide** (WebAssembly) in de browser.
 - De eerste keer wordt ongeveer 10 MB gedownload; daarna is het snel.
 - Code wordt niet naar de server gestuurd.
-- `input()` opent een invoer-pop-up. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
+- `input()` opent bovenaan je scherm een venster met een tekstvak (met de drie puntjes). Typ je antwoord daar en druk op **Enter**. EasyCodey toont die uitleg ook bij het speelveld en op de projectpagina's. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
 - Na de eerste keer bewaart de service worker de Python-runtime, zodat de editor en het speelveld ook offline werken.
 - Op een projectpagina voert **▶ Speel dit idee** meteen het volledige project uit; **⌨ Programmeer dit idee** opent dezelfde code in de editor.
 
@@ -201,6 +205,8 @@ EasyCodey is een installeerbare webapp. Je gebruikt dezelfde site en dezelfde vo
 Er is ook een aparte pagina **`/installeren/`** met een QR-code en uitleg per platform. Scan de QR-code met je Android-telefoon om de site meteen te openen.
 
 Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
+
+EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Zie je toch een melding over een oude of onveilige versie, open dan de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/** en gebruik **App bijwerken** in het installatievenster. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost).
 
 Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`.
 
@@ -266,19 +272,22 @@ De interactieve app blijft de hash-SPA. De vaste pagina's linken met `?play=1` t
 
 Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.md)**.
 
-## Opslag en privacy
+## Opslag, profielen en privacy
 
-- Voortgang, thema, AI-instellingen, eigen projecten en je editor-code staan in `localStorage` onder de sleutel `easycodey.v1`.
+- Voortgang, thema, AI-instellingen, eigen projecten en je editor-code staan in `localStorage`.
+- Zonder profiel gebruik je de gastsleutel `easycodey.v1`.
+- Met een profiel gebruikt elk profiel een eigen sleutel: `easycodey.v1.profile.<id>`. De profielen zelf staan onder `easycodey.profiles.v1`; het actieve profiel onder `easycodey.activeProfile.v1`.
 - Bestaande voortgang van vóór de naamswijziging (`easycode.v1`) wordt automatisch overgezet.
-- Er is geen account en geen database.
-- **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg.
-- Gebruik exporteren/importeren op **Mijn ideeën** om eigen projecten mee te nemen. Voortgang zelf wordt niet geëxporteerd.
+- Er is **geen account op een server en geen database**. Profielen leven alleen op dit apparaat.
+- Een profiel is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als beveiliging. De PIN houdt profielen uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat.
+- **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
+- Gebruik **Back-up downloaden** en **Back-up herstellen** op `#/profiel` om voortgang, eigen projecten en editor-code mee te nemen. Op **Mijn ideeën** kun je daarnaast alleen je eigen projecten exporteren/importeren.
 
 ## Lokaal testen
 
 1. `npm run check` — controleert alle projectdata, het manifest, de offline-cache, de 161 vaste pagina's, het overzicht en de sitemap.
 2. `npm start` en open http://localhost:4173.
-3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen` en een projectpagina.
+3. Test de routes `#/`, `#/leerpad`, `#/programmeren`, `#/mijn-ideeen`, `#/profiel` en een projectpagina.
 4. Test de vaste pagina's: `/projecten/`, `/installeren/`, `/contact/`, `/doneren/`, `/idee/raad-het-getal/` en `/idee/raad-het-getal` (zonder slash, moet doorsturen).
 5. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
 6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
@@ -286,10 +295,11 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 8. Open de AI-coach zonder sleutel: je krijgt de offline coach.
 9. Stel eventueel een sleutel in via ⚙ en stel een vraag.
 10. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
-11. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
-12. Open **📲 Installeer als app** en controleer de uitleg. In DevTools → Application moet de service worker actief zijn.
-13. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
-14. Test op een smal scherm en wissel tussen licht en donker thema.
+11. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
+12. Maak op `#/profiel` een profiel, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**.
+13. Open **📲 Installeer als app** en controleer de uitleg en de knop **App bijwerken**. In DevTools → Application moet de service worker actief zijn.
+14. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
+15. Test op een smal scherm en wissel tussen licht en donker thema. Controleer dat er geen horizontale scrollbalk is.
 
 ## Deployen naar Render
 
@@ -338,6 +348,7 @@ Het bestand `render.yaml` staat klaar. Kies **New → Blueprint**, koppel je rep
 - Node.js `http`-server zonder externe dependencies.
 - Data lokaal in `data/`; voortgang in `localStorage`.
 - Lokale SVG-covers in `assets/covers/`.
+- Huisstijl met CSS-variabelen (ivoor, diepgroen, goud) en Fraunces/Plus Jakarta Sans via Google Fonts.
 - AI via de OpenAI-compatibele Chat Completions API met streaming.
 - Nederlandse systeemprompt staat server-side in `server.js`.
 

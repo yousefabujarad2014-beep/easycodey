@@ -1,6 +1,6 @@
 # EasyCodey — eindrapport
 
-**Datum:** 8 november 2026
+**Datum:** 9 november 2026
 **Map:** `C:\Users\Home\Desktop\FLL`
 **Status:** inhoudelijk klaar, live op GitHub Pages
 
@@ -45,6 +45,15 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Alle afbeeldingen hebben duidelijke alt-tekst en `loading="lazy"` op de kaarten.
 - Geen externe afbeeldingsdiensten.
 
+### Chique huisstijl en logo
+- Warm ivoor, diepgroen en goud als vaste kleurenpalet, met donkere code- en footerblokken.
+- **Fraunces** voor koppen en **Plus Jakarta Sans** voor tekst; **JetBrains Mono** voor code.
+- Verfijnde kaarten, ronde knoppen, zachte schaduwen, gouden randen en een subtiele korrel/gloed op de achtergrond.
+- Nieuw logo: een diepgroen vierkant met dunne gouden rand, een ivoren serif **E** en een gouden punt. Het logo staat in de header, op de offlinepagina en als favicon (`assets/icons/logo.svg`).
+- De app-iconen (`icon.svg`, `maskable.svg` en de PNG's) zijn opnieuw getekend in dezelfde stijl.
+- De bestaande klassen, routes en functionaliteit zijn ongewijzigd gebleven; de nieuwe laag verfijnt alleen de weergave.
+- `theme-color` blijft in het lichte thema **`#f7f5ef`**; donker gebruikt **`#12110f`**.
+
 ### Homepagina (`#/`)
 - Zoeken op titel, samenvatting, beschrijving, categorie, vaardigheden en tips.
 - Categorie-chips met aantallen per categorie.
@@ -55,6 +64,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Eerste 30 resultaten, daarna "Meer laden" in stappen van 30.
 - Statistieken: aantal projecten, categorieën, afgeronde projecten en totale voortgang.
 - Sneltoets `/` focust het zoekveld.
+- **App-entry** bovenaan: een opvallend blok dat uitlegt dat je je leerpad overal mee naartoe kunt nemen, met knoppen naar de editor en het installeren van de app.
+- De hero-knop **▶ Snel proberen** opent het Python-speelveld.
 
 ### Projectpagina (`#/idee/:id`)
 - Omslagafbeelding, titel, categorie, niveau, duur en aantal stappen.
@@ -68,6 +79,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Actiebalk met **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
 - **Speel dit idee** voert het volledige project meteen uit in het Python-speelveld.
 - **Programmeer dit idee** opent de editor met alle stappen als één programma, met commentaar per stap.
+- **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm (het tekstvak met de drie puntjes) en daarna op **Enter** drukt.
+- Dezelfde uitleg staat op elke vaste projectpagina en in het Python-speelveld.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
 
 ### Leerpad (`#/leerpad`)
@@ -83,6 +96,15 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Importeren van een eerder geëxporteerd JSON-bestand.
 - Geïmporteerde projecten worden gevalideerd en schoongemaakt: ongeldige velden, categorieën en niveaus worden hersteld en projecten met minder dan 3 geldige stappen worden geweigerd.
 - Duidelijke waarschuwing dat projecten per browser/apparaat zijn opgeslagen.
+
+### Optioneel profiel (`#/profiel`)
+- Een profiel is **optioneel**; zonder profiel werkt EasyCodey gewoon als gast.
+- Registreren met een naam en een PIN van 4 tot 12 cijfers; inloggen, uitloggen en een profiel verwijderen.
+- Elk profiel heeft eigen voortgang, eigen projecten en eigen editor-code via `easycodey.v1.profile.<id>`.
+- Bij het aanmaken kun je de huidige gastvoortgang meenemen.
+- **Back-up downloaden** bewaart voortgang, eigen projecten en editor-code als JSON; **Back-up herstellen** zet het bestand terug.
+- De header heeft een **👤-icoon** en de footer een link **Mijn profiel**.
+- Duidelijke uitleg dat profielen alleen op dit apparaat staan en dat de PIN geen sterke beveiliging is.
 
 ### AI-coach EasyCoach
 - Zijpaneel met streaming antwoorden.
@@ -111,7 +133,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De runtime wordt pas geladen als iemand het speelveld opent en op **Uitvoeren** klikt.
 - Zes voorbeelden: hallo wereld, rekenen, loops, lijsten, functies en "Raad het getal" zonder `input()`.
 - Uitvoer en foutmeldingen verschijnen direct in het paneel.
-- `input()` opent een invoer-pop-up.
+- `input()` toont bovenaan je scherm een venster met een tekstvak (met de drie puntjes). De statusregel zegt **“Typ je antwoord in het venster bovenaan…”**.
+- Bij het speelveld, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
 - Geen code of uitvoer gaat naar de server.
 - Bij een netwerkfout verschijnt een duidelijke melding; de rest van de site blijft werken.
 
@@ -128,8 +151,11 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### Installeerbare app (PWA)
 - `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeën**.
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
-- `sw.js` bewaart de app-shell (33 bestanden) bij de eerste installatie.
-- **Network-first** voor navigatie, **stale-while-revalidate** voor statische bestanden en **cache-first** voor de CDN.
+- `sw.js` bewaart de app-shell (34 bestanden) bij de eerste installatie.
+- **Network-first** voor navigatie én same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
+- De service worker registreert met `updateViaCache: "none"`, controleert bij het starten en elke 30 minuten, en neemt een nieuwe versie automatisch over.
+- **↻ App bijwerken** in het installatievenster verwijdert de oude service worker en caches en herlaadt de nieuwste versie.
+- HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Het installatievenster en de installatiepagina leggen uit dat je altijd de beveiligde live-link moet gebruiken.
 - De Python-runtime en lettertypen komen in een aparte runtime-cache, zodat Python na de eerste keer offline werkt.
 - `offline.html` verschijnt als een pagina niet in de cache staat.
 - **📲 Installeer als app** in de header en footer, met uitleg per platform en een **Installeer nu**-knop zodra de browser dat ondersteunt.
@@ -152,6 +178,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - `/projecten/` is een indexeerbaar overzicht per categorie met zoekveld (`CollectionPage` + `ItemList`).
 - `/contact/` is de Nederlandstalige contactpagina met telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com** (`ContactPage` + `Organization`).
 - Titel, description, canonical, Open Graph, Twitter-kaarten en JSON-LD staan ook in `index.html`.
+- Het nieuwe logo (`assets/icons/logo.svg`) is het favicon en de app-iconen zijn opnieuw gegenereerd.
 - Documentatie en scripts zijn niet publiek bereikbaar.
 - Uitleg staat in `GOOGLE.md`.
 
@@ -182,7 +209,7 @@ FLL/
 │   ├── helper.js              Compacte helpers voor projecten en stappen
 │   └── ideas-01.js t/m ideas-07.js
 ├── assets/covers/             10 lokale SVG-omslagen
-├── assets/icons/              App-iconen: 192, 512, maskable en Apple
+├── assets/icons/              Logo (`logo.svg`) en app-iconen: 192, 512, maskable en Apple
 ├── assets/qr/                 QR-code naar de live site voor installatie op Android
 ├── assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
 ├── scripts/check-data.mjs     Controle van projectdata, manifest, offline-cache, pagina's en sitemap
@@ -240,7 +267,7 @@ FLL/
 | Live GitHub Pages: editor, hero-link en projectacties | ✅ 9/9 live checks geslaagd |
 | Manifest, iconen en snelkoppelingen | ✅ 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
 | Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
-| Offline-cache gevuld | ✅ 33 bestanden |
+| Offline-cache gevuld | ✅ 34 bestanden |
 | Installatie-uitleg in de app | ✅ 3 platformstappen, sluit correct |
 | **Speel dit idee** op een projectpagina | ✅ volledige code (24 regels) en directe Pyodide-uitvoer |
 | Site herladen zonder internet | ✅ laadt uit de cache |
@@ -249,7 +276,10 @@ FLL/
 | Chrome-installeerbaarheid | ✅ geen installability errors |
 | PWA-testsuite op de live site | ✅ 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
-| Live: offline-cache en offline Python | ✅ 33 bestanden, Pyodide werkt offline |
+| Live: offline-cache en offline Python | ✅ 34 bestanden, Pyodide werkt offline |
+| Nieuwe flows lokaal | ✅ 17/17 checks: invoerhulp, app-entry, profielen, back-up, updateknop en HTTPS |
+| Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
+| Nieuw logo en app-iconen | ✅ `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
 | Vaste pagina's lokaal | ✅ 70/70 checks geslaagd |
 | Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
 | Projectpagina zonder slash | ✅ 301 naar de map met slash |
@@ -301,11 +331,14 @@ FLL/
 
 ## 5. Opslag en privacy
 
-- Voortgang, thema, AI-instellingen, eigen projecten en de editor-code staan in `localStorage` onder de sleutel `easycodey.v1`.
-- Er is geen account, geen database en geen server-side opslag van gebruikersdata.
-- **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg.
-- Eigen projecten verplaats je met exporteren/importeren op **Mijn ideeën**.
-- Voortgang zelf wordt niet geëxporteerd.
+- Voortgang, thema, AI-instellingen, eigen projecten en de editor-code staan in `localStorage`.
+- Zonder profiel gebruikt de site de gastsleutel `easycodey.v1`; met een profiel `easycodey.v1.profile.<id>`.
+- Profielen staan onder `easycodey.profiles.v1`, het actieve profiel onder `easycodey.activeProfile.v1`.
+- Er is **geen account op een server, geen database en geen server-side opslag** van gebruikersdata. Profielen leven alleen op het apparaat.
+- De PIN houdt profielen op hetzelfde apparaat uit elkaar, maar is geen sterke beveiliging.
+- **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
+- Met **Back-up downloaden/herstellen** op `#/profiel` verplaats je voortgang, eigen projecten en editor-code.
+- Eigen projecten kun je daarnaast exporteren/importeren op **Mijn ideeën**.
 - De API-sleutel hoort bij voorkeur in `.env` of in de Render-omgevingsvariabelen, niet in de broncode.
 - `.env` staat in `.gitignore` en wordt nooit gecommit.
 - De server blokkeert publieke toegang tot `server.js`, `package.json`, `render.yaml`, `README.md`, `.env*`, `scripts/` en `.git/`.
@@ -439,7 +472,10 @@ De site staat live:
 | Windows-snelkoppelingen | ✅ bureaublad + startmenu |
 | Python-speelveld op de live site | ✅ |
 | Programmeer-editor op de live site | ✅ |
-| Installeerbare app (PWA) | ✅ manifest, service worker en offline-cache (live getest) |
+| Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **App bijwerken** |
+| Chique huisstijl + logo | ✅ ivoor/diepgroen/goud en eigen monogram |
+| Optionele profielen + back-up | ✅ `#/profiel`, lokale profielen en JSON-back-up |
+| Invoerhulp bij `input()` | ✅ in speelveld en op projectpagina's |
 | 161 vaste projectpagina's + overzicht | ✅ `/idee/<id>/` en `/projecten/` |
 | Installatiepagina met QR-code | ✅ `/installeren/` |
 | Contactpagina | ✅ `/contact/` met telefoon/WhatsApp en e-mail |
@@ -459,15 +495,15 @@ Wat optioneel nog kan:
 
 ## 10. Bekende beperkingen
 
-- Geen accounts en geen synchronisatie tussen apparaten; alles is lokaal.
+- Optionele lokale profielen, maar geen accounts op een server en geen automatische synchronisatie tussen apparaten. Gebruik de back-up om te verhuizen.
 - De gratis Render-tier heeft een slaapstand en beperkte uren.
 - AI-antwoorden kunnen fouten bevatten; de site vraagt gebruikers code altijd zelf te testen.
 - De offline coach is bewust algemeen en kan niet meedenken over willekeurige eigen code.
 - De rate limiter houdt tellers in het geheugen; na een herstart begint de telling opnieuw.
 - Er is geen automatische testrunner; `npm run check` controleert de data en de app-bestanden, niet de UI.
 - Het Python-speelveld en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
-- `input()` opent een pop-up. Een oneindige loop stopt pas als je het tabblad of venster sluit.
-- Editor-code staat per browser/apparaat in `localStorage`; er is geen account of synchronisatie.
+- `input()` opent een venster bovenaan het scherm met een tekstvak. Een oneindige loop stopt pas als je het tabblad of venster sluit.
+- Editor-code en profielen staan per browser/apparaat in `localStorage`; er is geen account op een server of automatische synchronisatie.
 - De geïnstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.
 - Offline werkt alles behalve de online AI-coach en doneren; de offline coach blijft beschikbaar.
 - De service worker werkt alleen via `https://` of `localhost`, niet als los bestand (`file://`).

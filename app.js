@@ -25,6 +25,8 @@ import {
   guessCategory
 } from "./js/ai.js";
 
+const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
+
 const app = document.querySelector("#app");
 const aiPanel = document.querySelector("#ai-panel");
 const aiBackdrop = document.querySelector(".ai-backdrop");
@@ -259,7 +261,7 @@ function applyTheme(theme) {
   document.documentElement.dataset.theme = finalTheme;
   document.querySelector('meta[name="theme-color"]')?.setAttribute(
     "content",
-    finalTheme === "dark" ? "#0c0c0e" : "#f7f5ef"
+    finalTheme === "dark" ? "#12110f" : "#f7f5ef"
   );
 }
 
@@ -331,6 +333,12 @@ function route() {
     return;
   }
 
+  if (segments[0] === "profiel") {
+    setNav("");
+    renderProfile();
+    return;
+  }
+
   setNav("");
   app.innerHTML = emptyState(
     "Deze pagina bestaat niet",
@@ -338,6 +346,192 @@ function route() {
     '<a class="btn" href="#/">Naar alle projecten</a>'
   );
   document.title = "Niet gevonden — EasyCodey";
+}
+
+/* ------------------------------ profiel ------------------------------ */
+
+function profileDate(value) {
+  try {
+    return new Date(value).toLocaleDateString("nl-BE", {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    });
+  } catch {
+    return "";
+  }
+}
+
+function renderProfile() {
+  const active = store.getActiveProfile();
+  const profiles = store.getProfiles();
+  const stats = store.getStats(allIdeas());
+  const initial = active ? active.name.trim().charAt(0).toUpperCase() : "?";
+  const profileOptions = profiles
+    .map((profile) => `<option value="${e(profile.id)}">${e(profile.name)}</option>`)
+    .join("");
+
+  app.innerHTML = `
+    <section class="static-page-head profile-head">
+      <p class="eyebrow">Optioneel account</p>
+      <h1>Mijn profiel</h1>
+      <p class="static-lead">
+        Bewaar je voortgang, eigen projecten en editor-code per persoon. Een profiel is optioneel:
+        je kunt EasyCodey ook gewoon zonder profiel gebruiken.
+      </p>
+    </section>
+
+    <div class="profile-grid">
+      ${
+        active
+          ? `<section class="panel profile-card">
+              <div class="profile-identity">
+                <span class="profile-avatar" aria-hidden="true">${e(initial)}</span>
+                <div>
+                  <p class="profile-kicker">Ingelogd op dit apparaat</p>
+                  <h2>${e(active.name)}</h2>
+                  <p class="muted">Profiel gemaakt op ${e(profileDate(active.createdAt))}</p>
+                </div>
+              </div>
+              <div class="profile-stats">
+                <div class="stat"><strong>${stats.completed}</strong><span>projecten afgerond</span></div>
+                <div class="stat"><strong>${stats.percent}%</strong><span>totale voortgang</span></div>
+              </div>
+              <div class="profile-actions">
+                <button class="btn ghost" type="button" data-action="profile-logout">Uitloggen</button>
+                <button class="btn ghost" type="button" data-action="profile-delete">Profiel verwijderen</button>
+              </div>
+              <p class="static-note">
+                Je profiel staat op dit apparaat. Gebruik hieronder een back-up om je voortgang
+                naar een ander apparaat te verplaatsen.
+              </p>
+            </section>`
+          : `<section class="panel profile-card">
+              <h2>Inloggen</h2>
+              ${
+                profiles.length
+                  ? `<form class="profile-form" id="profile-login-form">
+                      <label class="field">
+                        <span>Profiel</span>
+                        <select id="profile-login-id">${profileOptions}</select>
+                      </label>
+                      <label class="field">
+                        <span>PIN</span>
+                        <input id="profile-login-pin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="4 tot 12 cijfers" />
+                      </label>
+                      <p class="form-error" id="profile-login-error" role="alert" hidden></p>
+                      <button class="btn brand" type="submit">Inloggen</button>
+                    </form>`
+                  : `<p class="muted">Je hebt nog geen profiel. Maak er hiernaast één aan.</p>`
+              }
+            </section>
+            <section class="panel profile-card">
+              <h2>Nieuw profiel</h2>
+              <p class="profile-text">
+                Kies een naam en een PIN. Je huidige voortgang kan meteen mee in het nieuwe profiel.
+              </p>
+              <form class="profile-form" id="profile-register-form">
+                <label class="field">
+                  <span>Naam</span>
+                  <input id="profile-register-name" type="text" maxlength="40" autocomplete="nickname" placeholder="Bijv. Yousef" />
+                </label>
+                <label class="field">
+                  <span>PIN</span>
+                  <input id="profile-register-pin" type="password" inputmode="numeric" autocomplete="new-password" placeholder="4 tot 12 cijfers" />
+                </label>
+                <label class="profile-check">
+                  <input id="profile-register-copy" type="checkbox" checked />
+                  <span>Neem mijn huidige voortgang mee</span>
+                </label>
+                <p class="form-error" id="profile-register-error" role="alert" hidden></p>
+                <button class="btn brand" type="submit">Profiel maken</button>
+              </form>
+            </section>`
+      }
+    </div>
+
+    <section class="panel profile-backup">
+      <h2>Back-up en verhuizen</h2>
+      <p class="profile-text">
+        Download je voortgang als bestand en zet hem op een ander apparaat weer terug.
+        Zo verhuis je je profiel zonder server of account.
+      </p>
+      <div class="profile-actions">
+        <button class="btn ghost" type="button" data-action="profile-backup">⤓ Back-up downloaden</button>
+        <button class="btn ghost" type="button" data-action="profile-restore">⤒ Back-up herstellen</button>
+        <input id="profile-restore-file" type="file" accept="application/json,.json" hidden />
+      </div>
+      <p class="static-note">
+        Je gegevens worden alleen in deze browser opgeslagen. Je PIN houdt profielen uit elkaar,
+        maar is geen beveiliging tegen iemand die toegang heeft tot dit apparaat.
+      </p>
+    </section>
+  `;
+
+  document.title = "Mijn profiel — EasyCodey";
+}
+
+function showProfileError(id, message) {
+  const element = document.getElementById(id);
+  if (!element) return;
+  element.textContent = message;
+  element.hidden = false;
+}
+
+function handleProfileLogin() {
+  const id = document.querySelector("#profile-login-id")?.value || "";
+  const pin = document.querySelector("#profile-login-pin")?.value || "";
+  const result = store.loginProfile(id, pin);
+  if (!result.ok) {
+    showProfileError("profile-login-error", result.error);
+    return;
+  }
+  location.reload();
+}
+
+function handleProfileRegister() {
+  const name = document.querySelector("#profile-register-name")?.value || "";
+  const pin = document.querySelector("#profile-register-pin")?.value || "";
+  const copyGuest = Boolean(document.querySelector("#profile-register-copy")?.checked);
+  const result = store.registerProfile(name, pin, { copyGuest });
+  if (!result.ok) {
+    showProfileError("profile-register-error", result.error);
+    return;
+  }
+  location.reload();
+}
+
+function downloadBackup() {
+  const backup = store.exportBackup();
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `easycodey-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  toast("Back-up gedownload.");
+}
+
+function restoreBackupFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const result = store.importBackup(JSON.parse(String(reader.result)));
+      if (!result.ok) {
+        toast(result.error);
+        return;
+      }
+      toast(`Back-up hersteld: ${result.progress} projecten en ${result.ideas} eigen ideeën.`);
+      renderProfile();
+    } catch {
+      toast("Dit bestand is geen geldige JSON.");
+    }
+  };
+  reader.readAsText(file);
 }
 
 /* ------------------------------ home ------------------------------ */
@@ -434,6 +628,21 @@ function renderHome(params) {
       </div>
     </section>
 
+    <section class="app-entry" id="app-entry" aria-label="EasyCodey als app">
+      <div class="app-entry-copy">
+        <p class="app-entry-kicker">EasyCodey als app</p>
+        <h2>Neem je leerpad overal mee.</h2>
+        <p>
+          Installeer EasyCodey op je telefoon of laptop, of open de website in je browser.
+          Je voortgang en eigen projecten blijven gewoon bewaard.
+        </p>
+      </div>
+      <div class="app-entry-actions">
+        <button class="btn brand" type="button" id="app-entry-install" data-action="install-app">Installeer de app</button>
+        <a class="btn ghost" id="app-entry-web" href="${LIVE_URL}" target="_blank" rel="noopener">Open de website ↗</a>
+      </div>
+    </section>
+
     <div class="toolbar">
       <div class="chips" id="category-chips">${categoryChips}</div>
       <div class="toolbar-spacer"></div>
@@ -466,6 +675,7 @@ function renderHome(params) {
   document.title = "EasyCodey — Leer Python door te bouwen";
   document.querySelector("#home-search").value = homeState.q;
   homeBound = true;
+  updateInstallUI();
   applyHomeFilters();
 }
 
@@ -705,6 +915,10 @@ function renderDetail(id) {
         idea.id
       )}/">Vaste projectpagina</a></span>
     </div>
+    <p class="input-help input-help-inline" role="note">
+      <span class="input-help-icon" aria-hidden="true">⌨</span>
+      <span><strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je scherm een venster met een tekstvak (drie puntjes). Typ daar je antwoord en druk op <kbd>Enter</kbd>.</span>
+    </p>
 
     <div class="detail-grid">
       <div class="detail-main">
@@ -1312,7 +1526,11 @@ async function executePython(code, append) {
   pyodide.setStderr({ batched: append });
   pyodide.setStdin({
     stdin: () => {
-      const value = window.prompt("Invoer voor je Python-programma:");
+      playgroundStatus.className = "playground-status busy";
+      playgroundStatus.textContent = "Typ je antwoord in het venster bovenaan…";
+      const value = window.prompt("Typ hier je antwoord (in het tekstvak met de drie puntjes) en druk op Enter:");
+      playgroundStatus.className = "playground-status busy";
+      playgroundStatus.textContent = "Bezig.";
       return value === null ? "" : value;
     }
   });
@@ -1834,6 +2052,27 @@ document.addEventListener("click", (event) => {
     if (action === "install-app") openInstall();
     if (action === "close-install") closeInstall();
     if (action === "install-now") installApp();
+    if (action === "refresh-app") refreshApp();
+    if (action === "profile-logout") {
+      store.logoutProfile();
+      location.reload();
+    }
+    if (action === "profile-delete") {
+      const active = store.getActiveProfile();
+      if (!active) return;
+      const pin = window.prompt(`Typ je PIN om het profiel "${active.name}" te verwijderen:`);
+      if (pin === null) return;
+      const result = store.deleteProfile(active.id, pin);
+      if (!result.ok) {
+        toast(result.error);
+        return;
+      }
+      location.reload();
+    }
+    if (action === "profile-backup") downloadBackup();
+    if (action === "profile-restore") {
+      document.querySelector("#profile-restore-file")?.click();
+    }
     if (action === "playground-example") loadPlaygroundExample();
     if (action === "run-playground") runPlayground();
     if (action === "clear-playground") clearPlayground();
@@ -1993,6 +2232,10 @@ document.addEventListener("change", (event) => {
     importCustomIdeas(event.target.files?.[0]);
     event.target.value = "";
   }
+  if (event.target.id === "profile-restore-file") {
+    restoreBackupFile(event.target.files?.[0]);
+    event.target.value = "";
+  }
 });
 
 document.addEventListener("submit", (event) => {
@@ -2002,6 +2245,14 @@ document.addEventListener("submit", (event) => {
   }
   if (event.target.id === "generator-form") {
     handleGenerate(event);
+  }
+  if (event.target.id === "profile-login-form") {
+    event.preventDefault();
+    handleProfileLogin();
+  }
+  if (event.target.id === "profile-register-form") {
+    event.preventDefault();
+    handleProfileRegister();
   }
 });
 
@@ -2047,9 +2298,25 @@ function isStandaloneApp() {
 
 function updateInstallUI() {
   const standalone = isStandaloneApp();
-  if (installHeader) installHeader.hidden = standalone;
+  if (installHeader) {
+    installHeader.hidden = false;
+    installHeader.setAttribute(
+      "aria-label",
+      standalone ? "App-info en website openen" : "Installeer EasyCodey als app"
+    );
+    installHeader.setAttribute("title", standalone ? "App-info en website" : "Installeer als app");
+  }
   if (installFooter) installFooter.hidden = standalone;
   if (installNowBtn) installNowBtn.hidden = !deferredInstallPrompt;
+
+  const entryInstall = document.querySelector("#app-entry-install");
+  if (entryInstall) entryInstall.hidden = standalone;
+
+  const entryWeb = document.querySelector("#app-entry-web");
+  if (entryWeb) {
+    entryWeb.textContent = standalone ? "Open de website ↗" : "Bekijk de website ↗";
+    entryWeb.setAttribute("aria-label", standalone ? "Open EasyCodey in je browser" : "Bekijk de EasyCodey-website");
+  }
 }
 
 function openInstall() {
@@ -2084,9 +2351,60 @@ function registerServiceWorker() {
   const { protocol, hostname } = window.location;
   const allowed = protocol === "https:" || hostname === "localhost" || hostname === "127.0.0.1";
   if (!allowed) return;
-  navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {
-    // Zonder service worker blijft de site gewoon werken.
+
+  const hadController = Boolean(navigator.serviceWorker.controller);
+  let reloading = false;
+
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController || reloading) return;
+    reloading = true;
+    window.location.reload();
   });
+
+  navigator.serviceWorker
+    .register("./sw.js", { scope: "./", updateViaCache: "none" })
+    .then((registration) => {
+      const activateWaiting = () => {
+        if (registration.waiting) registration.waiting.postMessage("SKIP_WAITING");
+      };
+
+      activateWaiting();
+      registration.update().catch(() => {});
+
+      registration.addEventListener("updatefound", () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener("statechange", () => {
+          if (worker.state === "installed" && navigator.serviceWorker.controller) {
+            worker.postMessage("SKIP_WAITING");
+            toast("Nieuwe versie gevonden. De app wordt bijgewerkt…");
+          }
+        });
+      });
+
+      // Controleer af en toe op een nieuwe versie, ook als de app lang open blijft.
+      window.setInterval(() => registration.update().catch(() => {}), 30 * 60 * 1000);
+    })
+    .catch(() => {
+      // Zonder service worker blijft de site gewoon werken.
+    });
+}
+
+async function refreshApp() {
+  toast("App wordt bijgewerkt…");
+  try {
+    if ("serviceWorker" in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+    }
+    if ("caches" in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    }
+  } catch {
+    // Als opruimen niet lukt, herladen we alsnog.
+  }
+  window.location.reload();
 }
 
 function initPWA() {

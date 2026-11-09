@@ -3,6 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    if (location.protocol === "http:" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+      location.replace("https://" + location.host + location.pathname + location.search + location.hash);
+    }
+  </script>
   <meta name="google-site-verification" content="uVww2pg_nyIECJzQ3jJlGrz5WuS2giXLCmTHseHZ_Fk" />
   <title>EasyCodey — Leer Python door te bouwen</title>
   <meta name="description" content="EasyCodey: 161 Python-projecten met uitleg, code en een stappenplan. Bewaar je voortgang, programmeer zelf in de browser en vraag de AI-coach om hulp." />
@@ -40,9 +45,9 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>" />
+  <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
 </head>
 <body>
@@ -63,7 +68,12 @@
   <header class="site-header">
     <div class="header-inner">
       <a class="logo" href="#/" aria-label="EasyCodey home">
-        <span class="logo-mark">🐍</span>
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" width="24" height="24" fill="none">
+            <text x="20" y="31" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="27" font-weight="500" fill="currentColor">E</text>
+            <circle cx="33.5" cy="11.5" r="2.3" fill="#e3bd6a"></circle>
+          </svg>
+        </span>
         <span class="logo-text">Easy<strong>Codey</strong></span>
       </a>
 
@@ -79,6 +89,12 @@
       </nav>
 
       <div class="header-tools">
+        <a class="icon-btn" href="#/profiel" aria-label="Mijn profiel" title="Mijn profiel">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+          </svg>
+        </a>
         <button class="icon-btn donate-icon" id="donate-header" type="button" data-action="open-donate" aria-label="Steun EasyCodey" title="Steun EasyCodey" hidden>♥</button>
         <button class="icon-btn" id="install-header" type="button" data-action="install-app" aria-label="Installeer EasyCodey als app" title="Installeer als app">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -115,6 +131,8 @@
         <button class="link-btn" type="button" data-action="open-playground">▶ Probeer Python</button>
         <span aria-hidden="true">·</span>
         <button class="link-btn" id="install-footer" type="button" data-action="install-app">📲 Installeer als app</button>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="#/profiel">👤 Mijn profiel</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="contact/">✉ Contact</a>
         <span aria-hidden="true">·</span>
@@ -327,6 +345,14 @@
         Typ Python en klik op <strong>Uitvoeren</strong>. De eerste keer wordt Python in je browser geladen
         (ongeveer 10 MB). Je code wordt niet naar een server gestuurd.
       </p>
+      <div class="input-help" role="note">
+        <span class="input-help-icon" aria-hidden="true">⌨</span>
+        <p>
+          <strong>Moet je iets typen?</strong> Sommige projecten vragen om invoer. Er verschijnt dan
+          <strong>bovenaan je scherm</strong> een venster met een tekstvak (met drie puntjes).
+          Typ je antwoord daar en druk op <kbd>Enter</kbd>. Zonder antwoord blijft het programma wachten.
+        </p>
+      </div>
       <div class="playground-toolbar">
         <label class="field playground-example-field">
           <span>Voorbeeld</span>
@@ -349,9 +375,10 @@
       </div>
       <pre class="playground-output" id="playground-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
       <p class="modal-fineprint">
-        Python draait via <code>Pyodide</code> (WebAssembly) in je browser. <code>input()</code> opent een
-        invoer-pop-up. Vermijd oneindige loops; die kun je alleen stoppen door het venster te sluiten.
-        Gebruik <strong>▶ Speel</strong> bij een codeblok om dat stuk code direct uit te proberen.
+        Python draait via <code>Pyodide</code> (WebAssembly) in je browser. Bij <code>input()</code> typ je
+        je antwoord in het venster dat bovenaan verschijnt. Vermijd oneindige loops; die kun je alleen
+        stoppen door het venster te sluiten. Gebruik <strong>▶ Speel</strong> bij een codeblok om dat stuk
+        code direct uit te proberen.
       </p>
     </div>
   </div>
@@ -387,8 +414,15 @@
         Python werkt offline nadat je het één keer hebt gebruikt.
         <a href="installeren/">Bekijk de volledige installatie-uitleg</a>.
       </p>
+      <p class="install-note">
+        Zie je een melding over een onveilige of oude versie? Installeer EasyCodey altijd via
+        <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong> en gebruik hieronder
+        <strong>App bijwerken</strong>. Dan wordt de nieuwste versie opnieuw opgehaald.
+      </p>
       <div class="modal-actions">
         <button class="btn brand" type="button" id="install-now" data-action="install-now" hidden>📲 Installeer nu</button>
+        <a class="btn ghost" href="https://yousefabujarad2014-beep.github.io/easycodey/" target="_blank" rel="noopener">Open de website ↗</a>
+        <button class="btn ghost" type="button" data-action="refresh-app">↻ App bijwerken</button>
         <button class="btn ghost" type="button" data-action="close-install">Sluiten</button>
       </div>
     </div>

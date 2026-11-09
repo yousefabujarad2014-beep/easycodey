@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="EasyCodey">
+  <defs>
+    <linearGradient id="easycodey-logo-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d725d" />
+      <stop offset="1" stop-color="#0d3d33" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#easycodey-logo-bg)" />
+  <rect x="2.6" y="2.6" width="58.8" height="58.8" rx="12.8" fill="none" stroke="#e3bd6a" stroke-opacity="0.55" stroke-width="1.2" />
+  <text x="29" y="45" text-anchor="middle" font-family="Fraunces, Georgia, 'Times New Roman', serif" font-size="38" font-weight="500" fill="#fffdf8">E</text>
+  <circle cx="49" cy="17" r="3.2" fill="#e3bd6a" />
+</svg>

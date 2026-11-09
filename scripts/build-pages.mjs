@@ -67,6 +67,11 @@ function jsonLd(data) {
 function head({ title, description, canonical, image, prefix, extraLd }) {
   return `<meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script>
+    if (location.protocol === "http:" && !/^(localhost|127\\.0\\.0\\.1)$/.test(location.hostname)) {
+      location.replace("https://" + location.host + location.pathname + location.search + location.hash);
+    }
+  </script>
   <meta name="theme-color" content="#f7f5ef" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}" />
@@ -75,6 +80,7 @@ function head({ title, description, canonical, image, prefix, extraLd }) {
   <link rel="canonical" href="${esc(canonical)}" />
   <link rel="manifest" href="${prefix}manifest.webmanifest" />
   <link rel="apple-touch-icon" href="${prefix}assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/svg+xml" href="${prefix}assets/icons/logo.svg" />
   <link rel="icon" type="image/png" sizes="192x192" href="${prefix}assets/icons/icon-192.png" />
   <meta property="og:title" content="${esc(title)}" />
   <meta property="og:description" content="${esc(description)}" />
@@ -92,7 +98,7 @@ ${jsonLd(extraLd)}
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="${prefix}styles.css" />
   <script>
     (function () {
@@ -102,7 +108,7 @@ ${jsonLd(extraLd)}
         var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
         var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", dark ? "#0c0c0e" : "#f7f5ef");
+        if (meta) meta.setAttribute("content", dark ? "#12110f" : "#f7f5ef");
       } catch (error) {}
     })();
   </script>`;
@@ -113,7 +119,12 @@ function header(prefix) {
   <header class="site-header">
     <div class="header-inner">
       <a class="logo" href="${prefix}" aria-label="EasyCodey home">
-        <span class="logo-mark">🐍</span>
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 44 44" width="24" height="24" fill="none">
+            <text x="20" y="31" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-size="27" font-weight="500" fill="currentColor">E</text>
+            <circle cx="33.5" cy="11.5" r="2.3" fill="#e3bd6a"></circle>
+          </svg>
+        </span>
         <span class="logo-text">Easy<strong>Codey</strong></span>
       </a>
       <nav class="main-nav" aria-label="Hoofdnavigatie">
@@ -125,6 +136,20 @@ function header(prefix) {
         <a href="${prefix}contact/">Contact</a>
       </nav>
       <div class="header-tools">
+        <a class="icon-btn" href="${prefix}#/profiel" aria-label="Mijn profiel" title="Mijn profiel">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M4 21a8 8 0 0 1 16 0"></path>
+          </svg>
+        </a>
+        <a class="icon-btn" href="${prefix}installeren/" aria-label="Installeer EasyCodey als app" title="Installeer als app">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+            <path d="M12 7v7"></path>
+            <path d="m9 11 3 3 3-3"></path>
+            <path d="M8 17h8"></path>
+          </svg>
+        </a>
         <button class="icon-btn" type="button" id="static-theme" aria-label="Wissel licht/donker thema" title="Wissel thema">
           ${SUN_MOON}
         </button>
@@ -145,6 +170,8 @@ function footer(prefix) {
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}installeren/">📲 Installeren</a>
         <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}#/profiel">👤 Mijn profiel</a>
+        <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}doneren/">♥ Doneren</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}contact/">✉ Contact</a>
@@ -164,7 +191,7 @@ const THEME_SCRIPT = `<script>
           var next = root.dataset.theme === "dark" ? "light" : "dark";
           root.dataset.theme = next;
           var meta = document.querySelector('meta[name="theme-color"]');
-          if (meta) meta.setAttribute("content", next === "dark" ? "#0c0c0e" : "#f7f5ef");
+          if (meta) meta.setAttribute("content", next === "dark" ? "#12110f" : "#f7f5ef");
           try {
             var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
             var state = raw ? JSON.parse(raw) : {};
@@ -330,6 +357,10 @@ function renderProjectPage(idea) {
           <p class="static-note">
             <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
             Je voortgang wordt lokaal in je browser bewaard.
+            <br />
+            <strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je
+            scherm een venster met een tekstvak (drie puntjes). Typ daar je antwoord en druk op
+            <kbd>Enter</kbd>.
           </p>
         </div>
       </header>
@@ -726,9 +757,11 @@ function renderInstallPage() {
       <ul class="tips">
         <li>Gebruik Chrome, Edge of Safari. Firefox en in-app browsers ondersteunen installeren minder goed.</li>
         <li>Sluit incognito en open de site in een normaal tabblad.</li>
+        <li>Installeer altijd via de beveiligde link <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong>, niet via een lokaal bestand of een oude snelkoppeling.</li>
+        <li>Zie je een melding over een onveilige of oude versie? Open de site online en gebruik <strong>App bijwerken</strong> in het installatievenster. De nieuwste versie wordt dan opnieuw opgehaald.</li>
         <li>Bezoek de site één keer online en wacht een paar seconden, zodat de service worker klaar is.</li>
         <li>Werk je browser bij via de Play Store of App Store en herstart hem.</li>
-        <li>Je voortgang staat per apparaat en per browser. Er is geen account of synchronisatie.</li>
+        <li>Je voortgang staat per apparaat en per browser. Maak een optioneel profiel voor meerdere gebruikers op hetzelfde apparaat, of gebruik een back-up om je voortgang te verhuizen.</li>
       </ul>
       <div class="static-actions">
         <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>

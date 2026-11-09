@@ -1,7 +1,7 @@
 /* EasyCodey service worker — installeerbare app en offline modus.
    Bij een grote wijziging: verhoog VERSION, dan wordt de oude cache opgeruimd. */
 
-const VERSION = "easycodey-v5";
+const VERSION = "easycodey-v6";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
@@ -24,6 +24,7 @@ const SHELL = [
   "./data/ideas-06.js",
   "./data/ideas-07.js",
   "./assets/icons/icon.svg",
+  "./assets/icons/logo.svg",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   "./assets/icons/icon-maskable-192.png",
@@ -108,6 +109,18 @@ async function staleWhileRevalidate(request, cacheName) {
   return cached || network || new Response("", { status: 504 });
 }
 
+async function networkFirstAsset(request, cacheName) {
+  const cache = await caches.open(cacheName);
+  try {
+    const response = await fetch(request);
+    if (isCacheable(response)) cache.put(request, response.clone());
+    return response;
+  } catch {
+    const cached = await cache.match(request);
+    return cached || new Response("", { status: 504 });
+  }
+}
+
 async function cacheFirst(request, cacheName) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(request);
@@ -135,7 +148,13 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (url.origin === self.location.origin) {
-    event.respondWith(staleWhileRevalidate(request, SHELL_CACHE));
+    // Code en styles altijd eerst van het netwerk halen, zodat een nieuwe versie
+    // nooit achter een oude cache blijft hangen. Afbeeldingen mogen uit de cache.
+    if (request.destination === "image" || request.destination === "font") {
+      event.respondWith(cacheFirst(request, SHELL_CACHE));
+    } else {
+      event.respondWith(networkFirstAsset(request, SHELL_CACHE));
+    }
     return;
   }
 

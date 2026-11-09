@@ -14,16 +14,18 @@
       --panel: #ffffff;
       --ink: #15150f;
       --muted: #5f5d52;
-      --brand: #1f5eff;
+      --brand: #145c4b;
+      --gold: #b8893b;
       --line: rgba(21, 21, 15, 0.12);
     }
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0c0c0e;
-        --panel: #141419;
+        --bg: #12110f;
+        --panel: #1b1a16;
         --ink: #f4f2ea;
         --muted: #a8a598;
-        --brand: #6d8dff;
+        --brand: #2f8a71;
+        --gold: #e3bd6a;
         --line: rgba(244, 242, 234, 0.14);
       }
     }
@@ -55,12 +57,14 @@
       height: 74px;
       margin: 0 auto 18px;
       border-radius: 20px;
-      background: linear-gradient(145deg, #3b74ff, #0a2fae);
-      color: #fff;
-      font: 700 30px/1 "Consolas", monospace;
+      background: linear-gradient(150deg, #1d725d 0%, #0d3d33 100%);
+      border: 1px solid rgba(227, 189, 106, 0.55);
+      color: #fffdf8;
+      font: 500 34px/1 Georgia, "Times New Roman", serif;
+      box-shadow: 0 14px 30px -18px rgba(13, 61, 51, 0.9);
     }
-    .mark span { color: #ffd43b; }
-    h1 { margin: 0 0 8px; font-size: 24px; letter-spacing: -0.02em; }
+    .mark span { color: var(--gold); }
+    h1 { margin: 0 0 8px; font-family: Georgia, "Times New Roman", serif; font-weight: 500; font-size: 26px; letter-spacing: -0.02em; }
     p { margin: 0 0 10px; color: var(--muted); }
     .actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 22px; }
     a, button {
@@ -72,14 +76,14 @@
       text-decoration: none;
       border: 1px solid transparent;
     }
-    .primary { background: var(--brand); color: #fff; }
+    .primary { background: var(--brand); color: #fffdf8; }
     .ghost { background: transparent; border-color: var(--line); color: var(--ink); }
     small { display: block; margin-top: 20px; color: var(--muted); font-size: 12.5px; }
   </style>
 </head>
 <body>
   <main>
-    <div class="mark" aria-hidden="true">&gt;<span>_</span></div>
+    <div class="mark" aria-hidden="true">E<span>.</span></div>
     <h1>Je bent offline</h1>
     <p>EasyCodey heeft nu geen internetverbinding.</p>
     <p>Pagina's die je al eerder opende, blijven werken. Python werkt offline zodra je het één keer hebt gebruikt.</p>
