@@ -1595,6 +1595,7 @@ function renderEditor(params) {
   const project = projectId ? findIdea(projectId) : null;
   const exampleKey = params.get("voorbeeld");
   const hasExample = Boolean(exampleKey && PLAYGROUND_EXAMPLES[exampleKey]);
+  const editorProjectId = project ? project.id : "";
 
   let code;
   if (project) {
@@ -1691,7 +1692,7 @@ function renderEditor(params) {
   output.textContent = "Uitvoer verschijnt hier.";
 
   textarea.addEventListener("input", () => {
-    store.saveEditorDraft(textarea.value);
+    store.saveEditorDraft(textarea.value, editorProjectId);
     saveStatus.textContent = "Opgeslagen";
     saveStatus.className = "editor-save-status";
   });
@@ -1726,7 +1727,8 @@ async function runEditorCode() {
     return;
   }
 
-  store.saveEditorDraft(textarea.value);
+  const projectId = new URLSearchParams(location.hash.split("?")[1] || "").get("project") || "";
+  store.saveEditorDraft(textarea.value, projectId);
   if (runButton) runButton.disabled = true;
   output.textContent = "";
   output.classList.remove("error");
@@ -1832,7 +1834,8 @@ function programIdea(ideaId) {
   const idea = findIdea(ideaId);
   if (!idea) return;
   const draft = store.getEditorDraft();
-  if (draft.projectId !== idea.id || !draft.code) {
+  const looksLikeProjectCode = draft.code.startsWith(`# ${idea.title} — EasyCodey`);
+  if (draft.projectId !== idea.id || !draft.code || !looksLikeProjectCode) {
     store.saveEditorDraft(combinedIdeaCode(idea), idea.id);
   }
   navigate(`#/programmeren?project=${encodeURIComponent(idea.id)}`);
