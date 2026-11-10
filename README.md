@@ -92,6 +92,7 @@ FLL/
 ├── render.yaml             Render Blueprint
 ├── .env.example            Voorbeeldconfiguratie
 ├── APP.md                  EasyCodey als app installeren en offline gebruiken
+├── PLAYSTORE.md            EasyCodey in Google Play: TWA, keystore, assets en checklist
 ├── EINDRAPPORT.md          Overzicht van de oplevering en testresultaten
 ├── PUBLICATIE.md           Stap-voor-stap publicatie op GitHub en Render
 ├── GOOGLE.md               Site openbaar maken en laten indexeren door Google
@@ -218,7 +219,8 @@ Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle p
 
 EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Je hoeft zelf niets te doen. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). De live app gebruikt HTTPS met een geldig certificaat en HSTS.
 
-Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`.
+Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`. Wil je EasyCodey ook via
+Google Play installeren, lees dan `PLAYSTORE.md`.
 
 ## Donaties instellen
 

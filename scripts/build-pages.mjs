@@ -30,6 +30,7 @@ const OVERVIEW_DIR = path.join(root, "projecten");
 const INSTALL_DIR = path.join(root, "installeren");
 const CONTACT_DIR = path.join(root, "contact");
 const DONATE_DIR = path.join(root, "doneren");
+const PRIVACY_DIR = path.join(root, "privacy");
 
 const SUN_MOON = `<svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>`;
@@ -161,7 +162,7 @@ function header(prefix) {
 function footer(prefix) {
   return `<footer class="site-footer">
     <div class="footer-inner">
-      <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
+      <p><strong>EasyCodey</strong> — leren door te bouwen. Optioneel account, geen reclame.</p>
       <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
       <p class="footer-trust">
         <span class="trust-dot" aria-hidden="true"></span>
@@ -183,6 +184,8 @@ function footer(prefix) {
         <a class="link-btn" href="${prefix}doneren/">♥ Doneren</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}contact/">✉ Contact</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}privacy/">🔒 Privacy</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/eigenaar">🔑 Beheer</a>
         <span aria-hidden="true">·</span>
@@ -992,6 +995,189 @@ function renderContactPage() {
 `;
 }
 
+function renderPrivacyPage() {
+  const prefix = "../";
+  const canonical = `${SITE}/privacy/`;
+  const title = "Privacybeleid — EasyCodey";
+  const description = trim(
+    "Lees hoe EasyCodey met je gegevens omgaat: alles blijft lokaal op je apparaat, zonder advertenties, trackers of verkoop van gegevens.",
+    155
+  );
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        name: title,
+        description,
+        url: canonical,
+        inLanguage: "nl-NL",
+        isPartOf: { "@type": "WebSite", name: "EasyCodey", url: `${SITE}/` }
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "EasyCodey", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Privacy", item: canonical }
+        ]
+      }
+    ]
+  };
+
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+  ${head({ title, description, canonical, image: `${SITE}/assets/icons/icon-512.png`, prefix, extraLd: ld })}
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  ${header(prefix)}
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="${prefix}">Home</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Privacy</span>
+    </nav>
+
+    <header class="static-page-head">
+      <p class="eyebrow">Privacy</p>
+      <h1>Privacybeleid</h1>
+      <p class="static-lead">
+        EasyCodey is gemaakt om veilig en privé te voelen. Je voortgang, profielen en eigen projecten
+        blijven op je eigen apparaat. Er is geen server die je gegevens bewaart.
+      </p>
+      <p class="static-note">Laatst bijgewerkt: 10 november 2026</p>
+    </header>
+
+    <section class="panel">
+      <h2>Wie is verantwoordelijk?</h2>
+      <p class="profile-text">
+        EasyCodey is een project van <strong>Yousef Abujarad (EasyCodey)</strong>.
+        Je kunt contact opnemen via <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>,
+        telefoon of WhatsApp <a href="tel:${CONTACT_PHONE_TEL}">${CONTACT_PHONE_DISPLAY}</a>.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Welke gegevens worden bewaard?</h2>
+      <p class="profile-text">
+        EasyCodey bewaart alleen wat nodig is om de app te laten werken. Dit staat in de opslag
+        van je eigen browser (<code>localStorage</code>) en wordt niet naar een server gestuurd:
+      </p>
+      <ul class="tips">
+        <li>Je voortgang: welke stappen je hebt afgevinkt en welke projecten je hebt afgerond.</li>
+        <li>Je thema, AI-instellingen en de code in de programmeer-editor.</li>
+        <li>Je eigen projecten en ideeën die je zelf hebt gemaakt.</li>
+        <li>Als je een optioneel account maakt: je naam, een hash van je wachtwoord en eventueel een e-mailadres of telefoonnummer.</li>
+        <li>De datum waarop je account is gemaakt en je laatste activiteit.</li>
+      </ul>
+      <p class="static-note">
+        Een wachtwoord wordt nooit als platte tekst bewaard. Het is een eenvoudige hash die accounts
+        op hetzelfde apparaat uit elkaar houdt, geen sterke beveiliging tegen iemand met toegang tot je toestel.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Waarom bewaren we dit?</h2>
+      <ul class="tips">
+        <li>Om je voortgang te onthouden als je terugkomt.</li>
+        <li>Om meerdere gebruikers op hetzelfde apparaat eigen voortgang te geven.</li>
+        <li>Om je eigen projecten en editor-code te bewaren.</li>
+        <li>Om je de app te laten gebruiken zonder verplicht account.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Geen server, geen verkoop</h2>
+      <p class="profile-text">
+        EasyCodey heeft geen database en geen account op een server. Je gegevens worden niet verkocht,
+        niet verhuurd en niet gebruikt voor advertenties. Er zijn geen advertentienetwerken, geen
+        analytics van derden en geen trackers.
+      </p>
+      <p class="static-note">
+        De eigenaar ziet alleen de profielen die op hetzelfde apparaat zijn gemaakt, via het lokale
+        beheerscherm. Andere telefoons en computers hebben hun eigen opslag.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Externe diensten</h2>
+      <p class="profile-text">
+        De website wordt gehost via GitHub Pages. Lettertypen komen van Google Fonts en Python wordt
+        geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
+        browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
+        je projecten of profielen naar deze diensten.
+      </p>
+      <p class="static-note">
+        De online AI-coach is alleen beschikbaar als de eigenaar een server met API-sleutel koppelt.
+        Op GitHub Pages wordt de offline coach gebruikt en gaat er geen chat naar een AI-server.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Bewaartermijn</h2>
+      <p class="profile-text">
+        Je gegevens blijven staan tot je ze zelf verwijdert: via je profiel, via het beheerscherm of
+        door de sitegegevens van je browser te wissen. Een back-upbestand dat je downloadt, bewaar
+        je zelf; EasyCodey heeft daar geen kopie van.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Jouw rechten</h2>
+      <ul class="tips">
+        <li>Je kunt je gegevens bekijken en downloaden via <strong>Mijn profiel</strong> en <strong>Back-up downloaden</strong>.</li>
+        <li>Je kunt je account en voortgang verwijderen via <strong>Mijn profiel</strong> of het lokale beheerscherm.</li>
+        <li>Je kunt een fout in je gegevens zelf herstellen of ons contacteren via ${CONTACT_EMAIL}.</li>
+        <li>Je hebt recht op inzage, correctie, verwijdering en overdraagbaarheid van je gegevens.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Kinderen en jongeren</h2>
+      <p class="profile-text">
+        EasyCodey is bedoeld om te leren programmeren en vraagt niet om een account. Een e-mailadres
+        of telefoonnummer is optioneel en wordt niet verplicht. Omdat er geen gegevens naar een server
+        gaan, blijft de drempel laag. Ouders of begeleiders kunnen de lokale gegevens via het
+        beheerscherm bekijken en verwijderen.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Beveiliging</h2>
+      <p class="profile-text">
+        De live site gebruikt HTTPS met een geldig certificaat en HSTS. Omdat alle gegevens lokaal
+        staan, is de beveiliging van je toestel en browser belangrijk. Gebruik geen belangrijk
+        wachtwoord en deel je toestel niet met mensen die je niet vertrouwt.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Wijzigingen</h2>
+      <p class="profile-text">
+        Als dit beleid verandert, passen we de datum bovenaan aan. Belangrijke wijzigingen
+        communiceren we via de app of de website.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Contact</h2>
+      <p class="profile-text">
+        Vragen over privacy? Mail <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a> of stuur een
+        WhatsApp naar <a href="${CONTACT_WHATSAPP}">${CONTACT_PHONE_DISPLAY}</a>.
+      </p>
+    </section>
+  </main>
+
+  ${footer(prefix)}
+  ${THEME_SCRIPT}
+</body>
+</html>
+`;
+}
+
 function renderDonatePage() {
   const prefix = "../";
   const canonical = `${SITE}/doneren/`;
@@ -1215,6 +1401,7 @@ writeFile(path.join(OVERVIEW_DIR, "index.html"), renderOverviewPage());
 writeFile(path.join(INSTALL_DIR, "index.html"), renderInstallPage());
 writeFile(path.join(CONTACT_DIR, "index.html"), renderContactPage());
 writeFile(path.join(DONATE_DIR, "index.html"), renderDonatePage());
+writeFile(path.join(PRIVACY_DIR, "index.html"), renderPrivacyPage());
 
 const urls = [
   { loc: `${SITE}/`, priority: "1.0", changefreq: "weekly" },
@@ -1222,6 +1409,7 @@ const urls = [
   { loc: `${SITE}/installeren/`, priority: "0.7", changefreq: "monthly" },
   { loc: `${SITE}/contact/`, priority: "0.6", changefreq: "yearly" },
   { loc: `${SITE}/doneren/`, priority: "0.6", changefreq: "yearly" },
+  { loc: `${SITE}/privacy/`, priority: "0.4", changefreq: "yearly" },
   ...IDEAS.map((idea) => ({
     loc: `${SITE}/idee/${idea.id}/`,
     priority: "0.8",
@@ -1251,5 +1439,6 @@ console.log(`Overzicht:       projecten/index.html`);
 console.log(`Installeren:     installeren/index.html`);
 console.log(`Contact:         contact/index.html`);
 console.log(`Doneren:         doneren/index.html`);
+console.log(`Privacy:         privacy/index.html`);
 console.log(`Sitemap:         ${urls.length} URL's`);
 if (removed) console.log(`Opgeruimd:       ${removed} verouderde projectmap(pen)`);

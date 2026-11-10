@@ -146,6 +146,34 @@ if (!existsSync(manifestPath)) {
 if (!existsSync(path.join(root, "sw.js"))) fail("sw.js ontbreekt.");
 if (!existsSync(path.join(root, "offline.html"))) fail("offline.html ontbreekt.");
 
+/* Google Play: Digital Asset Links voor de TWA. */
+
+const assetLinksPath = path.join(root, ".well-known", "assetlinks.json");
+if (!existsSync(assetLinksPath)) {
+  fail(".well-known/assetlinks.json ontbreekt (nodig voor de Google Play-app).");
+} else {
+  try {
+    const links = JSON.parse(readFileSync(assetLinksPath, "utf8"));
+    if (!Array.isArray(links) || links.length === 0) {
+      fail("assetlinks.json moet een niet-lege lijst zijn.");
+    } else {
+      const target = links[0].target || {};
+      if (target.namespace !== "android_app") fail("assetlinks.json mist namespace \"android_app\".");
+      if (target.package_name !== "be.easycodey.app") {
+        fail("assetlinks.json moet package_name \"be.easycodey.app\" gebruiken.");
+      }
+      if (!Array.isArray(target.sha256_cert_fingerprints) || target.sha256_cert_fingerprints.length === 0) {
+        fail("assetlinks.json mist een SHA-256 fingerprint.");
+      }
+      if (!Array.isArray(links[0].relation) || !links[0].relation.includes("delegate_permission/common.handle_all_urls")) {
+        fail("assetlinks.json mist de relation voor het openen van alle URL's.");
+      }
+    }
+  } catch (error) {
+    fail(`assetlinks.json is geen geldige JSON: ${error.message}`);
+  }
+}
+
 const indexHtml = readFileSync(path.join(root, "index.html"), "utf8");
 if (!indexHtml.includes('rel="manifest"')) fail("index.html linkt niet naar het manifest.");
 if (!indexHtml.includes("apple-touch-icon")) fail("index.html mist het apple-touch-icoon.");
@@ -257,6 +285,19 @@ if (!existsSync(donateFile)) {
   if (!donate.includes("DonateAction")) fail("Doneerpagina mist DonateAction JSON-LD.");
 }
 
+const privacyFile = path.join(root, "privacy", "index.html");
+if (!existsSync(privacyFile)) {
+  fail("Privacy pagina privacy/index.html ontbreekt (voer npm run pages uit).");
+} else {
+  const privacy = readFileSync(privacyFile, "utf8");
+  if (!privacy.includes(`<link rel="canonical" href="${SITE}/privacy/"`)) {
+    fail("Privacy pagina heeft niet de juiste canonical.");
+  }
+  if (!privacy.includes("<h1>Privacybeleid</h1>")) fail("Privacy pagina mist de juiste <h1>.");
+  if (!privacy.includes("localStorage")) fail("Privacy pagina mist de uitleg over lokale opslag.");
+  if (!privacy.includes('type="application/ld+json"')) fail("Privacy pagina mist JSON-LD.");
+}
+
 const sitemapFile = path.join(root, "sitemap.xml");
 if (!existsSync(sitemapFile)) {
   fail("sitemap.xml ontbreekt.");
@@ -268,12 +309,13 @@ if (!existsSync(sitemapFile)) {
   if (!sitemap.includes(`<loc>${SITE}/installeren/</loc>`)) fail("Sitemap mist de installatiepagina.");
   if (!sitemap.includes(`<loc>${SITE}/contact/</loc>`)) fail("Sitemap mist de contactpagina.");
   if (!sitemap.includes(`<loc>${SITE}/doneren/</loc>`)) fail("Sitemap mist de doneerpagina.");
+  if (!sitemap.includes(`<loc>${SITE}/privacy/</loc>`)) fail("Sitemap mist de privacypagina.");
   for (const idea of IDEAS) {
     if (!sitemap.includes(`<loc>${SITE}/idee/${idea.id}/</loc>`)) {
       fail(`Sitemap mist het project ${idea.id}.`);
     }
   }
-  const expectedUrls = IDEAS.length + 5;
+  const expectedUrls = IDEAS.length + 6;
   if (sitemapCount !== expectedUrls) {
     fail(`Sitemap heeft ${sitemapCount} URL's; verwacht ${expectedUrls}.`);
   }
@@ -292,7 +334,7 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
-console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + contact + doneren`);
+console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + contact + doneren + privacy`);
 console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
 for (const category of CATEGORIES) {

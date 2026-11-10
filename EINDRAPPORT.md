@@ -507,7 +507,9 @@ De site staat live:
 | Installatiepagina met QR-code | ✅ `/installeren/` |
 | Contactpagina | ✅ `/contact/` met telefoon/WhatsApp en e-mail |
 | Doneerpagina | ✅ `/doneren/` met IBAN, houder, bank, BIC en transparantie |
-| Sitemap met 166 URL's | ✅ gegenereerd door `npm run pages` |
+| Privacybeleid | ✅ `/privacy/` met lokale opslag, geen verkoop en contact |
+| Sitemap met 167 URL's | ✅ gegenereerd door `npm run pages` |
+| Google Play (TWA) | ⏳ technisch klaar: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
 | Online AI-coach | ⏳ alleen op Render; Pages gebruikt de offline coach |
 | Doneren | ✅ Belfius IBAN via `site-config.json` en de doneerpagina |
 

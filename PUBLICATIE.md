@@ -19,6 +19,8 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | Invoerhulp | ✅ `input()` toont de vraag en een tekstvak in het venster bovenaan |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
 | Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **volledig automatische updates** |
+| Privacybeleid | ✅ `/privacy/` met uitleg over lokale opslag, geen verkoop en contact |
+| Google Play (TWA) | ⏳ technisch voorbereid: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
 | Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
 
 Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
@@ -319,7 +321,25 @@ Na de eerste succesvolle deploy:
 1. Open **https://search.google.com/search-console**.
 2. Voeg je live-URL toe als property.
 3. Verifieer met de HTML-tag of het HTML-bestand.
-4. Meld `sitemap.xml` aan (166 URL's).
+4. Meld `sitemap.xml` aan (167 URL's).
 5. Vraag indexering aan voor de startpagina en enkele projectpagina's.
 
 De volledige uitleg over de vaste projectpagina's, de app en de checklist staat in **`GOOGLE.md`**.
+
+---
+
+## 12. Google Play
+
+EasyCodey is technisch klaar om als Android-app via Google Play te installeren:
+
+- **TWA-project** gegenereerd met Bubblewrap (package `be.easycodey.app`).
+- **Upload-keystore** aangemaakt buiten de repository.
+- **`/.well-known/assetlinks.json`** met de SHA-256 van de uploadsleutel.
+- **Store-assets**: app-icoon 512, feature graphic 1024×500 en vijf telefoonscreenshots 1080×1920.
+- **Store listing-tekst** in het Nederlands, plus de privacybeleid-URL `/privacy/`.
+
+De app zelf bouwen en uploaden staat stap voor stap in **`PLAYSTORE.md`**.
+
+> Publiceren kan pas met een **Google Play Developer-account** (eenmalig $25) en een geslaagde
+> identiteitsverificatie. Daarna: AAB uploaden, Play App Signing-fingerprint toevoegen aan
+> `assetlinks.json`, store listing invullen en ter review indienen.

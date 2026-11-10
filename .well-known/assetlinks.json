@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "be.easycodey.app",
+      "sha256_cert_fingerprints": [
+        "C4:07:A1:09:32:B0:ED:6C:3C:37:A1:8D:EC:1B:E7:5D:99:D6:9F:4D:68:22:30:D4:8B:5C:D1:EA:BA:AB:E0:7A"
+      ]
+    }
+  }
+]
