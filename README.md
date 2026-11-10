@@ -14,26 +14,33 @@ Op GitHub Pages werkt alles behalve de online AI-coach (daar is de Node-server v
 
 ## Snel starten
 
-Je hebt [Node.js](https://nodejs.org) nodig (versie 18 of nieuwer). Er zijn geen pakketten om te installeren en er is geen build-stap.
+De makkelijkste en veiligste manier is de live app:
+
+```
+https://yousefabujarad2014-beep.github.io/easycodey/
+```
+
+Op Windows kun je dubbelklikken op **`start-easycodey.bat`** of **`EasyCodey.url`**. Die openen de beveiligde HTTPS-versie in je browser.
+
+Wil je lokaal ontwikkelen? Je hebt [Node.js](https://nodejs.org) nodig (versie 18 of nieuwer). Er zijn geen pakketten om te installeren en er is geen build-stap.
 
 ```bash
 npm start
 ```
 
-Open daarna **http://localhost:4173** in je browser.
+Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met `start-easycodey.bat local` of `start-easycodey-local.bat`.
 
-> Open de site via de server, niet via `file://`. De site gebruikt ES-modules en die werken niet als je `index.html` direct opent.
-
-Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
+> Open de site via de server, niet via `file://`. De site gebruikt ES-modules en die werken niet als je `index.html` direct opent. Gebruik voor de echte app altijd de HTTPS-link hierboven; dan zie je het slotje in de adresbalk.
 
 ## Wat zit erin?
 
 - **161 projecten** van Beginner tot Gevorderd, verdeeld over Games, Web, GUI, Data & AI, Handige tools, Automatisering, Security, Wetenschap, Kunst & Creatief en Onderwijs.
 - Elke opdracht heeft een omslagafbeelding, uitleg, een stappenplan met code per stap, tips en vervolgprojecten.
 - **Voortgang bijhouden**: vink stappen af. Je voortgang wordt lokaal in je browser opgeslagen (`localStorage`).
-- **Optioneel account** (`#/profiel`): meld je snel aan zoals bij Kahoot, met alleen een naam en een wachtwoord. Elk account heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder account werkt alles gewoon als gast.
-- **Chat met je coach**: zodra je bent ingelogd verschijnt er een chatknop in de header, in de footer en als zwevende knop. Op Android en laptop opent die direct EasyCoach. Je profielpagina heeft daarnaast een grote chatkaart.
+- **Optioneel account** (`#/profiel`): meld je snel aan zoals bij Kahoot, met alleen een naam en een wachtwoord. Elk account heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder account werkt alles gewoon als gast. Je kunt optioneel een e-mailadres of telefoonnummer toevoegen; dat blijft lokaal en wordt nooit verstuurd.
+- **Chat met je coach**: zodra je bent ingelogd verschijnt er een chatknop in de footer en als zwevende knop rechtsonder. Op Android en laptop opent die direct EasyCoach. Je profielpagina heeft daarnaast een grote chatkaart.
 - **Back-up**: download je profieldata als JSON en zet die op een ander apparaat weer terug.
+- **Eigenaarspaneel** (`#/eigenaar`): met de eigenaarscode zie je hoeveel profielen er op dit apparaat zijn, wat hun voortgang is en kun je een mededeling plaatsen of lokale gegevens downloaden. Er is geen server: je ziet alleen dit apparaat.
 - **Zoeken en filteren** op trefwoord, categorie, niveau, tijdsduur, meerdere vaardigheden, alleen niet-afgeronde projecten en sorteren.
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
 - **Leerpad** met alle projecten per niveau en een categorie-filter.
@@ -42,10 +49,10 @@ Op Windows kun je ook dubbelklikken op `start-easycodey.bat`.
 - **Offline coach**: werkt direct zonder API-sleutel. Herkent je onderwerp en geeft een stappenplan plus passende projecten.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.
-- **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm (het tekstvak met de drie puntjes). Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
+- **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
 - **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
-- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Een ingebouwde **App bijwerken**-knop haalt de nieuwste versie handmatig op.
+- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Je hoeft zelf niets te doen.
 - **Chique huisstijl**: warm ivoor, diepgroen en goud, met Fraunces voor koppen, verfijnde kaarten en donkere code- en footerblokken. Het logo is een eigen monogram (diepgroen vierkant, gouden rand en ivoren **E**).
 - **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd. Elk project heeft daarnaast een eigen vaste pagina op `/idee/<id>/` met eigen titel, description en JSON-LD.
@@ -88,7 +95,9 @@ FLL/
 ├── EINDRAPPORT.md          Overzicht van de oplevering en testresultaten
 ├── PUBLICATIE.md           Stap-voor-stap publicatie op GitHub en Render
 ├── GOOGLE.md               Site openbaar maken en laten indexeren door Google
-└── start-easycodey.bat     Windows-startscript
+├── EasyCodey.url           Snelkoppeling naar de beveiligde live-app
+├── start-easycodey.bat     Opent de beveiligde live-app (of lokaal met `local`)
+└── start-easycodey-local.bat  Start de lokale ontwikkelserver
 ```
 
 ## Een project toevoegen
@@ -188,7 +197,7 @@ In de hero staat **⌨ Programmeer zelf** (naar de editor) en **▶ Snel probere
 - Python draait via **Pyodide** (WebAssembly) in de browser.
 - De eerste keer wordt ongeveer 10 MB gedownload; daarna is het snel.
 - Code wordt niet naar de server gestuurd.
-- `input()` opent bovenaan je scherm een venster met een tekstvak (met de drie puntjes). Typ je antwoord daar en druk op **Enter**. EasyCodey toont die uitleg ook bij het speelveld en op de projectpagina's. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
+- `input()` opent bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. Typ je antwoord daar en druk op **Enter**. EasyCodey toont die uitleg ook bij het speelveld en op de projectpagina's. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
 - Na de eerste keer bewaart de service worker de Python-runtime, zodat de editor en het speelveld ook offline werken.
 - Op een projectpagina voert **▶ Speel dit idee** meteen het volledige project uit; **⌨ Programmeer dit idee** opent dezelfde code in de editor.
 
@@ -207,7 +216,7 @@ Er is ook een aparte pagina **`/installeren/`** met een QR-code en uitleg per pl
 
 Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
 
-EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Zie je toch een melding over een oude of onveilige versie, open dan de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/** en gebruik **App bijwerken** in het installatievenster. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost).
+EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Je hoeft zelf niets te doen. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). De live app gebruikt HTTPS met een geldig certificaat en HSTS.
 
 Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`.
 
@@ -282,6 +291,8 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 - Er is **geen account op een server en geen database**. Accounts leven alleen op dit apparaat.
 - Een account is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als beveiliging. Het wachtwoord houdt accounts uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat.
 - Oude accounts met een PIN blijven werken: de PIN wordt bij het inlezen automatisch als wachtwoord gelezen.
+- Het contactveld bij registratie is **optioneel**. Het staat alleen in `easycodey.profiles.v1` op dit apparaat en wordt nooit verstuurd.
+- Het **eigenaarspaneel** op `#/eigenaar` is lokaal beveiligd met de eigenaarscode. Het toont het aantal profielen op dit apparaat, hun voortgang en contactgegevens. Wachtwoorden zijn nooit zichtbaar.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Gebruik **Back-up downloaden** en **Back-up herstellen** op `#/profiel` om voortgang, eigen projecten en editor-code mee te nemen. Op **Mijn ideeën** kun je daarnaast alleen je eigen projecten exporteren/importeren.
 
@@ -299,9 +310,10 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 10. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
 11. Open een project en test **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
 12. Maak op `#/profiel` een account met naam en wachtwoord, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**. Controleer dat de chatknop verschijnt zodra je ingelogd bent.
-13. Open **📲 Installeer als app** en controleer de uitleg en de knop **App bijwerken**. In DevTools → Application moet de service worker actief zijn. Bij een nieuwe versie moet de app zichzelf bijwerken.
-14. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
-15. Test op een smal scherm en wissel tussen licht en donker thema. Controleer dat er geen horizontale scrollbalk is.
+13. Open `#/eigenaar`, ontgrendel met de eigenaarscode en controleer het aantal profielen, de mededeling en **Alles downloaden**.
+14. Open **📲 Installeer als app** en controleer de uitleg. In DevTools → Application moet de service worker actief zijn. Bij een nieuwe versie moet de app zichzelf automatisch bijwerken.
+15. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
+16. Test op een smal scherm en wissel tussen licht en donker thema. Controleer dat er geen horizontale scrollbalk is.
 
 ## Deployen naar Render
 

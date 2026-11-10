@@ -89,13 +89,6 @@
       </nav>
 
       <div class="header-tools">
-        <button class="icon-btn chat-icon" id="chat-header" type="button" data-action="open-ai" aria-label="Chat met EasyCoach" title="Chat met EasyCoach" hidden>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.9 9.9 0 0 1-4.2-.9L3 21l1.9-4.6A8.4 8.4 0 1 1 21 11.5Z"></path>
-            <path d="M8 10h8"></path>
-            <path d="M8 14h5"></path>
-          </svg>
-        </button>
         <a class="icon-btn profile-icon" href="#/profiel" aria-label="Mijn profiel" title="Mijn profiel">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="8" r="4"></circle>
@@ -131,6 +124,14 @@
     <div class="footer-inner">
       <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
       <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-trust">
+        <span class="trust-dot" aria-hidden="true"></span>
+        <span id="footer-security">Beveiligde verbinding</span>
+        <span aria-hidden="true">·</span>
+        <span>Geen advertenties of trackers</span>
+        <span aria-hidden="true">·</span>
+        <span>Je gegevens blijven op dit apparaat</span>
+      </p>
       <p class="footer-actions">
         <a class="link-btn" href="projecten/">📚 Alle projecten</a>
         <span aria-hidden="true">·</span>
@@ -147,6 +148,8 @@
         <a class="link-btn" href="contact/">✉ Contact</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="doneren/">♥ Doneren</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="#/eigenaar">🔑 Beheer</a>
         <span aria-hidden="true" id="donate-footer-sep" hidden>·</span>
         <button class="link-btn" id="donate-footer" type="button" data-action="open-donate" hidden>♥ Steun EasyCodey</button>
       </p>
@@ -364,7 +367,7 @@
         <span class="input-help-icon" aria-hidden="true">⌨</span>
         <p>
           <strong>Moet je iets typen?</strong> Sommige projecten vragen om invoer. Er verschijnt dan
-          <strong>bovenaan je scherm</strong> een venster met een tekstvak (met drie puntjes).
+          <strong>bovenaan je scherm</strong> een venster met de vraag van het programma en een tekstvak.
           Typ je antwoord daar en druk op <kbd>Enter</kbd>. Zonder antwoord blijft het programma wachten.
         </p>
       </div>
@@ -409,6 +412,13 @@
         Zet EasyCodey op je computer of telefoon. De app krijgt een eigen icoon, opent in een eigen venster
         en werkt na de eerste keer ook offline. Je voortgang blijft gewoon bewaard.
       </p>
+      <div class="trust-strip" role="note">
+        <span class="trust-lock" aria-hidden="true">🔒</span>
+        <div>
+          <strong>Beveiligd en privé</strong>
+          <span>HTTPS-versleuteling, geen advertenties of trackers. Je voortgang en account blijven op dit apparaat.</span>
+        </div>
+      </div>
       <ol class="install-steps">
         <li>
           <strong>Chrome of Edge op de computer</strong>
@@ -431,18 +441,17 @@
       </p>
       <p class="install-note">
         EasyCodey controleert automatisch op updates en werkt zichzelf bij zodra je online bent.
-        Je voortgang en accounts blijven daarbij bewaard. Handmatig kan ook met
-        <strong>App bijwerken</strong>.
+        Je voortgang en accounts blijven daarbij bewaard. Je hoeft zelf niets te doen.
       </p>
       <p class="install-note">
-        Zie je een melding over een onveilige of oude versie? Installeer EasyCodey altijd via
-        <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong> en gebruik hieronder
-        <strong>App bijwerken</strong>. Dan wordt de nieuwste versie opnieuw opgehaald.
+        Installeer EasyCodey altijd via de beveiligde link
+        <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong>.
+        Heb je nog een oude app of snelkoppeling die een waarschuwing geeft? Verwijder die en installeer
+        opnieuw via de beveiligde link. <a href="installeren/#oude-app">Zo verwijder je een oude versie</a>.
       </p>
       <div class="modal-actions">
         <button class="btn brand" type="button" id="install-now" data-action="install-now" hidden>📲 Installeer nu</button>
         <a class="btn ghost" href="https://yousefabujarad2014-beep.github.io/easycodey/" target="_blank" rel="noopener">Open de website ↗</a>
-        <button class="btn ghost" type="button" data-action="refresh-app">↻ App bijwerken</button>
         <button class="btn ghost" type="button" data-action="close-install">Sluiten</button>
       </div>
     </div>

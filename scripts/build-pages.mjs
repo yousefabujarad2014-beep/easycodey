@@ -163,6 +163,14 @@ function footer(prefix) {
     <div class="footer-inner">
       <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
       <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-trust">
+        <span class="trust-dot" aria-hidden="true"></span>
+        <span id="footer-security">Beveiligde verbinding</span>
+        <span aria-hidden="true">·</span>
+        <span>Geen advertenties of trackers</span>
+        <span aria-hidden="true">·</span>
+        <span>Je gegevens blijven op dit apparaat</span>
+      </p>
       <p class="footer-actions">
         <a class="link-btn" href="${prefix}">🏠 Startpagina</a>
         <span aria-hidden="true">·</span>
@@ -175,6 +183,8 @@ function footer(prefix) {
         <a class="link-btn" href="${prefix}doneren/">♥ Doneren</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}contact/">✉ Contact</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}#/eigenaar">🔑 Beheer</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/programmeren">⌨ Programmeer zelf</a>
       </p>
@@ -199,6 +209,15 @@ const THEME_SCRIPT = `<script>
             localStorage.setItem("easycodey.v1", JSON.stringify(state));
           } catch (error) {}
         });
+      }
+
+      var security = document.getElementById("footer-security");
+      if (security) {
+        var secure = location.protocol === "https:";
+        security.textContent = secure ? "Beveiligde HTTPS-verbinding" : "Lokale ontwikkelversie";
+        security.title = secure
+          ? "Je verbinding met EasyCodey is versleuteld."
+          : "Je bekijkt de lokale versie. De live app gebruikt HTTPS.";
       }
 
       document.querySelectorAll("[data-copy-iban]").forEach(function (copyButton) {
@@ -359,7 +378,7 @@ function renderProjectPage(idea) {
             Je voortgang wordt lokaal in je browser bewaard.
             <br />
             <strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je
-            scherm een venster met een tekstvak (drie puntjes). Typ daar je antwoord en druk op
+            scherm een venster met de vraag en een tekstvak. Typ daar je antwoord en druk op
             <kbd>Enter</kbd>.
           </p>
         </div>
@@ -652,6 +671,40 @@ function renderInstallPage() {
       </section>
     </div>
 
+    <section class="panel install-section install-security" id="veiligheid">
+      <h2><span class="h2-num">✓</span> Veilig en privé</h2>
+      <p class="static-lead">
+        EasyCodey is gemaakt om veilig te voelen: een beveiligde verbinding, geen advertenties,
+        geen trackers en geen account op een server.
+      </p>
+      <div class="trust-grid">
+        <div class="trust-card">
+          <span class="trust-card-icon" aria-hidden="true">🔒</span>
+          <strong>HTTPS-versleuteling</strong>
+          <p>De live app werkt via een beveiligde HTTPS-verbinding. Je browser toont het slotje in de adresbalk.</p>
+        </div>
+        <div class="trust-card">
+          <span class="trust-card-icon" aria-hidden="true">📱</span>
+          <strong>Je gegevens blijven bij jou</strong>
+          <p>Voortgang, accounts en eigen projecten staan alleen in de opslag van je eigen browser. Er is geen database.</p>
+        </div>
+        <div class="trust-card">
+          <span class="trust-card-icon" aria-hidden="true">🚫</span>
+          <strong>Geen advertenties of trackers</strong>
+          <p>EasyCodey verkoopt niets en volgt je niet. Er zijn geen advertentienetwerken of analytics van derden.</p>
+        </div>
+        <div class="trust-card">
+          <span class="trust-card-icon" aria-hidden="true">🔄</span>
+          <strong>Automatische veilige updates</strong>
+          <p>De app controleert zelf op een nieuwe versie en werkt zich bij zodra je online bent.</p>
+        </div>
+      </div>
+      <p class="static-note">
+        Je wachtwoord houdt accounts op hetzelfde apparaat uit elkaar, maar is geen sterke beveiliging
+        tegen iemand die toegang heeft tot je toestel. Gebruik geen belangrijk wachtwoord.
+      </p>
+    </section>
+
     <section class="panel install-section">
       <h2><span class="h2-num">1</span> Android (Chrome)</h2>
       <ol class="install-steps">
@@ -758,7 +811,7 @@ function renderInstallPage() {
         <li>Gebruik Chrome, Edge of Safari. Firefox en in-app browsers ondersteunen installeren minder goed.</li>
         <li>Sluit incognito en open de site in een normaal tabblad.</li>
         <li>Installeer altijd via de beveiligde link <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong>, niet via een lokaal bestand of een oude snelkoppeling.</li>
-        <li>Zie je een melding over een onveilige of oude versie? Open de site online en gebruik <strong>App bijwerken</strong> in het installatievenster. De nieuwste versie wordt dan opnieuw opgehaald.</li>
+        <li>EasyCodey controleert zelf op updates en werkt zich automatisch bij zodra je online bent. Je hoeft niets te doen.</li>
         <li>Bezoek de site één keer online en wacht een paar seconden, zodat de service worker klaar is.</li>
         <li>Werk je browser bij via de Play Store of App Store en herstart hem.</li>
         <li>Je voortgang staat per apparaat en per browser. Maak een optioneel profiel voor meerdere gebruikers op hetzelfde apparaat, of gebruik een back-up om je voortgang te verhuizen.</li>
@@ -767,6 +820,40 @@ function renderInstallPage() {
         <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>
         <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
       </div>
+    </section>
+
+    <section class="panel install-section" id="oude-app">
+      <h2><span class="h2-num">!</span> Oude app of oude melding</h2>
+      <p class="static-lead">
+        Krijg je nog een waarschuwing over een oude versie? Dan wijst je oude snelkoppeling
+        of geïnstalleerde app nog naar een verouderd adres. Verwijder die en installeer opnieuw via de
+        beveiligde link.
+      </p>
+      <ol class="install-steps">
+        <li>
+          <strong>Verwijder de oude app</strong>
+          Houd het EasyCodey-icoon ingedrukt en kies <em>Verwijderen</em> (Android/iPhone) of ga op de
+          computer naar <em>Instellingen → Apps → EasyCodey → Verwijderen</em>.
+        </li>
+        <li>
+          <strong>Wis de oude sitegegevens</strong>
+          Chrome: <em>Instellingen → Privacy en beveiliging → Site-instellingen → Alle sites → EasyCodey
+          → Gegevens wissen</em>. Safari: <em>Instellingen → Safari → Geavanceerd → Websitegegevens</em>.
+        </li>
+        <li>
+          <strong>Open de beveiligde link</strong>
+          Ga naar <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong> en controleer dat
+          je een slotje ziet.
+        </li>
+        <li>
+          <strong>Installeer opnieuw</strong>
+          Chrome/Edge: menu ⋮ → <em>App installeren</em>. iPhone: <em>Deel → Zet op beginscherm</em>.
+        </li>
+      </ol>
+      <p class="static-note">
+        Gebruik altijd <strong>https</strong> en de slash aan het einde. Open EasyCodey niet als los
+        bestand en gebruik geen oude bladwijzer met <code>http://</code>.
+      </p>
     </section>
   </main>
 

@@ -79,7 +79,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Actiebalk met **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
 - **Speel dit idee** voert het volledige project meteen uit in het Python-speelveld.
 - **Programmeer dit idee** opent de editor met alle stappen als één programma, met commentaar per stap.
-- **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm (het tekstvak met de drie puntjes) en daarna op **Enter** drukt.
+- **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm, waarin ook de **vraag van het programma** staat, en daarna op **Enter** drukt.
 - Dezelfde uitleg staat op elke vaste projectpagina en in het Python-speelveld.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
 
@@ -99,7 +99,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Optioneel account (`#/profiel`)
 - Een account is **optioneel**; zonder account werkt EasyCodey gewoon als gast.
-- Snel aanmelden zoals bij Kahoot: een naam en een wachtwoord van 4 tot 64 tekens, geen e-mail.
+- Snel aanmelden zoals bij Kahoot: een naam en een wachtwoord van 4 tot 64 tekens.
+- Een e-mailadres of telefoonnummer is **optioneel**; het blijft lokaal en wordt nooit verstuurd.
 - Inloggen op naam + wachtwoord, met **Toon/Verberg** voor het wachtwoordveld; uitloggen en een account verwijderen.
 - Elk account heeft eigen voortgang, eigen projecten en eigen editor-code via `easycodey.v1.profile.<id>`.
 - Bij het aanmaken kun je de huidige gastvoortgang meenemen.
@@ -108,12 +109,22 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De header heeft een **👤-icoon** en de footer een link **Mijn profiel**.
 - Duidelijke uitleg dat accounts alleen op dit apparaat staan en dat het wachtwoord geen sterke beveiliging is.
 
+### Eigenaarspaneel (`#/eigenaar`)
+- Alleen bereikbaar met de eigenaarscode; de ontgrendeling geldt voor de sessie.
+- Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeën.
+- Profielentabel met naam, optioneel contact, aanmaakdatum, laatste activiteit en voortgang.
+- **Voortgang wissen** en **Verwijderen** per profiel, met bevestiging.
+- Mededeling opslaan/wissen; gebruikers zien die bovenaan de app en kunnen hem sluiten.
+- **Alles downloaden** exporteert alle lokale profielen en hun data als JSON.
+- Wachtwoorden zijn nooit zichtbaar. Er is geen server: alleen dit apparaat.
+
 ### Chatknop na inloggen
-- Zodra een account actief is, verschijnt een chatknop in de header, een link in de footer en een zwevende knop rechtsonder.
+- Zodra een account actief is, verschijnt een link in de footer en een zwevende knop rechtsonder.
 - Op `#/profiel` staat een grote **Chat met EasyCoach**-kaart.
 - De knop werkt op Android en op de laptop en opent het bestaande AI-paneel.
 - De begroeting en het gebruikersavatar gebruiken de naam en initiaal van het actieve account.
 - Zonder actief account blijven alle chatknoppen verborgen.
+- De header heeft **geen** tweede chatknop: dat voorkomt dubbele knoppen en houdt de navigatie rustig.
 
 ### AI-coach EasyCoach
 - Zijpaneel met streaming antwoorden.
@@ -142,7 +153,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De runtime wordt pas geladen als iemand het speelveld opent en op **Uitvoeren** klikt.
 - Zes voorbeelden: hallo wereld, rekenen, loops, lijsten, functies en "Raad het getal" zonder `input()`.
 - Uitvoer en foutmeldingen verschijnen direct in het paneel.
-- `input()` toont bovenaan je scherm een venster met een tekstvak (met de drie puntjes). De statusregel zegt **“Typ je antwoord in het venster bovenaan…”**.
+- `input()` toont bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. De statusregel zegt **“Typ je antwoord in het venster bovenaan…”**.
 - Bij het speelveld, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
 - Geen code of uitvoer gaat naar de server.
 - Bij een netwerkfout verschijnt een duidelijke melding; de rest van de site blijft werken.
@@ -163,8 +174,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
 - `sw.js` bewaart de app-shell (34 bestanden) bij de eerste installatie.
 - **Network-first** voor navigatie én same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
-- De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`) en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
-- **↻ App bijwerken** in het installatievenster verwijdert de oude service worker en caches en herlaadt de nieuwste versie.
+- De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`), bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
+- Er is **geen handmatige updateknop** meer: de app werkt zichzelf volledig automatisch bij.
 - HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Het installatievenster en de installatiepagina leggen uit dat je altijd de beveiligde live-link moet gebruiken.
 - De Python-runtime en lettertypen komen in een aparte runtime-cache, zodat Python na de eerste keer offline werkt.
 - `offline.html` verschijnt als een pagina niet in de cache staat.
@@ -241,7 +252,9 @@ FLL/
 ├── EINDRAPPORT.md             Overzicht van de oplevering en testresultaten
 ├── PUBLICATIE.md              Stap-voor-stap publicatie op GitHub en Render
 ├── GOOGLE.md                  Openbaar maken en laten indexeren door Google
-└── start-easycodey.bat        Windows-startscript
+├── EasyCodey.url              Snelkoppeling naar de beveiligde live-app
+├── start-easycodey.bat        Opent de beveiligde live-app (lokaal met `local`)
+└── start-easycodey-local.bat  Start de lokale ontwikkelserver
 ```
 
 ---
@@ -289,7 +302,8 @@ FLL/
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | ✅ 34 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | ✅ 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
-| Nieuwe flows lokaal | ✅ 27/27 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates en HTTPS |
+| Nieuwe flows lokaal | ✅ 33/33 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS en eigenaarspaneel |
+| Invoer-pop-up met de echte vraag | ✅ 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | ✅ `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
 | Vaste pagina's lokaal | ✅ 70/70 checks geslaagd |
@@ -300,7 +314,7 @@ FLL/
 | Speel dit idee vanaf vaste pagina | ✅ app opent met `?play=1`, volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
-| Installatiepagina `/installeren/` | ✅ 6 secties, 3 Android-stappen, eigen titel en canonical |
+| Installatiepagina `/installeren/` | ✅ 8 secties, 3 Android-stappen, eigen titel en canonical |
 | QR-code op installatiepagina | ✅ laadt als SVG en is zichtbaar op mobiel |
 | Installatiepagina mobiel | ✅ geen horizontale overflow, één kolom |
 | Contactpagina `/contact/` | ✅ telefoon/WhatsApp, e-mail, eigen titel, canonical en JSON-LD |
@@ -369,7 +383,7 @@ Open daarna **http://localhost:4173**.
 
 > Open de site via de server, niet via `file://`. De site gebruikt ES-modules; die werken niet als je `index.html` direct opent.
 
-Op Windows kan ook `start-easycodey.bat` worden gebruikt.
+Op Windows opent `start-easycodey.bat` standaard de beveiligde live-app. Gebruik `start-easycodey.bat local` of `start-easycodey-local.bat` voor de lokale ontwikkelversie.
 
 Datacontrole en pagina's genereren:
 
@@ -484,10 +498,11 @@ De site staat live:
 | Windows-snelkoppelingen | ✅ bureaublad + startmenu |
 | Python-speelveld op de live site | ✅ |
 | Programmeer-editor op de live site | ✅ |
-| Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **App bijwerken** |
+| Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **volledig automatische updates** |
 | Chique huisstijl + logo | ✅ ivoor/diepgroen/goud en eigen monogram |
-| Optionele profielen + back-up | ✅ `#/profiel`, lokale profielen en JSON-back-up |
-| Invoerhulp bij `input()` | ✅ in speelveld en op projectpagina's |
+| Optionele profielen + back-up | ✅ `#/profiel`, lokale profielen, optioneel contact en JSON-back-up |
+| Eigenaarspaneel | ✅ `#/eigenaar`, lokale statistieken, mededeling en download |
+| Invoerhulp bij `input()` | ✅ de vraag en het tekstvak verschijnen in het venster bovenaan |
 | 161 vaste projectpagina's + overzicht | ✅ `/idee/<id>/` en `/projecten/` |
 | Installatiepagina met QR-code | ✅ `/installeren/` |
 | Contactpagina | ✅ `/contact/` met telefoon/WhatsApp en e-mail |
@@ -514,7 +529,7 @@ Wat optioneel nog kan:
 - De rate limiter houdt tellers in het geheugen; na een herstart begint de telling opnieuw.
 - Er is geen automatische testrunner; `npm run check` controleert de data en de app-bestanden, niet de UI.
 - Het Python-speelveld en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
-- `input()` opent een venster bovenaan het scherm met een tekstvak. Een oneindige loop stopt pas als je het tabblad of venster sluit.
+- `input()` opent een venster bovenaan het scherm met de **vraag van het programma** en een tekstvak. Een oneindige loop stopt pas als je het tabblad of venster sluit.
 - Editor-code en profielen staan per browser/apparaat in `localStorage`; er is geen account op een server of automatische synchronisatie.
 - De geïnstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.
 - Offline werkt alles behalve de online AI-coach en doneren; de offline coach blijft beschikbaar.

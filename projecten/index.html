@@ -2284,6 +2284,14 @@
     <div class="footer-inner">
       <p><strong>EasyCodey</strong> — leren door te bouwen. Geen account, geen reclame.</p>
       <p class="muted">Je voortgang en eigen projecten worden lokaal in je browser opgeslagen.</p>
+      <p class="footer-trust">
+        <span class="trust-dot" aria-hidden="true"></span>
+        <span id="footer-security">Beveiligde verbinding</span>
+        <span aria-hidden="true">·</span>
+        <span>Geen advertenties of trackers</span>
+        <span aria-hidden="true">·</span>
+        <span>Je gegevens blijven op dit apparaat</span>
+      </p>
       <p class="footer-actions">
         <a class="link-btn" href="../">🏠 Startpagina</a>
         <span aria-hidden="true">·</span>
@@ -2296,6 +2304,8 @@
         <a class="link-btn" href="../doneren/">♥ Doneren</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="../contact/">✉ Contact</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../#/eigenaar">🔑 Beheer</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="../#/programmeren">⌨ Programmeer zelf</a>
       </p>
@@ -2318,6 +2328,15 @@
             localStorage.setItem("easycodey.v1", JSON.stringify(state));
           } catch (error) {}
         });
+      }
+
+      var security = document.getElementById("footer-security");
+      if (security) {
+        var secure = location.protocol === "https:";
+        security.textContent = secure ? "Beveiligde HTTPS-verbinding" : "Lokale ontwikkelversie";
+        security.title = secure
+          ? "Je verbinding met EasyCodey is versleuteld."
+          : "Je bekijkt de lokale versie. De live app gebruikt HTTPS.";
       }
 
       document.querySelectorAll("[data-copy-iban]").forEach(function (copyButton) {

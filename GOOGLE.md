@@ -110,7 +110,7 @@ Dit genereert de 161 pagina's, het overzicht, de installatie-, contact- en donee
 ### Let op
 
 - De canonical gebruikt de productie-URL `https://yousefabujarad2014-beep.github.io/easycodey`. Bij een eigen domein pas je `SITE` aan in `scripts/build-pages.mjs` en `SITE_URL` in `server.js`.
-- De service worker-cache (`VERSION` in `sw.js`, nu `easycodey-v7`) moet omhoog bij grote wijzigingen. Code en styles worden network-first opgehaald en de app controleert automatisch op updates, zodat terugkerende bezoekers niet achter een oude versie blijven hangen.
+- De service worker-cache (`VERSION` in `sw.js`, nu `easycodey-v8`) moet omhoog bij grote wijzigingen. Code en styles worden network-first opgehaald en de app controleert automatisch op updates, zodat terugkerende bezoekers niet achter een oude versie blijven hangen.
 
 ---
 

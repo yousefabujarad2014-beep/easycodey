@@ -40,7 +40,7 @@ Je kunt ook op het **📲-icoon** in de header tikken. Verscheen de knop **Insta
 - Sluit incognito en open de site in een normaal tabblad.
 - Bezoek de site één keer online en wacht een paar seconden, zodat de service worker klaar is.
 - Installeer altijd via de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**, niet via een lokaal bestand of een oude snelkoppeling.
-- Zie je een melding over een **onveilige of oude versie**? Open de site online en gebruik **App bijwerken** in het installatievenster. EasyCodey haalt dan de nieuwste code en styles op.
+- Krijg je een melding over een **oude versie**? Open de site online via de beveiligde HTTPS-link. EasyCodey haalt dan automatisch de nieuwste code en styles op. Zie je nog een oude app of snelkoppeling? Verwijder die en installeer opnieuw via de HTTPS-link; zie `#oude-app` op `/installeren/`.
 - Werk Chrome bij via de Play Store en herstart de browser.
 - Als laatste redmiddel: menu ⋮ → **Toevoegen aan startscherm**. Je krijgt dan een snelkoppeling die ook zonder adresbalk opent.
 
@@ -81,19 +81,11 @@ EasyCodey haalt code, styles en data altijd **eerst van het netwerk** en bewaart
 - zodra je terugkeert naar de app (tabblad of venster wordt weer zichtbaar);
 - zodra je toestel weer online komt.
 
-Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. Zo staat de app op Android en op je laptop steeds op de nieuwste versie.
+Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. Zo staat de app op Android en op je laptop steeds op de nieuwste versie. Er is geen handmatige updateknop meer nodig; je hoeft zelf niets te doen.
 
-Zo werk je handmatig bij:
+Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-1. Open de app of de website.
-2. Open **📲 Installeer als app** (of **Installeren** in de footer).
-3. Klik op **↻ App bijwerken**.
-
-EasyCodey verwijdert dan de oude service worker en caches en herlaadt de nieuwste versie. Je voortgang en accounts blijven bewaard.
-
-Zie je een melding over een **onveilige of oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand.
-
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v6` naar `easycodey-v7`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v7` naar `easycodey-v8`). De oude cache wordt dan bij de volgende start verwijderd.
 
 ---
 
@@ -138,7 +130,7 @@ Het script start zelf een tijdelijke headless Chrome. Staat Chrome ergens anders
 
 - **Chrome DevTools → Application → Manifest**: naam, iconen en start-URL moeten groen zijn.
 - **Application → Service Workers**: status *activated and is running*.
-- **Application → Cache Storage**: `easycodey-v7-shell` en `easycodey-v7-runtime`.
+- **Application → Cache Storage**: `easycodey-v8-shell` en `easycodey-v8-runtime`.
 - **Lighthouse → Progressive Web App**: controleert installeerbaarheid en offline werking.
 - `npm run check` controleert het manifest, de service worker, alle offline-bestanden, de 161 vaste pagina's en de sitemap.
 
@@ -151,12 +143,39 @@ Het script start zelf een tijdelijke headless Chrome. Staat Chrome ergens anders
 Een account is **optioneel**. Het is handig als meerdere mensen hetzelfde apparaat gebruiken: iedereen krijgt eigen voortgang, eigen projecten en eigen editor-code. Aanmelden gaat snel, zoals bij Kahoot.
 
 1. Open `#/profiel` via het **👤-icoon** in de header of de link in de footer.
-2. Kies een naam en een wachtwoord van minstens 4 tekens. Geen e-mail nodig.
+2. Kies een naam en een wachtwoord van minstens 4 tekens. Een e-mailadres of telefoonnummer is **optioneel**; het blijft lokaal op dit apparaat en wordt nooit verstuurd.
 3. Vink **Neem mijn huidige voortgang mee** aan als je bestaande gastvoortgang wilt overnemen.
 4. Inloggen doe je met je naam en wachtwoord. Met **Toon/Verberg** kun je je wachtwoord even bekijken.
 
 Accounts staan alleen op dit apparaat in `localStorage`. Het wachtwoord houdt accounts uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat. Er is geen account op een server. Oude accounts met een PIN blijven werken: de PIN wordt automatisch als wachtwoord gelezen.
 
-Zodra je bent ingelogd, verschijnt er een **chatknop** in de header, in de footer en als zwevende knop rechtsonder. Op je profielpagina staat bovendien een grote **Chat met EasyCoach**-kaart. De knop werkt op Android en op je laptop.
+Zodra je bent ingelogd, verschijnt er een **chatknop** in de footer en als zwevende knop rechtsonder. Op je profielpagina staat bovendien een grote **Chat met EasyCoach**-kaart. De knop werkt op Android en op je laptop. De header heeft geen tweede chatknop: zo blijft het overzichtelijk.
 
 Met **Back-up downloaden** bewaar je voortgang, eigen projecten en editor-code als JSON-bestand. Met **Back-up herstellen** zet je dat bestand terug, bijvoorbeeld op een nieuwe telefoon of na het wissen van je browsergegevens.
+
+### Eigenaarspaneel
+
+Open `#/eigenaar` (link **🔑 Beheer** in de footer) en vul de eigenaarscode in. Je ziet dan:
+
+- hoeveel profielen er op **dit apparaat** zijn gemaakt;
+- de naam, het optionele contact, de aanmaakdatum, de laatste activiteit en de voortgang per profiel;
+- knoppen om de voortgang van een profiel te wissen of een lokaal account te verwijderen;
+- een mededeling die bovenaan de app verschijnt;
+- **Alles downloaden** als JSON met alle lokale profielen en hun voortgang.
+
+Het paneel is een lokale toegangspoort, geen serverbeveiliging. Er is geen database: andere telefoons en computers hebben hun eigen lokale profielen. Wachtwoorden zijn nooit zichtbaar.
+
+---
+
+## 7. Veilig en privé
+
+EasyCodey is bewust rustig en veilig opgezet:
+
+- **HTTPS:** de live app werkt via `https://yousefabujarad2014-beep.github.io/easycodey/` met een geldig certificaat, HSTS en een automatische doorverwijzing van HTTP naar HTTPS.
+- **Lokaal:** voortgang, accounts en eigen projecten staan alleen in de opslag van je eigen browser. Er is geen database en geen server die je gegevens bewaart.
+- **Geen advertenties of trackers:** er zijn geen advertentienetwerken en geen analytics van derden.
+- **Automatische updates:** de app controleert bij de start, elke 15 minuten, bij terugkeer naar de app, bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch geactiveerd.
+- **Geen sterke beveiliging:** het wachtwoord houdt accounts op hetzelfde apparaat uit elkaar. Gebruik geen belangrijk wachtwoord, want iemand met toegang tot je toestel kan bij de lokale opslag.
+- **Oude app verwijderen:** krijg je nog een melding over een oude versie, verwijder dan de oude app of snelkoppeling en installeer opnieuw via de HTTPS-link. Stap voor stap staat op `/installeren/#oude-app`.
+
+Op de site staat een beveiligingsbadge in de footer. Op HTTPS toont die **Beveiligde HTTPS-verbinding**; lokaal toont die **Lokale ontwikkelversie**.

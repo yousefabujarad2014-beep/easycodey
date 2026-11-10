@@ -26,6 +26,8 @@ import {
 } from "./js/ai.js";
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
+const OWNER_CODE_HASH = "j0qwup";
+const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 
 const app = document.querySelector("#app");
 const aiPanel = document.querySelector("#ai-panel");
@@ -295,6 +297,8 @@ function navigate(hash) {
 
 function route() {
   syncProfileChatUI();
+  syncSecurityBadge();
+  showOwnerNotice();
   const { segments, params } = parseRoute();
   currentContext = null;
   renderAIContext();
@@ -337,6 +341,12 @@ function route() {
   if (segments[0] === "profiel") {
     setNav("");
     renderProfile();
+    return;
+  }
+
+  if (segments[0] === "eigenaar") {
+    setNav("");
+    renderOwner();
     return;
   }
 
@@ -477,7 +487,11 @@ function renderProfile() {
               <button class="password-toggle" type="button" data-action="toggle-password" data-target="profile-register-password" aria-label="Toon wachtwoord">Toon</button>
             </span>
           </label>
-          <p class="field-hint">Cijfers, letters of een mix. Geen e-mail nodig.</p>
+          <label class="field">
+            <span>Contact <span class="field-optional">optioneel</span></span>
+            <input id="profile-register-contact" type="text" maxlength="120" autocomplete="email" placeholder="E-mail of telefoonnummer" />
+          </label>
+          <p class="field-hint">Cijfers, letters of een mix. Je contact blijft lokaal op dit apparaat en wordt nooit verstuurd.</p>
           <label class="profile-check">
             <input id="profile-register-copy" type="checkbox" checked />
             <span>Neem mijn huidige voortgang mee</span>
@@ -536,6 +550,227 @@ function renderProfile() {
   document.title = "Mijn profiel — EasyCodey";
 }
 
+/* ------------------------------ eigenaar / beheer ------------------------------ */
+
+function ownerHash(value) {
+  const text = `easycodey-owner:${value}`;
+  let hash = 2166136261;
+  for (let index = 0; index < text.length; index += 1) {
+    hash ^= text.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+function isOwnerUnlocked() {
+  try {
+    return sessionStorage.getItem(OWNER_SESSION_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setOwnerUnlocked(value) {
+  try {
+    if (value) sessionStorage.setItem(OWNER_SESSION_KEY, "1");
+    else sessionStorage.removeItem(OWNER_SESSION_KEY);
+  } catch {
+    // Zonder sessieopslag blijft het paneel tot de volgende klik ontgrendeld.
+  }
+}
+
+function ownerDate(value) {
+  if (!value) return "—";
+  try {
+    return new Date(value).toLocaleString("nl-BE", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  } catch {
+    return "—";
+  }
+}
+
+function renderOwner() {
+  if (!isOwnerUnlocked()) {
+    app.innerHTML = `
+      <section class="owner-gate">
+        <p class="eyebrow">Beheer</p>
+        <h1>Alleen voor de eigenaar</h1>
+        <p class="static-lead">
+          Dit paneel toont de lokale profielen van dit apparaat. Vul de eigenaarscode in om verder te gaan.
+        </p>
+        <form class="owner-unlock" id="owner-unlock-form">
+          <label class="field">
+            <span>Eigenaarscode</span>
+            <input id="owner-code" type="password" autocomplete="off" placeholder="Voer je code in" />
+          </label>
+          <p class="form-error" id="owner-unlock-error" role="alert" hidden></p>
+          <button class="btn brand btn-block" type="submit">Ontgrendel beheer</button>
+        </form>
+        <p class="static-note">
+          Let op: dit is een lokale toegangspoort, geen serverbeveiliging. Deel je code niet.
+        </p>
+      </section>
+    `;
+    document.title = "Beheer — EasyCodey";
+    return;
+  }
+
+  const profiles = store.getOwnerProfiles();
+  const notice = store.getOwnerNotice();
+  const totals = profiles.reduce(
+    (sum, profile) => ({
+      started: sum.started + profile.projectsStarted,
+      completed: sum.completed + profile.projectsCompleted,
+      steps: sum.steps + profile.stepsDone,
+      ideas: sum.ideas + profile.customIdeas
+    }),
+    { started: 0, completed: 0, steps: 0, ideas: 0 }
+  );
+
+  const rows = profiles.length
+    ? profiles
+        .map(
+          (profile) => `<tr>
+            <td>
+              <strong>${e(profile.name)}</strong>
+              <span class="owner-sub">${profile.contact ? e(profile.contact) : "Geen contact opgegeven"}</span>
+            </td>
+            <td>${e(ownerDate(profile.createdAt))}</td>
+            <td>${e(ownerDate(profile.lastLoginAt))}</td>
+            <td>${profile.projectsStarted} gestart · ${profile.projectsCompleted} af</td>
+            <td class="owner-row-actions">
+              <button class="btn ghost tiny" type="button" data-action="owner-reset" data-profile-id="${e(profile.id)}">Voortgang wissen</button>
+              <button class="btn ghost tiny owner-danger" type="button" data-action="owner-delete" data-profile-id="${e(profile.id)}">Verwijderen</button>
+            </td>
+          </tr>`
+        )
+        .join("")
+    : `<tr><td colspan="5" class="owner-empty">Nog geen profielen op dit apparaat.</td></tr>`;
+
+  app.innerHTML = `
+    <section class="owner-hero">
+      <div>
+        <p class="eyebrow">Beheer</p>
+        <h1>Eigenaarsoverzicht</h1>
+        <p class="static-lead">
+          Je ziet hier de profielen die op <strong>dit apparaat</strong> zijn gemaakt. Er is geen server:
+          andere telefoons en computers hebben hun eigen lokale opslag.
+        </p>
+      </div>
+      <button class="btn ghost" type="button" data-action="owner-lock">Vergrendelen</button>
+    </section>
+
+    <div class="owner-stats">
+      <div class="owner-stat"><strong>${profiles.length}</strong><span>profielen op dit apparaat</span></div>
+      <div class="owner-stat"><strong>${totals.started}</strong><span>projecten gestart</span></div>
+      <div class="owner-stat"><strong>${totals.completed}</strong><span>projecten afgerond</span></div>
+      <div class="owner-stat"><strong>${totals.steps}</strong><span>stappen gedaan</span></div>
+      <div class="owner-stat"><strong>${totals.ideas}</strong><span>eigen ideeën</span></div>
+    </div>
+
+    <section class="panel owner-panel">
+      <h2>Profielen</h2>
+      <div class="owner-table-wrap">
+        <table class="owner-table">
+          <thead>
+            <tr><th>Naam en contact</th><th>Gemaakt</th><th>Laatst actief</th><th>Voortgang</th><th>Acties</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <p class="static-note">
+        Wachtwoorden zijn nooit zichtbaar. Contactgegevens worden alleen lokaal bewaard en niet verstuurd.
+      </p>
+    </section>
+
+    <section class="panel owner-panel">
+      <h2>Mededeling voor gebruikers</h2>
+      <p class="profile-text">
+        Deze tekst verschijnt bovenaan de app op dit apparaat. Handig voor een korte uitleg, een
+        pauzemelding of een mededeling over onderhoud.
+      </p>
+      <form class="owner-notice-form" id="owner-notice-form">
+        <label class="field">
+          <span>Bericht</span>
+          <textarea id="owner-notice-text" rows="3" maxlength="280" placeholder="Bijv. Vandaag werken we aan de nieuwe projecten.">${e(notice.text)}</textarea>
+        </label>
+        <div class="profile-actions">
+          <button class="btn brand" type="submit">Mededeling opslaan</button>
+          <button class="btn ghost" type="button" data-action="owner-notice-clear">Wissen</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel owner-panel">
+      <h2>Gegevens van dit apparaat</h2>
+      <p class="profile-text">
+        Download een bestand met alle lokale profielen en hun voortgang. Bewaar het veilig; het bevat
+        dezelfde gegevens als de back-up per profiel.
+      </p>
+      <div class="profile-actions">
+        <button class="btn ghost" type="button" data-action="owner-export">⤓ Alles downloaden</button>
+      </div>
+      <p class="static-note">
+        Wil je álle klanten van álle toestellen zien? Dat kan alleen met een echte server en database.
+        EasyCodey is bewust offline en privé: er wordt niets naar een server gestuurd.
+      </p>
+    </section>
+  `;
+
+  document.title = "Beheer — EasyCodey";
+}
+
+function handleOwnerUnlock() {
+  const code = document.querySelector("#owner-code")?.value || "";
+  if (ownerHash(code) !== OWNER_CODE_HASH) {
+    showProfileError("owner-unlock-error", "Die code klopt niet.");
+    return;
+  }
+  setOwnerUnlocked(true);
+  renderOwner();
+}
+
+function showOwnerNotice() {
+  const notice = store.getOwnerNotice();
+  const existing = document.querySelector("#owner-notice-banner");
+  if (existing) existing.remove();
+  if (!notice.text.trim()) return;
+
+  let dismissed = "";
+  try {
+    dismissed = localStorage.getItem("easycodey.owner.notice.dismissed.v1") || "";
+  } catch {
+    dismissed = "";
+  }
+  if (dismissed === String(notice.updatedAt)) return;
+
+  const banner = document.createElement("div");
+  banner.id = "owner-notice-banner";
+  banner.className = "owner-notice-banner";
+  banner.setAttribute("role", "status");
+  banner.innerHTML = `<span>${e(notice.text)}</span><button type="button" aria-label="Mededeling sluiten" data-action="owner-notice-dismiss">✕</button>`;
+  app.before(banner);
+}
+
+function ownerExportAll() {
+  const payload = store.exportAllLocalData();
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `easycodey-lokaal-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+  toast("Lokale gegevens gedownload.");
+}
+
 function showProfileError(id, message) {
   const element = document.getElementById(id);
   if (!element) return;
@@ -547,21 +782,15 @@ function syncProfileChatUI() {
   const active = store.getActiveProfile();
   const name = active ? active.name : "";
   const show = Boolean(active);
-  const headerChat = document.querySelector("#chat-header");
   const fab = document.querySelector("#chat-fab");
   const footerChat = document.querySelector("#chat-footer");
   const footerSep = document.querySelector("#chat-footer-sep");
   const dot = document.querySelector("#profile-dot");
 
-  [headerChat, fab, footerChat, footerSep, dot].forEach((element) => {
+  [fab, footerChat, footerSep, dot].forEach((element) => {
     if (element) element.hidden = !show;
   });
 
-  if (headerChat) {
-    const label = show ? `Chat met EasyCoach — ${name}` : "Chat met EasyCoach";
-    headerChat.setAttribute("title", label);
-    headerChat.setAttribute("aria-label", label);
-  }
   if (fab) {
     fab.setAttribute("aria-label", show ? `Chat met EasyCoach — ${name}` : "Chat met EasyCoach");
   }
@@ -569,6 +798,19 @@ function syncProfileChatUI() {
   const profileLink = document.querySelector('.header-tools a[href$="#/profiel"]');
   if (profileLink) {
     profileLink.setAttribute("title", show ? `Mijn profiel — ${name}` : "Mijn profiel");
+  }
+}
+
+function syncSecurityBadge() {
+  const secure = window.location.protocol === "https:";
+  document.body.dataset.secure = secure ? "true" : "false";
+
+  const footer = document.querySelector("#footer-security");
+  if (footer) {
+    footer.textContent = secure ? "Beveiligde HTTPS-verbinding" : "Lokale ontwikkelversie";
+    footer.title = secure
+      ? "Je verbinding met EasyCodey is versleuteld."
+      : "Je bekijkt de lokale versie. De live app gebruikt HTTPS.";
   }
 }
 
@@ -586,8 +828,9 @@ function handleProfileLogin() {
 function handleProfileRegister() {
   const name = document.querySelector("#profile-register-name")?.value || "";
   const password = document.querySelector("#profile-register-password")?.value || "";
+  const contact = document.querySelector("#profile-register-contact")?.value || "";
   const copyGuest = Boolean(document.querySelector("#profile-register-copy")?.checked);
-  const result = store.registerProfile(name, password, { copyGuest });
+  const result = store.registerProfile(name, password, { copyGuest, contact });
   if (!result.ok) {
     showProfileError("profile-register-error", result.error);
     return;
@@ -1011,7 +1254,7 @@ function renderDetail(id) {
     </div>
     <p class="input-help input-help-inline" role="note">
       <span class="input-help-icon" aria-hidden="true">⌨</span>
-      <span><strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je scherm een venster met een tekstvak (drie puntjes). Typ daar je antwoord en druk op <kbd>Enter</kbd>.</span>
+      <span><strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je scherm een venster met de vraag en een tekstvak. Typ daar je antwoord en druk op <kbd>Enter</kbd>.</span>
     </p>
 
     <div class="detail-grid">
@@ -1619,6 +1862,32 @@ function clearPlayground() {
   playgroundCode.focus();
 }
 
+function askInBrowser(question) {
+  const text = String(question || "").trim();
+  const message = text
+    ? `${text}\n\nTyp je antwoord en druk op Enter:`
+    : "Het programma vraagt om invoer.\n\nTyp je antwoord en druk op Enter:";
+  const value = window.prompt(message, "");
+  return value === null ? "" : value;
+}
+
+window.easyCodeyAsk = askInBrowser;
+
+const INPUT_OVERRIDE_PY = `
+import builtins as _builtins
+from js import window as _window
+
+def _easycodey_input(prompt=""):
+    answer = _window.easyCodeyAsk("" if prompt is None else str(prompt))
+    if answer is None:
+        return ""
+    return str(answer)
+
+_builtins.input = _easycodey_input
+`;
+
+let inputOverrideInstalled = false;
+
 async function executePython(code, append) {
   const pyodide = await loadPyodideRuntime();
   pyodideLoaded = true;
@@ -1628,12 +1897,16 @@ async function executePython(code, append) {
     stdin: () => {
       playgroundStatus.className = "playground-status busy";
       playgroundStatus.textContent = "Typ je antwoord in het venster bovenaan…";
-      const value = window.prompt("Typ hier je antwoord (in het tekstvak met de drie puntjes) en druk op Enter:");
+      const value = window.prompt("Het programma vraagt om invoer.\n\nTyp je antwoord en druk op Enter:");
       playgroundStatus.className = "playground-status busy";
       playgroundStatus.textContent = "Bezig.";
       return value === null ? "" : value;
     }
   });
+  if (!inputOverrideInstalled) {
+    await pyodide.runPythonAsync(INPUT_OVERRIDE_PY);
+    inputOverrideInstalled = true;
+  }
   await pyodide.runPythonAsync(code);
 }
 
@@ -1777,7 +2050,7 @@ function renderEditor(params) {
         <pre class="editor-output" id="editor-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
         <div class="editor-note">
           <p>Python draait via <strong>Pyodide</strong> in je browser. De eerste keer wordt ongeveer 10 MB geladen.</p>
-          <p><code>input()</code> opent een invoer-pop-up. Een oneindige loop stopt pas als je het tabblad sluit.</p>
+          <p><code>input()</code> opent een pop-up met de vraag van je programma. Typ je antwoord in dat venster en druk op Enter. Een oneindige loop stopt pas als je het tabblad sluit.</p>
         </div>
       </section>
     </div>
@@ -2155,7 +2428,6 @@ document.addEventListener("click", (event) => {
     if (action === "install-app") openInstall();
     if (action === "close-install") closeInstall();
     if (action === "install-now") installApp();
-    if (action === "refresh-app") refreshApp();
     if (action === "profile-logout") {
       store.logoutProfile();
       location.reload();
@@ -2192,6 +2464,44 @@ document.addEventListener("click", (event) => {
       location.reload();
     }
     if (action === "profile-backup") downloadBackup();
+    if (action === "owner-lock") {
+      setOwnerUnlocked(false);
+      renderOwner();
+    }
+    if (action === "owner-reset") {
+      const id = actionEl.dataset.profileId || "";
+      const profile = store.getOwnerProfiles().find((item) => item.id === id);
+      if (!profile) return;
+      if (!window.confirm(`Voortgang van "${profile.name}" wissen? Het account blijft bestaan.`)) return;
+      store.resetProfileProgress(id);
+      renderOwner();
+      toast("Voortgang gewist.");
+    }
+    if (action === "owner-delete") {
+      const id = actionEl.dataset.profileId || "";
+      const profile = store.getOwnerProfiles().find((item) => item.id === id);
+      if (!profile) return;
+      if (!window.confirm(`Account "${profile.name}" definitief verwijderen van dit apparaat?`)) return;
+      store.deleteProfileAsOwner(id);
+      renderOwner();
+      toast("Account verwijderd.");
+    }
+    if (action === "owner-export") ownerExportAll();
+    if (action === "owner-notice-clear") {
+      store.setOwnerNotice("");
+      renderOwner();
+      showOwnerNotice();
+      toast("Mededeling gewist.");
+    }
+    if (action === "owner-notice-dismiss") {
+      const notice = store.getOwnerNotice();
+      try {
+        localStorage.setItem("easycodey.owner.notice.dismissed.v1", String(notice.updatedAt));
+      } catch {
+        // Negeer.
+      }
+      actionEl.closest("#owner-notice-banner")?.remove();
+    }
     if (action === "profile-restore") {
       document.querySelector("#profile-restore-file")?.click();
     }
@@ -2376,6 +2686,18 @@ document.addEventListener("submit", (event) => {
     event.preventDefault();
     handleProfileRegister();
   }
+  if (event.target.id === "owner-unlock-form") {
+    event.preventDefault();
+    handleOwnerUnlock();
+  }
+  if (event.target.id === "owner-notice-form") {
+    event.preventDefault();
+    const text = document.querySelector("#owner-notice-text")?.value || "";
+    store.setOwnerNotice(text);
+    renderOwner();
+    showOwnerNotice();
+    toast("Mededeling opgeslagen.");
+  }
 });
 
 document.addEventListener("keydown", (event) => {
@@ -2514,28 +2836,12 @@ function registerServiceWorker() {
         if (document.visibilityState === "visible") checkForUpdate();
       });
       window.addEventListener("focus", checkForUpdate);
+      window.addEventListener("pageshow", checkForUpdate);
       window.addEventListener("online", checkForUpdate);
     })
     .catch(() => {
       // Zonder service worker blijft de site gewoon werken.
     });
-}
-
-async function refreshApp() {
-  toast("App wordt bijgewerkt…");
-  try {
-    if ("serviceWorker" in navigator) {
-      const registrations = await navigator.serviceWorker.getRegistrations();
-      await Promise.all(registrations.map((registration) => registration.unregister()));
-    }
-    if ("caches" in window) {
-      const keys = await caches.keys();
-      await Promise.all(keys.map((key) => caches.delete(key)));
-    }
-  } catch {
-    // Als opruimen niet lukt, herladen we alsnog.
-  }
-  window.location.reload();
 }
 
 function initPWA() {

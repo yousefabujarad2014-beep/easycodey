@@ -177,7 +177,8 @@ function readProfiles() {
               ? profile.pin
               : "",
         createdAt: Number(profile.createdAt) || Date.now(),
-        lastLoginAt: Number(profile.lastLoginAt) || 0
+        lastLoginAt: Number(profile.lastLoginAt) || 0,
+        contact: typeof profile.contact === "string" ? profile.contact.slice(0, 120) : ""
       }));
   } catch {
     return [];
@@ -218,6 +219,17 @@ function safeProfile(profile) {
     name: profile.name,
     createdAt: profile.createdAt,
     lastLoginAt: profile.lastLoginAt
+  };
+}
+
+function ownerProfile(profile) {
+  if (!profile) return null;
+  return {
+    id: profile.id,
+    name: profile.name,
+    createdAt: profile.createdAt,
+    lastLoginAt: profile.lastLoginAt,
+    contact: profile.contact || ""
   };
 }
 
@@ -265,10 +277,12 @@ export function registerProfile(name, password, options = {}) {
   }
 
   const guestData = options.copyGuest === false ? clone(DEFAULT_STATE) : readStateFromKey(STORAGE_KEY);
+  const contact = String(options.contact || "").trim().slice(0, 120);
   const profile = {
     id: `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
     name: cleanName,
     password: hashSecret(cleanPassword),
+    contact,
     createdAt: Date.now(),
     lastLoginAt: Date.now()
   };
@@ -535,4 +549,110 @@ export function exportCustomIdeas() {
     exportedAt: new Date().toISOString(),
     ideas: getCustomIdeas()
   };
+}
+
+/* ------------------------------ eigenaar / beheer ------------------------------
+   Deze functies werken alleen op dit apparaat. Er is geen server: de eigenaar
+   ziet dus uitsluitend de lokale profielen van deze browser. */
+
+export function getProfileCount() {
+  return profiles.length;
+}
+
+export function getOwnerProfiles() {
+  return profiles
+    .map((profile) => {
+      const data = readStateFromKey(stateKey(profile.id));
+      const progress = data.progress && typeof data.progress === "object" ? data.progress : {};
+      let stepsDone = 0;
+      let completed = 0;
+      for (const entry of Object.values(progress)) {
+        const steps = Array.isArray(entry?.steps) ? entry.steps.length : 0;
+        stepsDone += steps;
+        if (steps > 0) completed += 1;
+      }
+      return {
+        ...ownerProfile(profile),
+        projectsStarted: Object.keys(progress).length,
+        projectsCompleted: completed,
+        stepsDone,
+        customIdeas: Array.isArray(data.customIdeas) ? data.customIdeas.length : 0,
+        editorUpdatedAt: Number(data.editor?.updatedAt) || 0
+      };
+    })
+    .sort((a, b) => (b.lastLoginAt || b.createdAt) - (a.lastLoginAt || a.createdAt));
+}
+
+export function resetProfileProgress(id) {
+  const profile = profiles.find((item) => item.id === id);
+  if (!profile) return { ok: false, error: "Profiel niet gevonden." };
+  const data = readStateFromKey(stateKey(id));
+  data.progress = {};
+  data.editor = { code: "", projectId: "", updatedAt: 0 };
+  writeStateToKey(id, data);
+  if (id === activeProfileId) state = readState();
+  return { ok: true };
+}
+
+export function deleteProfileAsOwner(id) {
+  const profile = profiles.find((item) => item.id === id);
+  if (!profile) return { ok: false, error: "Profiel niet gevonden." };
+
+  profiles = profiles.filter((item) => item.id !== id);
+  saveProfiles();
+  try {
+    localStorage.removeItem(stateKey(id));
+  } catch {
+    // Negeer: het profiel is al uit de lijst verwijderd.
+  }
+  if (activeProfileId === id) {
+    activeProfileId = "";
+    try {
+      localStorage.removeItem(ACTIVE_PROFILE_KEY);
+    } catch {
+      // Negeer.
+    }
+  }
+  state = readState();
+  return { ok: true };
+}
+
+export function exportAllLocalData() {
+  return {
+    app: "EasyCodey",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    scope: "local-device",
+    profiles: profiles.map((profile) => ({
+      ...ownerProfile(profile),
+      data: readStateFromKey(stateKey(profile.id))
+    }))
+  };
+}
+
+const NOTICE_KEY = "easycodey.owner.notice.v1";
+
+export function getOwnerNotice() {
+  try {
+    const raw = localStorage.getItem(NOTICE_KEY);
+    if (!raw) return { text: "", updatedAt: 0 };
+    const parsed = JSON.parse(raw);
+    return {
+      text: typeof parsed.text === "string" ? parsed.text.slice(0, 280) : "",
+      updatedAt: Number(parsed.updatedAt) || 0
+    };
+  } catch {
+    return { text: "", updatedAt: 0 };
+  }
+}
+
+export function setOwnerNotice(text) {
+  const value = { text: String(text || "").slice(0, 280), updatedAt: Date.now() };
+  try {
+    if (value.text.trim()) localStorage.setItem(NOTICE_KEY, JSON.stringify(value));
+    else localStorage.removeItem(NOTICE_KEY);
+  } catch {
+    // Negeer: zonder opslag werkt de rest gewoon.
+  }
+  return value;
 }
