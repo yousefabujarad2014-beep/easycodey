@@ -1280,23 +1280,6 @@ function renderDetail(id) {
       </div>
     </header>
 
-    <div class="idea-actions" aria-label="Projectcode gebruiken">
-      <button class="btn brand" type="button" data-action="play-idea" data-idea-id="${e(
-        idea.id
-      )}">▶ Speel dit idee</button>
-      <button class="btn ghost" type="button" data-action="program-idea" data-idea-id="${e(
-        idea.id
-      )}">⌨ Programmeer dit idee</button>
-      <button class="btn ghost" type="button" data-action="download-idea" data-idea-id="${e(
-        idea.id
-      )}">⤓ Download .py</button>
-      <button class="btn ghost" type="button" data-action="copy-idea-code" data-idea-id="${e(
-        idea.id
-      )}">Kopieer alle code</button>
-      <span class="idea-actions-note">Speel het hele programma of open alle stappen in de editor. <a href="idee/${encodeURIComponent(
-        idea.id
-      )}/">Vaste projectpagina</a></span>
-    </div>
     <p class="input-help input-help-inline" role="note">
       <span class="input-help-icon" aria-hidden="true">⌨</span>
       <span><strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je scherm een venster met de vraag en een tekstvak. Typ daar je antwoord en druk op <kbd>Enter</kbd>.</span>
@@ -1305,11 +1288,23 @@ function renderDetail(id) {
     <section class="project-view is-app" data-project-view data-idea-id="${e(idea.id)}">
       <div class="project-view-bar">
         <div class="view-tabs" role="tablist" aria-label="Weergave">
-          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
-          <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">▶ Speel dit idee</button>
+          <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Gebruik dit idee</button>
         </div>
-        <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        <div class="view-extras">
+          <button class="btn brand" type="button" data-action="program-idea" data-idea-id="${e(
+            idea.id
+          )}">⌨ Programmeer zelf</button>
+          <button class="btn ghost" type="button" data-action="download-idea" data-idea-id="${e(
+            idea.id
+          )}">⤓ Download .py</button>
+          <button class="btn ghost" type="button" data-action="copy-idea-code" data-idea-id="${e(
+            idea.id
+          )}">Kopieer alle code</button>
+          <a class="link-btn" href="idee/${encodeURIComponent(idea.id)}/">Vaste projectpagina</a>
+        </div>
       </div>
+      <p class="view-hint" data-view-hint>Kies <strong>▶ Speel dit idee</strong> voor de app, of <strong>⌨ Gebruik dit idee</strong> voor alle code.</p>
       <div class="preview-panel" data-view-panel="app">
         <div class="preview-stage" data-preview-stage>
           <div class="preview-fallback">
@@ -1318,7 +1313,7 @@ function renderDetail(id) {
             <p>${e(idea.summary)}</p>
           </div>
         </div>
-        <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo of kies <em>⌨ Gebruik dit idee</em> voor alle code en uitleg.</p>
       </div>
 
     <div class="detail-grid">

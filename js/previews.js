@@ -7622,8 +7622,20 @@ function setView(view, mode) {
   const hint = view.querySelector("[data-view-hint]");
   if (hint) {
     hint.textContent = isCode
-      ? "Alle code van dit project, stap voor stap."
-      : "Zo ziet het project eruit. Speel meteen mee.";
+      ? "Alle code van dit project, stap voor stap. Kies ▶ Speel dit idee om terug te gaan."
+      : "Kies ▶ Speel dit idee voor de app, of ⌨ Gebruik dit idee voor alle code.";
+  }
+
+  // Sta je diep in de code en kies je opnieuw "Speel dit idee", dan brengen we
+  // de app-weergave in beeld in plaats van je bovenaan de code achter te laten.
+  if (!isCode) {
+    const panel = view.querySelector(".preview-panel");
+    if (panel && typeof panel.scrollIntoView === "function") {
+      const box = panel.getBoundingClientRect();
+      if (box.top < 0 || box.top > window.innerHeight * 0.55) {
+        panel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
   }
 }
 

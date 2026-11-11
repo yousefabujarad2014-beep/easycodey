@@ -401,12 +401,12 @@ function renderProjectPage(idea) {
           </div>
           <p class="detail-summary">${esc(idea.summary)}</p>
           <div class="static-actions">
-            <a class="btn brand" href="${prefix}#/idee/${idea.id}?play=1">▶ Speel dit idee</a>
+            <a class="btn brand" href="#project-view">▶ Speel dit idee</a>
             <a class="btn ghost" href="${prefix}#/idee/${idea.id}">Open in EasyCodey</a>
-            <a class="btn ghost" href="${prefix}#/programmeren?project=${idea.id}">⌨ Programmeer dit idee</a>
           </div>
           <p class="static-note">
-            <strong>Speel dit idee</strong> opent de app en voert het volledige programma meteen uit.
+            <strong>Speel dit idee</strong> opent de speelbare app hieronder.
+            <strong>Gebruik dit idee</strong> toont alle code.
             Je voortgang wordt lokaal in je browser bewaard.
             <br />
             <strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je
@@ -416,14 +416,18 @@ function renderProjectPage(idea) {
         </div>
       </header>
 
-      <section class="project-view is-app" data-project-view data-idea-id="${esc(idea.id)}">
+      <section class="project-view is-app" id="project-view" data-project-view data-idea-id="${esc(idea.id)}">
         <div class="project-view-bar">
           <div class="view-tabs" role="tablist" aria-label="Weergave">
-            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
-            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">▶ Speel dit idee</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Gebruik dit idee</button>
           </div>
-          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+          <div class="view-extras">
+            <a class="btn brand" href="${prefix}#/programmeren?project=${idea.id}">⌨ Programmeer zelf</a>
+            <a class="btn ghost" href="${prefix}#/idee/${idea.id}?play=1">▶ Voer de echte code uit</a>
+          </div>
         </div>
+        <p class="view-hint" data-view-hint>Kies <strong>▶ Speel dit idee</strong> voor de app, of <strong>⌨ Gebruik dit idee</strong> voor alle code.</p>
         <div class="preview-panel" data-view-panel="app">
           <div class="preview-stage" data-preview-stage>
             <div class="preview-fallback">
@@ -432,7 +436,7 @@ function renderProjectPage(idea) {
               <p>${esc(idea.summary)}</p>
             </div>
           </div>
-          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo of kies <em>⌨ Gebruik dit idee</em> voor alle code en uitleg.</p>
         </div>
 
       <div class="detail-grid">

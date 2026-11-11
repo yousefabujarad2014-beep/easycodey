@@ -59,7 +59,7 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Onderdeel | Offline |
 |---|---|
 | Alle 161 projecten, uitleg, stappen en tips | ✅ |
-| Interactieve app-previews en de App/Code-tabs | ✅ |
+| Interactieve app-previews en de knoppen Speel dit idee / Gebruik dit idee | ✅ |
 | Vaste projectpagina's `/idee/<id>/` en `/projecten/` | ✅ na één keer online bezoek |
 | Voortgang, thema, accounts en eigen projecten | ✅ |
 | Python-speelveld en editor | ✅ na de eerste keer online |

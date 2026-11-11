@@ -76,11 +76,12 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - "Markeer als afgerond" en "Voortgang resetten".
 - Zijbalk met projectgegevens, vervolgprojecten en "Vraag AI om hulp".
 - Per stap: "Vraag AI over deze stap", inclusief project- en stapcontext.
-- Actiebalk met **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**.
-- **Speel dit idee** voert het volledige project meteen uit in het Python-speelveld.
-- **Programmeer dit idee** opent de editor met alle stappen als Ã©Ã©n programma, met commentaar per stap.
+- Actiebalk met **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**.
+- **Speel dit idee** toont de speelbare app-weergave van het project, meteen in de pagina.
+- **Gebruik dit idee** toont in dezelfde plek alle code, stap voor stap.
+- **Programmeer zelf** opent de editor met alle stappen als Ã©Ã©n programma, met commentaar per stap.
 - **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm, waarin ook de **vraag van het programma** staat, en daarna op **Enter** drukt.
-- **App-weergave**: de pagina opent standaard in een schone preview zonder code, met de tabs **ðŸŽ® App** en **âŒ¨ Code**. In de app-stand speel je meteen mee; in de code-stand zie je alle stappen en uitleg. De code blijft altijd in de HTML staan voor SEO en tests.
+- **App-weergave**: de pagina opent standaard in een schone preview zonder code. De knoppen **▶ Speel dit idee** en **⌨ Gebruik dit idee** zijn samen de schakelaar: app en code zitten dus in dezelfde twee acties. In de app-stand speel je meteen mee; in de code-stand zie je alle stappen en uitleg. De code blijft altijd in de HTML staan voor SEO en tests.
 - Elke preview is een echte, offline demo die bij het onderwerp past: Snake, Tetris, Pong, Galgje, rekenmachine, weer, portscanner, molecuulmassa, warmteverspreiding enz. Alle 161 projecten hebben een preview; waar nodig via een passende categorie-fallback.
 - Dezelfde uitleg staat op elke vaste projectpagina en in het Python-speelveld.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
@@ -166,7 +167,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - **Download .py** bewaart het programma als Python-bestand.
 - **Kopieer** zet de code op het klembord.
 - Automatisch bewaren in `localStorage`; de code staat na herladen nog in de editor.
-- Editor-code is gekoppeld aan het project waarvoor je hem opende. Typ je daarna in de algemene editor (`#/programmeren`), dan wordt die code niet per ongeluk aan het oude project gekoppeld; **Programmeer dit idee** laadt altijd de juiste projectcode.
+- Editor-code is gekoppeld aan het project waarvoor je hem opende. Typ je daarna in de algemene editor (`#/programmeren`), dan wordt die code niet per ongeluk aan het oude project gekoppeld; **Programmeer zelf** laadt altijd de juiste projectcode.
 - Voorbeelden laden, uitvoer wissen, **Tab** invoegen als vier spaties en de editor leegmaken.
 - **Projectcode opnieuw laden** en **Terug naar project** in de projectbalk.
 - Op mobiel staat de navigatie op een eigen scrollbare rij en wordt de editor Ã©Ã©n kolom.
@@ -285,7 +286,7 @@ FLL/
 | Editor na herladen | âœ… code blijft bewaard, ook bij een project |
 | Editor Ctrl + Enter | âœ… `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
 | Editor voorbeelden, uitvoer wissen en downloaden | âœ… |
-| Projectacties op detailpagina | âœ… **Speel dit idee**, **Programmeer dit idee**, **Download .py**, **Kopieer alle code** |
+| Projectacties op detailpagina | âœ… **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
 | Projectcode in de editor | âœ… alle stappen met commentaar en projectbanner |
 | KopiÃ«ren naar klembord | âœ… volledige projectcode op het klembord |
 | Download `.py` vanaf detail en editor | âœ… bestanden bevatten de juiste code |
@@ -295,10 +296,11 @@ FLL/
 | Service worker actief en pagina onder controle | âœ… scope `/`, app-shell uit cache |
 | Offline-cache gevuld | âœ… 35 bestanden |
 | Installatie-uitleg in de app | âœ… 3 platformstappen, sluit correct |
-| **Speel dit idee** op een projectpagina | âœ… volledige code (24 regels) en directe Pyodide-uitvoer |
+| **Speel dit idee** op een projectpagina | âœ… speelbare app in de pagina; **Gebruik dit idee** toont alle code |
+| **Programmeer zelf** met autoplay | âœ… volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
 | Site herladen zonder internet | âœ… laadt uit de cache |
 | Python uitvoeren zonder internet | âœ… werkt na eenmalig laden |
-| PWA-testsuite lokaal | âœ… 20/20 checks geslaagd |
+| PWA-testsuite lokaal | âœ… 21/21 checks geslaagd |
 | Chrome-installeerbaarheid | âœ… geen installability errors |
 | PWA-testsuite op de live site | âœ… 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
@@ -308,7 +310,7 @@ FLL/
 | Invoer-pop-up met de echte vraag | âœ… 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | âœ… Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | âœ… `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
-| Vaste pagina's lokaal | âœ… 90/90 checks geslaagd, inclusief App/Code-tabs en Snake-preview |
+| Vaste pagina's lokaal | âœ… 91/91 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee en Snake-preview |
 | App-preview per project | âœ… 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
 | Weerbaarheid bij laadfouten | âœ… 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
 | Snake-preview | âœ… canvas, D-pad en toetsen; speelbaar in de browser |
@@ -317,7 +319,7 @@ FLL/
 | Projectpagina zonder slash | âœ… 301 naar de map met slash |
 | Overzicht `/projecten/` | âœ… 161 links, 10 categorieÃ«n, zoekfilter en `CollectionPage` |
 | Sitemap lokaal | âœ… geldige XML, 167 URL's, productie-startpagina aanwezig |
-| Speel dit idee vanaf vaste pagina | âœ… app opent met `?play=1`, volledige code en Pyodide-uitvoer |
+| Speel dit idee vanaf vaste pagina | âœ… app-weergave in de pagina; **Programmeer zelf** opent `?play=1` met volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | âœ… wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | âœ… geen horizontale overflow, Ã©Ã©n kolom |
 | Installatiepagina `/installeren/` | âœ… 8 secties, 3 Android-stappen, eigen titel en canonical |

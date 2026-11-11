@@ -188,7 +188,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `/projecten/` toont alle 161 projecten, gegroepeerd per categorie.
 - [ ] `/idee/<id>/` toont een eigen titel, description en canonical.
 - [ ] `/idee/<id>` zonder slash stuurt door naar `/idee/<id>/`.
-- [ ] **Speel dit idee** op een vaste pagina opent de app met `?play=1` en voert de code uit.
+- [ ] **▶ Speel dit idee** op een vaste pagina toont de speelbare app in de pagina; **Programmeer zelf** opent `?play=1` en voert de code uit.
 - [ ] Zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren werken.
 - [ ] Filters staan in de URL en blijven na verversen bewaard.
 - [ ] Projectpagina toont stappen, code en tips.
@@ -212,8 +212,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Elk account heeft eigen voortgang; **Back-up downloaden** en **Back-up herstellen** werken.
 - [ ] Header en footer linken naar **Mijn profiel**.
 - [ ] `#/eigenaar` vraagt om de eigenaarscode en toont daarna het aantal lokale profielen, de voortgang, de mededeling en **Alles downloaden**.
-- [ ] Projectpagina: **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code** werken.
-- [ ] **Speel dit idee** voert het volledige project uit in het speelveld.
+- [ ] Projectpagina: **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
+- [ ] **Speel dit idee** toont de app, **Gebruik dit idee** toont de code en **Programmeer zelf** voert het volledige project uit in het speelveld.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
 - [ ] `/doneren/` toont IBAN **BE69 0638 3621 2278**, rekeninghouder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB** en de transparantie.
 - [ ] De doneerpagina linkt terug naar de app, contact en alle projecten.
