@@ -3,6 +3,11 @@ const LEGACY_STORAGE_KEY = "easycode.v1";
 const PROFILES_KEY = "easycodey.profiles.v1";
 const ACTIVE_PROFILE_KEY = "easycodey.activeProfile.v1";
 
+/* Het eigenaarsaccount. Alleen deze naam met dit wachtwoord krijgt beheer.
+   Er staat bewust geen leesbaar wachtwoord in de code: alleen de hash. */
+const OWNER_NAME = "Yousef Abujarad";
+const OWNER_PASSWORD_HASH = "4rqs35"; // hashSecret("[verwijderd]")
+
 const DEFAULT_STATE = {
   version: 1,
   theme: null,
@@ -218,7 +223,8 @@ function safeProfile(profile) {
     id: profile.id,
     name: profile.name,
     createdAt: profile.createdAt,
-    lastLoginAt: profile.lastLoginAt
+    lastLoginAt: profile.lastLoginAt,
+    isOwner: isOwnerAccount(profile)
   };
 }
 
@@ -229,8 +235,32 @@ function ownerProfile(profile) {
     name: profile.name,
     createdAt: profile.createdAt,
     lastLoginAt: profile.lastLoginAt,
-    contact: profile.contact || ""
+    contact: profile.contact || "",
+    isOwner: isOwnerAccount(profile)
   };
+}
+
+/* ------------------------------ eigenaarsaccount ------------------------------
+   Inloggen met de eigenaarsnaam en het eigenaars-wachtwoord maakt dit profiel
+   eigenaar. Dat werkt op elk toestel: het account wordt bij de eerste login
+   lokaal aangemaakt. Zonder die login blijft het beheerscherm vergrendeld. */
+
+function isOwnerAccount(profile) {
+  if (!profile || typeof profile.name !== "string") return false;
+  return (
+    profile.name.trim().toLowerCase() === OWNER_NAME.toLowerCase() &&
+    profile.password === OWNER_PASSWORD_HASH
+  );
+}
+
+export function isOwnerCredentials(name, password) {
+  const cleanName = String(name || "").trim().toLowerCase();
+  if (cleanName !== OWNER_NAME.toLowerCase()) return false;
+  return hashSecret(String(password || "").trim()) === OWNER_PASSWORD_HASH;
+}
+
+export function isActiveProfileOwner() {
+  return isOwnerAccount(profiles.find((profile) => profile.id === activeProfileId));
 }
 
 let profiles = readProfiles();
@@ -274,6 +304,9 @@ export function registerProfile(name, password, options = {}) {
   }
   if (profiles.some((profile) => profile.name.toLowerCase() === cleanName.toLowerCase())) {
     return { ok: false, error: "Er bestaat al een account met deze naam." };
+  }
+  if (cleanName.toLowerCase() === OWNER_NAME.toLowerCase() && !isOwnerCredentials(cleanName, cleanPassword)) {
+    return { ok: false, error: "Deze naam is voorbehouden voor de eigenaar van EasyCodey." };
   }
 
   const guestData = options.copyGuest === false ? clone(DEFAULT_STATE) : readStateFromKey(STORAGE_KEY);
@@ -329,6 +362,37 @@ export function loginProfileByName(name, password) {
   if (!cleanName) {
     return { ok: false, error: "Vul je naam in." };
   }
+
+  // Het eigenaarsaccount werkt op elk toestel, ook als het hier nog niet bestaat.
+  if (isOwnerCredentials(name, password)) {
+    let profile = profiles.find((item) => item.name.toLowerCase() === cleanName);
+    if (!profile) {
+      profile = {
+        id: `p-owner-${Date.now().toString(36)}`,
+        name: OWNER_NAME,
+        password: OWNER_PASSWORD_HASH,
+        contact: "",
+        createdAt: Date.now(),
+        lastLoginAt: 0
+      };
+      profiles = [profile, ...profiles];
+    } else {
+      // De eigenaar bewijst met het juiste wachtwoord toegang; herstel het account.
+      profile.name = OWNER_NAME;
+      profile.password = OWNER_PASSWORD_HASH;
+    }
+    profile.lastLoginAt = Date.now();
+    saveProfiles();
+    activeProfileId = profile.id;
+    try {
+      localStorage.setItem(ACTIVE_PROFILE_KEY, profile.id);
+    } catch {
+      // Zonder opslag blijft het profiel actief tot je de pagina sluit.
+    }
+    state = readState();
+    return { ok: true, profile: safeProfile(profile), owner: true };
+  }
+
   const profile = profiles.find((item) => item.name.toLowerCase() === cleanName);
   if (!profile) {
     return { ok: false, error: "Geen account met deze naam. Maak er eerst een aan." };
@@ -597,6 +661,9 @@ export function resetProfileProgress(id) {
 export function deleteProfileAsOwner(id) {
   const profile = profiles.find((item) => item.id === id);
   if (!profile) return { ok: false, error: "Profiel niet gevonden." };
+  if (isOwnerAccount(profile)) {
+    return { ok: false, error: "Het eigenaarsaccount kan niet verwijderd worden." };
+  }
 
   profiles = profiles.filter((item) => item.id !== id);
   saveProfiles();

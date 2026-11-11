@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -298,6 +299,28 @@ if (!existsSync(privacyFile)) {
   if (!privacy.includes('type="application/ld+json"')) fail("Privacy pagina mist JSON-LD.");
 }
 
+const downloadFile = path.join(root, "download", "index.html");
+const apkFile = path.join(root, "download", "EasyCodey-1.0.0.apk");
+if (!existsSync(downloadFile)) {
+  fail("Downloadpagina download/index.html ontbreekt (voer npm run pages uit).");
+} else {
+  const download = readFileSync(downloadFile, "utf8");
+  if (!download.includes(`<link rel="canonical" href="${SITE}/download/"`)) {
+    fail("Downloadpagina heeft niet de juiste canonical.");
+  }
+  if (!download.includes("<h1>")) fail("Downloadpagina mist een <h1>.");
+  if (!download.includes('type="application/ld+json"')) fail("Downloadpagina mist JSON-LD.");
+  if (!download.includes("be.easycodey.app")) fail("Downloadpagina mist de pakketnaam.");
+  if (!existsSync(apkFile)) {
+    fail("APK download/EasyCodey-1.0.0.apk ontbreekt.");
+  } else {
+    const apkHash = createHash("sha256").update(readFileSync(apkFile)).digest("hex").toUpperCase();
+    if (!download.includes(apkHash)) {
+      fail("Downloadpagina toont niet de juiste SHA-256 van de APK.");
+    }
+  }
+}
+
 const sitemapFile = path.join(root, "sitemap.xml");
 if (!existsSync(sitemapFile)) {
   fail("sitemap.xml ontbreekt.");
@@ -307,6 +330,7 @@ if (!existsSync(sitemapFile)) {
   if (!sitemap.includes(`<loc>${SITE}/</loc>`)) fail("Sitemap mist de startpagina.");
   if (!sitemap.includes(`<loc>${SITE}/projecten/</loc>`)) fail("Sitemap mist de overzichtspagina.");
   if (!sitemap.includes(`<loc>${SITE}/installeren/</loc>`)) fail("Sitemap mist de installatiepagina.");
+  if (!sitemap.includes(`<loc>${SITE}/download/</loc>`)) fail("Sitemap mist de downloadpagina.");
   if (!sitemap.includes(`<loc>${SITE}/contact/</loc>`)) fail("Sitemap mist de contactpagina.");
   if (!sitemap.includes(`<loc>${SITE}/doneren/</loc>`)) fail("Sitemap mist de doneerpagina.");
   if (!sitemap.includes(`<loc>${SITE}/privacy/</loc>`)) fail("Sitemap mist de privacypagina.");
@@ -315,7 +339,7 @@ if (!existsSync(sitemapFile)) {
       fail(`Sitemap mist het project ${idea.id}.`);
     }
   }
-  const expectedUrls = IDEAS.length + 6;
+  const expectedUrls = IDEAS.length + 7;
   if (sitemapCount !== expectedUrls) {
     fail(`Sitemap heeft ${sitemapCount} URL's; verwacht ${expectedUrls}.`);
   }
@@ -334,7 +358,7 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
-console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + contact + doneren + privacy`);
+console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + download + contact + doneren + privacy`);
 console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
 for (const category of CATEGORIES) {

@@ -88,6 +88,33 @@ app-release-signed.apk   ← lokaal testen op een toestel
 Het TWA-project opnieuw genereren kan met
 `playstore-build\init-twa.mjs` (past package, kleuren, iconen en keystore toe).
 
+## Gratis verspreiden zonder Google Play
+
+De Play Store vraagt een eenmalige **$25** registratievergoeding. Je kunt EasyCodey ook gratis
+verspreiden; de app is daar al op voorbereid.
+
+| Route | Wat je doet | Kosten |
+|---|---|---|
+| **PWA** | Bezoekers kiezen **Installeren** in Chrome of **Zet op beginscherm** in Safari | €0 |
+| **APK** | Deel `download/EasyCodey-1.0.0.apk` of link naar `/download/` | €0 |
+| **Samsung Galaxy Store** | Gratis account, zelfde APK/AAB uploaden | €0 |
+| **Amazon Appstore / Huawei AppGallery** | Gratis developeraccount, APK uploaden | €0 |
+| **Google Play** | AAB uploaden na account en review | $25 eenmalig |
+
+De APK is ondertekend met de **uploadsleutel** en die fingerprint staat al in
+`/.well-known/assetlinks.json`. Daardoor opent de TWA ook bij sideloaden zonder adresbalk. Gebruikers
+moeten eenmalig **Onbekende bronnen** toestaan; Play Protect kan één keer waarschuwen → **Toch
+installeren**.
+
+De inhoud van de app (projecten, editor, accounts) werkt automatisch bij via de website. Alleen als de
+Android-schil zelf verandert, is een nieuwe APK nodig:
+
+1. Verhoog `appVersionCode` en `appVersionName` in `twa-manifest.json`.
+2. Bouw opnieuw met `bubblewrap build`.
+3. Kopieer de nieuwe APK naar `download/EasyCodey-<versie>.apk`.
+4. Werk `APK_FILE`, `APK_VERSION`, `APK_VERSION_CODE` en `APK_SHA256` bij in
+   `scripts/build-pages.mjs` en draai `npm run build`.
+
 ## Store listing
 
 ### Korte beschrijving (max. 80 tekens)

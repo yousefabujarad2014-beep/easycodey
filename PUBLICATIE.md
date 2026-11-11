@@ -15,7 +15,9 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
 | Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord, optioneel contact en JSON-back-up |
 | Chatknop na inloggen | ✅ footer, zwevende knop en chatkaart op het profiel (geen dubbele knop in de header) |
-| Eigenaarspaneel | ✅ `#/eigenaar`, lokale profielen, voortgang, mededeling en download |
+| Eigenaarspaneel | ✅ `#/eigenaar`, eigenaarslogin zonder code, lokale profielen, voortgang, mededeling, app-status en download |
+| Inzichten (optioneel) | ✅ anonieme, cookieloze bezoekcijfers via GoatCounter, populairste projecten, app-versie en opt-out per toestel |
+| Gratis Android-download | ✅ `/download/` met ondertekende APK 1.0.0, SHA-256, installatie-uitleg en FAQ — zonder Google Play |
 | Invoerhulp | ✅ `input()` toont de vraag en een tekstvak in het venster bovenaan |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
 | Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **volledig automatische updates** |
@@ -212,6 +214,9 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Elk account heeft eigen voortgang; **Back-up downloaden** en **Back-up herstellen** werken.
 - [ ] Header en footer linken naar **Mijn profiel**.
 - [ ] `#/eigenaar` vraagt om de eigenaarscode en toont daarna het aantal lokale profielen, de voortgang, de mededeling en **Alles downloaden**.
+- [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
+- [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag en de laatste update.
+- [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** verwijdert de sitecode; de opt-out op het profiel werkt.
 - [ ] Projectpagina: **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
 - [ ] **Speel dit idee** toont de app, **Gebruik dit idee** toont de code en **Programmeer zelf** voert het volledige project uit in het speelveld.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
@@ -321,7 +326,7 @@ Na de eerste succesvolle deploy:
 1. Open **https://search.google.com/search-console**.
 2. Voeg je live-URL toe als property.
 3. Verifieer met de HTML-tag of het HTML-bestand.
-4. Meld `sitemap.xml` aan (167 URL's).
+4. Meld `sitemap.xml` aan (168 URL's).
 5. Vraag indexering aan voor de startpagina en enkele projectpagina's.
 
 De volledige uitleg over de vaste projectpagina's, de app en de checklist staat in **`GOOGLE.md`**.

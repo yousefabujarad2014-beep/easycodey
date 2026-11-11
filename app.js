@@ -12,6 +12,7 @@ import {
 } from "./data/index.js";
 
 import * as store from "./js/store.js";
+import * as analytics from "./js/analytics.js";
 import {
   escapeHtml as e,
   renderMarkdown,
@@ -71,6 +72,7 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
+const APP_VERSION = "v11";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 
@@ -341,6 +343,28 @@ function navigate(hash) {
 }
 
 function route() {
+  try {
+    renderRoute();
+  } finally {
+    // Na het renderen meten we de paginaweergave. De titel staat dan al klaar.
+    window.setTimeout(trackCurrentView, 0);
+  }
+}
+
+function trackCurrentView() {
+  const { segments } = parseRoute();
+  let path = "home";
+  if (segments[0] === "idee" && segments[1]) path = `idee/${segments[1]}`;
+  else if (segments[0] === "leerpad") path = "leerpad";
+  else if (segments[0] === "programmeren") path = "programmeren";
+  else if (segments[0] === "mijn-ideeen") path = "mijn-ideeen";
+  else if (segments[0] === "profiel") path = "profiel";
+  else if (segments[0] === "eigenaar") path = "eigenaar";
+  else if (segments.length) path = "404";
+  analytics.trackView(path, document.title);
+}
+
+function renderRoute() {
   syncProfileChatUI();
   syncSecurityBadge();
   showOwnerNotice();
@@ -422,6 +446,7 @@ function renderProfile() {
   const active = store.getActiveProfile();
   const profiles = store.getProfiles();
   const stats = store.getStats(allIdeas());
+  const tracking = analytics.analyticsInfo();
   const initial = active ? active.name.trim().charAt(0).toUpperCase() : "?";
 
   const profileOptions = profiles
@@ -448,7 +473,9 @@ function renderProfile() {
           <span class="profile-avatar" aria-hidden="true">${e(initial)}</span>
           <div>
             <p class="profile-kicker">Ingelogd op dit apparaat</p>
-            <h2>${e(active.name)}</h2>
+            <h2>${e(active.name)}${
+              active.isOwner ? ' <span class="owner-badge">Eigenaar</span>' : ""
+            }</h2>
             <p class="muted">Account gemaakt op ${e(profileDate(active.createdAt))}</p>
           </div>
         </div>
@@ -457,6 +484,7 @@ function renderProfile() {
           <div class="stat"><strong>${stats.percent}%</strong><span>totale voortgang</span></div>
         </div>
         <div class="profile-actions">
+          ${active.isOwner ? '<a class="btn brand" href="#/eigenaar">⚙ Eigenaarspaneel</a>' : ""}
           <button class="btn ghost" type="button" data-action="profile-logout">Uitloggen</button>
           <button class="btn ghost" type="button" data-action="profile-delete">Account verwijderen</button>
         </div>
@@ -491,26 +519,22 @@ function renderProfile() {
           </div>
         </div>
         ${profileChips}
-        ${
-          profiles.length
-            ? `<form class="profile-form" id="profile-login-form">
-                <label class="field">
-                  <span>Naam</span>
-                  <input id="profile-login-name" type="text" maxlength="40" autocomplete="username" list="profile-names" placeholder="Jouw naam" />
-                  <datalist id="profile-names">${profileOptions}</datalist>
-                </label>
-                <label class="field">
-                  <span>Wachtwoord</span>
-                  <span class="password-field">
-                    <input id="profile-login-password" type="password" autocomplete="current-password" placeholder="Jouw wachtwoord" />
-                    <button class="password-toggle" type="button" data-action="toggle-password" data-target="profile-login-password" aria-label="Toon wachtwoord">Toon</button>
-                  </span>
-                </label>
-                <p class="form-error" id="profile-login-error" role="alert" hidden></p>
-                <button class="btn brand btn-block" type="submit">Doe mee →</button>
-              </form>`
-            : `<p class="profile-text">Nog geen account. Maak er hiernaast eentje aan — je bent in 10 seconden klaar.</p>`
-        }
+        <form class="profile-form" id="profile-login-form">
+          <label class="field">
+            <span>Naam</span>
+            <input id="profile-login-name" type="text" maxlength="40" autocomplete="username" list="profile-names" placeholder="Jouw naam" />
+            <datalist id="profile-names">${profileOptions}</datalist>
+          </label>
+          <label class="field">
+            <span>Wachtwoord</span>
+            <span class="password-field">
+              <input id="profile-login-password" type="password" autocomplete="current-password" placeholder="Jouw wachtwoord" />
+              <button class="password-toggle" type="button" data-action="toggle-password" data-target="profile-login-password" aria-label="Toon wachtwoord">Toon</button>
+            </span>
+          </label>
+          <p class="form-error" id="profile-login-error" role="alert" hidden></p>
+          <button class="btn brand btn-block" type="submit">Doe mee →</button>
+        </form>
       </section>
       <section class="panel profile-card profile-join profile-join-new">
         <div class="profile-card-head">
@@ -590,6 +614,26 @@ function renderProfile() {
         maar is geen sterke beveiliging tegen iemand die toegang heeft tot dit apparaat.
       </p>
     </section>
+
+    <section class="panel profile-privacy">
+      <h2>Privacy en statistieken</h2>
+      <p class="profile-text">
+        EasyCodey bewaart je voortgang lokaal. Alleen als de eigenaar een meetcode instelt, worden
+        anonieme bezoekcijfers geteld: welke pagina's en projecten populair zijn. Geen cookies,
+        geen namen, geen e-mail en geen profielgegevens.
+      </p>
+      <label class="profile-check">
+        <input id="profile-analytics-toggle" type="checkbox" ${tracking.optOut ? "" : "checked"} />
+        <span>Deel anonieme gebruiksstatistieken vanaf dit toestel</span>
+      </label>
+      <p class="static-note">
+        ${
+          tracking.site
+            ? "De keuze geldt alleen voor dit toestel en je kunt hem altijd wijzigen."
+            : "De eigenaar heeft nog geen meting ingesteld, dus er wordt nu niets verstuurd."
+        }
+      </p>
+    </section>
   `;
 
   document.title = "Mijn profiel — EasyCodey";
@@ -609,16 +653,19 @@ function ownerHash(value) {
 
 function isOwnerUnlocked() {
   try {
-    return sessionStorage.getItem(OWNER_SESSION_KEY) === "1";
+    const flag = sessionStorage.getItem(OWNER_SESSION_KEY);
+    if (flag === "1") return true;
+    if (flag === "0") return false;
   } catch {
-    return false;
+    // Zonder sessieopslag valt de app terug op het actieve account.
   }
+  return store.isActiveProfileOwner();
 }
 
 function setOwnerUnlocked(value) {
   try {
-    if (value) sessionStorage.setItem(OWNER_SESSION_KEY, "1");
-    else sessionStorage.removeItem(OWNER_SESSION_KEY);
+    // "0" betekent: bewust vergrendeld in deze sessie, ook al ben je de eigenaar.
+    sessionStorage.setItem(OWNER_SESSION_KEY, value ? "1" : "0");
   } catch {
     // Zonder sessieopslag blijft het paneel tot de volgende klik ontgrendeld.
   }
@@ -659,6 +706,10 @@ function renderOwner() {
         <p class="static-note">
           Let op: dit is een lokale toegangspoort, geen serverbeveiliging. Deel je code niet.
         </p>
+        <p class="static-note">
+          Ben je de eigenaar? Log in met je eigen account op <a href="#/profiel">Mijn profiel</a>.
+          Dan opent dit paneel automatisch, zonder code.
+        </p>
       </section>
     `;
     document.title = "Beheer — EasyCodey";
@@ -682,7 +733,7 @@ function renderOwner() {
         .map(
           (profile) => `<tr>
             <td>
-              <strong>${e(profile.name)}</strong>
+              <strong>${e(profile.name)}</strong>${profile.isOwner ? ' <span class="owner-badge">Eigenaar</span>' : ""}
               <span class="owner-sub">${profile.contact ? e(profile.contact) : "Geen contact opgegeven"}</span>
             </td>
             <td>${e(ownerDate(profile.createdAt))}</td>
@@ -751,6 +802,45 @@ function renderOwner() {
       </form>
     </section>
 
+    <section class="panel owner-panel owner-insights">
+      <h2>Inzicht en updates</h2>
+      <p class="profile-text">
+        Bezoekcijfers, populairste projecten en de versie die mensen gebruiken. De meting is
+        cookieloos en anoniem: geen namen, geen e-mail, geen profielen.
+      </p>
+      <div class="owner-stats owner-status" data-owner-status>
+        <div class="owner-stat"><strong data-status="version">${e(APP_VERSION)}</strong><span>app-versie</span></div>
+        <div class="owner-stat"><strong data-status="sw">…</strong><span>service worker</span></div>
+        <div class="owner-stat"><strong data-status="cache">…</strong><span>offline bestanden</span></div>
+        <div class="owner-stat"><strong data-status="storage">…</strong><span>opslag gebruikt</span></div>
+        <div class="owner-stat"><strong data-status="update">…</strong><span>laatste update</span></div>
+      </div>
+      <div class="owner-analytics">
+        <h3>Bezoekers meten</h3>
+        <p class="profile-text" data-analytics-state>Meting wordt gecontroleerd…</p>
+        <form class="owner-analytics-form" id="owner-analytics-form">
+          <label class="field">
+            <span>GoatCounter-sitecode</span>
+            <input id="owner-analytics-site" type="text" maxlength="40" autocomplete="off" placeholder="bijv. easycodey" />
+          </label>
+          <div class="profile-actions">
+            <button class="btn brand" type="submit">Meting opslaan</button>
+            <button class="btn ghost" type="button" data-action="owner-analytics-stop">Stop met meten</button>
+            <a class="btn ghost" data-owner-dashboard href="https://www.goatcounter.com/" target="_blank" rel="noopener">Maak een gratis account ↗</a>
+          </div>
+          <label class="profile-check">
+            <input id="owner-analytics-toggle" type="checkbox" />
+            <span>Deel anonieme statistieken vanaf dit toestel</span>
+          </label>
+        </form>
+        <p class="static-note">
+          Maak gratis een account op goatcounter.com en vul hier je sitecode in (bijv.
+          <code>easycodey</code>). Daarna zie je bezoekers, populairste projecten en versies in je
+          dashboard. Installaties, crashes en beoordelingen zie je in Google Play Console.
+        </p>
+      </div>
+    </section>
+
     <section class="panel owner-panel">
       <h2>Gegevens van dit apparaat</h2>
       <p class="profile-text">
@@ -768,6 +858,83 @@ function renderOwner() {
   `;
 
   document.title = "Beheer — EasyCodey";
+  loadOwnerStatus();
+}
+
+function updateOwnerAnalyticsUI() {
+  const info = analytics.analyticsInfo();
+  const stateEl = document.querySelector("[data-analytics-state]");
+  const siteInput = document.querySelector("#owner-analytics-site");
+  const toggle = document.querySelector("#owner-analytics-toggle");
+  const link = document.querySelector("[data-owner-dashboard]");
+
+  if (siteInput && document.activeElement !== siteInput) siteInput.value = info.site;
+  if (toggle) toggle.checked = !info.optOut;
+  if (link) {
+    link.href = info.dashboard || "https://www.goatcounter.com/";
+    link.textContent = info.site ? "Open dashboard ↗" : "Maak een gratis account ↗";
+  }
+  if (stateEl) {
+    if (!info.site) {
+      stateEl.innerHTML =
+        "Nog geen sitecode. Zonder sitecode wordt er <strong>niets</strong> geladen en niets verstuurd.";
+    } else if (info.optOut) {
+      stateEl.innerHTML =
+        "Meting staat uit op dit toestel. Zet het vinkje aan om weer anoniem mee te tellen.";
+    } else {
+      stateEl.innerHTML = `Meting is <strong>actief</strong> voor <strong>${e(
+        info.site
+      )}</strong>. Bezoekers, populairste projecten en versies verschijnen in je dashboard.`;
+    }
+  }
+}
+
+async function loadOwnerStatus() {
+  const grid = document.querySelector("[data-owner-status]");
+  if (!grid) return;
+  const set = (name, text) => {
+    const el = grid.querySelector(`[data-status="${name}"]`);
+    if (el) el.textContent = text;
+  };
+
+  const hasSW = "serviceWorker" in navigator;
+  const controlled = hasSW && Boolean(navigator.serviceWorker.controller);
+  set("sw", !hasSW ? "niet" : controlled ? "actief" : "start…");
+
+  let cached = 0;
+  if ("caches" in window) {
+    try {
+      for (const key of await caches.keys()) {
+        const cache = await caches.open(key);
+        cached += (await cache.keys()).length;
+      }
+    } catch {
+      cached = 0;
+    }
+  }
+  set("cache", String(cached));
+
+  if (navigator.storage?.estimate) {
+    try {
+      const { usage } = await navigator.storage.estimate();
+      const mb = Number(usage) / (1024 * 1024);
+      set("storage", mb >= 0.1 ? `${mb.toFixed(1)} MB` : "0 MB");
+    } catch {
+      set("storage", "—");
+    }
+  } else {
+    set("storage", "—");
+  }
+
+  const last = analytics.getLastUpdate();
+  set(
+    "update",
+    last.at
+      ? new Date(last.at).toLocaleDateString("nl-BE", { day: "2-digit", month: "2-digit" })
+      : "—"
+  );
+
+  updateOwnerAnalyticsUI();
 }
 
 function handleOwnerUnlock() {
@@ -866,6 +1033,11 @@ function handleProfileLogin() {
   if (!result.ok) {
     showProfileError("profile-login-error", result.error);
     return;
+  }
+  try {
+    sessionStorage.removeItem(OWNER_SESSION_KEY);
+  } catch {
+    // Negeer: de login zelf is al gelukt.
   }
   location.reload();
 }
@@ -2274,6 +2446,7 @@ async function copyEditorCode(button) {
 function programIdea(ideaId) {
   const idea = findIdea(ideaId);
   if (!idea) return;
+  analytics.trackEvent("programmeer-zelf");
   const draft = store.getEditorDraft();
   const looksLikeProjectCode = draft.code.startsWith(`# ${idea.title} — EasyCodey`);
   if (draft.projectId !== idea.id || !draft.code || !looksLikeProjectCode) {
@@ -2285,6 +2458,7 @@ function programIdea(ideaId) {
 async function playIdea(ideaId) {
   const idea = findIdea(ideaId);
   if (!idea) return;
+  analytics.trackEvent("project-uitgevoerd");
   openPlayground(combinedIdeaCode(idea));
   await runPlayground();
 }
@@ -2498,6 +2672,11 @@ document.addEventListener("click", (event) => {
     if (action === "install-now") installApp();
     if (action === "profile-logout") {
       store.logoutProfile();
+      try {
+        sessionStorage.removeItem(OWNER_SESSION_KEY);
+      } catch {
+        // Negeer.
+      }
       location.reload();
     }
     if (action === "profile-pick") {
@@ -2555,6 +2734,11 @@ document.addEventListener("click", (event) => {
       toast("Account verwijderd.");
     }
     if (action === "owner-export") ownerExportAll();
+    if (action === "owner-analytics-stop") {
+      analytics.setAnalyticsSite("");
+      updateOwnerAnalyticsUI();
+      toast("Meting gestopt. Er wordt niets meer verstuurd.");
+    }
     if (action === "owner-notice-clear") {
       store.setOwnerNotice("");
       renderOwner();
@@ -2591,8 +2775,14 @@ document.addEventListener("click", (event) => {
     if (action === "editor-reload-project") reloadEditorProject(actionEl.dataset.ideaId);
     if (action === "program-idea") programIdea(actionEl.dataset.ideaId);
     if (action === "play-idea") playIdea(actionEl.dataset.ideaId);
-    if (action === "download-idea") downloadIdeaCode(actionEl.dataset.ideaId);
-    if (action === "copy-idea-code") copyIdeaCode(actionEl, actionEl.dataset.ideaId);
+    if (action === "download-idea") {
+      analytics.trackEvent("download-py");
+      downloadIdeaCode(actionEl.dataset.ideaId);
+    }
+    if (action === "copy-idea-code") {
+      analytics.trackEvent("kopieer-code");
+      copyIdeaCode(actionEl, actionEl.dataset.ideaId);
+    }
     if (action === "toggle-step") {
       store.toggleStep(actionEl.dataset.ideaId, Number(actionEl.dataset.stepIndex));
       const idea = findIdea(actionEl.dataset.ideaId);
@@ -2736,6 +2926,19 @@ document.addEventListener("change", (event) => {
     restoreBackupFile(event.target.files?.[0]);
     event.target.value = "";
   }
+  if (
+    event.target.id === "owner-analytics-toggle" ||
+    event.target.id === "profile-analytics-toggle"
+  ) {
+    analytics.setAnalyticsOptOut(!event.target.checked);
+    if (event.target.checked) analytics.initAnalytics();
+    updateOwnerAnalyticsUI();
+    toast(
+      event.target.checked
+        ? "Anonieme statistieken staan aan."
+        : "Anonieme statistieken staan uit."
+    );
+  }
 });
 
 document.addEventListener("submit", (event) => {
@@ -2765,6 +2968,22 @@ document.addEventListener("submit", (event) => {
     renderOwner();
     showOwnerNotice();
     toast("Mededeling opgeslagen.");
+  }
+  if (event.target.id === "owner-analytics-form") {
+    event.preventDefault();
+    const raw = document.querySelector("#owner-analytics-site")?.value || "";
+    const site = analytics.setAnalyticsSite(raw);
+    if (site.length < 2) {
+      analytics.setAnalyticsSite("");
+      updateOwnerAnalyticsUI();
+      toast("Vul een geldige sitecode in, bijvoorbeeld easycodey.");
+      return;
+    }
+    analytics.setAnalyticsOptOut(false);
+    analytics.initAnalytics();
+    updateOwnerAnalyticsUI();
+    analytics.trackView("eigenaar", document.title);
+    toast(`Meting actief voor ${site}.`);
   }
 });
 
@@ -2868,6 +3087,7 @@ function registerServiceWorker() {
   let reloading = false;
 
   navigator.serviceWorker.addEventListener("controllerchange", () => {
+    analytics.markUpdate(APP_VERSION);
     if (!hadController || reloading) return;
     reloading = true;
     window.location.reload();
@@ -2924,6 +3144,7 @@ function initPWA() {
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
     updateInstallUI();
+    analytics.trackEvent("installatie");
     toast("EasyCodey staat als app op je apparaat.");
   });
 
@@ -2941,6 +3162,20 @@ async function init() {
   window.__easycodeyBoot?.();
   initTheme();
   initPWA();
+  analytics.initAnalytics();
+  analytics.trackOnce(`start-${APP_VERSION}`);
+
+  // Welke weergave kiezen mensen: de app of de code?
+  document.addEventListener(
+    "click",
+    (event) => {
+      const tab = event.target.closest?.("[data-view-tab]");
+      if (!tab) return;
+      analytics.trackEvent(tab.dataset.viewTab === "code" ? "code-weergave" : "app-weergave");
+    },
+    true
+  );
+
   route();
   serverConfig = await fetchConfig();
   updateAIStatus();

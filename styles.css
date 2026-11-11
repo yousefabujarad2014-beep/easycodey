@@ -2732,6 +2732,56 @@ button { cursor: pointer; }
 
 .install-section { margin-top: 14px; }
 
+.download-card .download-emoji {
+  display: block;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.download-card .btn-block {
+  margin-top: 6px;
+}
+
+.download-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 14px 0 0;
+}
+
+.download-meta > div {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 88%, var(--bg-soft));
+}
+
+.download-meta dt {
+  margin-bottom: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.download-meta dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.download-meta-wide { grid-column: 1 / -1; }
+
+.download-hash {
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  color: var(--ink);
+}
+
 .offline-table {
   width: 100%;
   border-collapse: collapse;
@@ -4518,6 +4568,61 @@ body.ai-open .chat-fab {
 
 .owner-panel {
   margin-bottom: 20px;
+}
+
+.owner-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, var(--line));
+  background: color-mix(in srgb, var(--gold) 18%, var(--panel));
+  color: var(--ink);
+  font-family: var(--font-body, inherit);
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.owner-insights h3 {
+  margin: 20px 0 8px;
+  font-size: 1rem;
+}
+
+.owner-status {
+  margin: 16px 0 6px;
+}
+
+.owner-status .owner-stat strong {
+  font-size: 1.35rem;
+}
+
+.owner-analytics {
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+}
+
+.owner-analytics-form {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.owner-analytics-form .profile-check {
+  margin: 0;
+}
+
+.owner-analytics-form code {
+  padding: 1px 5px;
+  border-radius: 6px;
+  background: var(--panel-2);
+  font-size: 0.82em;
+}
+
+.profile-privacy .profile-check {
+  margin-top: 6px;
 }
 
 .owner-table-wrap {

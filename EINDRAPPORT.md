@@ -113,7 +113,10 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Duidelijke uitleg dat accounts alleen op dit apparaat staan en dat het wachtwoord geen sterke beveiliging is.
 
 ### Eigenaarspaneel (`#/eigenaar`)
-- Alleen bereikbaar met de eigenaarscode; de ontgrendeling geldt voor de sessie.
+- De eigenaar logt in op **Mijn profiel** met de eigenaarsnaam en het eigenaars-wachtwoord. Dat account wordt bij de eerste login lokaal aangemaakt, dus het werkt op elk toestel. Het profiel krijgt het label **Eigenaar** en het beheer opent zonder code.
+- Alternatief: de eigenaarscode op `#/eigenaar`; de ontgrendeling geldt voor de sessie.
+- **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik en de laatste automatische update.
+- **Bezoekers meten (optioneel):** GoatCounter-sitecode instellen voor anonieme, cookieloze bezoekcijfers en populairste projecten. Zonder sitecode wordt niets geladen of verstuurd; gebruikers kunnen zich afmelden via **Mijn profiel → Privacy en statistieken**.
 - Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeÃ«n.
 - Profielentabel met naam, optioneel contact, aanmaakdatum, laatste activiteit en voortgang.
 - **Voortgang wissen** en **Verwijderen** per profiel, met bevestiging.
@@ -175,7 +178,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### Installeerbare app (PWA)
 - `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeÃ«n**.
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
-- `sw.js` bewaart de app-shell (35 bestanden) bij de eerste installatie.
+- `sw.js` bewaart de app-shell (36 bestanden) bij de eerste installatie.
 - **Network-first** voor navigatie Ã©n same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
 - De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`), bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
 - Er is **geen handmatige updateknop** meer: de app werkt zichzelf volledig automatisch bij.
@@ -185,6 +188,13 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - **ðŸ“² Installeer als app** in de header en footer, met uitleg per platform en een **Installeer nu**-knop zodra de browser dat ondersteunt.
 - In een geÃ¯nstalleerde app verdwijnt de installeerknop en opent de site in een eigen venster.
 - Werkt op GitHub Pages zonder server; de service worker draait alleen via `https://` of `localhost`.
+
+### Gratis Android-app (APK)
+- `/download/` biedt de ondertekende Android-app aan als APK: versie 1.0.0, 1,89 MB, pakket `be.easycodey.app`, Android 7.0+.
+- Geen Google Play-account of betaling nodig. De APK is ondertekend met de uploadsleutel en de fingerprint staat in `/.well-known/assetlinks.json`, dus de TWA opent zonder adresbalk.
+- De pagina toont de **SHA-256**, installatiestappen, uitleg over Play Protect, een hashcontrole voor Windows/macOS/Linux en veelgestelde vragen.
+- De inhoud (projecten, editor, accounts) werkt automatisch bij via de website. Alleen een nieuwe Android-schil vraagt een nieuwe APK.
+- Bereikbaar via de footer **⬇ Android-app**, het installatievenster en `/installeren/`.
 
 ### Donaties
 - Doneerknop in de header en footer, met een link naar de volledige pagina `/doneren/`.
@@ -197,7 +207,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Vindbaarheid
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **167 URL's**: startpagina, projectoverzicht, installatiepagina, contactpagina, doneerpagina en alle 161 projecten.
+- `/sitemap.xml` bevat **168 URL's**: startpagina, projectoverzicht, installatiepagina, downloadpagina, contactpagina, doneerpagina en alle 161 projecten.
 - Elk project heeft een vaste pagina op `/idee/<id>/` met eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht per categorie met zoekveld (`CollectionPage` + `ItemList`).
 - `/contact/` is de Nederlandstalige contactpagina met telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com** (`ContactPage` + `Organization`).
@@ -244,7 +254,7 @@ FLL/
 â”œâ”€â”€ installeren/index.html     Installatie-uitleg per platform met QR-code
 â”œâ”€â”€ contact/index.html         Nederlandstalige contactpagina met telefoon, WhatsApp en e-mail
 â”œâ”€â”€ doneren/index.html         Doneerpagina met IBAN, rekeninghouder, bank, BIC en transparantie
-â”œâ”€â”€ sitemap.xml                Startpagina, overzicht, installeren, contact, doneren en 161 projectpagina's (167 URL's)
+â”œâ”€â”€ sitemap.xml                Startpagina, overzicht, installeren, download, contact, doneren en 161 projectpagina's (168 URL's)
 â”œâ”€â”€ server.js                  Statische server + AI-proxy (geen dependencies)
 â”œâ”€â”€ package.json               Scripts: start, dev, check, pages, build, icons
 â”œâ”€â”€ render.yaml                Render Blueprint
@@ -274,7 +284,7 @@ FLL/
 | Alle 10 categorie-covers | âœ… 200, `image/svg+xml` |
 | `/api/config` | âœ… 200, `application/json`, inclusief doneervelden |
 | `/robots.txt` | âœ… 200, `text/plain`, verwijst naar de sitemap |
-| `/sitemap.xml` | âœ… 200, geldige XML met 167 URL's en `SITE_URL` |
+| `/sitemap.xml` | âœ… 200, geldige XML met 168 URL's en `SITE_URL` |
 | Doneerknop zonder `DONATE_URL` | âœ… verborgen |
 | Doneerknop met `DONATE_URL` | âœ… zichtbaar, link en label kloppen |
 | Python-speelveld (headless Chrome, Pyodide) | âœ… `print("Test", 2 + 3)` geeft `Test 5` |
@@ -294,7 +304,7 @@ FLL/
 | Live GitHub Pages: editor, hero-link en projectacties | âœ… 9/9 live checks geslaagd |
 | Manifest, iconen en snelkoppelingen | âœ… 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
 | Service worker actief en pagina onder controle | âœ… scope `/`, app-shell uit cache |
-| Offline-cache gevuld | âœ… 35 bestanden |
+| Offline-cache gevuld | âœ… 36 bestanden |
 | Installatie-uitleg in de app | âœ… 3 platformstappen, sluit correct |
 | **Speel dit idee** op een projectpagina | âœ… speelbare app in de pagina; **Gebruik dit idee** toont alle code |
 | **Programmeer zelf** met autoplay | âœ… volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
@@ -304,13 +314,15 @@ FLL/
 | Chrome-installeerbaarheid | âœ… geen installability errors |
 | PWA-testsuite op de live site | âœ… 11/11 checks geslaagd |
 | Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
-| Live: offline-cache en offline Python | âœ… 35 bestanden, Pyodide werkt offline |
+| Live: offline-cache en offline Python | âœ… 36 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | âœ… 33/33 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS en eigenaarspaneel |
+| Eigenaarslogin en inzichten lokaal | âœ… 35/35 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, app-status, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
+| Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Invoer-pop-up met de echte vraag | âœ… 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | âœ… Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | âœ… `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
-| Vaste pagina's lokaal | âœ… 91/91 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee en Snake-preview |
+| Vaste pagina's lokaal | âœ… 102/102 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee en Snake-preview |
 | App-preview per project | âœ… 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
 | Weerbaarheid bij laadfouten | âœ… 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
 | Snake-preview | âœ… canvas, D-pad en toetsen; speelbaar in de browser |
@@ -318,7 +330,7 @@ FLL/
 | Projectpagina `/idee/dobbelsteen-simulator/` | âœ… eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
 | Projectpagina zonder slash | âœ… 301 naar de map met slash |
 | Overzicht `/projecten/` | âœ… 161 links, 10 categorieÃ«n, zoekfilter en `CollectionPage` |
-| Sitemap lokaal | âœ… geldige XML, 167 URL's, productie-startpagina aanwezig |
+| Sitemap lokaal | âœ… geldige XML, 168 URL's, productie-startpagina aanwezig |
 | Speel dit idee vanaf vaste pagina | âœ… app-weergave in de pagina; **Programmeer zelf** opent `?play=1` met volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | âœ… wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | âœ… geen horizontale overflow, Ã©Ã©n kolom |
@@ -516,7 +528,7 @@ De site staat live:
 | Contactpagina | âœ… `/contact/` met telefoon/WhatsApp en e-mail |
 | Doneerpagina | âœ… `/doneren/` met IBAN, houder, bank, BIC en transparantie |
 | Privacybeleid | âœ… `/privacy/` met lokale opslag, geen verkoop en contact |
-| Sitemap met 167 URL's | âœ… gegenereerd door `npm run pages` |
+| Sitemap met 168 URL's | âœ… gegenereerd door `npm run pages` |
 | Google Play (TWA) | â³ technisch klaar: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
 | Online AI-coach | â³ alleen op Render; Pages gebruikt de offline coach |
 | Doneren | âœ… Belfius IBAN via `site-config.json` en de doneerpagina |
@@ -525,7 +537,7 @@ Wat optioneel nog kan:
 
 1. Render Web Service of Blueprint koppelen voor de online AI-coach (`npm install`, `npm start`).
 2. `OPENAI_API_KEY`, `SITE_URL` en eventueel `DONATE_URL` in Render instellen.
-3. Site aanmelden bij Google Search Console en de sitemap met 167 URL's insturen; zie `GOOGLE.md`.
+3. Site aanmelden bij Google Search Console en de sitemap met 168 URL's insturen; zie `GOOGLE.md`.
 4. Optioneel: eigen domein koppelen.
 
 ---

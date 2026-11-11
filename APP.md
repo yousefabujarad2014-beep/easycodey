@@ -71,6 +71,14 @@ De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldin
 
 Je voortgang staat per browser en per apparaat in `localStorage`. Met een optioneel account op `#/profiel` houd je gebruikers op hetzelfde apparaat gescheiden. Er is geen account op een server en geen automatische synchronisatie tussen apparaten; gebruik de back-up om je gegevens te verhuizen.
 
+### Android-app als APK
+
+Naast de installeerbare webapp is er een echte Android-app als **APK**: `download/EasyCodey-1.0.0.apk` (1,89 MB). Je vindt hem op **`/download/`**, in de footer onder **⬇ Android-app** en in het installatievenster. Dit werkt zonder Google Play en zonder betaling.
+
+- De APK is ondertekend met de uploadsleutel; de fingerprint staat in `/.well-known/assetlinks.json`, dus de app opent zonder adresbalk.
+- De pagina toont de **SHA-256**, installatiestappen, uitleg over Play Protect en een hashcontrole.
+- De inhoud werkt automatisch bij via de website. Alleen een nieuwe Android-schil vraagt een nieuwe APK; zie `PLAYSTORE.md`.
+
 ---
 
 ## 3. De app bijwerken
@@ -86,7 +94,7 @@ Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. 
 
 Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v9` naar `easycodey-v10`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v10` naar `easycodey-v11`). De oude cache wordt dan bij de volgende start verwijderd.
 
 ### Als de app of website niet opent
 
@@ -165,12 +173,22 @@ Met **Back-up downloaden** bewaar je voortgang, eigen projecten en editor-code a
 
 ### Eigenaarspaneel
 
-Open `#/eigenaar` (link **🔑 Beheer** in de footer) en vul de eigenaarscode in. Je ziet dan:
+**Inloggen als eigenaar:** ga naar **Mijn profiel** en log in met de eigenaarsnaam en het
+eigenaars-wachtwoord. Daarna ben je op dat toestel eigenaar: het beheer opent zonder code en je
+profiel krijgt het label **Eigenaar**. Het account wordt bij de eerste login lokaal aangemaakt.
+
+Alternatief: open `#/eigenaar` (link **🔑 Beheer** in de footer) en vul de eigenaarscode in.
+
+Je ziet dan:
 
 - hoeveel profielen er op **dit apparaat** zijn gemaakt;
 - de naam, het optionele contact, de aanmaakdatum, de laatste activiteit en de voortgang per profiel;
 - knoppen om de voortgang van een profiel te wissen of een lokaal account te verwijderen;
 - een mededeling die bovenaan de app verschijnt;
+- **Inzicht en updates:** app-versie, service worker, aantal offline bestanden, opslaggebruik en de
+  laatste automatische update;
+- **Bezoekers meten:** vul je GoatCounter-sitecode in om anonieme bezoekcijfers, populairste
+  projecten en versies te zien. Zonder sitecode wordt er niets geladen of verstuurd;
 - **Alles downloaden** als JSON met alle lokale profielen en hun voortgang.
 
 Het paneel is een lokale toegangspoort, geen serverbeveiliging. Er is geen database: andere telefoons en computers hebben hun eigen lokale profielen. Wachtwoorden zijn nooit zichtbaar.
@@ -183,7 +201,7 @@ EasyCodey is bewust rustig en veilig opgezet:
 
 - **HTTPS:** de live app werkt via `https://yousefabujarad2014-beep.github.io/easycodey/` met een geldig certificaat, HSTS en een automatische doorverwijzing van HTTP naar HTTPS.
 - **Lokaal:** voortgang, accounts en eigen projecten staan alleen in de opslag van je eigen browser. Er is geen database en geen server die je gegevens bewaart.
-- **Geen advertenties of trackers:** er zijn geen advertentienetwerken en geen analytics van derden.
+- **Geen advertenties of trackers:** er zijn geen advertentienetwerken. Alleen als de eigenaar een GoatCounter-sitecode instelt, worden anonieme bezoekcijfers geteld — cookieloos, zonder persoonsgegevens en met een opt-out in **Mijn profiel → Privacy en statistieken**.
 - **Automatische updates:** de app controleert bij de start, elke 15 minuten, bij terugkeer naar de app, bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch geactiveerd.
 - **Geen sterke beveiliging:** het wachtwoord houdt accounts op hetzelfde apparaat uit elkaar. Gebruik geen belangrijk wachtwoord, want iemand met toegang tot je toestel kan bij de lokale opslag.
 - **Oude app verwijderen:** krijg je nog een melding over een oude versie, verwijder dan de oude app of snelkoppeling en installeer opnieuw via de HTTPS-link. Stap voor stap staat op `/installeren/#oude-app`.

@@ -31,6 +31,16 @@ const INSTALL_DIR = path.join(root, "installeren");
 const CONTACT_DIR = path.join(root, "contact");
 const DONATE_DIR = path.join(root, "doneren");
 const PRIVACY_DIR = path.join(root, "privacy");
+const DOWNLOAD_DIR = path.join(root, "download");
+const APK_FILE = "EasyCodey-1.0.0.apk";
+const APK_VERSION = "1.0.0";
+const APK_VERSION_CODE = 1;
+const APK_SHA256 = "9F11E9E0D4F9CC68ADC088103A89B99BDD79DB804CA6E8A6CE1C88386B2F872F";
+const APK_PATH = path.join(DOWNLOAD_DIR, APK_FILE);
+const APK_BYTES = fs.existsSync(APK_PATH) ? fs.statSync(APK_PATH).size : 0;
+const APK_SIZE = APK_BYTES
+  ? `${(APK_BYTES / (1024 * 1024)).toFixed(2).replace(".", ",")} MB`
+  : "onbekend";
 
 const SUN_MOON = `<svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
         <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path></svg>`;
@@ -178,6 +188,8 @@ function footer(prefix) {
         <a class="link-btn" href="${prefix}projecten/">📚 Alle projecten</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}installeren/">📲 Installeren</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}download/">⬇ Android-app</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/profiel">👤 Mijn profiel</a>
         <span aria-hidden="true">·</span>
@@ -631,6 +643,218 @@ function renderOverviewPage() {
 `;
 }
 
+function renderDownloadPage() {
+  const prefix = "../";
+  const canonical = `${SITE}/download/`;
+  const apkUrl = `${SITE}/download/${APK_FILE}`;
+  const title = "Download EasyCodey voor Android (APK) — gratis";
+  const description = trim(
+    `Download de gratis Android-app van EasyCodey als APK. Versie ${APK_VERSION}, ${APK_SIZE}, geen Google Play-account nodig. Controleer de SHA-256 en installeer veilig.`,
+    155
+  );
+
+  const ld = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        name: "EasyCodey",
+        operatingSystem: "Android 7.0 of nieuwer",
+        applicationCategory: "EducationalApplication",
+        softwareVersion: APK_VERSION,
+        fileSize: String(APK_BYTES || ""),
+        downloadUrl: apkUrl,
+        installUrl: canonical,
+        inLanguage: "nl",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+        publisher: { "@type": "Person", name: "Yousef Abujarad" },
+        description:
+          "Leer Python met 161 projecten, een editor en een coach. Gratis, privé en offline na de eerste keer laden."
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "EasyCodey", item: `${SITE}/` },
+          { "@type": "ListItem", position: 2, name: "Download", item: canonical }
+        ]
+      }
+    ]
+  };
+
+  return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+  ${head({ title, description, canonical, image: `${SITE}/assets/icons/icon-512.png`, prefix, extraLd: ld })}
+</head>
+<body>
+  <div class="page-glow" aria-hidden="true"></div>
+  ${header(prefix)}
+
+  <main id="main" class="static-main">
+    <nav class="breadcrumb" aria-label="Kruimelpad">
+      <a href="${prefix}">EasyCodey</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Download</span>
+    </nav>
+
+    <header class="static-page-head">
+      <p class="eyebrow">Android-app</p>
+      <h1>Download EasyCodey voor Android</h1>
+      <p class="static-lead">
+        De echte Android-app, zonder Google Play en zonder account. Gratis, ${esc(
+          APK_SIZE
+        )}, versie ${esc(APK_VERSION)}. Je krijgt een eigen icoon, een eigen venster en al je
+        voortgang blijft lokaal bewaard.
+      </p>
+    </header>
+
+    <div class="install-hero">
+      <section class="panel install-qr download-card">
+        <span class="download-emoji" aria-hidden="true">🤖</span>
+        <h2>EasyCodey ${esc(APK_VERSION)}</h2>
+        <p>Android 7.0 of nieuwer · ${esc(APK_SIZE)}</p>
+        <a class="btn brand btn-block" href="${prefix}download/${esc(APK_FILE)}" download>⬇ Download de APK</a>
+        <p class="static-note">
+          Alleen van deze officiële pagina downloaden. Controleer hieronder de SHA-256.
+        </p>
+      </section>
+      <section class="panel install-highlights">
+        <h2>Waarom deze download?</h2>
+        <ul class="tips">
+          <li>Werkt zonder Google Play-account en zonder betaling.</li>
+          <li>Eigen icoon en volledig scherm, net als een store-app.</li>
+          <li>De inhoud en projecten blijven automatisch actueel via de website.</li>
+          <li>Je voortgang, profielen en editor-code blijven op je toestel.</li>
+          <li>Geen advertenties, geen trackers en geen verplicht account.</li>
+        </ul>
+        <div class="static-actions">
+          <a class="btn ghost" href="${prefix}installeren/">📲 Liever als webapp</a>
+          <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">1</span> Bestandsgegevens</h2>
+      <dl class="download-meta">
+        <div><dt>Versie</dt><dd>${esc(APK_VERSION)} (versionCode ${APK_VERSION_CODE})</dd></div>
+        <div><dt>Grootte</dt><dd>${esc(APK_SIZE)}</dd></div>
+        <div><dt>Pakketnaam</dt><dd><code>be.easycodey.app</code></dd></div>
+        <div><dt>Android</dt><dd>7.0 of nieuwer</dd></div>
+        <div class="download-meta-wide">
+          <dt>SHA-256</dt>
+          <dd><code class="download-hash">${esc(APK_SHA256)}</code></dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">2</span> Zo installeer je de app</h2>
+      <ol class="install-steps">
+        <li>
+          <strong>Tik op de downloadknop</strong>
+          De APK komt in de map <em>Downloads</em> van je telefoon. Chrome kan één keer vragen of je
+          het bestand wilt bewaren: kies <em>Downloaden</em>.
+        </li>
+        <li>
+          <strong>Open het gedownloade bestand</strong>
+          Tik op de melding of open <em>Downloads</em> in je browser en tik op
+          <code>${esc(APK_FILE)}</code>.
+        </li>
+        <li>
+          <strong>Sta installatie toe</strong>
+          Android vraagt om toestemming: <em>Instellingen → Toestaan vanuit deze bron</em>. Daarna kun
+          je terug en op <em>Installeren</em> tikken.
+        </li>
+        <li>
+          <strong>Bevestig bij Play Protect</strong>
+          Zie je “App geblokkeerd” of een waarschuwing? Tik op <em>Meer details</em> en daarna op
+          <em>Toch installeren</em>. De app is ondertekend en bevat geen advertenties.
+        </li>
+        <li>
+          <strong>Open EasyCodey</strong>
+          Het icoon staat nu op je startscherm. De eerste keer heb je internet nodig; daarna werkt de
+          app ook offline.
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">3</span> Controleer de download</h2>
+      <p class="static-lead">
+        Wil je zeker weten dat het bestand klopt? Vergelijk de SHA-256 met de waarde hierboven.
+      </p>
+      <p><strong>Windows (PowerShell):</strong></p>
+      <pre class="code-block"><code>Get-FileHash .\\${esc(APK_FILE)} -Algorithm SHA256</code></pre>
+      <p><strong>macOS of Linux:</strong></p>
+      <pre class="code-block"><code>shasum -a 256 ${esc(APK_FILE)}</code></pre>
+      <p class="static-note">
+        Komt de hash niet overeen? Verwijder het bestand en download opnieuw vanaf deze pagina.
+      </p>
+    </section>
+
+    <section class="panel install-section donate-faq">
+      <h2><span class="h2-num">?</span> Veelgestelde vragen</h2>
+      <details class="faq-item">
+        <summary>Is dit veilig?</summary>
+        <p>
+          Ja. De APK is ondertekend met de eigen uploadsleutel van EasyCodey en opent alleen
+          <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong>. Er zit geen reclame,
+          geen tracker en geen verborgen code in. Je kunt de hash controleren.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Waarom staat de app niet in Google Play?</summary>
+        <p>
+          Google vraagt een eenmalige registratievergoeding van $25 voor de Play Store. EasyCodey is
+          gratis en blijft gratis; daarom bieden we de APK rechtstreeks aan. Later kan de app alsnog
+          naar Play, zonder dat je iets opnieuw hoeft te bouwen.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Krijg ik automatisch updates?</summary>
+        <p>
+          De <strong>inhoud</strong> — projecten, editor, eigenaarslogin en verbeteringen — wordt
+          automatisch bijgewerkt zodra je online bent. Alleen als de Android-schil zelf verandert,
+          verschijnt hier een nieuwe APK. Download die dan opnieuw.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Moet ik een account maken?</summary>
+        <p>
+          Nee. Alles werkt als gast. Een optioneel account houdt alleen profielen op hetzelfde
+          toestel uit elkaar. De eigenaar kan inloggen voor het beheerscherm.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Werkt de app ook offline?</summary>
+        <p>
+          Ja, na de eerste keer online gebruiken. Python wordt één keer geladen en daarna uit de cache
+          gebruikt. Je voortgang staat lokaal in je browser.
+        </p>
+      </details>
+    </section>
+
+    <section class="panel install-section">
+      <h2><span class="h2-num">✓</span> Liever geen APK?</h2>
+      <p class="static-lead">
+        Je kunt EasyCodey ook als webapp installeren. Dat werkt op Android, iPhone, iPad, computer en
+        Chromebook, zonder download en met automatische updates.
+      </p>
+      <div class="static-actions">
+        <a class="btn brand" href="${prefix}installeren/">📲 Installeren als webapp</a>
+        <a class="btn ghost" href="${prefix}">▶ Open EasyCodey</a>
+      </div>
+    </section>
+  </main>
+
+  ${footer(prefix)}
+  ${THEME_SCRIPT}
+</body>
+</html>
+`;
+}
+
 function renderInstallPage() {
   const prefix = "../";
   const canonical = `${SITE}/installeren/`;
@@ -725,6 +949,7 @@ function renderInstallPage() {
         <div class="static-actions">
           <a class="btn brand" href="${prefix}">▶ Open EasyCodey</a>
           <a class="btn ghost" href="${prefix}projecten/">📚 Alle projecten</a>
+          <a class="btn ghost" href="${prefix}download/">⬇ Android-app (APK)</a>
         </div>
       </section>
     </div>
@@ -749,7 +974,7 @@ function renderInstallPage() {
         <div class="trust-card">
           <span class="trust-card-icon" aria-hidden="true">🚫</span>
           <strong>Geen advertenties of trackers</strong>
-          <p>EasyCodey verkoopt niets en volgt je niet. Er zijn geen advertentienetwerken of analytics van derden.</p>
+          <p>EasyCodey verkoopt niets en volgt je niet. Er zijn geen advertentienetwerken. Alleen anonieme, cookieloze bezoekcijfers als de eigenaar dat instelt — en die kun je zelf uitzetten.</p>
         </div>
         <div class="trust-card">
           <span class="trust-card-icon" aria-hidden="true">🔄</span>
@@ -1148,8 +1373,15 @@ function renderPrivacyPage() {
       <h2>Geen server, geen verkoop</h2>
       <p class="profile-text">
         EasyCodey heeft geen database en geen account op een server. Je gegevens worden niet verkocht,
-        niet verhuurd en niet gebruikt voor advertenties. Er zijn geen advertentienetwerken, geen
-        analytics van derden en geen trackers.
+        niet verhuurd en niet gebruikt voor advertenties. Er zijn geen advertentienetwerken en geen
+        trackers.
+      </p>
+      <p class="profile-text">
+        De eigenaar kan optioneel <strong>anonieme bezoekcijfers</strong> laten meten met GoatCounter.
+        Dat gebeurt zonder cookies, zonder vingerafdruk en zonder persoonsgegevens: alleen welke pagina
+        en welk project zijn bekeken, met een grove regio en het browsertype. Je kunt dit altijd
+        uitzetten via <strong>Mijn profiel → Privacy en statistieken</strong>. Staat er geen meetcode
+        ingesteld, dan wordt er niets verstuurd.
       </p>
       <p class="static-note">
         De eigenaar ziet alleen de profielen die op hetzelfde apparaat zijn gemaakt, via het lokale
@@ -1163,7 +1395,8 @@ function renderPrivacyPage() {
         De website wordt gehost via GitHub Pages. Lettertypen komen van Google Fonts en Python wordt
         geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
         browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
-        je projecten of profielen naar deze diensten.
+        je projecten of profielen naar deze diensten. Alleen als de eigenaar een meetcode instelt,
+        wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder cookies.
       </p>
       <p class="static-note">
         De online AI-coach is alleen beschikbaar als de eigenaar een server met API-sleutel koppelt.
@@ -1457,11 +1690,13 @@ writeFile(path.join(INSTALL_DIR, "index.html"), renderInstallPage());
 writeFile(path.join(CONTACT_DIR, "index.html"), renderContactPage());
 writeFile(path.join(DONATE_DIR, "index.html"), renderDonatePage());
 writeFile(path.join(PRIVACY_DIR, "index.html"), renderPrivacyPage());
+writeFile(path.join(DOWNLOAD_DIR, "index.html"), renderDownloadPage());
 
 const urls = [
   { loc: `${SITE}/`, priority: "1.0", changefreq: "weekly" },
   { loc: `${SITE}/projecten/`, priority: "0.9", changefreq: "weekly" },
   { loc: `${SITE}/installeren/`, priority: "0.7", changefreq: "monthly" },
+  { loc: `${SITE}/download/`, priority: "0.7", changefreq: "monthly" },
   { loc: `${SITE}/contact/`, priority: "0.6", changefreq: "yearly" },
   { loc: `${SITE}/doneren/`, priority: "0.6", changefreq: "yearly" },
   { loc: `${SITE}/privacy/`, priority: "0.4", changefreq: "yearly" },
@@ -1492,6 +1727,7 @@ writeFile(path.join(root, "sitemap.xml"), sitemap);
 console.log(`Projectpagina's: ${IDEAS.length}`);
 console.log(`Overzicht:       projecten/index.html`);
 console.log(`Installeren:     installeren/index.html`);
+console.log(`Download:        download/index.html (${APK_FILE})`);
 console.log(`Contact:         contact/index.html`);
 console.log(`Doneren:         doneren/index.html`);
 console.log(`Privacy:         privacy/index.html`);

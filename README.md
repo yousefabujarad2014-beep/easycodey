@@ -40,7 +40,8 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **Optioneel account** (`#/profiel`): meld je snel aan zoals bij Kahoot, met alleen een naam en een wachtwoord. Elk account heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder account werkt alles gewoon als gast. Je kunt optioneel een e-mailadres of telefoonnummer toevoegen; dat blijft lokaal en wordt nooit verstuurd.
 - **Chat met je coach**: zodra je bent ingelogd verschijnt er een chatknop in de footer en als zwevende knop rechtsonder. Op Android en laptop opent die direct EasyCoach. Je profielpagina heeft daarnaast een grote chatkaart.
 - **Back-up**: download je profieldata als JSON en zet die op een ander apparaat weer terug.
-- **Eigenaarspaneel** (`#/eigenaar`): met de eigenaarscode zie je hoeveel profielen er op dit apparaat zijn, wat hun voortgang is en kun je een mededeling plaatsen of lokale gegevens downloaden. Er is geen server: je ziet alleen dit apparaat.
+- **Eigenaarspaneel** (`#/eigenaar`): log in als eigenaar op **Mijn profiel** (naam + wachtwoord) en het beheer opent zonder code; met de eigenaarscode kan het ook. Je ziet hoeveel profielen er op dit apparaat zijn, wat hun voortgang is, de app-status en optioneel anonieme bezoekcijfers via GoatCounter. Er is geen server: je ziet alleen dit apparaat.
+- **Gratis Android-app**: download de APK op `/download/` (versie 1.0.0, 1,89 MB) en installeer zonder Google Play. De app opent de website, werkt offline en houdt de inhoud automatisch actueel.
 - **Zoeken en filteren** op trefwoord, categorie, niveau, tijdsduur, meerdere vaardigheden, alleen niet-afgeronde projecten en sorteren.
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
 - **Leerpad** met alle projecten per niveau en een categorie-filter.
@@ -298,7 +299,8 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 - Een account is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als beveiliging. Het wachtwoord houdt accounts uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat.
 - Oude accounts met een PIN blijven werken: de PIN wordt bij het inlezen automatisch als wachtwoord gelezen.
 - Het contactveld bij registratie is **optioneel**. Het staat alleen in `easycodey.profiles.v1` op dit apparaat en wordt nooit verstuurd.
-- Het **eigenaarspaneel** op `#/eigenaar` is lokaal beveiligd met de eigenaarscode. Het toont het aantal profielen op dit apparaat, hun voortgang en contactgegevens. Wachtwoorden zijn nooit zichtbaar.
+- Het **eigenaarspaneel** op `#/eigenaar` is lokaal beveiligd met de eigenaarscode. De eigenaar kan ook inloggen met het eigenaarsaccount op **Mijn profiel**; dan opent het paneel zonder code en werkt dat op elk toestel. Het toont het aantal profielen op dit apparaat, hun voortgang en contactgegevens. Wachtwoorden zijn nooit zichtbaar.
+- **Anonieme bezoekcijfers** zijn optioneel en cookieloos (GoatCounter). Alleen de eigenaar stelt een sitecode in; zonder sitecode wordt er niets geladen of verstuurd. Iedereen kan zich afmelden via **Mijn profiel → Privacy en statistieken**.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Gebruik **Back-up downloaden** en **Back-up herstellen** op `#/profiel` om voortgang, eigen projecten en editor-code mee te nemen. Op **Mijn ideeën** kun je daarnaast alleen je eigen projecten exporteren/importeren.
 
