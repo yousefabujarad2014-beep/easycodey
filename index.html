@@ -461,6 +461,142 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script type="module" src="app.js"></script>
+  <style>
+    .boot-fallback {
+      max-width: 640px;
+      margin: 32px auto;
+      padding: 28px;
+      border-radius: 20px;
+      background: #f7f5ef;
+      color: #12261c;
+      border: 1px solid rgba(18, 38, 28, 0.12);
+      box-shadow: 0 18px 40px rgba(18, 38, 28, 0.12);
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    .boot-fallback h1 {
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.55rem;
+      margin: 0 0 12px;
+    }
+    .boot-fallback p {
+      margin: 0 0 12px;
+    }
+    .boot-fallback .boot-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 14px;
+    }
+    .boot-fallback button {
+      font: inherit;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 11px 18px;
+      border: 1px solid #12261c;
+      background: #12261c;
+      color: #f7f5ef;
+    }
+    .boot-fallback button.secondary {
+      background: transparent;
+      color: #12261c;
+    }
+    .boot-fallback .boot-small {
+      font-size: 0.92rem;
+      margin: 0;
+      color: #40544a;
+    }
+    .boot-fallback a {
+      color: #12261c;
+    }
+    @media (prefers-color-scheme: dark) {
+      .boot-fallback {
+        background: #12110f;
+        color: #f4efe3;
+        border-color: rgba(244, 239, 227, 0.16);
+      }
+      .boot-fallback button {
+        background: #e3bd6a;
+        border-color: #e3bd6a;
+        color: #12110f;
+      }
+      .boot-fallback button.secondary {
+        background: transparent;
+        color: #f4efe3;
+        border-color: rgba(244, 239, 227, 0.4);
+      }
+      .boot-fallback .boot-small,
+      .boot-fallback a {
+        color: #cfc7b6;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      var timer = null;
+      var shown = false;
+
+      function showFallback() {
+        if (shown || window.__easycodeyBooted) return;
+        var main = document.getElementById("app");
+        if (!main || main.children.length) return;
+        shown = true;
+        var offline = navigator.onLine === false;
+        var message = offline
+          ? "Je toestel lijkt offline. Zet wifi of mobiele data aan en probeer opnieuw."
+          : "De app-bestanden zijn niet volledig binnengehaald. Meestal helpt opnieuw laden of een schone start.";
+        main.innerHTML =
+          '<section class="boot-fallback" role="alert">' +
+          "<h1>EasyCodey laden lukt even niet</h1>" +
+          "<p>" + message + "</p>" +
+          "<p>Je voortgang en je projecten blijven bewaard. Je hoeft niets opnieuw te doen.</p>" +
+          '<p class="boot-actions">' +
+          '<button type="button" id="boot-retry">Opnieuw proberen</button>' +
+          '<button type="button" class="secondary" id="boot-reset">App-cache wissen en herladen</button>' +
+          "</p>" +
+          '<p class="boot-small">Blijft het misgaan? Open <a href="projecten/">alle projecten</a> of de <a href="installeren/">installatie-uitleg</a>.</p>' +
+          "</section>";
+
+        var retry = document.getElementById("boot-retry");
+        if (retry) retry.addEventListener("click", function () { window.location.reload(); });
+
+        var reset = document.getElementById("boot-reset");
+        if (reset) {
+          reset.addEventListener("click", function () {
+            reset.disabled = true;
+            reset.textContent = "Bezig met opruimen…";
+            var jobs = [];
+            try {
+              if ("serviceWorker" in navigator) {
+                jobs.push(
+                  navigator.serviceWorker.getRegistrations().then(function (regs) {
+                    return Promise.all(regs.map(function (reg) { return reg.unregister(); }));
+                  })
+                );
+              }
+              if (window.caches) {
+                jobs.push(
+                  caches.keys().then(function (keys) {
+                    return Promise.all(keys.map(function (key) { return caches.delete(key); }));
+                  })
+                );
+              }
+            } catch (error) {}
+            Promise.all(jobs).catch(function () {}).then(function () {
+              window.location.reload();
+            });
+          });
+        }
+      }
+
+      window.__easycodeyBoot = function () {
+        window.__easycodeyBooted = true;
+        if (timer) clearTimeout(timer);
+      };
+      window.__easycodeyBootFail = showFallback;
+      timer = window.setTimeout(showFallback, 8000);
+    })();
+  </script>
+  <script type="module" src="app.js" onerror="window.__easycodeyBootFail && window.__easycodeyBootFail()"></script>
 </body>
 </html>

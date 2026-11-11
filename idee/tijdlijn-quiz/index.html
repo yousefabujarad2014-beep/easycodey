@@ -434,6 +434,35 @@ for naam, jaar in juist:
           }
         });
       });
+
+      // Vangnet: als de preview-module niet laadt, tonen we de volledige code
+      // en zorgen we dat de App/Code-tabs toch blijven werken.
+      var projectView = document.querySelector("[data-project-view]");
+      if (projectView) {
+        var setProjectView = function (mode) {
+          var isCode = mode === "code";
+          projectView.classList.toggle("is-app", !isCode);
+          projectView.classList.toggle("is-code", isCode);
+          projectView.querySelectorAll("[data-view-tab]").forEach(function (tab) {
+            var active = tab.getAttribute("data-view-tab") === mode;
+            tab.classList.toggle("is-active", active);
+            tab.setAttribute("aria-selected", String(active));
+            tab.tabIndex = active ? 0 : -1;
+          });
+        };
+        window.setTimeout(function () {
+          var stage = projectView.querySelector("[data-preview-stage]");
+          if (stage && stage.getAttribute("data-mounted") === "1") return;
+          setProjectView("code");
+          var hint = projectView.querySelector("[data-view-hint]");
+          if (hint) hint.textContent = "De demo kon niet laden. Je ziet nu de volledige code.";
+          projectView.addEventListener("click", function (event) {
+            var tab = event.target.closest("[data-view-tab]");
+            if (!tab) return;
+            setProjectView(tab.getAttribute("data-view-tab") === "code" ? "code" : "app");
+          });
+        }, 4000);
+      }
     })();
   </script>
 </body>

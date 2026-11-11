@@ -12,7 +12,6 @@ import {
 } from "./data/index.js";
 
 import * as store from "./js/store.js";
-import { mountProjectView } from "./js/previews.js";
 import {
   escapeHtml as e,
   renderMarkdown,
@@ -25,6 +24,51 @@ import {
   parseGeneratedIdea,
   guessCategory
 } from "./js/ai.js";
+
+/* De preview-module is groot. We laden hem pas wanneer iemand een project opent,
+   zodat een trage of mislukte download nooit de hele site kan blokkeren. */
+let previewsPromise = null;
+
+function loadPreviews() {
+  if (!previewsPromise) {
+    previewsPromise = import("./js/previews.js").catch((error) => {
+      console.warn("Preview-module niet geladen, code-weergave blijft werken.", error);
+      previewsPromise = null;
+      return null;
+    });
+  }
+  return previewsPromise;
+}
+
+function applyProjectView(view, mode) {
+  const isCode = mode === "code";
+  view.classList.toggle("is-app", !isCode);
+  view.classList.toggle("is-code", isCode);
+  view.querySelectorAll("[data-view-tab]").forEach((tab) => {
+    const active = tab.dataset.viewTab === mode;
+    tab.classList.toggle("is-active", active);
+    tab.setAttribute("aria-selected", String(active));
+    tab.tabIndex = active ? 0 : -1;
+  });
+}
+
+function showCodeFallback(root) {
+  const view = root.querySelector?.("[data-project-view]");
+  if (!view) return;
+  applyProjectView(view, "code");
+  const hint = view.querySelector("[data-view-hint]");
+  if (hint) hint.textContent = "De demo kon niet laden. Je ziet nu de volledige code.";
+  // De previews-module regelt normaal de tabs. Zonder die module blijven de
+  // knoppen toch bruikbaar, zodat de code altijd bereikbaar is.
+  if (view.dataset.fallbackTabs !== "1") {
+    view.dataset.fallbackTabs = "1";
+    view.addEventListener("click", (event) => {
+      const tab = event.target.closest?.("[data-view-tab]");
+      if (!tab) return;
+      applyProjectView(view, tab.dataset.viewTab === "code" ? "code" : "app");
+    });
+  }
+}
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
 const OWNER_CODE_HASH = "j0qwup";
@@ -1355,7 +1399,14 @@ function renderDetail(id) {
     </div>
     </section>
   </div>`;
-  mountProjectView(app);
+  loadPreviews().then((module) => {
+    if (!app.isConnected) return;
+    if (module && typeof module.mountProjectView === "function") {
+      module.mountProjectView(app);
+    } else {
+      showCodeFallback(app);
+    }
+  });
 }
 
 /* ------------------------------ leerpad ------------------------------ */
@@ -2892,6 +2943,7 @@ function initPWA() {
 /* ------------------------------ start ------------------------------ */
 
 async function init() {
+  window.__easycodeyBoot?.();
   initTheme();
   initPWA();
   route();

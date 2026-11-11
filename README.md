@@ -221,6 +221,8 @@ Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle p
 
 EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Je hoeft zelf niets te doen. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). De live app gebruikt HTTPS met een geldig certificaat en HSTS.
 
+Valt het netwerk weg of laadt een bestand niet? Dan start de app uit de bewaarde cache in plaats van te blijven wachten. De grote preview-module wordt pas bij een project geladen; lukt dat niet, dan schakelt de pagina automatisch naar de volledige code. Start de app helemaal niet, dan verschijnt een herstelscherm met **Opnieuw proberen** en **App-cache wissen en herladen** — je voortgang blijft daarbij bewaard.
+
 Meer uitleg over installeren, bijwerken en de iconen staat in `APP.md`. Wil je EasyCodey ook via
 Google Play installeren, lees dan `PLAYSTORE.md`.
 

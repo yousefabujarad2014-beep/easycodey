@@ -310,6 +310,7 @@ FLL/
 | Nieuw logo en app-iconen | âœ… `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
 | Vaste pagina's lokaal | âœ… 90/90 checks geslaagd, inclusief App/Code-tabs en Snake-preview |
 | App-preview per project | âœ… 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
+| Weerbaarheid bij laadfouten | âœ… 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
 | Snake-preview | âœ… canvas, D-pad en toetsen; speelbaar in de browser |
 | Alle 161 projecten | âœ… elk project heeft een preview (135 eigen demo's + 26 nieuwe demo's; 0 fallbacks over) |
 | Projectpagina `/idee/dobbelsteen-simulator/` | âœ… eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |

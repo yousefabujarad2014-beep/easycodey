@@ -86,7 +86,16 @@ Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. 
 
 Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v8` naar `easycodey-v9`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v9` naar `easycodey-v10`). De oude cache wordt dan bij de volgende start verwijderd.
+
+### Als de app of website niet opent
+
+EasyCodey heeft twee vangnetten, zodat je nooit met een leeg scherm blijft zitten:
+
+1. **De preview-module is losgekoppeld.** De interactieve demo's (`js/previews.js`) worden pas geladen als je een project opent. Lukt dat niet, dan zie je automatisch de volledige code en blijven de knoppen **App** en **Code** werken.
+2. **Herstelscherm.** Als de app zelf niet start, verschijnt na een paar seconden een uitleg met twee knoppen: **Opnieuw proberen** en **App-cache wissen en herladen**. Je voortgang, profielen en eigen projecten blijven daarbij bewaard.
+
+Lukt het nog steeds niet? Open de site in een incognitovenster of wis bij de browserinstellingen de sitegegevens van `yousefabujarad2014-beep.github.io`. Daarna installeer je opnieuw via **https://yousefabujarad2014-beep.github.io/easycodey/installeren/**.
 
 ---
 

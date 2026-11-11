@@ -1,7 +1,7 @@
 /* EasyCodey service worker — installeerbare app en offline modus.
    Bij een grote wijziging: verhoog VERSION, dan wordt de oude cache opgeruimd. */
 
-const VERSION = "easycodey-v9";
+const VERSION = "easycodey-v10";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
@@ -78,24 +78,59 @@ function isCacheable(response) {
   return response.type === "opaque";
 }
 
+/* Bewaar nooit iets stil kapot: een volle cache of een mislukte put mag
+   nooit verhinderen dat de pagina zelf geladen wordt. */
+function putSafe(cache, request, response) {
+  try {
+    return cache.put(request, response.clone()).catch(() => {});
+  } catch {
+    return Promise.resolve();
+  }
+}
+
+/* Als het netwerk traag of weg is, tonen we liever meteen de bewaarde versie
+   dan de bezoeker een leeg scherm te geven. */
+function withTimeout(promise, ms) {
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => resolve(null), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      () => {
+        clearTimeout(timer);
+        resolve(null);
+      }
+    );
+  });
+}
+
+const NAV_TIMEOUT = 3500;
+const ASSET_TIMEOUT = 2500;
+
 async function networkFirstNavigation(request) {
   const cache = await caches.open(SHELL_CACHE);
-  try {
-    const response = await fetch(request);
-    if (isCacheable(response)) cache.put(request, response.clone());
-    return response;
-  } catch {
-    return (
-      (await cache.match(request)) ||
-      (await cache.match("./index.html")) ||
-      (await cache.match("./")) ||
-      (await caches.match("./offline.html")) ||
-      new Response("<h1>Je bent offline</h1>", {
-        status: 503,
-        headers: { "Content-Type": "text/html; charset=utf-8" }
-      })
-    );
-  }
+  const network = fetch(request)
+    .then((response) => {
+      if (isCacheable(response)) putSafe(cache, request, response);
+      return response;
+    })
+    .catch(() => null);
+  const cached =
+    (await cache.match(request)) ||
+    (await cache.match("./index.html")) ||
+    (await cache.match("./"));
+  const fresh = cached ? await withTimeout(network, NAV_TIMEOUT) : await network;
+  return (
+    fresh ||
+    cached ||
+    (await caches.match("./offline.html")) ||
+    new Response("<h1>Je bent offline</h1>", {
+      status: 503,
+      headers: { "Content-Type": "text/html; charset=utf-8" }
+    })
+  );
 }
 
 async function staleWhileRevalidate(request, cacheName) {
@@ -103,7 +138,7 @@ async function staleWhileRevalidate(request, cacheName) {
   const cached = await cache.match(request);
   const network = fetch(request)
     .then((response) => {
-      if (isCacheable(response)) cache.put(request, response.clone());
+      if (isCacheable(response)) putSafe(cache, request, response);
       return response;
     })
     .catch(() => null);
@@ -112,14 +147,17 @@ async function staleWhileRevalidate(request, cacheName) {
 
 async function networkFirstAsset(request, cacheName) {
   const cache = await caches.open(cacheName);
-  try {
-    const response = await fetch(request);
-    if (isCacheable(response)) cache.put(request, response.clone());
-    return response;
-  } catch {
-    const cached = await cache.match(request);
-    return cached || new Response("", { status: 504 });
-  }
+  const cached = await cache.match(request);
+  const network = fetch(request)
+    .then((response) => {
+      if (isCacheable(response)) putSafe(cache, request, response);
+      return response;
+    })
+    .catch(() => null);
+  // Zonder bewaarde kopie wachten we op het netwerk; met kopie krijgt het
+  // netwerk heel even de tijd en anders start de app uit de cache.
+  const fresh = cached ? await withTimeout(network, ASSET_TIMEOUT) : await network;
+  return fresh || cached || new Response("", { status: 504 });
 }
 
 async function cacheFirst(request, cacheName) {
@@ -128,7 +166,7 @@ async function cacheFirst(request, cacheName) {
   if (cached) return cached;
   try {
     const response = await fetch(request);
-    if (isCacheable(response)) cache.put(request, response.clone());
+    if (isCacheable(response)) putSafe(cache, request, response);
     return response;
   } catch {
     return new Response("", { status: 504 });
