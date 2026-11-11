@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="stem-app">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🗳️</span>
+              <strong>Stem-app</strong>
+              <p>Laat bezoekers stemmen en toon de resultaten.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak de opties</h3>
             </div>
             <p>Bewaar de stemmen in een dictionary met een beginwaarde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>opties = {&quot;Pizza&quot;: 0, &quot;Pasta&quot;: 0, &quot;Sushi&quot;: 0}</code></pre>
           </div>
@@ -229,7 +248,7 @@
               <h3 class="step-title">Toon het formulier</h3>
             </div>
             <p>Elke optie wordt een knop met dezelfde naam.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.route(&quot;/&quot;)
 def home():
@@ -246,7 +265,7 @@ def home():
               <h3 class="step-title">Tel de stem</h3>
             </div>
             <p>Lees de keuze uit het formulier en verhoog de teller.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.route(&quot;/&quot;, methods=[&quot;GET&quot;, &quot;POST&quot;])
 def home():
@@ -264,7 +283,7 @@ def home():
               <h3 class="step-title">Toon de resultaten</h3>
             </div>
             <p>Bereken het totaal en toon percentages.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.route(&quot;/resultaten&quot;)
 def resultaten():
@@ -315,6 +334,7 @@ def resultaten():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -351,6 +371,8 @@ def resultaten():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

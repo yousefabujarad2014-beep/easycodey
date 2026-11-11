@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="back-up-script">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">💾</span>
+              <strong>Back-up-script</strong>
+              <p>Maak automatisch een zip-back-up van een map.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een zip</h3>
             </div>
             <p>ZipFile schrijft een archief met alle bestanden uit een map.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 import zipfile
@@ -239,7 +258,7 @@ with zipfile.ZipFile(doel, &quot;w&quot;, zipfile.ZIP_DEFLATED) as archief:
               <h3 class="step-title">Voeg een datum toe</h3>
             </div>
             <p>Zo overschrijf je nooit per ongeluk een oude back-up.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from datetime import datetime
 
@@ -253,7 +272,7 @@ doel = Path(&quot;back-ups&quot;) / f&quot;project-{stempel}.zip&quot;</code></p
               <h3 class="step-title">Sla lege mappen over</h3>
             </div>
             <p>Een zip bevat alleen bestanden, dus controleer je invoer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if not any(bron.rglob(&quot;*&quot;)):
     print(&quot;De bronmap is leeg.&quot;)</code></pre>
@@ -265,7 +284,7 @@ doel = Path(&quot;back-ups&quot;) / f&quot;project-{stempel}.zip&quot;</code></p
               <h3 class="step-title">Ruim oude back-ups op</h3>
             </div>
             <p>Bewaar bijvoorbeeld de laatste tien archieven.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>backups = sorted(Path(&quot;back-ups&quot;).glob(&quot;project-*.zip&quot;))
 for oud in backups[:-10]:
@@ -278,7 +297,7 @@ for oud in backups[:-10]:
               <h3 class="step-title">Maak een restore-test</h3>
             </div>
             <p>Controleer of je een bestand uit de zip kunt lezen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>with zipfile.ZipFile(doel) as archief:
     namen = archief.namelist()
@@ -325,6 +344,7 @@ for oud in backups[:-10]:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -361,6 +381,8 @@ for oud in backups[:-10]:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="tafels-oefenen">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">✖️</span>
+              <strong>Tafels oefenen</strong>
+              <p>Oefen de tafels met willekeurige vragen en feedback.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Stel een vraag</h3>
             </div>
             <p>Kies twee getallen en bereken het juiste antwoord.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -233,7 +252,7 @@ antwoord = int(input(f&quot;Wat is {tafel} x {factor}? &quot;))</code></pre>
               <h3 class="step-title">Controleer het antwoord</h3>
             </div>
             <p>Geef uitleg bij een fout antwoord.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if antwoord == tafel * factor:
     print(&quot;Goed!&quot;)
@@ -247,7 +266,7 @@ else:
               <h3 class="step-title">Maak een oefenreeks</h3>
             </div>
             <p>Herhaal tien vragen en houd de score bij.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>score = 0
 for _ in range(10):
@@ -269,7 +288,7 @@ print(f&quot;Score: {score}/10&quot;)</code></pre>
               <h3 class="step-title">Valideer de invoer</h3>
             </div>
             <p>Vang fouten op als iemand letters typt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def vraag_getal(tekst):
     while True:
@@ -285,7 +304,7 @@ print(f&quot;Score: {score}/10&quot;)</code></pre>
               <h3 class="step-title">Kies een moeilijkheidsgraad</h3>
             </div>
             <p>Beperk de getallen voor beginners.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>niveau = input(&quot;Makkelijk of moeilijk? &quot;).lower()
 maximum = 5 if niveau == &quot;makkelijk&quot; else 12</code></pre>
@@ -330,6 +349,7 @@ maximum = 5 if niveau == &quot;makkelijk&quot; else 12</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -366,6 +386,8 @@ maximum = 5 if niveau == &quot;makkelijk&quot; else 12</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

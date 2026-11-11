@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="breakout">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧱</span>
+              <strong>Breakout</strong>
+              <p>Kaats een bal en breek alle blokken.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Teken de bal en paddle</h3>
             </div>
             <p>Begin met een bal en een paddle onderaan het scherm.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import pygame
 
@@ -249,7 +268,7 @@ while loopt:
               <h3 class="step-title">Beweeg en laat de bal stuiteren</h3>
             </div>
             <p>De bal kaatst tegen de randen en tegen de paddle.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>bal.x += bal_snelheid[0]
 bal.y += bal_snelheid[1]
@@ -270,7 +289,7 @@ paddle.x = pygame.mouse.get_pos()[0] - paddle.width // 2</code></pre>
               <h3 class="step-title">Maak blokken die verdwijnen</h3>
             </div>
             <p>Bewaar de blokken in een lijst en verwijder een blok bij een botsing.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>blokken = [pygame.Rect(60 + kolom * 110, 80 + rij * 40, 90, 24)
            for rij in range(4) for kolom in range(7)]
@@ -325,6 +344,7 @@ if not blokken:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -361,6 +381,8 @@ if not blokken:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="fibonacci">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🌀</span>
+              <strong>Fibonacci en de gulden snede</strong>
+              <p>Genereer de Fibonacci-reeks en onderzoek de verhouding.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Genereer de reeks</h3>
             </div>
             <p>Elk getal is de som van de twee vorige.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>a, b = 0, 1
 reeks = []
@@ -236,7 +255,7 @@ print(reeks)</code></pre>
               <h3 class="step-title">Bereken de verhouding</h3>
             </div>
             <p>Deel elk getal door het vorige en print het resultaat.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for i in range(2, len(reeks)):
     verhouding = reeks[i] / reeks[i - 1]
@@ -249,7 +268,7 @@ print(reeks)</code></pre>
               <h3 class="step-title">Vergelijk met de gulden snede</h3>
             </div>
             <p>De verhouding nadert 1,6180339887.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>gulden_snede = (1 + 5 ** 0.5) / 2
 print(&quot;Gulden snede:&quot;, round(gulden_snede, 8))
@@ -295,6 +314,7 @@ print(&quot;Laatste verhouding:&quot;, round(reeks[-1] / reeks[-2], 8))</code></
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -331,6 +351,8 @@ print(&quot;Laatste verhouding:&quot;, round(reeks[-1] / reeks[-2], 8))</code></
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

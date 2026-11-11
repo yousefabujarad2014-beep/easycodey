@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="quiz-spel">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">❓</span>
+              <strong>Quizspel</strong>
+              <p>Stel meerkeuzevragen, houd de score bij en voeg zelf vragen toe.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Zet je vragen in een lijst</h3>
             </div>
             <p>Elke vraag is een woordenboek met de vraag, de opties en het juiste antwoord. Het juiste antwoord is de index van de optie, beginnend bij 0.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>vragen = [
     {
@@ -241,7 +260,7 @@
               <h3 class="step-title">Toon een vraag met genummerde opties</h3>
             </div>
             <p>Met enumerate() zet je een nummer voor elke optie. De gebruiker kiest 1, 2 of 3.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for vraag in vragen:
     print()
@@ -259,7 +278,7 @@
               <h3 class="step-title">Controleer het antwoord en tel de score</h3>
             </div>
             <p>Vergelijk de keuze met de opgeslagen index. Geef bij een fout antwoord meteen het juiste antwoord, dat leert het meest.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>score = 0
 
@@ -286,7 +305,7 @@ for vraag in vragen:
               <h3 class="step-title">Toon de eindscore</h3>
             </div>
             <p>Bereken het percentage en sluit af met een passende boodschap. Door de score te delen door het aantal vragen krijg je een cijfer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>aantal = len(vragen)
 percentage = score / aantal * 100
@@ -308,7 +327,7 @@ else:
               <h3 class="step-title">Hussel de vragen en breid uit</h3>
             </div>
             <p>Met random.shuffle() krijgt elke speler een andere volgorde. Voeg daarna je eigen vragen toe; de code verandert niet mee.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -365,6 +384,7 @@ vragen.append({
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -401,6 +421,8 @@ vragen.append({
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

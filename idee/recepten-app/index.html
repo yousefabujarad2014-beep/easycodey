@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="recepten-app">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🍳</span>
+              <strong>Recepten-app</strong>
+              <p>Bewaar en bekijk recepten in een kleine webapp.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Laad de recepten</h3>
             </div>
             <p>Lees bij het starten een JSON-bestand of begin met een lege lijst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import json
 from pathlib import Path
@@ -233,7 +252,7 @@ recepten = json.loads(BESTAND.read_text(encoding=&quot;utf-8&quot;)) if BESTAND.
               <h3 class="step-title">Toon het overzicht</h3>
             </div>
             <p>Maak een lijst met links naar elk recept.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.get(&quot;/&quot;)
 def home():
@@ -250,7 +269,7 @@ def home():
               <h3 class="step-title">Voeg een recept toe</h3>
             </div>
             <p>Lees de velden en voeg een dictionary toe aan de lijst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.post(&quot;/nieuw&quot;)
 def nieuw():
@@ -268,7 +287,7 @@ def nieuw():
               <h3 class="step-title">Toon een detailpagina</h3>
             </div>
             <p>Controleer de index voordat je een recept opzoekt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.get(&quot;/recept/&lt;int:index&gt;&quot;)
 def detail(index):
@@ -284,7 +303,7 @@ def detail(index):
               <h3 class="step-title">Maak een formulier</h3>
             </div>
             <p>Een klein formulier op de homepage maakt toevoegen mogelijk.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>&lt;form method=&quot;post&quot; action=&quot;/nieuw&quot;&gt;
   &lt;input name=&quot;naam&quot; placeholder=&quot;Naam&quot; required&gt;
@@ -332,6 +351,7 @@ def detail(index):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -368,6 +388,8 @@ def detail(index):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

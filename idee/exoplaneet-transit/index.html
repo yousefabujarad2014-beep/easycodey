@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="exoplaneet-transit">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🌑</span>
+              <strong>Exoplaneet-transit</strong>
+              <p>Simuleer een dip in het licht van een ster.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Modelleer de ster</h3>
             </div>
             <p>De helderheid is bijna constant.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>basis = 1.0
 helderheid = []</code></pre>
@@ -230,7 +249,7 @@ helderheid = []</code></pre>
               <h3 class="step-title">Voeg een transit toe</h3>
             </div>
             <p>Als de planeet voor de ster langs gaat, daalt de helderheid.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for minuut in range(0, 600):
     dip = 0.02 if 240 &lt; minuut &lt; 260 else 0.0
@@ -243,7 +262,7 @@ helderheid = []</code></pre>
               <h3 class="step-title">Maak een lichtcurve</h3>
             </div>
             <p>Print de waarden als een grafiek in de terminal.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for minuut in range(0, 600, 10):
     waarde = helderheid[minuut]
@@ -257,7 +276,7 @@ helderheid = []</code></pre>
               <h3 class="step-title">Bereken de periode</h3>
             </div>
             <p>Herhaal de dip en meet de afstand tussen twee dips.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>dips = [i for i, w in enumerate(helderheid) if w &lt; 0.99]
 print(&quot;Eerste dip op minuut&quot;, dips[0])</code></pre>
@@ -302,6 +321,7 @@ print(&quot;Eerste dip op minuut&quot;, dips[0])</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -338,6 +358,8 @@ print(&quot;Eerste dip op minuut&quot;, dips[0])</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

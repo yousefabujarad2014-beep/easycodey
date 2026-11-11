@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="dictee-generator">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🗣️</span>
+              <strong>Dictee-generator</strong>
+              <p>Laat Python zinnen voorlezen en controleer de spelling.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Lees een zin voor</h3>
             </div>
             <p>Op Windows kan PowerShell een zin uitspreken.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import subprocess
 
@@ -237,7 +256,7 @@ def spreek(tekst):
               <h3 class="step-title">Maak een dictee</h3>
             </div>
             <p>Gebruik lastige woorden uit je eigen lijst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>zinnen = [
     &quot;De koe loopt door de wei.&quot;,
@@ -252,7 +271,7 @@ def spreek(tekst):
               <h3 class="step-title">Spreek voor en controleer</h3>
             </div>
             <p>Vergelijk zonder hoofdletters en leestekens.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import re
 
@@ -274,7 +293,7 @@ for zin in zinnen:
               <h3 class="step-title">Werk ook op andere systemen</h3>
             </div>
             <p>Op macOS bestaat say; op Linux kun je espeak gebruiken.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># macOS: subprocess.run([&quot;say&quot;, tekst])
 # Linux: subprocess.run([&quot;espeak&quot;, tekst])</code></pre>
@@ -286,7 +305,7 @@ for zin in zinnen:
               <h3 class="step-title">Bewaar de score</h3>
             </div>
             <p>Houd bij welke zinnen je nog moet oefenen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>moeilijk = []
 # Voeg de zin toe aan moeilijk als het antwoord fout is.</code></pre>
@@ -331,6 +350,7 @@ for zin in zinnen:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -367,6 +387,8 @@ for zin in zinnen:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

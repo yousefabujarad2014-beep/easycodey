@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="pomodoro-timer">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🍅</span>
+              <strong>Pomodoro-timer met tkinter</strong>
+              <p>Een echte desktop-app met een aftellende klok en start- en stopknop.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Maak je eerste venster</h3>
             </div>
             <p>tkinter zit standaard bij Python, je hoeft niets te installeren. Elk programma begint met een hoofdvenster en eindigt met mainloop(), dat het venster openhoudt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -239,7 +258,7 @@ root.mainloop()</code></pre>
               <h3 class="step-title">Laat de klok aftellen</h3>
             </div>
             <p>after(1000, tick) vraagt tkinter om tick() over één seconde opnieuw aan te roepen. Zo blijft het venster reageren tijdens het aftellen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>seconden = 25 * 60
 loopt = False
@@ -264,7 +283,7 @@ def tick():
               <h3 class="step-title">Voeg start- en stopknoppen toe</h3>
             </div>
             <p>De knoppen roepen functies aan. Met de variabele loopt voorkom je dat er twee timers tegelijk lopen als je twee keer op start klikt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def start():
     global loopt
@@ -288,7 +307,7 @@ tk.Button(root, text=&quot;Stop&quot;, width=10, command=stop).pack(side=&quot;r
               <h3 class="step-title">Wissel werk en pauze af</h3>
             </div>
             <p>Na 25 minuten werken volgt 5 minuten pauze. Houd bij in welke fase je zit en reset de seconden als de fase voorbij is. Zo wordt het een echte pomodoro.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>werk_seconden = 25 * 60
 pauze_seconden = 5 * 60
@@ -311,7 +330,7 @@ else:
               <h3 class="step-title">Maak het af met een melding</h3>
             </div>
             <p>Een venster dat piept of van kleur verandert voelt pas af. Op Windows kun je winsound gebruiken; op andere systemen print je een melding of gebruik je een belletje van tkinter.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import sys
 
@@ -365,6 +384,7 @@ def meld():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -401,6 +421,8 @@ def meld():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

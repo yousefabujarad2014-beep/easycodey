@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="zwaartekracht-simulatie">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🪐</span>
+              <strong>Zwaartekracht-simulatie</strong>
+              <p>Simuleer vallende objecten met echte natuurkunde.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Stel de beginwaarden in</h3>
             </div>
             <p>Hoogte, snelheid en tijd beginnen bij nul.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>hoogte = 100.0
 snelheid = 0.0
@@ -233,7 +252,7 @@ dt = 0.05</code></pre>
               <h3 class="step-title">Simuleer de val</h3>
             </div>
             <p>Versnel en werk de positie bij.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>hoogtepunten = []
 
@@ -250,7 +269,7 @@ while hoogte &gt; 0:
               <h3 class="step-title">Vergelijk met de formule</h3>
             </div>
             <p>De theoretische valtijd is wortel van 2h/g.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import math
 
@@ -264,7 +283,7 @@ print(f&quot;Simulatie: {tijd:.2f} s, theorie: {theorie:.2f} s&quot;)</code></pr
               <h3 class="step-title">Maak een grafiek</h3>
             </div>
             <p>Print een eenvoudige tekstgrafiek of gebruik matplotlib.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for t, h in hoogtepunten[::20]:
     print(f&quot;{t:4.1f}s &quot; + &quot;#&quot; * int(h // 5))</code></pre>
@@ -309,6 +328,7 @@ print(f&quot;Simulatie: {tijd:.2f} s, theorie: {theorie:.2f} s&quot;)</code></pr
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -345,6 +365,8 @@ print(f&quot;Simulatie: {tijd:.2f} s, theorie: {theorie:.2f} s&quot;)</code></pr
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

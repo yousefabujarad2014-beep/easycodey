@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="rekenmachine-gui">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧮</span>
+              <strong>Rekenmachine met venster</strong>
+              <p>Bouw een echte rekenmachine met knoppen en een scherm.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak het venster</h3>
             </div>
             <p>tkinter zit standaard bij Python. Maak eerst een venster met een titel en een invoerveld.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -237,7 +256,7 @@ venster.mainloop()</code></pre>
               <h3 class="step-title">Voeg knoppen toe</h3>
             </div>
             <p>Een grid met rijen en kolommen houdt de knoppen netjes uitgelijnd.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def voeg_in(teken):
     scherm.insert(&quot;end&quot;, teken)
@@ -258,7 +277,7 @@ for index, label in enumerate(knoppen):
               <h3 class="step-title">Bereken het resultaat</h3>
             </div>
             <p>eval is hier alleen veilig omdat je zelf de invoer via knoppen beperkt. Controleer de tekens extra.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def bereken():
     tekst = scherm.get()
@@ -280,7 +299,7 @@ for index, label in enumerate(knoppen):
               <h3 class="step-title">Maak het venster schaalbaar</h3>
             </div>
             <p>Met weight krijgen rijen en kolommen dezelfde ruimte.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for i in range(4):
     venster.columnconfigure(i, weight=1)
@@ -295,7 +314,7 @@ for i in range(1, 6):
               <h3 class="step-title">Voeg een wis-knop toe</h3>
             </div>
             <p>Een extra knop maakt de rekenmachine bruikbaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>tk.Button(venster, text=&quot;C&quot;, command=lambda: scherm.delete(0, &quot;end&quot;)).grid(
     row=6, column=0, columnspan=4, sticky=&quot;nsew&quot;, padx=4, pady=4
@@ -341,6 +360,7 @@ for i in range(1, 6):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -377,6 +397,8 @@ for i in range(1, 6):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

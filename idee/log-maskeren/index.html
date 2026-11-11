@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="log-maskeren">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🕶️</span>
+              <strong>Gevoelige data maskeren</strong>
+              <p>Verwijder e-mailadressen en tokens uit logregels.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak testregels</h3>
             </div>
             <p>Gebruik verzonnen gegevens.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>regels = [
     &quot;login user=sam@example.com token=abc123&quot;,
@@ -233,7 +252,7 @@
               <h3 class="step-title">Maskeer e-mailadressen</h3>
             </div>
             <p>Vervang het deel voor de apenstaart.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import re
 
@@ -247,7 +266,7 @@ def maskeer_email(tekst):
               <h3 class="step-title">Maskeer tokens</h3>
             </div>
             <p>Vervang waarden achter token= of password=.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def maskeer_geheimen(tekst):
     tekst = re.sub(r&quot;(token|password|secret)=\S+&quot;, r&quot;\1=[verborgen]&quot;, tekst, flags=re.I)
@@ -260,7 +279,7 @@ def maskeer_email(tekst):
               <h3 class="step-title">Verwerk het log</h3>
             </div>
             <p>Pas beide filters toe en schrijf een schoner bestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -274,7 +293,7 @@ Path(&quot;log-schoon.txt&quot;).write_text(&quot;\n&quot;.join(schoon), encodin
               <h3 class="step-title">Controleer het resultaat</h3>
             </div>
             <p>Zoek naar apenstaarten en tokenwaarden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for regel in schoon:
     print(regel)
@@ -320,6 +339,7 @@ Path(&quot;log-schoon.txt&quot;).write_text(&quot;\n&quot;.join(schoon), encodin
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -356,6 +376,8 @@ Path(&quot;log-schoon.txt&quot;).write_text(&quot;\n&quot;.join(schoon), encodin
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

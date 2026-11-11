@@ -59,6 +59,7 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Onderdeel | Offline |
 |---|---|
 | Alle 161 projecten, uitleg, stappen en tips | ✅ |
+| Interactieve app-previews en de App/Code-tabs | ✅ |
 | Vaste projectpagina's `/idee/<id>/` en `/projecten/` | ✅ na één keer online bezoek |
 | Voortgang, thema, accounts en eigen projecten | ✅ |
 | Python-speelveld en editor | ✅ na de eerste keer online |
@@ -85,7 +86,7 @@ Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. 
 
 Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v7` naar `easycodey-v8`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v8` naar `easycodey-v9`). De oude cache wordt dan bij de volgende start verwijderd.
 
 ---
 

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="bmi-app">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">⚖️</span>
+              <strong>BMI-app</strong>
+              <p>Bereken je BMI en toon een categorie.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak de invoervelden</h3>
             </div>
             <p>Vraag lengte in centimeters en gewicht in kilo&#39;s.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -236,7 +255,7 @@ gewicht.pack()</code></pre>
               <h3 class="step-title">Bereken de BMI</h3>
             </div>
             <p>Deel gewicht door lengte in meters in het kwadraat.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def bereken():
     try:
@@ -256,7 +275,7 @@ gewicht.pack()</code></pre>
               <h3 class="step-title">Voeg een categorie toe</h3>
             </div>
             <p>Gebruik de officiële grenzen als ruwe indicatie.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def categorie(bmi):
     if bmi &lt; 18.5:
@@ -274,7 +293,7 @@ gewicht.pack()</code></pre>
               <h3 class="step-title">Toon een waarschuwing</h3>
             </div>
             <p>BMI houdt geen rekening met spier massa of leeftijd.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>tk.Label(venster, text=&quot;BMI is een ruwe indicatie, geen medisch advies.&quot;).pack()</code></pre>
           </div>
@@ -318,6 +337,7 @@ gewicht.pack()</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -354,6 +374,8 @@ gewicht.pack()</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

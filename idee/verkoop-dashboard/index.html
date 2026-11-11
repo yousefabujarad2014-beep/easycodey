@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="verkoop-dashboard">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🏪</span>
+              <strong>Verkoopdashboard</strong>
+              <p>Analyseer verkopen per product en maand.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak de data</h3>
             </div>
             <p>Gebruik een lijst met dictionaries als eenvoudige dataset.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>verkopen = [
     {&quot;product&quot;: &quot;Appel&quot;, &quot;maand&quot;: &quot;jan&quot;, &quot;aantal&quot;: 12, &quot;prijs&quot;: 0.5},
@@ -233,7 +252,7 @@
               <h3 class="step-title">Bereken omzet per product</h3>
             </div>
             <p>Vermenigvuldig aantal met prijs.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from collections import defaultdict
 
@@ -250,7 +269,7 @@ print(dict(omzet))</code></pre>
               <h3 class="step-title">Groepeer per maand</h3>
             </div>
             <p>Een tweede dictionary laat de trend zien.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>per_maand = defaultdict(float)
 for rij in verkopen:
@@ -263,7 +282,7 @@ for rij in verkopen:
               <h3 class="step-title">Maak een ranglijst</h3>
             </div>
             <p>Sorteer producten op omzet.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for product, bedrag in sorted(omzet.items(), key=lambda paar: paar[1], reverse=True):
     print(f&quot;{product:&lt;8} € {bedrag:.2f}&quot;)</code></pre>
@@ -275,7 +294,7 @@ for rij in verkopen:
               <h3 class="step-title">Voeg een totaal toe</h3>
             </div>
             <p>Tel alle omzet op en toon de beste maand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>totaal = sum(omzet.values())
 beste_maand = max(per_maand, key=per_maand.get)
@@ -321,6 +340,7 @@ print(f&quot;Totaal: € {totaal:.2f}, beste maand: {beste_maand}&quot;)</code><
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -357,6 +377,8 @@ print(f&quot;Totaal: € {totaal:.2f}, beste maand: {beste_maand}&quot;)</code><
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

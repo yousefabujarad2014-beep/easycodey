@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="e-mail-herinnering">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📧</span>
+              <strong>E-mailherinnering</strong>
+              <p>Verstuur een herinnering via e-mail zonder sleutels in je code.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Lees instellingen uit de omgeving</h3>
             </div>
             <p>Gebruik os.environ, niet een hardcoded wachtwoord.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import os
 
@@ -234,7 +253,7 @@ wachtwoord = os.environ[&quot;SMTP_PASSWORD&quot;]</code></pre>
               <h3 class="step-title">Bouw het bericht</h3>
             </div>
             <p>EmailMessage maakt een nette e-mail met onderwerp en tekst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from email.message import EmailMessage
 
@@ -251,7 +270,7 @@ bericht.set_content(&quot;Vergeet niet je opdracht voor vrijdag in te leveren.&q
               <h3 class="step-title">Verstuur via SMTP</h3>
             </div>
             <p>Start TLS en log in met je app-wachtwoord.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import smtplib
 
@@ -267,7 +286,7 @@ with smtplib.SMTP(host, poort) as server:
               <h3 class="step-title">Test zonder echt te versturen</h3>
             </div>
             <p>Print het bericht eerst en controleer alle velden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(bericht[&quot;Subject&quot;])
 print(bericht[&quot;To&quot;])
@@ -280,7 +299,7 @@ print(bericht.get_content())</code></pre>
               <h3 class="step-title">Vang fouten op</h3>
             </div>
             <p>Een mislukte verbinding mag je programma niet laten crashen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>try:
     with smtplib.SMTP(host, poort, timeout=15) as server:
@@ -330,6 +349,7 @@ except Exception as fout:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -366,6 +386,8 @@ except Exception as fout:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

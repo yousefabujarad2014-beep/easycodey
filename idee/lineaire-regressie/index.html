@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="lineaire-regressie">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📉</span>
+              <strong>Lineaire regressie</strong>
+              <p>Voorspel een waarde met een rechte lijn.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak meetpunten</h3>
             </div>
             <p>Gebruik uren studie en het behaalde cijfer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>punten = [(1, 4.5), (2, 5.0), (3, 5.8), (4, 6.4), (5, 7.1)]</code></pre>
           </div>
@@ -229,7 +248,7 @@
               <h3 class="step-title">Bereken het gemiddelde</h3>
             </div>
             <p>Je hebt de gemiddelden van x en y nodig.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def gemiddelde(waarden):
     return sum(waarden) / len(waarden)
@@ -245,7 +264,7 @@ mx, my = gemiddelde(xs), gemiddelde(ys)</code></pre>
               <h3 class="step-title">Bereken de lijn</h3>
             </div>
             <p>De formule voor de helling gebruikt covariante en variantie.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>teller = sum((x - mx) * (y - my) for x, y in punten)
 noemer = sum((x - mx) ** 2 for x in xs)
@@ -259,7 +278,7 @@ intercept = my - helling * mx</code></pre>
               <h3 class="step-title">Voorspel en meet de fout</h3>
             </div>
             <p>De gemiddelde absolute fout maakt de kwaliteit zichtbaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def voorspel(x):
     return helling * x + intercept
@@ -275,7 +294,7 @@ print(f&quot;Gemiddelde fout: {fout:.2f}&quot;)</code></pre>
               <h3 class="step-title">Voeg een voorspelling toe</h3>
             </div>
             <p>Gebruik de lijn voor een nieuwe waarde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(&quot;Bij 6 uur studie:&quot;, voorspel(6))</code></pre>
           </div>
@@ -319,6 +338,7 @@ print(f&quot;Gemiddelde fout: {fout:.2f}&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -355,6 +375,8 @@ print(f&quot;Gemiddelde fout: {fout:.2f}&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

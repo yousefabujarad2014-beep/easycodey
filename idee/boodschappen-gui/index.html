@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="boodschappen-gui">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🛒</span>
+              <strong>Boodschappenlijst</strong>
+              <p>Maak een boodschappenlijst met aantallen en een totaal.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak de velden</h3>
             </div>
             <p>Naam, aantal en prijs krijgen elk een eigen invoerveld.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -240,7 +259,7 @@ prijs.grid(row=0, column=2)</code></pre>
               <h3 class="step-title">Voeg een product toe</h3>
             </div>
             <p>Zet de invoer om naar een getal en toon een regel.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>lijst = tk.Listbox(venster, width=46, height=10)
 lijst.grid(row=1, column=0, columnspan=3, padx=4, pady=4)
@@ -262,7 +281,7 @@ def toevoegen():
               <h3 class="step-title">Bereken het totaal</h3>
             </div>
             <p>Loop door de regels en tel de bedragen op.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import re
 
@@ -281,7 +300,7 @@ def totaal():
               <h3 class="step-title">Maak het overzicht af</h3>
             </div>
             <p>Een totaal-label en een wis-knop ronden de app af.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>totaal_label = tk.Label(venster, text=&quot;Totaal: € 0.00&quot;, font=(&quot;Segoe UI&quot;, 14, &quot;bold&quot;))
 totaal_label.grid(row=2, column=0, columnspan=2)
@@ -296,7 +315,7 @@ tk.Button(venster, text=&quot;Wis&quot;, command=lambda: lijst.delete(0, &quot;e
               <h3 class="step-title">Valideer de prijs</h3>
             </div>
             <p>Ondersteun zowel 1,50 als 1.50.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def lees_prijs(tekst):
     return float(tekst.replace(&quot;,&quot;, &quot;.&quot;))</code></pre>
@@ -341,6 +360,7 @@ tk.Button(venster, text=&quot;Wis&quot;, command=lambda: lijst.delete(0, &quot;e
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -377,6 +397,8 @@ tk.Button(venster, text=&quot;Wis&quot;, command=lambda: lijst.delete(0, &quot;e
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="nieuwsbrief-aanmelding">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📨</span>
+              <strong>Nieuwsbrief-aanmelding</strong>
+              <p>Verzamel e-mailadressen via een Flask-formulier.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Toon het formulier</h3>
             </div>
             <p>Een eenvoudig formulier met een e-mailveld.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from flask import Flask
 
@@ -241,7 +260,7 @@ def home():
               <h3 class="step-title">Controleer het adres</h3>
             </div>
             <p>Een simpele controle op een apenstaart en een punt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def geldig(email):
     return &quot;@&quot; in email and &quot;.&quot; in email.split(&quot;@&quot;)[-1]</code></pre>
@@ -253,7 +272,7 @@ def home():
               <h3 class="step-title">Sla de aanmelding op</h3>
             </div>
             <p>Voorkom dubbele adressen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -279,7 +298,7 @@ def aanmelden():
               <h3 class="step-title">Toon het aantal aanmeldingen</h3>
             </div>
             <p>Een beheerroute geeft inzicht.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.get(&quot;/aantal&quot;)
 def aantal():
@@ -326,6 +345,7 @@ def aantal():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -362,6 +382,8 @@ def aantal():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

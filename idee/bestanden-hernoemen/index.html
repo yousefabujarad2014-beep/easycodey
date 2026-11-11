@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="bestanden-hernoemen">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🏷️</span>
+              <strong>Bestanden in bulk hernoemen</strong>
+              <p>Geef een hele map bestanden een nette naam.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Bekijk de bestanden</h3>
             </div>
             <p>Sorteer eerst, zodat de volgorde voorspelbaar is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -235,7 +254,7 @@ for bestand in bestanden:
               <h3 class="step-title">Maak een nieuwe naam</h3>
             </div>
             <p>Vervang spaties en voeg een volgnummer toe.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def nieuwe_naam(bestand, nummer):
     schoon = bestand.stem.lower().replace(&quot; &quot;, &quot;-&quot;)
@@ -248,7 +267,7 @@ for bestand in bestanden:
               <h3 class="step-title">Hernoem voorzichtig</h3>
             </div>
             <p>Controleer of de nieuwe naam al bestaat.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for nummer, bestand in enumerate(bestanden, start=1):
     doel = bestand.with_name(nieuwe_naam(bestand, nummer))
@@ -264,7 +283,7 @@ for bestand in bestanden:
               <h3 class="step-title">Maak een logbestand</h3>
             </div>
             <p>Bewaar wat je hebt gedaan, zodat je terug kunt kijken.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>with open(&quot;hernoemen.log&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as log:
     for nummer, bestand in enumerate(bestanden, start=1):
@@ -277,7 +296,7 @@ for bestand in bestanden:
               <h3 class="step-title">Test op een kopie</h3>
             </div>
             <p>Maak eerst een kopie van de map.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># Kopieer de map in Verkenner of met shutil.copytree voordat je test.</code></pre>
           </div>
@@ -321,6 +340,7 @@ for bestand in bestanden:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -357,6 +377,8 @@ for bestand in bestanden:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

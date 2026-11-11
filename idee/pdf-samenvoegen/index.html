@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="pdf-samenvoegen">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📚</span>
+              <strong>PDF&#39;s samenvoegen</strong>
+              <p>Voeg meerdere PDF-bestanden tot één document samen.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Installeer pypdf</h3>
             </div>
             <p>De bibliotheek leest en schrijft PDF-pagina&#39;s.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># pip install pypdf
 from pypdf import PdfWriter</code></pre>
@@ -230,7 +249,7 @@ from pypdf import PdfWriter</code></pre>
               <h3 class="step-title">Maak een writer</h3>
             </div>
             <p>Voeg pagina&#39;s uit elk bestand toe.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -247,7 +266,7 @@ for bestand in bestanden:
               <h3 class="step-title">Schrijf het resultaat</h3>
             </div>
             <p>Sla het samengevoegde document op.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>with open(&quot;samengevoegd.pdf&quot;, &quot;wb&quot;) as uitvoer:
     writer.write(uitvoer)
@@ -261,7 +280,7 @@ writer.close()</code></pre>
               <h3 class="step-title">Selecteer pagina&#39;s</h3>
             </div>
             <p>Je kunt ook maar een deel van een PDF toevoegen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for pagina in range(0, 2):
     writer.add_page(PdfReader(str(bestanden[0])).pages[pagina])</code></pre>
@@ -273,7 +292,7 @@ writer.close()</code></pre>
               <h3 class="step-title">Controleer het aantal pagina&#39;s</h3>
             </div>
             <p>Lees het resultaat terug en tel de pagina&#39;s.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pypdf import PdfReader
 
@@ -320,6 +339,7 @@ print(&quot;Pagina&#39;s:&quot;, len(reader.pages))</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -356,6 +376,8 @@ print(&quot;Pagina&#39;s:&quot;, len(reader.pages))</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

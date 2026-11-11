@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="rest-api">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🔌</span>
+              <strong>REST API voor taken</strong>
+              <p>Bouw een JSON-API die je met fetch kunt gebruiken.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een JSON-endpoint</h3>
             </div>
             <p>Flask zet een dictionary automatisch om naar JSON.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from flask import Flask, jsonify
 app = Flask(__name__)
@@ -236,7 +255,7 @@ def lijst():
               <h3 class="step-title">Voeg een taak toe</h3>
             </div>
             <p>Lees JSON uit het verzoek en geef een 201-status terug.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.post(&quot;/api/taken&quot;)
 def toevoegen():
@@ -256,7 +275,7 @@ def toevoegen():
               <h3 class="step-title">Werk een taak bij</h3>
             </div>
             <p>Met PUT vervang je de velden van een bestaande taak.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.put(&quot;/api/taken/&lt;int:taak_id&gt;&quot;)
 def bijwerken(taak_id):
@@ -276,7 +295,7 @@ def bijwerken(taak_id):
               <h3 class="step-title">Verwijder een taak</h3>
             </div>
             <p>DELETE geeft vaak 204 terug: gelukt, maar geen inhoud.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.delete(&quot;/api/taken/&lt;int:taak_id&gt;&quot;)
 def verwijderen(taak_id):
@@ -291,7 +310,7 @@ def verwijderen(taak_id):
               <h3 class="step-title">Test met fetch</h3>
             </div>
             <p>Vanuit de browser kun je de API testen zonder extra tool.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>fetch(&quot;/api/taken&quot;)
   .then((response) =&gt; response.json())
@@ -337,6 +356,7 @@ def verwijderen(taak_id):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -373,6 +393,8 @@ def verwijderen(taak_id):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

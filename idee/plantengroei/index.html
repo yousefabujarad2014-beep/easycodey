@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="plantengroei">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🌱</span>
+              <strong>Plantengroei simuleren</strong>
+              <p>Modelleer hoe een plant groeit met licht en water.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Kies de groeivoet</h3>
             </div>
             <p>Een plant groeit sneller als er meer bladeren zijn.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>groei = 0.08
 lengte = 5.0
@@ -232,7 +251,7 @@ licht = 1.0</code></pre>
               <h3 class="step-title">Simuleer per dag</h3>
             </div>
             <p>Beperk de groei door de kleinste factor.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for dag in range(1, 31):
     factor = min(water, licht)
@@ -248,7 +267,7 @@ licht = 1.0</code></pre>
               <h3 class="step-title">Voeg een maximum toe</h3>
             </div>
             <p>Planten groeien niet eindeloos.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>MAXIMUM = 120
 lengte = min(MAXIMUM, lengte + lengte * groei * factor)</code></pre>
@@ -260,7 +279,7 @@ lengte = min(MAXIMUM, lengte + lengte * groei * factor)</code></pre>
               <h3 class="step-title">Vergelijk omstandigheden</h3>
             </div>
             <p>Test weinig water versus veel licht.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># Herhaal de simulatie met water = 0.3 en vergelijk de eindlengte.</code></pre>
           </div>
@@ -304,6 +323,7 @@ lengte = min(MAXIMUM, lengte + lengte * groei * factor)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -340,6 +360,8 @@ lengte = min(MAXIMUM, lengte + lengte * groei * factor)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

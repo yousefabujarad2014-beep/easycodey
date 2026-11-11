@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="markdown-blog">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📝</span>
+              <strong>Markdown-blog</strong>
+              <p>Toon je eigen teksten als een eenvoudige blog.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Bewaar een blogpost</h3>
             </div>
             <p>Maak een map posts en zet daarin een bestand zoals hallo.md met een titel en tekst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># hallo.md
 # Mijn eerste post
@@ -235,7 +254,7 @@ Dit is **vet** en dit is een lijst:
               <h3 class="step-title">Lees de bestanden</h3>
             </div>
             <p>Glob vindt alle Markdown-bestanden in een map.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -250,7 +269,7 @@ for post in posts:
               <h3 class="step-title">Zet Markdown om naar HTML</h3>
             </div>
             <p>Voor een simpele blog vervang je koppen, vet en regels zelf.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import re
 
@@ -268,7 +287,7 @@ def naar_html(tekst):
               <h3 class="step-title">Maak een postroute</h3>
             </div>
             <p>De slug uit de URL bepaalt welk bestand je opent.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.route(&quot;/post/&lt;slug&gt;&quot;)
 def post(slug):
@@ -284,7 +303,7 @@ def post(slug):
               <h3 class="step-title">Toon een index</h3>
             </div>
             <p>Een overzichtspagina linkt naar alle posts.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.route(&quot;/&quot;)
 def index():
@@ -333,6 +352,7 @@ def index():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -369,6 +389,8 @@ def index():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

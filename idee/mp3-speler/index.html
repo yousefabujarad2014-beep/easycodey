@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="mp3-speler">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🎧</span>
+              <strong>Muziekspeler</strong>
+              <p>Speel een lokaal muziekbestand af met knoppen.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Start de mixer</h3>
             </div>
             <p>pygame.mixer speelt mp3 en ogg af.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import pygame
 
@@ -232,7 +251,7 @@ print(&quot;Mixer klaar&quot;)</code></pre>
               <h3 class="step-title">Laad een bestand</h3>
             </div>
             <p>Vraag de gebruiker om een muziekbestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from tkinter import Tk, Button, filedialog
 
@@ -253,7 +272,7 @@ Button(venster, text=&quot;Kies muziek&quot;, command=kies).pack()</code></pre>
               <h3 class="step-title">Voeg bediening toe</h3>
             </div>
             <p>Stop, pauze en hervat met knoppen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>Button(venster, text=&quot;Stop&quot;, command=pygame.mixer.music.stop).pack()
 Button(venster, text=&quot;Pauze&quot;, command=pygame.mixer.music.pause).pack()
@@ -266,7 +285,7 @@ Button(venster, text=&quot;Verder&quot;, command=pygame.mixer.music.unpause).pac
               <h3 class="step-title">Stel het volume in</h3>
             </div>
             <p>Het volume loopt van 0.0 tot 1.0.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>pygame.mixer.music.set_volume(0.6)</code></pre>
           </div>
@@ -277,7 +296,7 @@ Button(venster, text=&quot;Verder&quot;, command=pygame.mixer.music.unpause).pac
               <h3 class="step-title">Start de app</h3>
             </div>
             <p>Houd het venster open.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>venster.mainloop()</code></pre>
           </div>
@@ -321,6 +340,7 @@ Button(venster, text=&quot;Verder&quot;, command=pygame.mixer.music.unpause).pac
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -357,6 +377,8 @@ Button(venster, text=&quot;Verder&quot;, command=pygame.mixer.music.unpause).pac
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

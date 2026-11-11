@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="csv-upload">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📤</span>
+              <strong>CSV uploaden</strong>
+              <p>Laat een gebruiker een CSV uploaden en toon een samenvatting.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een uploadformulier</h3>
             </div>
             <p>Gebruik multipart en beperk de bestandstypes.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.get(&quot;/&quot;)
 def home():
@@ -236,7 +255,7 @@ def home():
               <h3 class="step-title">Lees de CSV</h3>
             </div>
             <p>Decodeer als utf-8 en gebruik DictReader.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import csv
 import io
@@ -258,7 +277,7 @@ def upload():
               <h3 class="step-title">Toon een voorbeeld</h3>
             </div>
             <p>Laat de eerste regels zien in een tabel.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>koppen = list(rijen[0].keys()) if rijen else []
 thead = &quot;&quot;.join(f&quot;&lt;th&gt;{kop}&lt;/th&gt;&quot; for kop in koppen)
@@ -275,7 +294,7 @@ return f&quot;&lt;table&gt;&lt;tr&gt;{thead}&lt;/tr&gt;{body}&lt;/table&gt;&quot
               <h3 class="step-title">Beperk de grootte</h3>
             </div>
             <p>Voorkom dat iemand een enorm bestand uploadt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>app.config[&quot;MAX_CONTENT_LENGTH&quot;] = 2 * 1024 * 1024</code></pre>
           </div>
@@ -319,6 +338,7 @@ return f&quot;&lt;table&gt;&lt;tr&gt;{thead}&lt;/tr&gt;{body}&lt;/table&gt;&quot
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -355,6 +375,8 @@ return f&quot;&lt;table&gt;&lt;tr&gt;{thead}&lt;/tr&gt;{body}&lt;/table&gt;&quot
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

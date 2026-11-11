@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="weer-app">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🌤️</span>
+              <strong>Weer-app met een echte API</strong>
+              <p>Vraag het actuele weer op voor elke stad — zonder API-sleutel.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Zoek de coördinaten van een stad</h3>
             </div>
             <p>Open-Meteo heeft een aparte zoek-API. Stuur de stadsnaam mee als parameter en bekijk wat er terugkomt. Print de JSON eerst volledig, dan zie je de structuur.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import requests
 
@@ -238,7 +257,7 @@ print(data)</code></pre>
               <h3 class="step-title">Haal de juiste gegevens eruit</h3>
             </div>
             <p>De API geeft een lijst results terug. Als die leeg is, bestaat de stad niet. Anders pak je het eerste resultaat met naam, land en coördinaten.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if &quot;results&quot; not in data:
     print(&quot;Ik kon die plaats niet vinden.&quot;)
@@ -255,7 +274,7 @@ else:
               <h3 class="step-title">Vraag het weer op</h3>
             </div>
             <p>Met de coördinaten vraag je het actuele weer op. De parameter current bepaalt welke velden je terugkrijgt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>weer_url = &quot;https://api.open-meteo.com/v1/forecast&quot;
 weer_params = {
@@ -274,7 +293,7 @@ print(weer[&quot;current&quot;])</code></pre>
               <h3 class="step-title">Maak de uitvoer leesbaar</h3>
             </div>
             <p>De weercode is een getal. Met een kleine functie zet je die om naar gewone taal. Daarna print je één nette zin.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def beschrijf(code):
     if code == 0:
@@ -302,7 +321,7 @@ print(f&quot;De wind waait met {wind} km/u.&quot;)</code></pre>
               <h3 class="step-title">Vang netwerkfouten op</h3>
             </div>
             <p>Een API kan traag zijn of offline. Met try/except voorkom je dat je programma crasht. Geef een duidelijke melding en stop netjes.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>try:
     data = requests.get(url, params=params, timeout=10).json()
@@ -350,6 +369,7 @@ except requests.RequestException:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -386,6 +406,8 @@ except requests.RequestException:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

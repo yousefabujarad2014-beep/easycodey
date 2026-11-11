@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="twee-factor-demo">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📱</span>
+              <strong>Twee-factor demo</strong>
+              <p>Simuleer een tijdelijke code met HMAC.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een geheim</h3>
             </div>
             <p>De sleutel blijft op de server en in de authenticator-app.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import secrets
 
@@ -232,7 +251,7 @@ print(geheim.hex())</code></pre>
               <h3 class="step-title">Bereken een code</h3>
             </div>
             <p>Gebruik een tijdvak van 30 seconden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import hmac
 import hashlib
@@ -254,7 +273,7 @@ def code(geheim, tijdvak=30):
               <h3 class="step-title">Controleer de code</h3>
             </div>
             <p>Vergelijk in constante tijd en accepteer één tijdvak speling.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def geldig(geheim, ingevoerd, speling=1):
     teller = int(time.time()) // 30
@@ -274,7 +293,7 @@ def code(geheim, tijdvak=30):
               <h3 class="step-title">Test de demo</h3>
             </div>
             <p>Print de code en controleer hem direct.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>huidig = code(geheim)
 print(&quot;Code:&quot;, huidig)
@@ -320,6 +339,7 @@ print(&quot;Geldig:&quot;, geldig(geheim, huidig))</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -356,6 +376,8 @@ print(&quot;Geldig:&quot;, geldig(geheim, huidig))</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

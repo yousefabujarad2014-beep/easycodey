@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="pixel-tekenen">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🟦</span>
+              <strong>Pixel-tekenprogramma</strong>
+              <p>Teken pixel voor pixel op een raster.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een raster</h3>
             </div>
             <p>Teken een grid van vierkanten op een Canvas.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -241,7 +260,7 @@ for x in range(GROOTTE):
               <h3 class="step-title">Kleur een vakje</h3>
             </div>
             <p>Bereken het vakje op basis van de muispositie.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>kleur = &quot;#1f5eff&quot;
 
@@ -260,7 +279,7 @@ canvas.bind(&quot;&lt;Button-1&gt;&quot;, kleur_vak)</code></pre>
               <h3 class="step-title">Sleep om te tekenen</h3>
             </div>
             <p>Koppel ook de muisbeweging terwijl de knop ingedrukt is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def sleep(event):
     kleur_vak(event)
@@ -274,7 +293,7 @@ canvas.bind(&quot;&lt;B1-Motion&gt;&quot;, sleep)</code></pre>
               <h3 class="step-title">Voeg een palet toe</h3>
             </div>
             <p>Knoppen kiezen een kleur uit een kleine lijst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>kleuren = [&quot;#1f5eff&quot;, &quot;#ff6b4a&quot;, &quot;#ffd43b&quot;, &quot;#0f9d58&quot;, &quot;#a21caf&quot;, &quot;#15150f&quot;]
 
@@ -295,7 +314,7 @@ for waarde in kleuren:
               <h3 class="step-title">Wis het canvas</h3>
             </div>
             <p>Een wis-knop maakt opnieuw beginnen mogelijk.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>tk.Button(venster, text=&quot;Wissen&quot;, command=lambda: canvas.delete(&quot;all&quot;)).pack(pady=4)</code></pre>
           </div>
@@ -339,6 +358,7 @@ for waarde in kleuren:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -375,6 +395,8 @@ for waarde in kleuren:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

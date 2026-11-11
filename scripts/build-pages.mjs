@@ -252,7 +252,7 @@ const THEME_SCRIPT = `<script>
 
 function renderCode(code) {
   if (!code) return "";
-  return `<div class="code-block">
+  return `<div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>${esc(code)}</code></pre>
           </div>`;
@@ -387,6 +387,25 @@ function renderProjectPage(idea) {
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="${esc(idea.id)}">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">${esc(idea.emoji)}</span>
+              <strong>${esc(idea.title)}</strong>
+              <p>${esc(idea.summary)}</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -436,10 +455,13 @@ function renderProjectPage(idea) {
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
   ${footer(prefix)}
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="${prefix}js/previews.js"></script>
   ${THEME_SCRIPT}
 </body>
 </html>

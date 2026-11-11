@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="chemie-tabel">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">⚗️</span>
+              <strong>Periodiek systeem</strong>
+              <p>Zoek elementen op in een dictionary.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een elementendatabase</h3>
             </div>
             <p>Koppel elk symbool aan naam en atoomnummer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>elementen = {
     &quot;H&quot;: (&quot;Waterstof&quot;, 1),
@@ -234,7 +253,7 @@
               <h3 class="step-title">Zoek een element</h3>
             </div>
             <p>Vraag om een symbool en toon de gegevens.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>symbool = input(&quot;Symbool: &quot;).capitalize()
 
@@ -251,7 +270,7 @@ else:
               <h3 class="step-title">Bereken de molaire massa</h3>
             </div>
             <p>Tel de atoommassa&#39;s van de elementen in een formule.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>massa = {&quot;H&quot;: 1.008, &quot;C&quot;: 12.011, &quot;O&quot;: 15.999}
 
@@ -306,6 +325,7 @@ print(f&quot;Molaire massa van water: {totaal:.2f} g/mol&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -342,6 +362,8 @@ print(f&quot;Molaire massa van water: {totaal:.2f} g/mol&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

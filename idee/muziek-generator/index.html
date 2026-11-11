@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="muziek-generator">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🎵</span>
+              <strong>Muziek-generator</strong>
+              <p>Schrijf een kort muziekstuk als WAV-bestand.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak één toon</h3>
             </div>
             <p>Een sinusgolf met een vaste frequentie klinkt als een toon.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import math
 import wave
@@ -240,7 +259,7 @@ samples = [
               <h3 class="step-title">Schrijf een WAV-bestand</h3>
             </div>
             <p>De wave-module schrijft de header en de samples.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>with wave.open(&quot;toon.wav&quot;, &quot;w&quot;) as bestand:
     bestand.setnchannels(1)
@@ -256,7 +275,7 @@ samples = [
               <h3 class="step-title">Maak een melodie</h3>
             </div>
             <p>Zet meerdere noten achter elkaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>noten = [523.25, 587.33, 659.25, 523.25]
 alles = []
@@ -272,7 +291,7 @@ for freq in noten:
               <h3 class="step-title">Voeg een fade toe</h3>
             </div>
             <p>Een fade voorkomt klikken aan het begin en einde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def met_fade(samples, lengte=2000):
     for i in range(min(lengte, len(samples))):
@@ -287,7 +306,7 @@ for freq in noten:
               <h3 class="step-title">Experimenteer met akkoorden</h3>
             </div>
             <p>Tel twee frequenties op voor een rijkere klank.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def toon(freq, duur=0.5):
     return [
@@ -336,6 +355,7 @@ for freq in noten:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -372,6 +392,8 @@ for freq in noten:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="todo-lijst">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">✅</span>
+              <strong>To-do lijst in de terminal</strong>
+              <p>Een takenlijst die je kunt bekijken, toevoegen en verwijderen — en die blijft bestaan.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Maak een menu dat blijft draaien</h3>
             </div>
             <p>Een while True-loop toont steeds hetzelfde menu. Met break stop je het programma. Zo werkt bijna elke terminal-app.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>taken = []
 
@@ -241,7 +260,7 @@ while True:
               <h3 class="step-title">Toon de taken met een nummer</h3>
             </div>
             <p>enumerate() geeft bij elk item ook een nummer. Met start=1 begin je bij 1 in plaats van 0, dat leest prettiger.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if keuze == &quot;1&quot;:
     if not taken:
@@ -257,7 +276,7 @@ while True:
               <h3 class="step-title">Voeg een taak toe</h3>
             </div>
             <p>Vraag om de tekst en voeg die toe met append(). Een lege invoer sla je over, anders krijg je lege regels in je lijst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if keuze == &quot;2&quot;:
     nieuwe_taak = input(&quot;Wat wil je doen? &quot;).strip()
@@ -272,7 +291,7 @@ while True:
               <h3 class="step-title">Verwijder een taak</h3>
             </div>
             <p>De speler kiest een nummer. In Python begint een lijst bij 0, dus trek je 1 af. Controleer eerst of het nummer wel bestaat.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if keuze == &quot;4&quot;:
     nummer = int(input(&quot;Welk nummer verwijderen? &quot;))
@@ -289,7 +308,7 @@ while True:
               <h3 class="step-title">Bewaar de taken in een bestand</h3>
             </div>
             <p>Met json.dump() schrijf je de lijst naar een bestand en met json.load() lees je hem terug. Bij de start van je programma laad je de lijst, zodat je verder kunt waar je gebleven was.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import json
 from pathlib import Path
@@ -348,6 +367,7 @@ bestand.write_text(json.dumps(taken, indent=2, ensure_ascii=False), encoding=&qu
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -384,6 +404,8 @@ bestand.write_text(json.dumps(taken, indent=2, ensure_ascii=False), encoding=&qu
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="sentiment-analyse">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">😊</span>
+              <strong>Sentiment-analyse</strong>
+              <p>Bepaal of een recensie positief of negatief is.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak woordlijsten</h3>
             </div>
             <p>Positieve en negatieve woorden krijgen een gewicht.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>positief = {&quot;goed&quot;: 1, &quot;geweldig&quot;: 2, &quot;leuk&quot;: 1, &quot;mooi&quot;: 1, &quot;snel&quot;: 1}
 negatief = {&quot;slecht&quot;: 1, &quot;traag&quot;: 1, &quot;lelijk&quot;: 1, &quot;kapot&quot;: 2, &quot;teleurgesteld&quot;: 2}</code></pre>
@@ -230,7 +249,7 @@ negatief = {&quot;slecht&quot;: 1, &quot;traag&quot;: 1, &quot;lelijk&quot;: 1, 
               <h3 class="step-title">Verdeel de tekst in woorden</h3>
             </div>
             <p>Verwijder leestekens en zet alles op kleine letters.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import re
 
@@ -244,7 +263,7 @@ def woorden(tekst):
               <h3 class="step-title">Bereken de score</h3>
             </div>
             <p>Tel positieve en negatieve gewichten op.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def sentiment(tekst):
     score = 0
@@ -260,7 +279,7 @@ def woorden(tekst):
               <h3 class="step-title">Geef een label</h3>
             </div>
             <p>Bij nul is de tekst neutraal.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def label(score):
     if score &gt; 0:
@@ -276,7 +295,7 @@ def woorden(tekst):
               <h3 class="step-title">Test meerdere teksten</h3>
             </div>
             <p>Vergelijk korte en lange recensies.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>teksten = [
     &quot;Dit is een geweldig product, snel geleverd.&quot;,
@@ -328,6 +347,7 @@ for tekst in teksten:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -364,6 +384,8 @@ for tekst in teksten:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

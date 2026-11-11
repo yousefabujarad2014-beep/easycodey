@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="statistiek-tool">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📊</span>
+              <strong>Statistiek-tool</strong>
+              <p>Bereken gemiddelde, mediaan en spreiding.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Lees getallen in</h3>
             </div>
             <p>Gebruik split() om meerdere getallen in één keer te lezen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>tekst = input(&quot;Getallen, gescheiden door komma&#39;s: &quot;)
 getallen = [float(deel) for deel in tekst.split(&quot;,&quot;)]
@@ -231,7 +250,7 @@ print(getallen)</code></pre>
               <h3 class="step-title">Bereken gemiddelde en mediaan</h3>
             </div>
             <p>Sorteer de lijst en pak het middelste element.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>gemiddelde = sum(getallen) / len(getallen)
 gesorteerd = sorted(getallen)
@@ -252,7 +271,7 @@ print(&quot;Mediaan:&quot;, mediaan)</code></pre>
               <h3 class="step-title">Bereken de standaardafwijking</h3>
             </div>
             <p>De spreiding laat zien hoe ver de getallen van het gemiddelde liggen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>variantie = sum((x - gemiddelde) ** 2 for x in getallen) / len(getallen)
 standaardafwijking = variantie ** 0.5
@@ -298,6 +317,7 @@ print(f&quot;Standaardafwijking: {standaardafwijking:.2f}&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -334,6 +354,8 @@ print(f&quot;Standaardafwijking: {standaardafwijking:.2f}&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="katten-rennen">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🐈</span>
+              <strong>Eindeloze renner</strong>
+              <p>Laat een kat springen over obstakels.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak de speler</h3>
             </div>
             <p>Een rechthoek met een y-snelheid is genoeg.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import pygame
 
@@ -237,7 +256,7 @@ OP_DE_GROND = 220</code></pre>
               <h3 class="step-title">Voeg zwaartekracht toe</h3>
             </div>
             <p>De speler valt tot hij de grond raakt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>ZWAARTEKRACHT = 0.8
 
@@ -255,7 +274,7 @@ def spring():
               <h3 class="step-title">Beweeg de kat</h3>
             </div>
             <p>Werk de positie bij en stop op de grond.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>kat.y += snelheid_y
 if kat.y &gt; OP_DE_GROND:
@@ -269,7 +288,7 @@ if kat.y &gt; OP_DE_GROND:
               <h3 class="step-title">Laat obstakels komen</h3>
             </div>
             <p>Beweeg een blok naar links en reset het voorbij de rand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>obstakel = pygame.Rect(800, 240, 28, 40)
 obstakel.x -= 6
@@ -283,7 +302,7 @@ if obstakel.right &lt; 0:
               <h3 class="step-title">Tel de score en herstart</h3>
             </div>
             <p>Stop bij een botsing en toon de score.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>score += 1
 if kat.colliderect(obstakel):
@@ -329,6 +348,7 @@ if kat.colliderect(obstakel):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -365,6 +385,8 @@ if kat.colliderect(obstakel):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

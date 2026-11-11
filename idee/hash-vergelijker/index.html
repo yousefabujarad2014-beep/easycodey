@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="hash-vergelijker">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">#️⃣</span>
+              <strong>Hashes vergelijken</strong>
+              <p>Ontdek hoe hashing werkt en waarom een salt nodig is.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Hash een tekst</h3>
             </div>
             <p>Een hash is een vaste vingerafdruk van je invoer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import hashlib
 
@@ -234,7 +253,7 @@ print(sha256(&quot;appel&quot;))</code></pre>
               <h3 class="step-title">Vergelijk twee invoeren</h3>
             </div>
             <p>Kleine verschillen geven een compleet andere hash.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(sha256(&quot;appel&quot;))
 print(sha256(&quot;Appel&quot;))</code></pre>
@@ -246,7 +265,7 @@ print(sha256(&quot;Appel&quot;))</code></pre>
               <h3 class="step-title">Voeg een salt toe</h3>
             </div>
             <p>Door een willekeurige salt toe te voegen wordt elke hash anders.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import secrets
 
@@ -264,7 +283,7 @@ print(met_salt(&quot;appel&quot;))</code></pre>
               <h3 class="step-title">Controleer een wachtwoord</h3>
             </div>
             <p>Bewaar de salt en hash samen en vergelijk opnieuw.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def controleer(wachtwoord, opgeslagen):
     salt, oude_hash = opgeslagen.split(&quot;$&quot;)
@@ -278,7 +297,7 @@ print(met_salt(&quot;appel&quot;))</code></pre>
               <h3 class="step-title">Gebruik PBKDF2</h3>
             </div>
             <p>Voor wachtwoorden is een langzame hash met veel iteraties beter.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def pbkdf2(wachtwoord, salt):
     return hashlib.pbkdf2_hmac(
@@ -325,6 +344,7 @@ print(met_salt(&quot;appel&quot;))</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -361,6 +381,8 @@ print(met_salt(&quot;appel&quot;))</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

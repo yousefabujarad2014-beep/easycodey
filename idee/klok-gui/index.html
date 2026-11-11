@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="klok-gui">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🕰️</span>
+              <strong>Digitale klok</strong>
+              <p>Toon de live tijd in een eigen venster.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een groot label</h3>
             </div>
             <p>Een Label met een groot lettertype is het hele scherm.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -238,7 +257,7 @@ venster.mainloop()</code></pre>
               <h3 class="step-title">Toon de tijd</h3>
             </div>
             <p>strftime maakt een nette tijdsnotatie.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from datetime import datetime
 
@@ -256,7 +275,7 @@ update()</code></pre>
               <h3 class="step-title">Voeg de datum toe</h3>
             </div>
             <p>Een tweede label toont de datum in het Nederlands.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>datum = tk.Label(venster, font=(&quot;Segoe UI&quot;, 14), fg=&quot;#cfc9b8&quot;, bg=&quot;#15150f&quot;)
 datum.pack(pady=(0, 24))
@@ -274,7 +293,7 @@ def update():
               <h3 class="step-title">Maak het scherm altijd bovenaan</h3>
             </div>
             <p>Een optionele instelling die handig is tijdens het leren.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>venster.attributes(&quot;-topmost&quot;, True)</code></pre>
           </div>
@@ -285,7 +304,7 @@ def update():
               <h3 class="step-title">Voeg een stopknop toe</h3>
             </div>
             <p>Met een vlag kun je de updates netjes stoppen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>actief = True
 
@@ -338,6 +357,7 @@ def update():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -374,6 +394,8 @@ def update():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

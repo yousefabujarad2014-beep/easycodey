@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="cijfervoorspeller">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🎯</span>
+              <strong>Cijfervoorspeller</strong>
+              <p>Voorspel een cijfer op basis van studiedagen.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een dataset</h3>
             </div>
             <p>Gebruik uren studie als invoer en cijfer als uitkomst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>data = [
     (2, 4.2), (3, 4.8), (4, 5.1), (5, 5.9),
@@ -232,7 +251,7 @@
               <h3 class="step-title">Splits train en test</h3>
             </div>
             <p>Houd een paar punten apart om eerlijk te meten.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>train = data[:6]
 test = data[6:]</code></pre>
@@ -244,7 +263,7 @@ test = data[6:]</code></pre>
               <h3 class="step-title">Train een lijn</h3>
             </div>
             <p>Bereken de kleinste-kwadratenlijn op de trainingsdata.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def lijn(punten):
     mx = sum(x for x, _ in punten) / len(punten)
@@ -263,7 +282,7 @@ a, b = lijn(train)</code></pre>
               <h3 class="step-title">Test op nieuwe data</h3>
             </div>
             <p>Bereken de fout op de testpunten.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for x, y in test:
     voorspelling = a * x + b
@@ -276,7 +295,7 @@ a, b = lijn(train)</code></pre>
               <h3 class="step-title">Voorspel voor jezelf</h3>
             </div>
             <p>Gebruik het model voor een nieuwe studieweek.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>uren = 10
 print(f&quot;Bij {uren} uur: {a * uren + b:.1f}&quot;)</code></pre>
@@ -321,6 +340,7 @@ print(f&quot;Bij {uren} uur: {a * uren + b:.1f}&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -357,6 +377,8 @@ print(f&quot;Bij {uren} uur: {a * uren + b:.1f}&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

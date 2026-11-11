@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="phishing-quiz">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🎣</span>
+              <strong>Phishing-quiz</strong>
+              <p>Leer phishingberichten herkennen met een quiz.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Verzamel voorbeelden</h3>
             </div>
             <p>Gebruik verzonnen berichten, nooit echte slachtoffers.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>berichten = [
     {
@@ -240,7 +259,7 @@
               <h3 class="step-title">Stel een vraag</h3>
             </div>
             <p>Toon het bericht en vraag of het phishing is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for bericht in berichten:
     print(bericht[&quot;tekst&quot;])
@@ -254,7 +273,7 @@
               <h3 class="step-title">Toon uitleg</h3>
             </div>
             <p>Uitleg is belangrijker dan de score.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if antwoord == bericht[&quot;phishing&quot;]:
     print(&quot;Klopt:&quot;, bericht[&quot;uitleg&quot;])
@@ -268,7 +287,7 @@ else:
               <h3 class="step-title">Houd de score bij</h3>
             </div>
             <p>Tel goede antwoorden en toon een eindscore.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>score = 0
 for bericht in berichten:
@@ -283,7 +302,7 @@ print(f&quot;Score: {score}/{len(berichten)}&quot;)</code></pre>
               <h3 class="step-title">Voeg een leermoment toe</h3>
             </div>
             <p>Bespreek één regel die altijd helpt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(&quot;Bekijk altijd het echte domein achter een link voordat je klikt.&quot;)</code></pre>
           </div>
@@ -327,6 +346,7 @@ print(f&quot;Score: {score}/{len(berichten)}&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -363,6 +383,8 @@ print(f&quot;Score: {score}/{len(berichten)}&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

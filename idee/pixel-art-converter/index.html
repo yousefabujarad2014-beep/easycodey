@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="pixel-art-converter">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">👾</span>
+              <strong>Pixel-art converter</strong>
+              <p>Zet een foto om naar pixel-art.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Open de foto</h3>
             </div>
             <p>Pillow leest bijna elk beeldformaat.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from PIL import Image
 
@@ -232,7 +251,7 @@ print(foto.size)</code></pre>
               <h3 class="step-title">Verklein en vergroot</h3>
             </div>
             <p>Eerst verkleinen en daarna met nearest-neighbor vergroten geeft harde pixels.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>KLEIN = (64, 64)
 
@@ -247,7 +266,7 @@ pixel.save(&quot;pixel-art.png&quot;)</code></pre>
               <h3 class="step-title">Beperk het aantal kleuren</h3>
             </div>
             <p>Minder kleuren maken het resultaat grafischer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>pixel = foto.resize(KLEIN).convert(&quot;P&quot;, palette=Image.Palette.ADAPTIVE, colors=16)
 pixel = pixel.resize((640, 640), Image.Resampling.NEAREST)
@@ -260,7 +279,7 @@ pixel.convert(&quot;RGB&quot;).save(&quot;pixel-art.png&quot;)</code></pre>
               <h3 class="step-title">Maak een poster</h3>
             </div>
             <p>Voeg een achtergrond en rand toe met ImageOps.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from PIL import ImageOps
 
@@ -274,7 +293,7 @@ pixel.save(&quot;pixel-poster.png&quot;)</code></pre>
               <h3 class="step-title">Test verschillende groottes</h3>
             </div>
             <p>Kleinere tussenstappen geven grovere pixels.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for grootte in (32, 48, 64, 96):
     klein = foto.resize((grootte, grootte), Image.Resampling.LANCZOS)
@@ -320,6 +339,7 @@ pixel.save(&quot;pixel-poster.png&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -356,6 +376,8 @@ pixel.save(&quot;pixel-poster.png&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

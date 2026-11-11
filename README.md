@@ -52,6 +52,7 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
 - **Projectcode in de editor**: elk project heeft **Speel dit idee**, **Programmeer dit idee**, **Download .py** en **Kopieer alle code**. **Speel dit idee** voert het hele project direct uit; de editor laadt alle stappen als één programma met commentaar per stap.
+- **App-weergave per project**: elke projectpagina opent standaard in een schone, app-achtige preview zonder code. Met de tabs **🎮 App** en **⌨ Code** schakel je tussen spelen en leren. De previews zijn echte, interactieve demo's (Snake, Tetris, Pong, rekenmachine, weer, portscanner, simulaties enz.) en hebben voor alle 161 projecten een passende weergave.
 - **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Je hoeft zelf niets te doen.
 - **Chique huisstijl**: warm ivoor, diepgroen en goud, met Fraunces voor koppen, verfijnde kaarten en donkere code- en footerblokken. Het logo is een eigen monogram (diepgroen vierkant, gouden rand en ivoren **E**).
 - **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
@@ -71,6 +72,7 @@ FLL/
 ├── offline.html            Pagina die verschijnt als je offline bent
 ├── js/
 │   ├── ai.js               Streaming, markdown, offline coach en generator
+│   ├── previews.js         Interactieve app-previews en de App/Code-schakelaar
 │   └── store.js            Opslag van voortgang, instellingen, thema, editor en eigen projecten
 ├── data/
 │   ├── index.js            Centrale datalaag: normaliseren, covers en metadata

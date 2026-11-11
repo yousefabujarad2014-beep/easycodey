@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="sterrenkaart">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🌌</span>
+              <strong>Sterrenkaart</strong>
+              <p>Teken sterren op basis van helderheid en positie.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak stergegevens</h3>
             </div>
             <p>Elke ster heeft een x-, y- en helderheidswaarde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>sterren = [
     (1, 2, 8), (3, 5, 4), (6, 1, 9), (8, 7, 3), (4, 4, 6),
@@ -231,7 +250,7 @@
               <h3 class="step-title">Teken de sterren</h3>
             </div>
             <p>Gebruik een scatterplot met de helderheid als grootte.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import matplotlib.pyplot as plt
 
@@ -250,7 +269,7 @@ plt.show()</code></pre>
               <h3 class="step-title">Maak het mooier</h3>
             </div>
             <p>Voeg een titel en een donkere achtergrond toe en verberg de assen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>plt.style.use(&quot;dark_background&quot;)
 plt.scatter(x, y, s=grootte, c=&quot;gold&quot;, alpha=0.9)
@@ -298,6 +317,7 @@ plt.show()</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -334,6 +354,8 @@ plt.show()</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

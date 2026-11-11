@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="snake-ai">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🐍</span>
+              <strong>Snake met een computertegenstander</strong>
+              <p>Laat een simpele AI Snake spelen.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Bouw een tekstgrid</h3>
             </div>
             <p>Een lijst met lijsten is een simpel speelveld. Zet de slang en het voedsel erin.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from collections import deque
 
@@ -247,7 +266,7 @@ toon()</code></pre>
               <h3 class="step-title">Beweeg de slang</h3>
             </div>
             <p>Voeg een nieuwe kop toe en verwijder de staart. Zo groeit de slang alleen als hij eet.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def stap(richting):
     kop_x, kop_y = slang[0]
@@ -268,7 +287,7 @@ toon()</code></pre>
               <h3 class="step-title">Kies een eenvoudige AI-richting</h3>
             </div>
             <p>Bereken het verschil tussen de kop en het voedsel. De AI kiest eerst de horizontale richting en daarna de verticale.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def kies_richting():
     kop_x, kop_y = slang[0]
@@ -327,6 +346,7 @@ for _ in range(10):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -363,6 +383,8 @@ for _ in range(10):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

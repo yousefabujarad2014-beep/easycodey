@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="mandelbrot">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🌈</span>
+              <strong>Mandelbrot-verkenner</strong>
+              <p>Teken een fractal met tekst of pixels.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Bereken één punt</h3>
             </div>
             <p>Herhaal de formule z = z*z + c en kijk of z ontsnapt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def in_mandelbrot(c, max_iter=30):
     z = 0
@@ -237,7 +256,7 @@ print(in_mandelbrot(0))</code></pre>
               <h3 class="step-title">Teken een tekstfractal</h3>
             </div>
             <p>Loop over een rooster en print een teken voor elk punt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for y in range(-12, 13):
     rij = &quot;&quot;
@@ -253,7 +272,7 @@ print(in_mandelbrot(0))</code></pre>
               <h3 class="step-title">Maak het fijner</h3>
             </div>
             <p>Vergroot het aantal iteraties en het bereik voor meer detail.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for y in range(-20, 21):
     rij = &quot;&quot;
@@ -302,6 +321,7 @@ print(in_mandelbrot(0))</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -338,6 +358,8 @@ print(in_mandelbrot(0))</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="poster-generator">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🖼️</span>
+              <strong>Poster-generator</strong>
+              <p>Maak een poster met tekst en vormen als PNG.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een canvas</h3>
             </div>
             <p>Een leeg beeld met een achtergrondkleur is je poster.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from PIL import Image, ImageDraw
 
@@ -233,7 +252,7 @@ draw = ImageDraw.Draw(beeld)</code></pre>
               <h3 class="step-title">Teken vormen</h3>
             </div>
             <p>Rechthoeken en cirkels geven de poster ritme.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>draw.rectangle((80, 80, 1000, 1270), outline=&quot;#ffd43b&quot;, width=6)
 draw.ellipse((620, 220, 980, 580), fill=&quot;#ff6b4a&quot;)
@@ -246,7 +265,7 @@ draw.rectangle((120, 760, 700, 820), fill=&quot;#1f5eff&quot;)</code></pre>
               <h3 class="step-title">Voeg tekst toe</h3>
             </div>
             <p>Gebruik een systeemfont of een eigen TTF-bestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from PIL import ImageFont
 
@@ -264,7 +283,7 @@ draw.text((120, 1120), &quot;met Python&quot;, font=font_klein, fill=&quot;#cfc9
               <h3 class="step-title">Sla de poster op</h3>
             </div>
             <p>PNG is scherp en ondersteunt veel kleuren.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>beeld.save(&quot;poster.png&quot;)
 print(&quot;Klaar: poster.png&quot;)</code></pre>
@@ -276,7 +295,7 @@ print(&quot;Klaar: poster.png&quot;)</code></pre>
               <h3 class="step-title">Maak varianten</h3>
             </div>
             <p>Verander de kleuren en tekst per run.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -324,6 +343,7 @@ draw.ellipse((620, 220, 980, 580), fill=accent)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -360,6 +380,8 @@ draw.ellipse((620, 220, 980, 580), fill=accent)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

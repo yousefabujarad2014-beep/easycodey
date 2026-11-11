@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="wachtwoord-sterkt">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🔒</span>
+              <strong>Wachtwoordsterkte meten</strong>
+              <p>Beoordeel hoe sterk een wachtwoord is.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Controleer de lengte</h3>
             </div>
             <p>Lengte is de belangrijkste factor, maar niet de enige.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def score(wachtwoord):
     punten = 0
@@ -237,7 +256,7 @@ print(score(&quot;appel&quot;))</code></pre>
               <h3 class="step-title">Controleer de tekens</h3>
             </div>
             <p>Gebruik any() om te kijken of er cijfers, hoofdletters en symbolen zijn.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def heeft_soorten(wachtwoord):
     return {
@@ -256,7 +275,7 @@ print(heeft_soorten(&quot;Appel123!&quot;))</code></pre>
               <h3 class="step-title">Maak een eindscore</h3>
             </div>
             <p>Tel de soorten tekens op en geef een label terug.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def beoordeel(wachtwoord):
     soorten = heeft_soorten(wachtwoord)
@@ -277,7 +296,7 @@ print(beoordeel(&quot;Appel123!&quot;))</code></pre>
               <h3 class="step-title">Herken veelgebruikte wachtwoorden</h3>
             </div>
             <p>Een lang wachtwoord kan alsnog in een lijst met bekende wachtwoorden staan.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>veelgebruikt = {&quot;wachtwoord&quot;, &quot;123456&quot;, &quot;qwerty&quot;, &quot;welkom123&quot;}
 
@@ -291,7 +310,7 @@ def is_veelgebruikt(wachtwoord):
               <h3 class="step-title">Toon advies</h3>
             </div>
             <p>Geef concrete tips in plaats van alleen een cijfer.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if is_veelgebruikt(wachtwoord):
     advies = &quot;Kies een ander wachtwoord; deze staat in bekende lijsten.&quot;
@@ -340,6 +359,7 @@ else:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -376,6 +396,8 @@ else:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

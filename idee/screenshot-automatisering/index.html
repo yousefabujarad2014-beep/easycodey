@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="screenshot-automatisering">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📸</span>
+              <strong>Screenshot maken</strong>
+              <p>Maak automatisch een screenshot van je scherm.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Installeer pyautogui</h3>
             </div>
             <p>De bibliotheek werkt op Windows, macOS en Linux met een scherm.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># pip install pyautogui
 import pyautogui</code></pre>
@@ -230,7 +249,7 @@ import pyautogui</code></pre>
               <h3 class="step-title">Maak een screenshot</h3>
             </div>
             <p>pyautogui.screenshot geeft een afbeelding terug.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>foto = pyautogui.screenshot()
 foto.save(&quot;scherm.png&quot;)</code></pre>
@@ -242,7 +261,7 @@ foto.save(&quot;scherm.png&quot;)</code></pre>
               <h3 class="step-title">Voeg een tijdstempel toe</h3>
             </div>
             <p>Zo krijgt elk screenshot een unieke naam.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from datetime import datetime
 
@@ -256,7 +275,7 @@ pyautogui.screenshot().save(naam)</code></pre>
               <h3 class="step-title">Maak een reeks</h3>
             </div>
             <p>Wacht tussen de opnames en maak een map aan.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import time
 from pathlib import Path
@@ -276,7 +295,7 @@ for nummer in range(3):
               <h3 class="step-title">Beperk de regio</h3>
             </div>
             <p>Je kunt alleen een deel van het scherm vastleggen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>foto = pyautogui.screenshot(region=(0, 0, 800, 600))
 foto.save(&quot;links-boven.png&quot;)</code></pre>
@@ -321,6 +340,7 @@ foto.save(&quot;links-boven.png&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -357,6 +377,8 @@ foto.save(&quot;links-boven.png&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

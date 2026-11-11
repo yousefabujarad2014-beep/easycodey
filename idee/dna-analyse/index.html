@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="dna-analyse">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧬</span>
+              <strong>DNA-analyse</strong>
+              <p>Tel basen en zoek patronen in een DNA-string.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Tel de basen</h3>
             </div>
             <p>Met count() tel je hoe vaak A, C, G en T voorkomen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>dna = &quot;ATGCGATACGCTTGA&quot;
 for base in &quot;ACGT&quot;:
@@ -231,7 +250,7 @@ for base in &quot;ACGT&quot;:
               <h3 class="step-title">Zoek een patroon</h3>
             </div>
             <p>Met find() vind je de eerste positie van een stukje DNA.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>patroon = &quot;GCTA&quot;
 positie = dna.find(patroon)
@@ -248,7 +267,7 @@ else:
               <h3 class="step-title">Bereken de GC-inhoud</h3>
             </div>
             <p>Het percentage G en C zegt iets over de stabiliteit van DNA.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>gc = dna.count(&quot;G&quot;) + dna.count(&quot;C&quot;)
 percentage = gc / len(dna) * 100
@@ -294,6 +313,7 @@ print(f&quot;GC-inhoud: {percentage:.1f}%&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -330,6 +350,8 @@ print(f&quot;GC-inhoud: {percentage:.1f}%&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

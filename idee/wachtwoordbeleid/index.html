@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="wachtwoordbeleid">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📋</span>
+              <strong>Wachtwoordbeleid controleren</strong>
+              <p>Controleer een lijst wachtwoorden tegen een beleid.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Definieer het beleid</h3>
             </div>
             <p>Maak de regels expliciet en testbaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def controles(wachtwoord):
     return {
@@ -236,7 +255,7 @@
               <h3 class="step-title">Controleer één wachtwoord</h3>
             </div>
             <p>Toon welke regels niet kloppen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def rapport(wachtwoord):
     resultaat = controles(wachtwoord)
@@ -252,7 +271,7 @@ print(rapport(&quot;Kort1!&quot;))</code></pre>
               <h3 class="step-title">Verwerk een lijst</h3>
             </div>
             <p>Lees nooit wachtwoorden uit een bestand dat je gaat delen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>testwachtwoorden = [&quot;Kort1!&quot;, &quot;DitIsEenLangerWachtwoord123!&quot;]
 
@@ -266,7 +285,7 @@ for wachtwoord in testwachtwoorden:
               <h3 class="step-title">Tel de resultaten</h3>
             </div>
             <p>Een samenvatting maakt het rapport bruikbaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>goed = sum(rapport(w) == &quot;ok&quot; for w in testwachtwoorden)
 print(f&quot;{goed} van {len(testwachtwoorden)} voldoet&quot;)</code></pre>
@@ -278,7 +297,7 @@ print(f&quot;{goed} van {len(testwachtwoorden)} voldoet&quot;)</code></pre>
               <h3 class="step-title">Geef geen wachtwoord terug</h3>
             </div>
             <p>Print nooit het wachtwoord zelf in een log.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># Wel: print(rapport(wachtwoord))
 # Niet: print(wachtwoord, rapport(wachtwoord))</code></pre>
@@ -323,6 +342,7 @@ print(f&quot;{goed} van {len(testwachtwoorden)} voldoet&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -359,6 +379,8 @@ print(f&quot;{goed} van {len(testwachtwoorden)} voldoet&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

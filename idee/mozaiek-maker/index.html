@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="mozaiek-maker">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧩</span>
+              <strong>Mozaïek-maker</strong>
+              <p>Maak een mozaïek van gekleurde vierkantjes.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Kies een patroon</h3>
             </div>
             <p>Een eenvoudige functie bepaalt de kleur per vakje.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def kleur_voor(x, y):
     if (x + y) % 3 == 0:
@@ -234,7 +253,7 @@
               <h3 class="step-title">Bouw de SVG</h3>
             </div>
             <p>SVG is tekst en werkt in elke browser.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>VAK = 40
 GROOTTE = 12
@@ -257,7 +276,7 @@ delen.append(&quot;&lt;/svg&gt;&quot;)</code></pre>
               <h3 class="step-title">Schrijf het bestand</h3>
             </div>
             <p>Open het resultaat daarna in je browser.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -271,7 +290,7 @@ print(&quot;Klaar: open mozaiek.svg&quot;)</code></pre>
               <h3 class="step-title">Maak het interessanter</h3>
             </div>
             <p>Gebruik diagonalen en afstand tot het midden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import math
 
@@ -290,7 +309,7 @@ def kleur_voor(x, y):
               <h3 class="step-title">Voeg een titel toe</h3>
             </div>
             <p>Met tekst in de SVG maak je er een poster van.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>delen.insert(1, &#39;&lt;rect width=&quot;100%&quot; height=&quot;100%&quot; fill=&quot;#15150f&quot;/&gt;&#39;)</code></pre>
           </div>
@@ -334,6 +353,7 @@ def kleur_voor(x, y):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -370,6 +390,8 @@ def kleur_voor(x, y):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

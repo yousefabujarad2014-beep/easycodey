@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="wachtwoordkluis">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🗄️</span>
+              <strong>Lokale wachtwoordkluis</strong>
+              <p>Bewaar geheimen versleuteld in een lokaal bestand.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Leid een sleutel af</h3>
             </div>
             <p>De master password wordt nooit opgeslagen; alleen de salt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import hashlib
 import secrets
@@ -235,7 +254,7 @@ def maak_sleutel(master, salt, lengte=32):
               <h3 class="step-title">Maak een keystream</h3>
             </div>
             <p>Voor een leerproject kun je een eenvoudige XOR-keystream gebruiken.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def keystream(sleutel, lengte):
     return hashlib.shake_256(sleutel).digest(lengte)</code></pre>
@@ -247,7 +266,7 @@ def maak_sleutel(master, salt, lengte=32):
               <h3 class="step-title">Versleutel tekst</h3>
             </div>
             <p>XOR de bytes van de tekst met de keystream.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import base64
 
@@ -263,7 +282,7 @@ def versleutel(tekst, sleutel):
               <h3 class="step-title">Ontsleutel tekst</h3>
             </div>
             <p>Dezelfde bewerking draait XOR weer terug.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def ontsleutel(geheim, sleutel):
     data = base64.b64decode(geheim)
@@ -277,7 +296,7 @@ def versleutel(tekst, sleutel):
               <h3 class="step-title">Sla de kluis op</h3>
             </div>
             <p>Bewaar alleen salt en versleutelde gegevens in JSON.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import json
 
@@ -295,7 +314,7 @@ with open(&quot;kluis.json&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as 
               <h3 class="step-title">Waarschuw de gebruiker</h3>
             </div>
             <p>XOR met een zelfgemaakte keystream is niet bestand tegen echte aanvallen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(&quot;Leerproject: gebruik voor echte geheimen een bewezen tool.&quot;)</code></pre>
           </div>
@@ -339,6 +358,7 @@ with open(&quot;kluis.json&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as 
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -375,6 +395,8 @@ with open(&quot;kluis.json&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as 
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

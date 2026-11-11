@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="eigen-404">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🚧</span>
+              <strong>Eigen foutpagina&#39;s</strong>
+              <p>Maak vriendelijke 404- en 500-pagina&#39;s.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een 404-pagina</h3>
             </div>
             <p>Registreer een handler voor not found.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from flask import Flask, render_template
 
@@ -235,7 +254,7 @@ def niet_gevonden(fout):
               <h3 class="step-title">Maak de template</h3>
             </div>
             <p>Een korte uitleg en een link terug naar huis.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>&lt;!-- templates/404.html --&gt;
 &lt;h1&gt;Deze pagina bestaat niet&lt;/h1&gt;
@@ -249,7 +268,7 @@ def niet_gevonden(fout):
               <h3 class="step-title">Vang serverfouten op</h3>
             </div>
             <p>Toon nooit interne foutdetails aan bezoekers.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.errorhandler(500)
 def serverfout(fout):
@@ -262,7 +281,7 @@ def serverfout(fout):
               <h3 class="step-title">Test de routes</h3>
             </div>
             <p>Vraag een onbekend pad op en controleer de statuscode.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># Open http://localhost:5000/bestaat-niet
 # De browser toont de 404-pagina.</code></pre>
@@ -307,6 +326,7 @@ def serverfout(fout):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -343,6 +363,8 @@ def serverfout(fout):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

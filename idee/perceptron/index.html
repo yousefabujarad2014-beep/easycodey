@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="perceptron">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧠</span>
+              <strong>Een perceptron bouwen</strong>
+              <p>Leer een computer om punten te classificeren.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een dataset</h3>
             </div>
             <p>Twee klassen die lineair te scheiden zijn.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>data = [
     ((0, 0), 0), ((0, 1), 0), ((1, 0), 0),
@@ -232,7 +251,7 @@
               <h3 class="step-title">Initialiseer gewichten</h3>
             </div>
             <p>Begin met kleine willekeurige waarden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -246,7 +265,7 @@ bias = random.uniform(-1, 1)</code></pre>
               <h3 class="step-title">Voorspel</h3>
             </div>
             <p>Een stapfunctie bepaalt de klasse.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def voorspel(x, y):
     som = gewichten[0] * x + gewichten[1] * y + bias
@@ -259,7 +278,7 @@ bias = random.uniform(-1, 1)</code></pre>
               <h3 class="step-title">Train het model</h3>
             </div>
             <p>Pas gewichten aan bij elke fout.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>LEERSNELHEID = 0.1
 
@@ -282,7 +301,7 @@ for ronde in range(20):
               <h3 class="step-title">Test het model</h3>
             </div>
             <p>Controleer alle voorbeelden na het trainen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for punt, doel in data:
     print(punt, &quot;voorspeld:&quot;, voorspel(*punt), &quot;echt:&quot;, doel)</code></pre>
@@ -327,6 +346,7 @@ for ronde in range(20):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -363,6 +383,8 @@ for ronde in range(20):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

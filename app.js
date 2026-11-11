@@ -12,6 +12,7 @@ import {
 } from "./data/index.js";
 
 import * as store from "./js/store.js";
+import { mountProjectView } from "./js/previews.js";
 import {
   escapeHtml as e,
   renderMarkdown,
@@ -108,7 +109,7 @@ function ideaProgress(idea) {
 }
 
 function codeBlock(code, language = "python") {
-  return `<div class="code-block">
+  return `<div class="code-block project-code-only">
     <div class="code-head">
       <span class="code-lang">${e(language)}</span>
       <div class="code-tools">
@@ -1257,6 +1258,25 @@ function renderDetail(id) {
       <span><strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je scherm een venster met de vraag en een tekstvak. Typ daar je antwoord en druk op <kbd>Enter</kbd>.</span>
     </p>
 
+    <section class="project-view is-app" data-project-view data-idea-id="${e(idea.id)}">
+      <div class="project-view-bar">
+        <div class="view-tabs" role="tablist" aria-label="Weergave">
+          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+          <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+        </div>
+        <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+      </div>
+      <div class="preview-panel" data-view-panel="app">
+        <div class="preview-stage" data-preview-stage>
+          <div class="preview-fallback">
+            <span class="preview-fallback-emoji" aria-hidden="true">${e(idea.emoji)}</span>
+            <strong>${e(idea.title)}</strong>
+            <p>${e(idea.summary)}</p>
+          </div>
+        </div>
+        <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+      </div>
+
     <div class="detail-grid">
       <div class="detail-main">
         <section class="panel">
@@ -1333,7 +1353,9 @@ function renderDetail(id) {
         }
       </aside>
     </div>
+    </section>
   </div>`;
+  mountProjectView(app);
 }
 
 /* ------------------------------ leerpad ------------------------------ */

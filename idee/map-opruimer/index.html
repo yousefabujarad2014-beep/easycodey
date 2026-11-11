@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="map-opruimer">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧹</span>
+              <strong>Dubbele bestanden vinden</strong>
+              <p>Vind dubbele bestanden met hashes en verwijder ze veilig.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Groepeer op grootte</h3>
             </div>
             <p>Bestanden met een andere grootte kunnen nooit identiek zijn.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 from collections import defaultdict
@@ -237,7 +256,7 @@ for bestand in map.rglob(&quot;*&quot;):
               <h3 class="step-title">Hash alleen kansrijke groepen</h3>
             </div>
             <p>Dit bespaart tijd bij grote mappen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import hashlib
 
@@ -261,7 +280,7 @@ for bestanden in op_grootte.values():
               <h3 class="step-title">Toon de dubbelen</h3>
             </div>
             <p>Print elke groep met dezelfde inhoud.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>dubbel = {h: paden for h, paden in op_hash.items() if len(paden) &gt; 1}
 for paden in dubbel.values():
@@ -276,7 +295,7 @@ for paden in dubbel.values():
               <h3 class="step-title">Verwijder alleen na bevestiging</h3>
             </div>
             <p>Houd altijd één bestand per groep.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for paden in dubbel.values():
     for pad in paden[1:]:
@@ -291,7 +310,7 @@ for paden in dubbel.values():
               <h3 class="step-title">Maak een log</h3>
             </div>
             <p>Bewaar wat je hebt verwijderd.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>with open(&quot;opruimen.log&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as log:
     log.write(f&quot;Verwijderd: {pad}\n&quot;)</code></pre>
@@ -336,6 +355,7 @@ for paden in dubbel.values():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -372,6 +392,8 @@ for paden in dubbel.values():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

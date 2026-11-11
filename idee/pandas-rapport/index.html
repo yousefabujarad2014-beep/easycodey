@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="pandas-rapport">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🐼</span>
+              <strong>Dataframe-rapport</strong>
+              <p>Analyseer een dataset met pandas.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Laad de data</h3>
             </div>
             <p>Lees een CSV direct in een DataFrame.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># pip install pandas
 import pandas as pd
@@ -233,7 +252,7 @@ print(df.head())</code></pre>
               <h3 class="step-title">Bekijk de structuur</h3>
             </div>
             <p>Controleer kolommen, types en ontbrekende waarden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(df.info())
 print(df.describe())
@@ -246,7 +265,7 @@ print(df.isna().sum())</code></pre>
               <h3 class="step-title">Maak een nieuwe kolom</h3>
             </div>
             <p>Bereken omzet uit aantal en prijs.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>df[&quot;omzet&quot;] = df[&quot;aantal&quot;] * df[&quot;prijs&quot;]</code></pre>
           </div>
@@ -257,7 +276,7 @@ print(df.isna().sum())</code></pre>
               <h3 class="step-title">Groepeer en sorteer</h3>
             </div>
             <p>Een groupby geeft totalen per product.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>per_product = df.groupby(&quot;product&quot;)[&quot;omzet&quot;].sum().sort_values(ascending=False)
 print(per_product)</code></pre>
@@ -269,7 +288,7 @@ print(per_product)</code></pre>
               <h3 class="step-title">Schrijf een rapport</h3>
             </div>
             <p>Sla het resultaat op als CSV.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>per_product.to_csv(&quot;omzet-per-product.csv&quot;)
 print(&quot;Klaar: omzet-per-product.csv&quot;)</code></pre>
@@ -314,6 +333,7 @@ print(&quot;Klaar: omzet-per-product.csv&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -350,6 +370,8 @@ print(&quot;Klaar: omzet-per-product.csv&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

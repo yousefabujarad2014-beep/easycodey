@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="organiseer-downloads">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🗂️</span>
+              <strong>Organiseer je Downloads-map</strong>
+              <p>Sorteer bestanden automatisch in mappen op basis van hun extensie.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Bekijk wat er in de map staat</h3>
             </div>
             <p>Path.home() geeft je gebruikersmap. Met iterdir() loop je door de inhoud. Print eerst alleen de namen: nog niets verplaatsen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -235,7 +254,7 @@ for bestand in map.iterdir():
               <h3 class="step-title">Bepaal de doelmap per extensie</h3>
             </div>
             <p>Een woordenboek koppelt elke extensie aan een mapnaam. Bestanden met een onbekende extensie laat je staan.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>doelen = {
     &quot;.jpg&quot;: &quot;Afbeeldingen&quot;,
@@ -257,7 +276,7 @@ print(&quot;Aantal regels:&quot;, len(doelen))</code></pre>
               <h3 class="step-title">Doe eerst een droge run</h3>
             </div>
             <p>Print wat je zou verplaatsen zonder het echt te doen. Controleer de lijst goed. Dit voorkomt dat je per ongeluk bestanden kwijtraakt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for bestand in map.iterdir():
     if not bestand.is_file():
@@ -276,7 +295,7 @@ print(&quot;Aantal regels:&quot;, len(doelen))</code></pre>
               <h3 class="step-title">Verplaats de bestanden</h3>
             </div>
             <p>Maak de doelmap aan met mkdir(exist_ok=True) en verplaats daarna elk bestand met rename(). Test dit eerst op een kopie van je map.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for bestand in map.iterdir():
     if not bestand.is_file():
@@ -298,7 +317,7 @@ print(&quot;Aantal regels:&quot;, len(doelen))</code></pre>
               <h3 class="step-title">Maak een logboek</h3>
             </div>
             <p>Schrijf voor elk verplaatst bestand de oude en nieuwe locatie naar een CSV. Zo kun je later terugzoeken waar iets naartoe is gegaan.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import csv
 
@@ -351,6 +370,7 @@ print(&quot;Logboek bijgewerkt.&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -387,6 +407,8 @@ print(&quot;Logboek bijgewerkt.&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

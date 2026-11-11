@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="webscraper">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🕷️</span>
+              <strong>Webscraper voor nieuwskoppen</strong>
+              <p>Haal automatisch de nieuwste koppen van een website en bewaar ze als CSV.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Haal een pagina op</h3>
             </div>
             <p>Installeer de pakketten met pip install requests beautifulsoup4. Vraag de pagina op met een herkenbare User-Agent en een timeout.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import requests
 from bs4 import BeautifulSoup
@@ -239,7 +258,7 @@ print(soep.title.text)</code></pre>
               <h3 class="step-title">Zoek de juiste elementen</h3>
             </div>
             <p>Open de pagina in je browser en bekijk de HTML. De koppen staan in een span met class titleline. Met select() zoek je op CSS-selector.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>titels = soep.select(&quot;.titleline&quot;)
 
@@ -253,7 +272,7 @@ for titel in titels[:10]:
               <h3 class="step-title">Bewaar titel en link</h3>
             </div>
             <p>Elke titel bevat een link. Met find(&#39;a&#39;) pak je die link en met [&#39;href&#39;] lees je het adres. Zet de resultaten in een lijst met woordenboeken.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>koppen = []
 
@@ -275,7 +294,7 @@ for kop in koppen:
               <h3 class="step-title">Schrijf de resultaten naar CSV</h3>
             </div>
             <p>Met de csv-module maak je een bestand dat je in Excel of Google Sheets kunt openen. newline=&#39;&#39; voorkomt lege regels op Windows.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import csv
 
@@ -293,7 +312,7 @@ print(&quot;Opgeslagen in koppen.csv&quot;)</code></pre>
               <h3 class="step-title">Respecteer de regels</h3>
             </div>
             <p>Niet elke site wil dat je hem automatisch uitleest. Kijk altijd naar robots.txt en de gebruiksvoorwaarden. Doe rustig aan met verzoeken en zet geen persoonlijke gegevens in je User-Agent.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># Controleer eerst:
 # https://news.ycombinator.com/robots.txt
@@ -345,6 +364,7 @@ for pagina_nummer in range(1, 4):
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -381,6 +401,8 @@ for pagina_nummer in range(1, 4):
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

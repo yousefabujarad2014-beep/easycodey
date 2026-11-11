@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="memorie">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🃏</span>
+              <strong>Memorie</strong>
+              <p>Draai kaartjes om en vind alle paren.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak een geschudde stapel</h3>
             </div>
             <p>Bouw een lijst met elk symbool twee keer en schud hem. Zo liggen de paren willekeurig door elkaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -234,7 +253,7 @@ print(kaarten)</code></pre>
               <h3 class="step-title">Draai twee kaarten om</h3>
             </div>
             <p>Vraag de speler om twee posities. Controleer daarna of de symbolen gelijk zijn.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def draai(kaarten, a, b):
     print(f&quot;Kaart {a}: {kaarten[a]}&quot;)
@@ -250,7 +269,7 @@ print(draai(kaarten, 0, 1))</code></pre>
               <h3 class="step-title">Speel tot alle paren gevonden zijn</h3>
             </div>
             <p>Houd bij welke paren al gevonden zijn en stop wanneer alles open is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>gevonden = set()
 
@@ -307,6 +326,7 @@ print(&quot;Alles gevonden!&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -343,6 +363,8 @@ print(&quot;Alles gevonden!&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

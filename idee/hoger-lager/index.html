@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="hoger-lager">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🔼</span>
+              <strong>Hoger of lager</strong>
+              <p>Raad of de volgende kaart hoger of lager is.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Trek een kaart</h3>
             </div>
             <p>Simuleer een kaart met een getal van 1 tot en met 13.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -235,7 +254,7 @@ print(&quot;Huidige kaart:&quot;, huidig)</code></pre>
               <h3 class="step-title">Vraag hoger of lager</h3>
             </div>
             <p>Lees de keuze en trek daarna de volgende kaart.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>keuze = input(&quot;Hoger of lager? &quot;).lower()
 volgende = trek_kaart()
@@ -248,7 +267,7 @@ print(&quot;Volgende kaart:&quot;, volgende)</code></pre>
               <h3 class="step-title">Houd de score bij</h3>
             </div>
             <p>Vergelijk de kaarten en ga door zolang de speler goed raadt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>score = 0
 huidig = trek_kaart()
@@ -305,6 +324,7 @@ while True:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -341,6 +361,8 @@ while True:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

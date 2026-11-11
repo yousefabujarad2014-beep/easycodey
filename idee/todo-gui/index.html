@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="todo-gui">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📝</span>
+              <strong>Takenlijst met venster</strong>
+              <p>Maak een takenlijst die je met knoppen beheert.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Bouw de basis</h3>
             </div>
             <p>Een invoerveld, een lijst en drie knoppen vormen de hele app.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import tkinter as tk
 
@@ -240,7 +259,7 @@ venster.mainloop()</code></pre>
               <h3 class="step-title">Voeg een taak toe</h3>
             </div>
             <p>Lees de invoer, controleer op lege tekst en wis daarna het veld.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def toevoegen(event=None):
     taak = invoer.get().strip()
@@ -258,7 +277,7 @@ tk.Button(venster, text=&quot;Toevoegen&quot;, command=toevoegen).pack()</code><
               <h3 class="step-title">Verwijder de selectie</h3>
             </div>
             <p>Met curselection weet je welk item geselecteerd is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def verwijderen():
     selectie = lijst.curselection()
@@ -274,7 +293,7 @@ tk.Button(venster, text=&quot;Verwijderen&quot;, command=verwijderen).pack()</co
               <h3 class="step-title">Markeer als klaar</h3>
             </div>
             <p>Een prefix in de lijst is genoeg voor een eerste versie.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def klaar():
     selectie = lijst.curselection()
@@ -294,7 +313,7 @@ tk.Button(venster, text=&quot;Klaar&quot;, command=klaar).pack()</code></pre>
               <h3 class="step-title">Bewaar de taken</h3>
             </div>
             <p>Sla de lijst op in een tekstbestand en lees hem bij het starten.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -351,6 +370,7 @@ venster.protocol(&quot;WM_DELETE_WINDOW&quot;, lambda: (bewaar(), venster.destro
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -387,6 +407,8 @@ venster.protocol(&quot;WM_DELETE_WINDOW&quot;, lambda: (bewaar(), venster.destro
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="website-monitor">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">📡</span>
+              <strong>Website-monitor</strong>
+              <p>Meld wanneer de inhoud van een webpagina verandert.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Haal de pagina op</h3>
             </div>
             <p>Gebruik een user-agent en een time-out.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import requests
 
@@ -236,7 +255,7 @@ def haal(url):
               <h3 class="step-title">Maak een vingerafdruk</h3>
             </div>
             <p>Een hash maakt vergelijken makkelijk en compact.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import hashlib
 
@@ -250,7 +269,7 @@ def vingerafdruk(tekst):
               <h3 class="step-title">Vergelijk met de vorige meting</h3>
             </div>
             <p>Bewaar de laatste hash in een bestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -268,7 +287,7 @@ def bewaar_hash(pad, waarde):
               <h3 class="step-title">Maak een melding</h3>
             </div>
             <p>Print een duidelijke regel met tijdstip.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from datetime import datetime
 
@@ -288,7 +307,7 @@ def controleer(url, hashbestand):
               <h3 class="step-title">Herhaal met een interval</h3>
             </div>
             <p>Gebruik time.sleep tussen controles.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import time
 
@@ -339,6 +358,7 @@ while True:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -375,6 +395,8 @@ while True:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

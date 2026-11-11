@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="tekst-teller">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🔢</span>
+              <strong>Tekst-teller</strong>
+              <p>Tel woorden, tekens en zinnen in een tekst.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Lees de tekst</h3>
             </div>
             <p>Vraag om een tekst of lees een bestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>tekst = input(&quot;Plak je tekst: &quot;)</code></pre>
           </div>
@@ -229,7 +248,7 @@
               <h3 class="step-title">Tel woorden en tekens</h3>
             </div>
             <p>Split op witruimte en gebruik len().</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>woorden = tekst.split()
 print(&quot;Woorden:&quot;, len(woorden))
@@ -243,7 +262,7 @@ print(&quot;Zonder spaties:&quot;, len(tekst.replace(&quot; &quot;, &quot;&quot;
               <h3 class="step-title">Tel zinnen</h3>
             </div>
             <p>Splits op leestekens en filter lege stukken.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import re
 
@@ -257,7 +276,7 @@ print(&quot;Zinnen:&quot;, len(zinnen))</code></pre>
               <h3 class="step-title">Tel het vaakst voorkomende woord</h3>
             </div>
             <p>Een dictionary met tellers maakt dit eenvoudig.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from collections import Counter
 
@@ -272,7 +291,7 @@ print(teller.most_common(5))</code></pre>
               <h3 class="step-title">Waarschuw bij een limiet</h3>
             </div>
             <p>Bij een opdracht met maximaal 500 woorden is dat direct bruikbaar.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>LIMIET = 500
 if len(woorden) &gt; LIMIET:
@@ -320,6 +339,7 @@ else:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -356,6 +376,8 @@ else:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

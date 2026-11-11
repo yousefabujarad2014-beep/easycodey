@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="sudoku-oplosser">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧩</span>
+              <strong>Sudoku-oplosser</strong>
+              <p>Laat Python elke sudoku oplossen met backtracking.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Zet de sudoku in een 2D-lijst</h3>
             </div>
             <p>Een sudoku is een lijst van negen rijen, elk met negen getallen. Nul betekent een leeg vakje. Print het bord in een leesbaar rooster.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>bord = [
     [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -244,7 +263,7 @@ def toon_bord():
               <h3 class="step-title">Controleer of een getal mag</h3>
             </div>
             <p>Een getal mag niet twee keer in dezelfde rij, kolom of 3x3-box staan. Bereken eerst waar de box begint en loop die daarna door.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def geldig(rij, kolom, getal):
     for i in range(9):
@@ -268,7 +287,7 @@ def toon_bord():
               <h3 class="step-title">Schrijf de backtracking-oplosser</h3>
             </div>
             <p>Zoek een leeg vakje. Probeer de getallen 1 tot 9. Als een getal mag, zet je het neer en roep je de functie opnieuw aan. Loopt dat vast, dan zet je het vakje terug op 0. Dat is backtracking.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def los_op():
     for rij in range(9):
@@ -290,7 +309,7 @@ def toon_bord():
               <h3 class="step-title">Los het bord op</h3>
             </div>
             <p>Roep de functie aan en print het resultaat. Als er geen oplossing is, krijg je False terug. Probeer daarna een leeg bord of een moeilijkere sudoku.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>if los_op():
     toon_bord()
@@ -304,7 +323,7 @@ else:
               <h3 class="step-title">Maak een sudoku-generator</h3>
             </div>
             <p>Als bonus kun je een sudoku maken: vul een leeg bord met de oplosser en haal daarna willekeurig cijfers weg. Controleer dat er nog steeds precies één oplossing is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -362,6 +381,7 @@ def maak_puzzel():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -398,6 +418,8 @@ def maak_puzzel():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

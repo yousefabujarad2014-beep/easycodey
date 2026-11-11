@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="flask-quiz">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧠</span>
+              <strong>Online quiz</strong>
+              <p>Stel vragen via de browser en houd de score bij.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Maak de vragen</h3>
             </div>
             <p>Bewaar vraag, opties en het juiste antwoord.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>vragen = [
     {&quot;vraag&quot;: &quot;Wat doet print()?&quot;, &quot;antwoord&quot;: &quot;tekst tonen&quot;},
@@ -232,7 +251,7 @@
               <h3 class="step-title">Toon één vraag</h3>
             </div>
             <p>Gebruik de sessie om de huidige vraag bij te houden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.get(&quot;/&quot;)
 def quiz():
@@ -256,7 +275,7 @@ def quiz():
               <h3 class="step-title">Controleer het antwoord</h3>
             </div>
             <p>Vergelijk zonder hoofdletters en spaties en werk de score bij.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.post(&quot;/&quot;)
 def antwoord():
@@ -277,7 +296,7 @@ def antwoord():
               <h3 class="step-title">Start opnieuw</h3>
             </div>
             <p>Een reset-route maakt de quiz speelbaar voor de volgende gebruiker.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>@app.get(&quot;/reset&quot;)
 def reset():
@@ -324,6 +343,7 @@ def reset():
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -360,6 +380,8 @@ def reset():
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

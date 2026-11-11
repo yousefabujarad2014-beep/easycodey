@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="tijdlijn-quiz">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🏛️</span>
+              <strong>Tijdlijn-quiz</strong>
+              <p>Zet historische gebeurtenissen in de juiste volgorde.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Verzamel gebeurtenissen</h3>
             </div>
             <p>Elke gebeurtenis heeft een jaar en een beschrijving.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>gebeurtenissen = [
     (&quot;Uitvinding van de telefoon&quot;, 1876),
@@ -234,7 +253,7 @@
               <h3 class="step-title">Sorteer op jaar</h3>
             </div>
             <p>Sorted met een key sorteert tuples op de tweede waarde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>juist = sorted(gebeurtenissen, key=lambda paar: paar[1])
 for naam, jaar in juist:
@@ -247,7 +266,7 @@ for naam, jaar in juist:
               <h3 class="step-title">Maak een sleepvraag</h3>
             </div>
             <p>Toon de gebeurtenissen in willekeurige volgorde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -263,7 +282,7 @@ for nummer, (naam, jaar) in enumerate(door elkaar, start=1):
               <h3 class="step-title">Controleer de volgorde</h3>
             </div>
             <p>Vraag de gebruiker om de nummers in de juiste volgorde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>antwoord = input(&quot;Geef de nummers van oud naar nieuw, gescheiden door komma&#39;s: &quot;)
 gekozen = [door elkaar[int(n) - 1] for n in antwoord.split(&quot;,&quot;)]
@@ -276,7 +295,7 @@ print(&quot;Goed!&quot; if gekozen == juist else &quot;Niet helemaal.&quot;)</co
               <h3 class="step-title">Voeg uitleg toe</h3>
             </div>
             <p>Bij elke gebeurtenis hoort een korte context.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>uitleg = {
     &quot;Eerste maanlanding&quot;: &quot;Apollo 11 landde in 1969 op de maan.&quot;,
@@ -324,6 +343,7 @@ for naam, jaar in juist:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -360,6 +380,8 @@ for naam, jaar in juist:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

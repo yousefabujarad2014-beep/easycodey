@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="json-formatter">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🧩</span>
+              <strong>JSON netjes formatteren</strong>
+              <p>Maak rommelige JSON leesbaar en controleer fouten.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Lees JSON</h3>
             </div>
             <p>json.loads zet tekst om naar Python-dictionaries en lijsten.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import json
 
@@ -233,7 +252,7 @@ print(data[&quot;naam&quot;])</code></pre>
               <h3 class="step-title">Formatteer netjes</h3>
             </div>
             <p>Met indent en ensure_ascii krijg je leesbare Nederlandse tekst.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>mooi = json.dumps(data, indent=2, ensure_ascii=False)
 print(mooi)</code></pre>
@@ -245,7 +264,7 @@ print(mooi)</code></pre>
               <h3 class="step-title">Vang fouten op</h3>
             </div>
             <p>JSONDecodeError vertelt waar het misgaat.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def formatteer(tekst):
     try:
@@ -261,7 +280,7 @@ print(mooi)</code></pre>
               <h3 class="step-title">Lees een bestand</h3>
             </div>
             <p>Gebruik utf-8 en schrijf het resultaat naar een nieuw bestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -275,7 +294,7 @@ Path(&quot;data-mooi.json&quot;).write_text(formatteer(ruw), encoding=&quot;utf-
               <h3 class="step-title">Test met een fout</h3>
             </div>
             <p>Verwijder een komma of haakje en kijk naar de melding.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(formatteer(&#39;{&quot;naam&quot;: &quot;Sam&quot;,}&#39;))</code></pre>
           </div>
@@ -319,6 +338,7 @@ Path(&quot;data-mooi.json&quot;).write_text(formatteer(ruw), encoding=&quot;utf-
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -355,6 +375,8 @@ Path(&quot;data-mooi.json&quot;).write_text(formatteer(ruw), encoding=&quot;utf-
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="rekenracer">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🏁</span>
+              <strong>Rekenracer</strong>
+              <p>Los zoveel mogelijk sommen op binnen 60 seconden.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Start de timer</h3>
             </div>
             <p>Onthoud de starttijd en bereken de resterende seconden.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import time
 
@@ -233,7 +252,7 @@ score = 0</code></pre>
               <h3 class="step-title">Stel sommen</h3>
             </div>
             <p>Kies een bewerking en twee getallen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -254,7 +273,7 @@ def som():
               <h3 class="step-title">Blijf vragen tot de tijd om is</h3>
             </div>
             <p>Controleer de tijd aan het begin van elke ronde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>while time.time() - start &lt; LIMIET:
     vraag, antwoord = som()
@@ -275,7 +294,7 @@ print(f&quot;Tijd! Je score is {score}.&quot;)</code></pre>
               <h3 class="step-title">Maak het eerlijker</h3>
             </div>
             <p>Gebruik een korte time-out per vraag in plaats van een harde stop.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code># Houd de tijd per vraag apart bij en stop pas na de huidige vraag.</code></pre>
           </div>
@@ -286,7 +305,7 @@ print(f&quot;Tijd! Je score is {score}.&quot;)</code></pre>
               <h3 class="step-title">Bewaar je highscore</h3>
             </div>
             <p>Sla de beste score op in een bestand.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>from pathlib import Path
 
@@ -336,6 +355,7 @@ if score &gt; oud:
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -372,6 +392,8 @@ if score &gt; oud:
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

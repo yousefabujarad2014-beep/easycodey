@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="dobbelsteen-simulator">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🎲</span>
+              <strong>Dobbelsteen-simulator</strong>
+              <p>Gooi virtuele dobbelstenen en bekijk de verdeling.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Gooi één dobbelsteen</h3>
             </div>
             <p>random.randint(1, 6) geeft een geheel getal van 1 tot en met 6.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import random
 
@@ -232,7 +251,7 @@ for _ in range(5):
               <h3 class="step-title">Simuleer duizend worpen</h3>
             </div>
             <p>Gebruik een dictionary om per uitkomst te tellen hoe vaak die voorkomt.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>telling = {ogen: 0 for ogen in range(1, 7)}
 
@@ -249,7 +268,7 @@ print(telling)</code></pre>
               <h3 class="step-title">Toon de verdeling</h3>
             </div>
             <p>Print per getal een eenvoudige balk. Zo zie je meteen of de verdeling ongeveer gelijk is.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for ogen, aantal in sorted(telling.items()):
     balk = &quot;#&quot; * (aantal // 20)
@@ -295,6 +314,7 @@ print(telling)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -331,6 +351,8 @@ print(telling)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

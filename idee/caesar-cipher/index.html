@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="caesar-cipher">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🏛️</span>
+              <strong>Caesar-vercijfering</strong>
+              <p>Vercijfer en ontsleutel tekst met een verschuiving.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Verschuif één letter</h3>
             </div>
             <p>ord() geeft de lettercode en chr() maakt er weer een letter van.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def verschuif(letter, aantal):
     if letter.isalpha():
@@ -235,7 +254,7 @@ print(verschuif(&quot;a&quot;, 3))</code></pre>
               <h3 class="step-title">Vercijfer een hele tekst</h3>
             </div>
             <p>Pas de verschuiving toe op elke letter.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def vercijfer(tekst, aantal):
     return &quot;&quot;.join(verschuif(letter, aantal) for letter in tekst)
@@ -249,7 +268,7 @@ print(vercijfer(&quot;hallo wereld&quot;, 3))</code></pre>
               <h3 class="step-title">Ontsleutel met dezelfde functie</h3>
             </div>
             <p>Terugdraaien is verschuiven met het tegenovergestelde aantal.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>def ontsleutel(tekst, aantal):
     return vercijfer(tekst, -aantal)
@@ -263,7 +282,7 @@ print(ontsleutel(&quot;kdoor zhuhog&quot;, 3))</code></pre>
               <h3 class="step-title">Probeer alle sleutels</h3>
             </div>
             <p>Met 26 mogelijkheden kun je een onbekende tekst brute-forcen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for sleutel in range(26):
     print(sleutel, vercijfer(&quot;kdoor&quot;, -sleutel))</code></pre>
@@ -275,7 +294,7 @@ print(ontsleutel(&quot;kdoor zhuhog&quot;, 3))</code></pre>
               <h3 class="step-title">Voeg cijfers en leestekens toe</h3>
             </div>
             <p>Alleen letters verschuiven; de rest blijft staan.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>print(vercijfer(&quot;Python 3 is leuk!&quot;, 5))</code></pre>
           </div>
@@ -319,6 +338,7 @@ print(ontsleutel(&quot;kdoor zhuhog&quot;, 3))</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -355,6 +375,8 @@ print(ontsleutel(&quot;kdoor zhuhog&quot;, 3))</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

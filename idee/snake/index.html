@@ -198,6 +198,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="snake">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🐍</span>
+              <strong>Snake met pygame</strong>
+              <p>Het slangenspel: eet, groei en bots niet tegen de muur of jezelf.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -219,7 +238,7 @@
               <h3 class="step-title">Zet het spelvenster op</h3>
             </div>
             <p>Installeer pygame met pip install pygame. Daarna maak je een venster met een vaste celgrootte, zodat je slang en eten op een raster passen.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import pygame
 import random
@@ -239,7 +258,7 @@ klok = pygame.time.Clock()</code></pre>
               <h3 class="step-title">Maak de slang en het eten</h3>
             </div>
             <p>De slang is een lijst met coördinaten. Het eerste element is het hoofd. Het eten staat op een willekeurige cel.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>slang = [(10, 10), (9, 10), (8, 10)]
 richting = (1, 0)
@@ -255,7 +274,7 @@ def nieuw_eten():
               <h3 class="step-title">Lees de toetsen</h3>
             </div>
             <p>Met pygame.key.get_pressed() lees je alle toetsen tegelijk. De slang mag niet direct omkeren, anders botst hij meteen tegen zichzelf.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>loopt = True
 
@@ -282,7 +301,7 @@ while loopt:
               <h3 class="step-title">Beweeg, eet en groei</h3>
             </div>
             <p>Bereken eerst de nieuwe kop en controleer botsingen. Daarna schuif je de slang door: een nieuwe kop vooraan en het laatste stukje eraf. Alleen bij eten laat je het staartje staan.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>    kop_x, kop_y = slang[0]
     nieuwe_kop = (kop_x + richting[0], kop_y + richting[1])
@@ -307,7 +326,7 @@ while loopt:
               <h3 class="step-title">Teken alles en houd de snelheid vast</h3>
             </div>
             <p>Vul het scherm, teken het eten en daarna elk stuk van de slang. Met klok.tick(10) speelt het spel tien stappen per seconde.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>    scherm.fill((18, 18, 22))
 
@@ -363,6 +382,7 @@ pygame.quit()</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -399,6 +419,8 @@ pygame.quit()</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");

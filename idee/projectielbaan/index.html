@@ -197,6 +197,25 @@
         </div>
       </header>
 
+      <section class="project-view is-app" data-project-view data-idea-id="projectielbaan">
+        <div class="project-view-bar">
+          <div class="view-tabs" role="tablist" aria-label="Weergave">
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">🎮 App</button>
+            <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Code</button>
+          </div>
+          <span class="view-hint" data-view-hint>Zo ziet het project eruit. Speel meteen mee.</span>
+        </div>
+        <div class="preview-panel" data-view-panel="app">
+          <div class="preview-stage" data-preview-stage>
+            <div class="preview-fallback">
+              <span class="preview-fallback-emoji" aria-hidden="true">🏹</span>
+              <strong>Projectielbaan</strong>
+              <p>Bereken waar een bal landt bij een schuine worp.</p>
+            </div>
+          </div>
+          <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo en schakel daarna naar <em>Code</em> voor alle stappen en uitleg.</p>
+        </div>
+
       <div class="detail-grid">
         <div class="detail-main">
           <section class="panel">
@@ -218,7 +237,7 @@
               <h3 class="step-title">Stel de beginsnelheid in</h3>
             </div>
             <p>Splits de snelheid in horizontaal en verticaal.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>import math
 
@@ -235,7 +254,7 @@ G = 9.81</code></pre>
               <h3 class="step-title">Simuleer de baan</h3>
             </div>
             <p>De horizontale snelheid blijft gelijk; de verticale verandert.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>x, y = 0.0, 0.0
 dt = 0.01
@@ -254,7 +273,7 @@ while y &gt;= 0:
               <h3 class="step-title">Vergelijk met de formule</h3>
             </div>
             <p>De theoretische afstand is v² sin(2θ) / g.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>bereik = v0 ** 2 * math.sin(2 * hoek) / G
 print(f&quot;Simulatie: {x:.1f} m, formule: {bereik:.1f} m&quot;)</code></pre>
@@ -266,7 +285,7 @@ print(f&quot;Simulatie: {x:.1f} m, formule: {bereik:.1f} m&quot;)</code></pre>
               <h3 class="step-title">Maak een baan</h3>
             </div>
             <p>Print de baan als tekstgrafiek.</p>
-            <div class="code-block">
+            <div class="code-block project-code-only">
             <div class="code-head"><span class="code-lang">python</span></div>
             <pre><code>for px, py in punten[::50]:
     print(f&quot;{px:5.1f} &quot; + &quot; &quot; * int(py) + &quot;*&quot;)</code></pre>
@@ -311,6 +330,7 @@ print(f&quot;Simulatie: {x:.1f} m, formule: {bereik:.1f} m&quot;)</code></pre>
           </div>
         </aside>
       </div>
+      </section>
     </article>
   </main>
 
@@ -347,6 +367,8 @@ print(f&quot;Simulatie: {x:.1f} m, formule: {bereik:.1f} m&quot;)</code></pre>
       </p>
     </div>
   </footer>
+  <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
+  <script type="module" src="../../js/previews.js"></script>
   <script>
     (function () {
       var button = document.getElementById("static-theme");
