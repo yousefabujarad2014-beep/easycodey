@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyCodey - Uren & Factuur Bouwer</title>
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; }
+            .print-shadow-none { box-shadow: none !important; border: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-6 no-print">
+            <div>
+                <h1 class="text-2xl font-bold text-indigo-600">EasyCodey Invoice</h1>
+                <p class="text-sm text-slate-500">Registreer je werk en genereer direct een factuur</p>
+            </div>
+            <div class="space-x-2">
+                <button onclick="wisAlles()" class="px-4 py-2 text-sm text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition">
+                    Lijst wissen
+                </button>
+                <button onclick="window.print()" class="px-4 py-2 text-sm text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow transition">
+                    Print / Opslaan als PDF
+                </button>
+            </div>
+        </header>
+
+        <!-- Invoerformulier -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-6 no-print">
+            <h2 class="text-lg font-semibold mb-4">Nieuwe taak toevoegen</h2>
+            <form id="taakForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Omschrijving</label>
+                    <input type="text" id="omschrijving" required placeholder="Bijv. Website ontwerp bouwen" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Aantal uren</label>
+                    <input type="number" id="uren" step="0.25" min="0.25" required placeholder="2.5" 
+                           class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-500 mb-1">Uurtarief (€)</label>
+                    <div class="flex gap-2">
+                        <input type="number" id="tarief" step="1" min="1" required value="75" 
+                               class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition">
+                            +
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Factuur Overzicht (Dit wordt geprint) -->
+        <div class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 print-shadow-none">
+            <div class="flex justify-between items-start border-b border-slate-200 pb-6 mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold uppercase tracking-wider text-slate-700">Factuur</h2>
+                    <p class="text-sm text-slate-500 mt-1">Datum: <span id="huidigeDatum"></span></p>
+                </div>
+                <div class="text-right">
+                    <input type="text" value="Jouw Bedrijfsnaam" class="font-bold text-right text-slate-800 focus:outline-none focus:bg-slate-50 rounded px-1">
+                    <p class="text-sm text-slate-500">BTW-nummer: BE0123.456.789</p>
+                </div>
+            </div>
+
+            <!-- Tabel met items -->
+            <table class="w-full text-left border-collapse mb-6">
+                <thead>
+                    <tr class="border-b-2 border-slate-200 text-xs uppercase text-slate-500">
+                        <th class="py-3">Omschrijving</th>
+                        <th class="py-3 text-right">Uren</th>
+                        <th class="py-3 text-right">Tarief</th>
+                        <th class="py-3 text-right">Totaal</th>
+                        <th class="py-3 text-right no-print">Actie</th>
+                    </tr>
+                </thead>
+                <tbody id="takenLijst" class="divide-y divide-slate-100 text-sm">
+                    <!-- Items worden hier via JavaScript ingeladen -->
+                </tbody>
+            </table>
+
+            <!-- Totalen -->
+            <div class="flex justify-end">
+                <div class="w-64 space-y-2 text-sm">
+                    <div class="flex justify-between text-slate-600">
+                        <span>Subtotaal (excl. BTW):</span>
+                        <span id="subtotaal">€ 0,00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600">
+                        <span>BTW (21%):</span>
+                        <span id="btwBedrag">€ 0,00</span>
+                    </div>
+                    <div class="flex justify-between text-base font-bold text-slate-900 border-t border-slate-200 pt-2">
+                        <span>Totaal te voldoen:</span>
+                        <span id="totaalBedrag">€ 0,00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datum instellen
+        document.getElementById('huidigeDatum').textContent = new Date().toLocaleDateString('nl-BE');
+
+        // Gegevens ophalen uit LocalStorage
+        let taken = JSON.parse(localStorage.getItem('easycodey_taken')) || [];
+
+        const form = document.getElementById('taakForm');
+        const lijstEl = document.getElementById('takenLijst');
+
+        // Formulier verwerken
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const omschrijving = document.getElementById('omschrijving').value;
+            const uren = parseFloat(document.getElementById('uren').value);
+            const tarief = parseFloat(document.getElementById('tarief').value);
+
+            taken.push({ id: Date.now(), omschrijving, uren, tarief });
+            opslaanEnTonen();
+            
+            document.getElementById('omschrijving').value = '';
+            document.getElementById('uren').value = '';
+        });
+
+        // Taak verwijderen
+        function verwijderTaak(id) {
+            taken = taken.filter(t => t.id !== id);
+            opslaanEnTonen();
+        }
+
+        // Alles wissen
+        function wisAlles() {
+            if(confirm('Weet je zeker dat je alle regels wilt wissen?')) {
+                taken = [];
+                opslaanEnTonen();
+            }
+        }
+
+        // Opslaan in browser en scherm bijwerken
+        function opslaanEnTonen() {
+            localStorage.setItem('easycodey_taken', JSON.stringify(taken));
+            renderTabel();
+        }
+
+        // Bedragen netjes formatteren
+        function formatEuro(bedrag) {
+            return '€ ' + bedrag.toFixed(2).replace('.', ',');
+        }
+
+        // Tabel opbouwen
+        function renderTabel() {
+            lijstEl.innerHTML = '';
+            let subtotaal = 0;
+
+            if (taken.length === 0) {
+                lijstEl.innerHTML = `<tr><td colspan="5" class="py-6 text-center text-slate-400 italic">Nog geen uren geregistreerd. Voeg hierboven een taak toe.</td></tr>`;
+            }
+
+            taken.forEach(taak => {
+                const regelTotaal = taak.uren * taak.tarief;
+                subtotaal += regelTotaal;
+
+                const rij = document.createElement('tr');
+                rij.innerHTML = `
+                    <td class="py-3 font-medium">${taak.omschrijving}</td>
+                    <td class="py-3 text-right">${taak.uren}</td>
+                    <td class="py-3 text-right">${formatEuro(taak.tarief)}</td>
+                    <td class="py-3 text-right font-medium">${formatEuro(regelTotaal)}</td>
+                    <td class="py-3 text-right no-print">
+                        <button onclick="verwijderTaak(${taak.id})" class="text-red-500 hover:text-red-700 text-xs">Verwijder</button>
+                    </td>
+                `;
+                lijstEl.appendChild(rij);
+            });
+
+            const btw = subtotaal * 0.21;
+            const totaal = subtotaal + btw;
+
+            document.getElementById('subtotaal').textContent = formatEuro(subtotaal);
+            document.getElementById('btwBedrag').textContent = formatEuro(btw);
+            document.getElementById('totaalBedrag').textContent = formatEuro(totaal);
+        }
+
+        // Eerste keer inladen
+        renderTabel();
+    </script>
+</body>
+</html>
