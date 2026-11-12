@@ -76,7 +76,7 @@ Je voortgang staat per browser en per apparaat in `localStorage`. Met een option
 Naast de installeerbare webapp is er een echte Android-app als **APK**: `download/EasyCodey-1.0.0.apk` (1,89 MB). Je vindt hem op **`/download/`**, in de footer onder **⬇ Android-app** en in het installatievenster. Dit werkt zonder Google Play en zonder betaling.
 
 - De APK is ondertekend met de uploadsleutel; de fingerprint staat in `/.well-known/assetlinks.json`, dus de app opent zonder adresbalk.
-- De pagina toont de **SHA-256**, installatiestappen, uitleg over Play Protect en een hashcontrole.
+- De pagina toont de **SHA-256**, een QR-code voor je telefoon, installatiestappen, uitleg over Play Protect en een hashcontrole.
 - De inhoud werkt automatisch bij via de website. Alleen een nieuwe Android-schil vraagt een nieuwe APK; zie `PLAYSTORE.md`.
 
 ---

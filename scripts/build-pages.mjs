@@ -717,6 +717,19 @@ function renderDownloadPage() {
         <p class="static-note">
           Alleen van deze officiële pagina downloaden. Controleer hieronder de SHA-256.
         </p>
+        <div class="download-qr">
+          <img
+            src="${prefix}assets/qr/easycodey-download.svg"
+            width="150"
+            height="150"
+            alt="QR-code die naar deze downloadpagina wijst"
+            loading="lazy"
+          />
+          <p>
+            <strong>Op je telefoon?</strong> Scan de code met je camera en download daar. Op dit
+            toestel kun je gewoon de knop hierboven gebruiken.
+          </p>
+        </div>
       </section>
       <section class="panel install-highlights">
         <h2>Waarom deze download?</h2>

@@ -192,7 +192,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### Gratis Android-app (APK)
 - `/download/` biedt de ondertekende Android-app aan als APK: versie 1.0.0, 1,89 MB, pakket `be.easycodey.app`, Android 7.0+.
 - Geen Google Play-account of betaling nodig. De APK is ondertekend met de uploadsleutel en de fingerprint staat in `/.well-known/assetlinks.json`, dus de TWA opent zonder adresbalk.
-- De pagina toont de **SHA-256**, installatiestappen, uitleg over Play Protect, een hashcontrole voor Windows/macOS/Linux en veelgestelde vragen.
+- De pagina toont de **SHA-256**, een **QR-code** voor je telefoon, installatiestappen, uitleg over Play Protect, een hashcontrole voor Windows/macOS/Linux en veelgestelde vragen.
 - De inhoud (projecten, editor, accounts) werkt automatisch bij via de website. Alleen een nieuwe Android-schil vraagt een nieuwe APK.
 - Bereikbaar via de footer **⬇ Android-app**, het installatievenster en `/installeren/`.
 

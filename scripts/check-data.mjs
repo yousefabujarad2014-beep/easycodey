@@ -311,6 +311,12 @@ if (!existsSync(downloadFile)) {
   if (!download.includes("<h1>")) fail("Downloadpagina mist een <h1>.");
   if (!download.includes('type="application/ld+json"')) fail("Downloadpagina mist JSON-LD.");
   if (!download.includes("be.easycodey.app")) fail("Downloadpagina mist de pakketnaam.");
+  if (!download.includes("assets/qr/easycodey-download.svg")) {
+    fail("Downloadpagina mist de QR-code.");
+  }
+  if (!existsSync(path.join(root, "assets", "qr", "easycodey-download.svg"))) {
+    fail("QR-code assets/qr/easycodey-download.svg ontbreekt.");
+  }
   if (!existsSync(apkFile)) {
     fail("APK download/EasyCodey-1.0.0.apk ontbreekt.");
   } else {
