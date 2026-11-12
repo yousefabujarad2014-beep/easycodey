@@ -11,7 +11,7 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste code-build | ✅ commit `791ff44`, Pages-build geslaagd |
+| Laatste code-build | ✅ commit `a7d6cdc`, Pages-build geslaagd |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
 | Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord, optioneel contact en JSON-back-up |
 | Chatknop na inloggen | ✅ footer, zwevende knop en chatkaart op het profiel (geen dubbele knop in de header) |
