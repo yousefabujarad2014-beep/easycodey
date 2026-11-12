@@ -10,6 +10,8 @@ const SCRIPT_SRC = "https://gc.zgo.at/count.js";
 const MAX_QUEUE = 60;
 
 let loadedSite = "";
+let publicSite = "";
+let configLoaded = false;
 let queue = [];
 
 function read(key, fallback = "") {
@@ -49,7 +51,22 @@ export function normalizeSite(value) {
 }
 
 export function getAnalyticsSite() {
-  return normalizeSite(read(SITE_KEY));
+  return normalizeSite(read(SITE_KEY)) || publicSite;
+}
+
+/* De sitecode voor álle bezoekers staat in site-config.json. Zo telt de app
+   niet alleen op het toestel van de eigenaar, maar bij iedereen die EasyCodey
+   gebruikt. De eigenaar kan lokaal een andere code instellen om te testen. */
+export async function loadAnalyticsConfig() {
+  try {
+    const response = await fetch("site-config.json", { cache: "no-store" });
+    const config = await response.json();
+    publicSite = normalizeSite(config?.analyticsSite);
+  } catch {
+    publicSite = "";
+  }
+  configLoaded = true;
+  return publicSite;
 }
 
 export function setAnalyticsSite(value) {
@@ -95,10 +112,14 @@ export function stopAnalytics() {
 }
 
 export function analyticsInfo() {
-  const site = getAnalyticsSite();
+  const localSite = normalizeSite(read(SITE_KEY));
+  const site = localSite || publicSite;
   const optOut = isAnalyticsOptOut();
   return {
     site,
+    localSite,
+    publicSite,
+    source: localSite ? "local" : publicSite ? "public" : "",
     optOut,
     enabled: Boolean(site) && !optOut,
     dashboard: site ? `https://${site}.goatcounter.com` : "",
@@ -167,7 +188,13 @@ export function initAnalytics() {
 }
 
 function send(payload) {
-  if (!analyticsInfo().enabled) return;
+  if (isAnalyticsOptOut()) return;
+  if (!getAnalyticsSite()) {
+    // De openbare sitecode wordt nog geladen: bewaar het event en stuur het
+    // zodra de configuratie binnen is. Zonder sitecode versturen we niets.
+    if (!configLoaded && queue.length < MAX_QUEUE) queue.push(payload);
+    return;
+  }
   const api = window.goatcounter;
   if (!api || typeof api.count !== "function") {
     if (queue.length < MAX_QUEUE) queue.push(payload);

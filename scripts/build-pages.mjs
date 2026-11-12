@@ -862,11 +862,53 @@ function renderDownloadPage() {
   </main>
 
   ${footer(prefix)}
+  ${DOWNLOAD_TRACKING}
   ${THEME_SCRIPT}
 </body>
 </html>
 `;
 }
+
+/* Meet bezoeken en APK-downloads op de downloadpagina. Alleen als er een
+   openbare sitecode in site-config.json staat en de bezoeker niet heeft
+   afgemeld. Cookieloos en zonder persoonsgegevens. */
+const DOWNLOAD_TRACKING = `<script>
+  (async () => {
+    try {
+      if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
+      const response = await fetch("../site-config.json", { cache: "no-store" });
+      const config = await response.json();
+      const site = String((config && config.analyticsSite) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\\/\\//, "")
+        .replace(/\\/.*$/, "")
+        .replace(/\\.goatcounter\\.com$/, "")
+        .replace(/[^a-z0-9-]/g, "");
+      if (!site) return;
+      window.goatcounter = { no_onload: true, allow_local: false };
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://gc.zgo.at/count.js";
+      script.dataset.goatcounter = "https://" + site + ".goatcounter.com/count";
+      script.addEventListener("load", () => {
+        try {
+          window.goatcounter.count({ path: "/download", title: document.title, event: false });
+          document.addEventListener(
+            "click",
+            (event) => {
+              if (event.target.closest && event.target.closest("a[download]")) {
+                window.goatcounter.count({ path: "/event/apk-download", event: true });
+              }
+            },
+            true
+          );
+        } catch (error) {}
+      });
+      document.head.appendChild(script);
+    } catch (error) {}
+  })();
+</script>`;
 
 function renderInstallPage() {
   const prefix = "../";
@@ -1341,7 +1383,7 @@ function renderPrivacyPage() {
         EasyCodey is gemaakt om veilig en privé te voelen. Je voortgang, profielen en eigen projecten
         blijven op je eigen apparaat. Er is geen server die je gegevens bewaart.
       </p>
-      <p class="static-note">Laatst bijgewerkt: 10 november 2026</p>
+      <p class="static-note">Laatst bijgewerkt: 12 november 2026</p>
     </header>
 
     <section class="panel">
@@ -1390,11 +1432,12 @@ function renderPrivacyPage() {
         trackers.
       </p>
       <p class="profile-text">
-        De eigenaar kan optioneel <strong>anonieme bezoekcijfers</strong> laten meten met GoatCounter.
+        De eigenaar kan <strong>anonieme bezoekcijfers</strong> laten meten met GoatCounter.
         Dat gebeurt zonder cookies, zonder vingerafdruk en zonder persoonsgegevens: alleen welke pagina
-        en welk project zijn bekeken, met een grove regio en het browsertype. Je kunt dit altijd
-        uitzetten via <strong>Mijn profiel → Privacy en statistieken</strong>. Staat er geen meetcode
-        ingesteld, dan wordt er niets verstuurd.
+        en welk project zijn bekeken, of de app als app is geopend (installatie) en of de APK is
+        gedownload, met een grove regio en het browsertype. Je kunt dit altijd uitzetten via
+        <strong>Mijn profiel → Privacy en statistieken</strong>. Staat er geen meetcode in de app,
+        dan wordt er niets verstuurd.
       </p>
       <p class="static-note">
         De eigenaar ziet alleen de profielen die op hetzelfde apparaat zijn gemaakt, via het lokale
@@ -1408,7 +1451,7 @@ function renderPrivacyPage() {
         De website wordt gehost via GitHub Pages. Lettertypen komen van Google Fonts en Python wordt
         geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
         browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
-        je projecten of profielen naar deze diensten. Alleen als de eigenaar een meetcode instelt,
+        je projecten of profielen naar deze diensten. Alleen als er een meetcode in de app staat,
         wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder cookies.
       </p>
       <p class="static-note">

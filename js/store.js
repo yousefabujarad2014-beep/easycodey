@@ -253,10 +253,14 @@ function isOwnerAccount(profile) {
   );
 }
 
+export function isOwnerPassword(password) {
+  return hashSecret(String(password || "").trim()) === OWNER_PASSWORD_HASH;
+}
+
 export function isOwnerCredentials(name, password) {
   const cleanName = String(name || "").trim().toLowerCase();
   if (cleanName !== OWNER_NAME.toLowerCase()) return false;
-  return hashSecret(String(password || "").trim()) === OWNER_PASSWORD_HASH;
+  return isOwnerPassword(password);
 }
 
 export function isActiveProfileOwner() {

@@ -299,6 +299,20 @@ if (!existsSync(privacyFile)) {
   if (!privacy.includes('type="application/ld+json"')) fail("Privacy pagina mist JSON-LD.");
 }
 
+const siteConfigFile = path.join(root, "site-config.json");
+if (!existsSync(siteConfigFile)) {
+  fail("site-config.json ontbreekt.");
+} else {
+  try {
+    const siteConfig = JSON.parse(readFileSync(siteConfigFile, "utf8"));
+    if (typeof siteConfig.analyticsSite !== "string") {
+      fail("site-config.json mist het veld analyticsSite (mag leeg zijn).");
+    }
+  } catch (error) {
+    fail(`site-config.json is geen geldige JSON: ${error.message}`);
+  }
+}
+
 const downloadFile = path.join(root, "download", "index.html");
 const apkFile = path.join(root, "download", "EasyCodey-1.0.0.apk");
 if (!existsSync(downloadFile)) {
@@ -311,6 +325,7 @@ if (!existsSync(downloadFile)) {
   if (!download.includes("<h1>")) fail("Downloadpagina mist een <h1>.");
   if (!download.includes('type="application/ld+json"')) fail("Downloadpagina mist JSON-LD.");
   if (!download.includes("be.easycodey.app")) fail("Downloadpagina mist de pakketnaam.");
+  if (!download.includes("analyticsSite")) fail("Downloadpagina mist de anonieme meetcode.");
   if (!download.includes("assets/qr/easycodey-download.svg")) {
     fail("Downloadpagina mist de QR-code.");
   }

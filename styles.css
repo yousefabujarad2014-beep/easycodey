@@ -4653,6 +4653,24 @@ body.ai-open .chat-fab {
   font-size: 0.82em;
 }
 
+.owner-analytics-steps {
+  margin: 16px 0 10px;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.owner-analytics-steps code {
+  padding: 1px 5px;
+  border-radius: 6px;
+  background: var(--panel-2);
+  font-size: 0.86em;
+  color: var(--ink);
+}
+
 .profile-privacy .profile-check {
   margin-top: 6px;
 }

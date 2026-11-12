@@ -278,7 +278,7 @@ Een persoonlijke bankrekening heeft geen openbare betaallink. Daarom ondersteunt
 De site heeft alles wat Google nodig heeft om hem te indexeren:
 
 - `/robots.txt` staat indexering toe en verwijst naar de sitemap.
-- `/sitemap.xml` bevat **166 URL's**: de startpagina, het projectoverzicht, de installatiepagina, de contactpagina, de doneerpagina en alle **161 projectpagina's**.
+- `/sitemap.xml` bevat **168 URL's**: de startpagina, het projectoverzicht, de installatiepagina, de downloadpagina, de contactpagina, de doneerpagina en alle **161 projectpagina's**.
 - Elk project heeft een echte pagina op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD (`LearningResource` + `BreadcrumbList`).
 - `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
 - `/installeren/`, `/contact/` en `/doneren/` zijn vaste pagina's met eigen titel, description, canonical en JSON-LD.
@@ -299,8 +299,8 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 - Een account is bedoeld om gebruikers op hetzelfde apparaat te scheiden, niet als beveiliging. Het wachtwoord houdt accounts uit elkaar, maar is geen sterke beveiliging tegen iemand met toegang tot het apparaat.
 - Oude accounts met een PIN blijven werken: de PIN wordt bij het inlezen automatisch als wachtwoord gelezen.
 - Het contactveld bij registratie is **optioneel**. Het staat alleen in `easycodey.profiles.v1` op dit apparaat en wordt nooit verstuurd.
-- Het **eigenaarspaneel** op `#/eigenaar` is lokaal beveiligd met de eigenaarscode. De eigenaar kan ook inloggen met het eigenaarsaccount op **Mijn profiel**; dan opent het paneel zonder code en werkt dat op elk toestel. Het toont het aantal profielen op dit apparaat, hun voortgang en contactgegevens. Wachtwoorden zijn nooit zichtbaar.
-- **Anonieme bezoekcijfers** zijn optioneel en cookieloos (GoatCounter). Alleen de eigenaar stelt een sitecode in; zonder sitecode wordt er niets geladen of verstuurd. Iedereen kan zich afmelden via **Mijn profiel → Privacy en statistieken**.
+- Het **eigenaarspaneel** op `#/eigenaar` is lokaal beveiligd met de eigenaarscode. De eigenaar kan ook inloggen met het eigenaarsaccount op **Mijn profiel**; dan opent het paneel zonder code en werkt dat op elk toestel. Na **Vergrendelen** opent zowel de eigenaarscode als het eigenaars-wachtwoord het paneel opnieuw. Het toont het aantal profielen op dit apparaat, hun voortgang en contactgegevens. Wachtwoorden zijn nooit zichtbaar.
+- **Anonieme bezoekcijfers** zijn optioneel en cookieloos (GoatCounter). De sitecode voor álle bezoekers staat in `site-config.json` (`analyticsSite`); een code in het paneel geldt alleen voor dat toestel. Zonder sitecode wordt er niets geladen of verstuurd. Bezoeken, populairste projecten, versies, installaties (app geopend als app) en APK-downloads verschijnen in het GoatCounter-dashboard. Iedereen kan zich afmelden via **Mijn profiel → Privacy en statistieken**.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Gebruik **Back-up downloaden** en **Back-up herstellen** op `#/profiel` om voortgang, eigen projecten en editor-code mee te nemen. Op **Mijn ideeën** kun je daarnaast alleen je eigen projecten exporteren/importeren.
 

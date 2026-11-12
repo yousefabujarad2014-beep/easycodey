@@ -114,9 +114,9 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Eigenaarspaneel (`#/eigenaar`)
 - De eigenaar logt in op **Mijn profiel** met de eigenaarsnaam en het eigenaars-wachtwoord. Dat account wordt bij de eerste login lokaal aangemaakt, dus het werkt op elk toestel. Het profiel krijgt het label **Eigenaar** en het beheer opent zonder code.
-- Alternatief: de eigenaarscode op `#/eigenaar`; de ontgrendeling geldt voor de sessie.
+- Alternatief: de eigenaarscode **of** het eigenaars-wachtwoord op `#/eigenaar`; de ontgrendeling geldt voor de sessie. Na **Vergrendelen** werkt het wachtwoord opnieuw.
 - **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik en de laatste automatische update.
-- **Bezoekers meten (optioneel):** GoatCounter-sitecode instellen voor anonieme, cookieloze bezoekcijfers en populairste projecten. Zonder sitecode wordt niets geladen of verstuurd; gebruikers kunnen zich afmelden via **Mijn profiel → Privacy en statistieken**.
+- **Bezoekers meten (optioneel):** GoatCounter-sitecode instellen voor anonieme, cookieloze bezoekcijfers, populairste projecten, versies, installaties en APK-downloads. De sitecode voor alle bezoekers staat in `site-config.json` (`analyticsSite`). Zonder sitecode wordt niets geladen of verstuurd; gebruikers kunnen zich afmelden via **Mijn profiel → Privacy en statistieken**.
 - Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeÃ«n.
 - Profielentabel met naam, optioneel contact, aanmaakdatum, laatste activiteit en voortgang.
 - **Voortgang wissen** en **Verwijderen** per profiel, met bevestiging.
@@ -312,17 +312,17 @@ FLL/
 | Python uitvoeren zonder internet | âœ… werkt na eenmalig laden |
 | PWA-testsuite lokaal | âœ… 21/21 checks geslaagd |
 | Chrome-installeerbaarheid | âœ… geen installability errors |
-| PWA-testsuite op de live site | âœ… 11/11 checks geslaagd |
+| PWA-testsuite op de live site | 13/13 checks geslaagd |
 | Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | âœ… 36 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | âœ… 33/33 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS en eigenaarspaneel |
-| Eigenaarslogin en inzichten lokaal | âœ… 35/35 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, app-status, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
+| Eigenaarslogin en inzichten lokaal | 37/37 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
 | Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Invoer-pop-up met de echte vraag | âœ… 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | âœ… Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | âœ… `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
-| Vaste pagina's lokaal | âœ… 102/102 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee en Snake-preview |
+| Vaste pagina's lokaal | 103/103 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee, Snake-preview en de downloadpagina met QR |
 | App-preview per project | âœ… 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
 | Weerbaarheid bij laadfouten | âœ… 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
 | Snake-preview | âœ… canvas, D-pad en toetsen; speelbaar in de browser |

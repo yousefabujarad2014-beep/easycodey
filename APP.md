@@ -177,7 +177,8 @@ Met **Back-up downloaden** bewaar je voortgang, eigen projecten en editor-code a
 eigenaars-wachtwoord. Daarna ben je op dat toestel eigenaar: het beheer opent zonder code en je
 profiel krijgt het label **Eigenaar**. Het account wordt bij de eerste login lokaal aangemaakt.
 
-Alternatief: open `#/eigenaar` (link **🔑 Beheer** in de footer) en vul de eigenaarscode in.
+Alternatief: open `#/eigenaar` (link **🔑 Beheer** in de footer) en vul de eigenaarscode of het
+eigenaars-wachtwoord in. Dat werkt ook opnieuw nadat je op **Vergrendelen** hebt geklikt.
 
 Je ziet dan:
 
@@ -188,7 +189,9 @@ Je ziet dan:
 - **Inzicht en updates:** app-versie, service worker, aantal offline bestanden, opslaggebruik en de
   laatste automatische update;
 - **Bezoekers meten:** vul je GoatCounter-sitecode in om anonieme bezoekcijfers, populairste
-  projecten en versies te zien. Zonder sitecode wordt er niets geladen of verstuurd;
+  projecten, versies, installaties en APK-downloads te zien. Zonder sitecode wordt er niets geladen
+  of verstuurd. De code in het vak geldt alleen op dit toestel; voor alle bezoekers zet je dezelfde
+  code in `site-config.json` bij `analyticsSite`;
 - **Alles downloaden** als JSON met alle lokale profielen en hun voortgang.
 
 Het paneel is een lokale toegangspoort, geen serverbeveiliging. Er is geen database: andere telefoons en computers hebben hun eigen lokale profielen. Wachtwoorden zijn nooit zichtbaar.

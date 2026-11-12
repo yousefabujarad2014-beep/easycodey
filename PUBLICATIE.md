@@ -213,10 +213,13 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De chatknop opent EasyCoach; de chatkaart op `#/profiel` werkt ook.
 - [ ] Elk account heeft eigen voortgang; **Back-up downloaden** en **Back-up herstellen** werken.
 - [ ] Header en footer linken naar **Mijn profiel**.
-- [ ] `#/eigenaar` vraagt om de eigenaarscode en toont daarna het aantal lokale profielen, de voortgang, de mededeling en **Alles downloaden**.
+- [ ] `#/eigenaar` vraagt om de eigenaarscode of het eigenaars-wachtwoord en toont daarna het aantal lokale profielen, de voortgang, de mededeling en **Alles downloaden**.
+- [ ] Na **Vergrendelen** opent **[verwijderd]** het paneel opnieuw; een verkeerde code geeft een duidelijke foutmelding.
 - [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
 - [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag en de laatste update.
-- [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** verwijdert de sitecode; de opt-out op het profiel werkt.
+- [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** zet de meting uit; de opt-out op het profiel werkt.
+- [ ] Met `analyticsSite` in `site-config.json` meldt het paneel “actief voor alle bezoekers” en laadt het GoatCounter-script.
+- [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.
 - [ ] Projectpagina: **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
 - [ ] **Speel dit idee** toont de app, **Gebruik dit idee** toont de code en **Programmeer zelf** voert het volledige project uit in het speelveld.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
@@ -231,7 +234,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De app opent in een eigen venster met het EasyCodey-icoon en het nieuwe logo.
 - [ ] Na één keer online gewerkt te hebben: site en Python werken offline.
 - [ ] `/robots.txt` en `/sitemap.xml` tonen de juiste live-URL.
-- [ ] `/sitemap.xml` bevat 166 URL's: startpagina, overzicht, installatiepagina, contactpagina, doneerpagina en 161 projecten.
+- [ ] `/sitemap.xml` bevat 168 URL's: startpagina, overzicht, installatiepagina, downloadpagina, contactpagina, doneerpagina en 161 projecten.
 - [ ] `/contact/` toont telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com**.
 - [ ] `/server.js`, `/package.json`, alle `*.md` en `/.env` geven 404.
 - [ ] Site is aangemeld bij Google Search Console (zie `GOOGLE.md`).

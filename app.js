@@ -693,12 +693,13 @@ function renderOwner() {
         <p class="eyebrow">Beheer</p>
         <h1>Alleen voor de eigenaar</h1>
         <p class="static-lead">
-          Dit paneel toont de lokale profielen van dit apparaat. Vul de eigenaarscode in om verder te gaan.
+          Vul je <strong>eigenaarscode</strong> of je <strong>eigenaars-wachtwoord</strong> in om het
+          beheer te openen.
         </p>
         <form class="owner-unlock" id="owner-unlock-form">
           <label class="field">
-            <span>Eigenaarscode</span>
-            <input id="owner-code" type="password" autocomplete="off" placeholder="Voer je code in" />
+            <span>Eigenaarscode of wachtwoord</span>
+            <input id="owner-code" type="password" autocomplete="off" placeholder="Code of wachtwoord" />
           </label>
           <p class="form-error" id="owner-unlock-error" role="alert" hidden></p>
           <button class="btn brand btn-block" type="submit">Ontgrendel beheer</button>
@@ -707,8 +708,9 @@ function renderOwner() {
           Let op: dit is een lokale toegangspoort, geen serverbeveiliging. Deel je code niet.
         </p>
         <p class="static-note">
-          Ben je de eigenaar? Log in met je eigen account op <a href="#/profiel">Mijn profiel</a>.
-          Dan opent dit paneel automatisch, zonder code.
+          Ben je de eigenaar? Log dan in met je account op <a href="#/profiel">👤 Mijn profiel</a>
+          (naam <strong>Yousef Abujarad</strong> + je wachtwoord). Daarna opent dit paneel automatisch,
+          zonder code.
         </p>
       </section>
     `;
@@ -833,10 +835,19 @@ function renderOwner() {
             <span>Deel anonieme statistieken vanaf dit toestel</span>
           </label>
         </form>
+        <ol class="owner-analytics-steps">
+          <li>Maak een gratis account op <strong>goatcounter.com</strong> (duurt ongeveer 2 minuten).</li>
+          <li>Kies een korte sitecode, bijvoorbeeld <code>easycodey</code>.</li>
+          <li>Vul die code hierboven in en klik op <strong>Meting opslaan</strong>.</li>
+        </ol>
         <p class="static-note">
-          Maak gratis een account op goatcounter.com en vul hier je sitecode in (bijv.
-          <code>easycodey</code>). Daarna zie je bezoekers, populairste projecten en versies in je
-          dashboard. Installaties, crashes en beoordelingen zie je in Google Play Console.
+          Daarna zie je in je dashboard: <strong>bezoeken</strong>, <strong>populairste projecten</strong>,
+          gebruikte versies, <strong>installaties</strong> en <strong>APK-downloads</strong>. De meting is
+          cookieloos en anoniem: geen namen, geen e-mail, geen profielen.
+        </p>
+        <p class="static-note">
+          De code in dit vak geldt alleen op <strong>dit toestel</strong>. Om alle bezoekers te tellen,
+          moet dezelfde code in <code>site-config.json</code> staan. Vraag je beheerder dat te doen.
         </p>
       </div>
     </section>
@@ -852,7 +863,8 @@ function renderOwner() {
       </div>
       <p class="static-note">
         Wil je álle klanten van álle toestellen zien? Dat kan alleen met een echte server en database.
-        EasyCodey is bewust offline en privé: er wordt niets naar een server gestuurd.
+        EasyCodey bewaart alles lokaal. Alleen de anonieme bezoekcijfers — als je die hierboven
+        aanzet — gaan naar GoatCounter.
       </p>
     </section>
   `;
@@ -877,14 +889,18 @@ function updateOwnerAnalyticsUI() {
   if (stateEl) {
     if (!info.site) {
       stateEl.innerHTML =
-        "Nog geen sitecode. Zonder sitecode wordt er <strong>niets</strong> geladen en niets verstuurd.";
+        "Nog geen sitecode. Maak hieronder een gratis account en vul je code in. Zonder code wordt er <strong>niets</strong> verstuurd.";
     } else if (info.optOut) {
       stateEl.innerHTML =
         "Meting staat uit op dit toestel. Zet het vinkje aan om weer anoniem mee te tellen.";
-    } else {
-      stateEl.innerHTML = `Meting is <strong>actief</strong> voor <strong>${e(
+    } else if (info.source === "public") {
+      stateEl.innerHTML = `Meting is <strong>actief voor alle bezoekers</strong> van EasyCodey (sitecode <strong>${e(
         info.site
-      )}</strong>. Bezoekers, populairste projecten en versies verschijnen in je dashboard.`;
+      )}</strong>). Je ziet de cijfers in je dashboard.`;
+    } else {
+      stateEl.innerHTML = `Meting is <strong>actief op dit toestel</strong> (sitecode <strong>${e(
+        info.site
+      )}</strong>). Voor alle bezoekers moet dezelfde code in <code>site-config.json</code> staan.`;
     }
   }
 }
@@ -939,8 +955,14 @@ async function loadOwnerStatus() {
 
 function handleOwnerUnlock() {
   const code = document.querySelector("#owner-code")?.value || "";
-  if (ownerHash(code) !== OWNER_CODE_HASH) {
-    showProfileError("owner-unlock-error", "Die code klopt niet.");
+  // De eigenaarscode én het eigenaars-wachtwoord openen het beheer. Zo werkt
+  // het ook als iemand het paneel vergrendelt en daarna zijn wachtwoord intypt.
+  const valid = ownerHash(code) === OWNER_CODE_HASH || store.isOwnerPassword(code);
+  if (!valid) {
+    showProfileError(
+      "owner-unlock-error",
+      "Die code of dat wachtwoord klopt niet. Probeer opnieuw."
+    );
     return;
   }
   setOwnerUnlocked(true);
@@ -2735,7 +2757,7 @@ document.addEventListener("click", (event) => {
     }
     if (action === "owner-export") ownerExportAll();
     if (action === "owner-analytics-stop") {
-      analytics.setAnalyticsSite("");
+      analytics.setAnalyticsOptOut(true);
       updateOwnerAnalyticsUI();
       toast("Meting gestopt. Er wordt niets meer verstuurd.");
     }
@@ -3153,6 +3175,22 @@ function initPWA() {
     standaloneQuery.addEventListener("change", updateInstallUI);
   }
 
+  // Telt één keer per toestel dat EasyCodey als app (PWA of APK) wordt geopend.
+  const openedAsApp =
+    standaloneQuery.matches ||
+    window.navigator.standalone === true ||
+    document.referrer.startsWith("android-app://");
+  if (openedAsApp) {
+    try {
+      if (localStorage.getItem("easycodey.installed.v1") !== "1") {
+        localStorage.setItem("easycodey.installed.v1", "1");
+        analytics.trackEvent("app-geinstalleerd");
+      }
+    } catch {
+      // Zonder opslag tellen we niet dubbel; de app blijft gewoon werken.
+    }
+  }
+
   registerServiceWorker();
 }
 
@@ -3162,8 +3200,10 @@ async function init() {
   window.__easycodeyBoot?.();
   initTheme();
   initPWA();
-  analytics.initAnalytics();
-  analytics.trackOnce(`start-${APP_VERSION}`);
+  analytics.loadAnalyticsConfig().then(() => {
+    analytics.initAnalytics();
+    analytics.trackOnce(`start-${APP_VERSION}`);
+  });
 
   // Welke weergave kiezen mensen: de app of de code?
   document.addEventListener(
