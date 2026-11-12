@@ -4636,6 +4636,28 @@ body.ai-open .chat-fab {
   border-top: 1px solid var(--line);
 }
 
+.owner-counter {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.owner-counter h3 {
+  margin: 0 0 4px;
+}
+
+.owner-counter-grid {
+  margin: 14px 0 12px;
+}
+
+.owner-counter-grid .owner-stat strong {
+  font-size: 1.6rem;
+}
+
+.owner-counter .profile-actions {
+  margin-bottom: 6px;
+}
+
 .owner-analytics-form {
   display: grid;
   gap: 12px;

@@ -13,6 +13,7 @@ import {
 
 import * as store from "./js/store.js";
 import * as analytics from "./js/analytics.js";
+import * as counter from "./js/counter.js";
 import {
   escapeHtml as e,
   renderMarkdown,
@@ -817,6 +818,26 @@ function renderOwner() {
         <div class="owner-stat"><strong data-status="storage">…</strong><span>opslag gebruikt</span></div>
         <div class="owner-stat"><strong data-status="update">…</strong><span>laatste update</span></div>
       </div>
+      <div class="owner-counter">
+        <h3>Bezoekcijfers</h3>
+        <p class="profile-text">
+          Deze cijfers komen van de ingebouwde, anonieme teller. Geen cookies, geen namen en geen
+          account nodig.
+        </p>
+        <div class="owner-stats owner-counter-grid" data-counter-totals>
+          <div class="owner-stat"><strong data-counter="visits">…</strong><span>bezoeken</span></div>
+          <div class="owner-stat"><strong data-counter="installs">…</strong><span>installaties</span></div>
+          <div class="owner-stat"><strong data-counter="downloads">…</strong><span>APK-downloads</span></div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn ghost" type="button" data-action="owner-counter-refresh">Cijfers verversen</button>
+        </div>
+        <p class="static-note" data-counter-note>
+          Bezoeken = nieuwe sessies. Installaties = toestellen waarop de app als app start.
+          APK-downloads = klikken op de downloadknop. Iemand die vaker komt, telt vaker mee.
+        </p>
+      </div>
+
       <div class="owner-analytics">
         <h3>Bezoekers meten</h3>
         <p class="profile-text" data-analytics-state>Meting wordt gecontroleerd…</p>
@@ -863,14 +884,37 @@ function renderOwner() {
       </div>
       <p class="static-note">
         Wil je álle klanten van álle toestellen zien? Dat kan alleen met een echte server en database.
-        EasyCodey bewaart alles lokaal. Alleen de anonieme bezoekcijfers — als je die hierboven
-        aanzet — gaan naar GoatCounter.
+        EasyCodey bewaart alles lokaal. Alleen de anonieme cijfers — bezoeken, installaties en
+        APK-downloads — gaan naar de ingebouwde teller. Voor populairste projecten kun je daarnaast
+        GoatCounter aanzetten.
       </p>
     </section>
   `;
 
   document.title = "Beheer — EasyCodey";
   loadOwnerStatus();
+  loadOwnerCounter();
+}
+
+async function loadOwnerCounter() {
+  const grid = document.querySelector("[data-counter-totals]");
+  if (!grid) return;
+  const note = document.querySelector("[data-counter-note]");
+  const totals = await counter.getTotals();
+  const put = (name, value) => {
+    const el = grid.querySelector(`[data-counter="${name}"]`);
+    if (!el) return;
+    el.textContent =
+      value === null ? "—" : new Intl.NumberFormat("nl-BE").format(value);
+  };
+  put("visits", totals.visits);
+  put("installs", totals.installs);
+  put("downloads", totals.downloads);
+  if (note) {
+    note.textContent = totals.available
+      ? "Bezoeken = nieuwe sessies. Installaties = toestellen waarop de app als app start. APK-downloads = klikken op de downloadknop. Iemand die vaker komt, telt vaker mee."
+      : "De teller is nu niet bereikbaar. Probeer het later opnieuw met de knop hierboven.";
+  }
 }
 
 function updateOwnerAnalyticsUI() {
@@ -887,12 +931,12 @@ function updateOwnerAnalyticsUI() {
     link.textContent = info.site ? "Open dashboard ↗" : "Maak een gratis account ↗";
   }
   if (stateEl) {
-    if (!info.site) {
+    if (info.optOut) {
       stateEl.innerHTML =
-        "Nog geen sitecode. Maak hieronder een gratis account en vul je code in. Zonder code wordt er <strong>niets</strong> verstuurd.";
-    } else if (info.optOut) {
+        "Alle meting staat uit op dit toestel. Zet het vinkje aan om weer anoniem mee te tellen.";
+    } else if (!info.site) {
       stateEl.innerHTML =
-        "Meting staat uit op dit toestel. Zet het vinkje aan om weer anoniem mee te tellen.";
+        "De ingebouwde teller hierboven werkt al. Een gratis GoatCounter-code geeft <strong>extra</strong> inzichten, zoals populairste projecten en versies. Zonder code wordt er niets naar GoatCounter verstuurd.";
     } else if (info.source === "public") {
       stateEl.innerHTML = `Meting is <strong>actief voor alle bezoekers</strong> van EasyCodey (sitecode <strong>${e(
         info.site
@@ -2756,6 +2800,10 @@ document.addEventListener("click", (event) => {
       toast("Account verwijderd.");
     }
     if (action === "owner-export") ownerExportAll();
+    if (action === "owner-counter-refresh") {
+      loadOwnerCounter();
+      toast("Cijfers worden opgehaald…");
+    }
     if (action === "owner-analytics-stop") {
       analytics.setAnalyticsOptOut(true);
       updateOwnerAnalyticsUI();
@@ -3181,14 +3229,9 @@ function initPWA() {
     window.navigator.standalone === true ||
     document.referrer.startsWith("android-app://");
   if (openedAsApp) {
-    try {
-      if (localStorage.getItem("easycodey.installed.v1") !== "1") {
-        localStorage.setItem("easycodey.installed.v1", "1");
-        analytics.trackEvent("app-geinstalleerd");
-      }
-    } catch {
-      // Zonder opslag tellen we niet dubbel; de app blijft gewoon werken.
-    }
+    counter.countInstall().then((value) => {
+      if (value !== null) analytics.trackEvent("app-geinstalleerd");
+    });
   }
 
   registerServiceWorker();
@@ -3203,6 +3246,9 @@ async function init() {
   analytics.loadAnalyticsConfig().then(() => {
     analytics.initAnalytics();
     analytics.trackOnce(`start-${APP_VERSION}`);
+  });
+  counter.loadCounterConfig().then(() => {
+    counter.countVisit();
   });
 
   // Welke weergave kiezen mensen: de app of de code?

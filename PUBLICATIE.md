@@ -11,12 +11,12 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste code-build | ✅ commit `936ed53`, Pages-build geslaagd |
+| Laatste code-build | ✅ commit `791ff44`, Pages-build geslaagd |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
 | Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord, optioneel contact en JSON-back-up |
 | Chatknop na inloggen | ✅ footer, zwevende knop en chatkaart op het profiel (geen dubbele knop in de header) |
 | Eigenaarspaneel | ✅ `#/eigenaar`, eigenaarslogin zonder code, lokale profielen, voortgang, mededeling, app-status en download |
-| Inzichten (optioneel) | ✅ anonieme, cookieloze bezoekcijfers via GoatCounter, populairste projecten, app-versie en opt-out per toestel |
+| Inzichten | ✅ ingebouwde anonieme teller voor bezoeken, installaties en APK-downloads; optioneel GoatCounter voor populairste projecten, versies en regio; opt-out per toestel |
 | Gratis Android-download | ✅ `/download/` met ondertekende APK 1.0.0, SHA-256, installatie-uitleg en FAQ — zonder Google Play |
 | Invoerhulp | ✅ `input()` toont de vraag en een tekstvak in het venster bovenaan |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
@@ -217,6 +217,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Na **Vergrendelen** opent **[verwijderd]** het paneel opnieuw; een verkeerde code geeft een duidelijke foutmelding.
 - [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
 - [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag en de laatste update.
+- [ ] **Bezoekcijfers** tonen getallen voor bezoeken, installaties en APK-downloads; **Cijfers verversen** haalt de nieuwste stand op.
 - [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** zet de meting uit; de opt-out op het profiel werkt.
 - [ ] Met `analyticsSite` in `site-config.json` meldt het paneel “actief voor alle bezoekers” en laadt het GoatCounter-script.
 - [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.

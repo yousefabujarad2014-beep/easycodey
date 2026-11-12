@@ -397,6 +397,51 @@ def detail(index):
   <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
   <script type="module" src="../../js/previews.js"></script>
   <script>
+  (async () => {
+    try {
+      if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
+      const response = await fetch("../../site-config.json", { cache: "no-store" });
+      const config = await response.json();
+
+      const counter = String((config && config.publicCounter) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]/g, "");
+      if (counter) {
+        let seen = false;
+        try {
+          seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
+        } catch (error) {}
+        if (!seen) {
+          try {
+            sessionStorage.setItem("easycodey.counter.session.v1", "1");
+          } catch (error) {}
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/bezoeken-v1",
+            { cache: "no-store", keepalive: true }
+          ).catch(() => {});
+        }
+      }
+
+      const site = String((config && config.analyticsSite) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\/\//, "")
+        .replace(/\/.*$/, "")
+        .replace(/\.goatcounter\.com$/, "")
+        .replace(/[^a-z0-9-]/g, "");
+      if (!site) return;
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://gc.zgo.at/count.js";
+      script.dataset.goatcounter = "https://" + site + ".goatcounter.com/count";
+      document.head.appendChild(script);
+    } catch (error) {}
+  })();
+</script>
+  <script>
     (function () {
       var button = document.getElementById("static-theme");
       if (button) {

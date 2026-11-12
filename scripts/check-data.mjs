@@ -308,6 +308,9 @@ if (!existsSync(siteConfigFile)) {
     if (typeof siteConfig.analyticsSite !== "string") {
       fail("site-config.json mist het veld analyticsSite (mag leeg zijn).");
     }
+    if (typeof siteConfig.publicCounter !== "string") {
+      fail("site-config.json mist het veld publicCounter (mag leeg zijn).");
+    }
   } catch (error) {
     fail(`site-config.json is geen geldige JSON: ${error.message}`);
   }

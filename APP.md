@@ -188,8 +188,11 @@ Je ziet dan:
 - een mededeling die bovenaan de app verschijnt;
 - **Inzicht en updates:** app-versie, service worker, aantal offline bestanden, opslaggebruik en de
   laatste automatische update;
-- **Bezoekers meten:** vul je GoatCounter-sitecode in om anonieme bezoekcijfers, populairste
-  projecten, versies, installaties en APK-downloads te zien. Zonder sitecode wordt er niets geladen
+- **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen **bezoeken**, **installaties** en
+  **APK-downloads**. Geen account nodig; geen cookies of persoonsgegevens. Met **Cijfers verversen**
+  haal je de nieuwste stand op;
+- **Bezoekers meten:** vul daarnaast je GoatCounter-sitecode in voor uitgebreidere inzichten:
+  populairste projecten, versies en regio. Zonder sitecode wordt er niets naar GoatCounter geladen
   of verstuurd. De code in het vak geldt alleen op dit toestel; voor alle bezoekers zet je dezelfde
   code in `site-config.json` bij `analyticsSite`;
 - **Alles downloaden** als JSON met alle lokale profielen en hun voortgang.

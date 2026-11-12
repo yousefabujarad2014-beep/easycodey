@@ -1,4 +1,4 @@
-﻿# EasyCodey â€” eindrapport
+# EasyCodey â€” eindrapport
 
 **Datum:** 9 november 2026
 **Map:** `C:\Users\Home\Desktop\FLL`
@@ -116,7 +116,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De eigenaar logt in op **Mijn profiel** met de eigenaarsnaam en het eigenaars-wachtwoord. Dat account wordt bij de eerste login lokaal aangemaakt, dus het werkt op elk toestel. Het profiel krijgt het label **Eigenaar** en het beheer opent zonder code.
 - Alternatief: de eigenaarscode **of** het eigenaars-wachtwoord op `#/eigenaar`; de ontgrendeling geldt voor de sessie. Na **Vergrendelen** werkt het wachtwoord opnieuw.
 - **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik en de laatste automatische update.
-- **Bezoekers meten (optioneel):** GoatCounter-sitecode instellen voor anonieme, cookieloze bezoekcijfers, populairste projecten, versies, installaties en APK-downloads. De sitecode voor alle bezoekers staat in `site-config.json` (`analyticsSite`). Zonder sitecode wordt niets geladen of verstuurd; gebruikers kunnen zich afmelden via **Mijn profiel → Privacy en statistieken**.
+- **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen bezoeken, installaties en APK-downloads. Geen account nodig en cookieloos.
+- **Bezoekers meten (optioneel):** daarnaast een gratis GoatCounter-sitecode instellen voor uitgebreidere inzichten: populairste projecten, versies en regio. De sitecode voor alle bezoekers staat in `site-config.json` (`analyticsSite`). Zonder sitecode wordt niets naar GoatCounter verstuurd; gebruikers kunnen alle meting uitzetten via **Mijn profiel → Privacy en statistieken**.
 - Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeÃ«n.
 - Profielentabel met naam, optioneel contact, aanmaakdatum, laatste activiteit en voortgang.
 - **Voortgang wissen** en **Verwijderen** per profiel, met bevestiging.
@@ -178,7 +179,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### Installeerbare app (PWA)
 - `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeÃ«n**.
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
-- `sw.js` bewaart de app-shell (36 bestanden) bij de eerste installatie.
+- `sw.js` bewaart de app-shell (37 bestanden) bij de eerste installatie.
 - **Network-first** voor navigatie Ã©n same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
 - De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`), bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
 - Er is **geen handmatige updateknop** meer: de app werkt zichzelf volledig automatisch bij.
@@ -304,7 +305,7 @@ FLL/
 | Live GitHub Pages: editor, hero-link en projectacties | âœ… 9/9 live checks geslaagd |
 | Manifest, iconen en snelkoppelingen | âœ… 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
 | Service worker actief en pagina onder controle | âœ… scope `/`, app-shell uit cache |
-| Offline-cache gevuld | âœ… 36 bestanden |
+| Offline-cache gevuld | 37 bestanden |
 | Installatie-uitleg in de app | âœ… 3 platformstappen, sluit correct |
 | **Speel dit idee** op een projectpagina | âœ… speelbare app in de pagina; **Gebruik dit idee** toont alle code |
 | **Programmeer zelf** met autoplay | âœ… volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
@@ -314,11 +315,12 @@ FLL/
 | Chrome-installeerbaarheid | âœ… geen installability errors |
 | PWA-testsuite op de live site | 13/13 checks geslaagd |
 | Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
-| Live: offline-cache en offline Python | âœ… 36 bestanden, Pyodide werkt offline |
+| Live: offline-cache en offline Python | 37 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | âœ… 33/33 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS en eigenaarspaneel |
-| Eigenaarslogin en inzichten lokaal | 37/37 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
+| Eigenaarslogin en inzichten lokaal | 40/40 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
 | Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
+| Ingebouwde anonieme teller | 3/3 checks: bezoek op een vaste projectpagina, niet dubbel bij herladen, APK-download op de downloadpagina |
 | Invoer-pop-up met de echte vraag | âœ… 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | âœ… Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | âœ… `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |

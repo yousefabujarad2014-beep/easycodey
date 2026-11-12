@@ -507,6 +507,7 @@ function renderProjectPage(idea) {
   ${footer(prefix)}
   <noscript><style>.project-view.is-app .project-code-only{display:block}.project-view .preview-panel{display:none}</style></noscript>
   <script type="module" src="${prefix}js/previews.js"></script>
+  ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
 </body>
 </html>
@@ -611,6 +612,7 @@ function renderOverviewPage() {
   </main>
 
   ${footer(prefix)}
+  ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
   <script>
     (function () {
@@ -869,15 +871,52 @@ function renderDownloadPage() {
 `;
 }
 
-/* Meet bezoeken en APK-downloads op de downloadpagina. Alleen als er een
-   openbare sitecode in site-config.json staat en de bezoeker niet heeft
-   afgemeld. Cookieloos en zonder persoonsgegevens. */
+/* Meet APK-downloads op de downloadpagina. De ingebouwde teller werkt altijd
+   als publicCounter in site-config.json staat. De uitgebreide GoatCounter-
+   meting komt daar bovenop als er een analyticsSite is ingesteld. Cookieloos
+   en zonder persoonsgegevens; de opt-out stopt allebei. */
 const DOWNLOAD_TRACKING = `<script>
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       const response = await fetch("../site-config.json", { cache: "no-store" });
       const config = await response.json();
+
+      const counter = String((config && config.publicCounter) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]/g, "");
+      if (counter) {
+        let seen = false;
+        try {
+          seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
+        } catch (error) {}
+        if (!seen) {
+          try {
+            sessionStorage.setItem("easycodey.counter.session.v1", "1");
+          } catch (error) {}
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/bezoeken-v1",
+            { cache: "no-store", keepalive: true }
+          ).catch(() => {});
+        }
+        document.addEventListener(
+          "click",
+          (event) => {
+            if (!event.target.closest || !event.target.closest("a[download]")) return;
+            fetch(
+              "https://abacus.jasoncameron.dev/hit/" +
+                encodeURIComponent(counter) +
+                "/apk-downloads-v1",
+              { cache: "no-store", keepalive: true }
+            ).catch(() => {});
+          },
+          true
+        );
+      }
+
       const site = String((config && config.analyticsSite) || "")
         .trim()
         .toLowerCase()
@@ -909,6 +948,58 @@ const DOWNLOAD_TRACKING = `<script>
     } catch (error) {}
   })();
 </script>`;
+
+/* Telt op de vaste pagina's één bezoek per sessie met de ingebouwde teller.
+   Staat er een GoatCounter-code in site-config.json, dan telt GoatCounter ook
+   de paginaweergave. Cookieloos, zonder persoonsgegevens en met dezelfde
+   opt-out als de app. */
+function SITE_TRACKING(prefix) {
+  return `<script>
+  (async () => {
+    try {
+      if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
+      const response = await fetch("${prefix}site-config.json", { cache: "no-store" });
+      const config = await response.json();
+
+      const counter = String((config && config.publicCounter) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]/g, "");
+      if (counter) {
+        let seen = false;
+        try {
+          seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
+        } catch (error) {}
+        if (!seen) {
+          try {
+            sessionStorage.setItem("easycodey.counter.session.v1", "1");
+          } catch (error) {}
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/bezoeken-v1",
+            { cache: "no-store", keepalive: true }
+          ).catch(() => {});
+        }
+      }
+
+      const site = String((config && config.analyticsSite) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/^https?:\\/\\//, "")
+        .replace(/\\/.*$/, "")
+        .replace(/\\.goatcounter\\.com$/, "")
+        .replace(/[^a-z0-9-]/g, "");
+      if (!site) return;
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://gc.zgo.at/count.js";
+      script.dataset.goatcounter = "https://" + site + ".goatcounter.com/count";
+      document.head.appendChild(script);
+    } catch (error) {}
+  })();
+</script>`;
+}
 
 function renderInstallPage() {
   const prefix = "../";
@@ -1196,6 +1287,7 @@ function renderInstallPage() {
   </main>
 
   ${footer(prefix)}
+  ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
 </body>
 </html>
@@ -1324,6 +1416,7 @@ function renderContactPage() {
   </main>
 
   ${footer(prefix)}
+  ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
 </body>
 </html>
@@ -1432,12 +1525,17 @@ function renderPrivacyPage() {
         trackers.
       </p>
       <p class="profile-text">
-        De eigenaar kan <strong>anonieme bezoekcijfers</strong> laten meten met GoatCounter.
-        Dat gebeurt zonder cookies, zonder vingerafdruk en zonder persoonsgegevens: alleen welke pagina
-        en welk project zijn bekeken, of de app als app is geopend (installatie) en of de APK is
-        gedownload, met een grove regio en het browsertype. Je kunt dit altijd uitzetten via
+        EasyCodey telt <strong>anoniem</strong> hoe vaak de app wordt geopend, hoe vaak de app als
+        app start (installatie) en hoe vaak de APK wordt gedownload. Dat gebeurt met een eigen teller
+        zonder cookies, zonder vingerafdruk en zonder persoonsgegevens. Alleen een getal per
+        onderwerp gaat heen en weer; er is geen account nodig.
+      </p>
+      <p class="profile-text">
+        De eigenaar kan daarnaast <strong>uitgebreidere bezoekcijfers</strong> laten meten met
+        GoatCounter: welke pagina en welk project zijn bekeken, met een grove regio en het
+        browsertype. Ook dat is cookieloos. Je kunt alle meting altijd uitzetten via
         <strong>Mijn profiel → Privacy en statistieken</strong>. Staat er geen meetcode in de app,
-        dan wordt er niets verstuurd.
+        dan wordt er niets naar GoatCounter verstuurd.
       </p>
       <p class="static-note">
         De eigenaar ziet alleen de profielen die op hetzelfde apparaat zijn gemaakt, via het lokale
@@ -1451,8 +1549,10 @@ function renderPrivacyPage() {
         De website wordt gehost via GitHub Pages. Lettertypen komen van Google Fonts en Python wordt
         geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
         browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
-        je projecten of profielen naar deze diensten. Alleen als er een meetcode in de app staat,
-        wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder cookies.
+        je projecten of profielen naar deze diensten. De ingebouwde teller (Abacus) ontvangt alleen
+        een anoniem getal voor bezoeken, installaties en APK-downloads. Alleen als er een meetcode
+        in de app staat, wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder
+        cookies.
       </p>
       <p class="static-note">
         De online AI-coach is alleen beschikbaar als de eigenaar een server met API-sleutel koppelt.
@@ -1516,6 +1616,7 @@ function renderPrivacyPage() {
   </main>
 
   ${footer(prefix)}
+  ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
 </body>
 </html>
@@ -1710,6 +1811,7 @@ function renderDonatePage() {
   </main>
 
   ${footer(prefix)}
+  ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
 </body>
 </html>

@@ -346,6 +346,42 @@
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       const response = await fetch("../site-config.json", { cache: "no-store" });
       const config = await response.json();
+
+      const counter = String((config && config.publicCounter) || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]/g, "");
+      if (counter) {
+        let seen = false;
+        try {
+          seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
+        } catch (error) {}
+        if (!seen) {
+          try {
+            sessionStorage.setItem("easycodey.counter.session.v1", "1");
+          } catch (error) {}
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/bezoeken-v1",
+            { cache: "no-store", keepalive: true }
+          ).catch(() => {});
+        }
+        document.addEventListener(
+          "click",
+          (event) => {
+            if (!event.target.closest || !event.target.closest("a[download]")) return;
+            fetch(
+              "https://abacus.jasoncameron.dev/hit/" +
+                encodeURIComponent(counter) +
+                "/apk-downloads-v1",
+              { cache: "no-store", keepalive: true }
+            ).catch(() => {});
+          },
+          true
+        );
+      }
+
       const site = String((config && config.analyticsSite) || "")
         .trim()
         .toLowerCase()
