@@ -199,8 +199,9 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Voortgang resetten werkt.
 - [ ] Leerpad toont alle niveaus.
 - [ ] Mijn ideeën: genereren, openen, verwijderen, exporteren en importeren.
+- [ ] AI-coach begrijpt eerst de vraag, vat samen wat je bedoelt en stelt zo nodig 1 of 2 korte vragen vóór de oplossing.
 - [ ] AI-coach geeft standaard een gratis online antwoord, zonder account of sleutel.
-- [ ] Na elk antwoord verschijnen vervolgvragen; bij een fout verschijnt **Opnieuw proberen met AI**.
+- [ ] Na elk antwoord verschijnen vervolgvragen, waaronder **Ik bedoelde iets anders**; bij een fout verschijnt **Opnieuw proberen met AI**.
 - [ ] Online AI uitzetten in de instellingen geeft de offline coach met eigen uitleg en code.
 - [ ] Met `OPENAI_API_KEY`: streaming antwoorden via de eigen server en foutfallback.
 - [ ] Met `ACCESS_CODE`: zonder code geen AI-antwoord via de eigen server.

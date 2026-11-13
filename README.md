@@ -46,7 +46,7 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
 - **Leerpad** met alle projecten per niveau en een categorie-filter.
 - **Mijn ideeën**: eigen AI-projecten bewaren, verwijderen en exporteren/importeren als JSON.
-- **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt. Antwoordt standaard via een **gratis online AI** (geen account of sleutel nodig) en geeft bij elke vraag een concreet antwoord met code, uitleg en een volgende stap.
+- **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt. Hij **begrijpt eerst je vraag**, stelt zo nodig 1 of 2 korte vragen en geeft daarna pas een concreet antwoord met code, uitleg en een volgende stap. Standaard via een **gratis online AI** (geen account of sleutel nodig).
 - **Offline coach**: werkt zonder internet of met de online AI uitgezet. Herkent je onderwerp, veelvoorkomende foutmeldingen en Python-begrippen, en geeft een stappenplan plus codevoorbeeld.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.

@@ -74,7 +74,7 @@ De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldin
 
 Je voortgang staat per browser en per apparaat in `localStorage`. Met een optioneel account op `#/profiel` houd je gebruikers op hetzelfde apparaat gescheiden. Er is geen account op een server en geen automatische synchronisatie tussen apparaten; gebruik de back-up om je gegevens te verhuizen.
 
-De **online AI-coach staat standaard aan** en gebruikt een gratis AI-dienst. Je vraag, het gesprek en de projectcontext gaan dan naar die dienst; je voortgang, account en contactgegevens nooit. Je kunt de online coach in de instellingen uitzetten en dan volledig offline werken. Na elk antwoord krijg je vervolgvragen en bij een storing een knop **Opnieuw proberen met AI**.
+De **online AI-coach staat standaard aan** en gebruikt een gratis AI-dienst. Hij **begrijpt eerst je vraag**: hij vat samen wat je bedoelt en stelt 1 of 2 korte vragen als er iets ontbreekt. Pas daarna krijg je uitleg of code. Je vraag, het gesprek en de projectcontext gaan naar die dienst; je voortgang, account en contactgegevens nooit. Je kunt de online coach in de instellingen uitzetten en dan volledig offline werken. Na elk antwoord krijg je vervolgvragen, waaronder **Ik bedoelde iets anders**, en bij een storing een knop **Opnieuw proberen met AI**.
 
 ### Android-app als APK
 

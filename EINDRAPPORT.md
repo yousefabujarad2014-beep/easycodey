@@ -136,6 +136,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### AI-coach EasyCoach
 - Zijpaneel met streaming antwoorden, zoals een chatgesprek.
 - **Standaard gratis online AI** via Pollinations (`text.pollinations.ai`, model `openai`). Geen account en geen sleutel nodig; werkt ook op GitHub Pages.
+- **Eerst begrijpen, dan doen:** de coach vat in één zin samen wat je bedoelt. Ontbreekt het doel, de code of de foutmelding, dan stelt hij maximaal 2 korte vragen en geeft hij nog geen volledige oplossing. Is de vraag duidelijk, dan bevestigt hij dat en komt pas daarna de uitleg of code.
 - Nederlandse systeemprompt met een vaste antwoordstijl: eerst het directe antwoord, korte alinea's, code in een `python`-blok, geen tabellen, en altijd één concrete volgende stap.
 - Project- en stapcontext wordt met elk verzoek meegestuurd.
 - Na elk antwoord verschijnen **vervolgvragen** als knoppen, bijvoorbeeld “Leg dit simpeler uit”.
@@ -320,7 +321,7 @@ FLL/
 | Live: offline-cache en offline Python | 37 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | 39/39 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster en eigenaarspaneel |
-| AI-coach en installatiehulp lokaal | 26/26 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v13 |
+| AI-coach en installatiehulp lokaal | 26/26 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v14 |
 | Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
 | Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |

@@ -75,7 +75,7 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
-const APP_VERSION = "v13";
+const APP_VERSION = "v14";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 const COUNTER_SNAPSHOT_KEY = "easycodey.counter.snapshots.v1";
@@ -1958,14 +1958,14 @@ function ensureGreeting() {
     "assistant",
     `## ${hello}, ik ben EasyCoach
 
-Ik help je met Python, je project en je fouten. Hoe duidelijker je vraag, hoe beter mijn antwoord.
+Ik help je met Python, je project en je fouten. **Eerst kijk ik of ik je vraag goed begrijp. Daarna help ik je.**
 
-**Zo vraag je het beste:**
-1. Wat wil je maken of begrijpen?
-2. Wat heb je al geprobeerd?
-3. Welke foutmelding zie je? Plak de hele tekst.
+**Zo werkt het:**
+1. Vertel wat je wilt maken of begrijpen.
+2. Vertel wat je al geprobeerd hebt.
+3. Plak de foutmelding als je er een ziet.
 
-Je kunt me ook vragen om **stap 2 van dit project** uit te leggen of om je code te verbeteren.`,
+Is je vraag nog niet helemaal duidelijk? Dan stel ik eerst 1 of 2 korte vragen. Daarna krijg je een antwoord dat bij jouw situatie past.`,
     { keep: false }
   );
 }
@@ -1975,8 +1975,8 @@ function appendFollowUps(body, contextPayload) {
   if (!wrapper) return;
 
   const prompts = contextPayload?.step
-    ? ["Leg deze stap simpeler uit.", "Waarom werkt deze code?", "Wat gaat er vaak fout?"]
-    : ["Leg dit simpeler uit.", "Geef een voorbeeld.", "Help me met mijn fout."];
+    ? ["Leg deze stap simpeler uit.", "Waarom werkt deze code?", "Ik bedoelde iets anders."]
+    : ["Leg dit simpeler uit.", "Geef een voorbeeld.", "Ik bedoelde iets anders."];
 
   const row = document.createElement("div");
   row.className = "chat-followups";
