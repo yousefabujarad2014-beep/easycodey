@@ -23,9 +23,9 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **volledig automatische updates** |
 | Privacybeleid | ✅ `/privacy/` met uitleg over lokale opslag, geen verkoop en contact |
 | Google Play (TWA) | ⏳ technisch voorbereid: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
-| Render (online AI-coach) | ⏳ optioneel, nog niet gekoppeld |
+| Render (online AI-coach) | ⏳ optioneel voor een eigen server of OpenAI-sleutel; de gratis online AI werkt al zonder server |
 
-Op GitHub Pages draait alleen de statische site. De online AI-coach en de server-doneerlink vallen daar weg; de site gebruikt automatisch de offline coach en de IBAN uit `site-config.json`. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
+Op GitHub Pages draait alleen de statische site. De **gratis online AI-coach werkt daar wel**: hij gebruikt een gratis AI-dienst waarvoor geen account of sleutel nodig is. Alleen de server-doneerlink valt weg; de IBAN komt uit `site-config.json`. Werkt de gratis AI even niet, dan gebruikt de site automatisch de offline coach. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
 
 ---
 
@@ -199,9 +199,12 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Voortgang resetten werkt.
 - [ ] Leerpad toont alle niveaus.
 - [ ] Mijn ideeën: genereren, openen, verwijderen, exporteren en importeren.
-- [ ] AI-coach werkt met de offline coach.
-- [ ] Met `OPENAI_API_KEY`: streaming antwoorden en foutfallback.
-- [ ] Met `ACCESS_CODE`: zonder code geen AI-antwoord.
+- [ ] AI-coach geeft standaard een gratis online antwoord, zonder account of sleutel.
+- [ ] Na elk antwoord verschijnen vervolgvragen; bij een fout verschijnt **Opnieuw proberen met AI**.
+- [ ] Online AI uitzetten in de instellingen geeft de offline coach met eigen uitleg en code.
+- [ ] Met `OPENAI_API_KEY`: streaming antwoorden via de eigen server en foutfallback.
+- [ ] Met `ACCESS_CODE`: zonder code geen AI-antwoord via de eigen server.
+- [ ] Het installatievenster toont bij een in-app browser (WhatsApp/Instagram) een waarschuwing en legt uit dat “Beveiligd en privé” de installatie niet blokkeert.
 - [ ] Rate limiting geeft 429 na het maximum.
 - [ ] Python-speelveld opent en `print("Hallo")` geeft uitvoer.
 - [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
@@ -218,6 +221,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
 - [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag en de laatste update.
 - [ ] **Bezoekcijfers** tonen getallen voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; **Cijfers verversen** haalt de nieuwste stand op.
+- [ ] **Cijferverloop** toont vandaag, sinds 7 dagen en sinds je vorige bezoek; de momentopname blijft alleen op dit toestel.
 - [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** zet de meting uit; de opt-out op het profiel werkt.
 - [ ] Met `analyticsSite` in `site-config.json` meldt het paneel “actief voor alle bezoekers” en laadt het GoatCounter-script.
 - [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.
@@ -230,6 +234,9 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `/manifest.webmanifest` geeft 200 met `application/manifest+json`.
 - [ ] `/sw.js` geeft 200 en de service worker is actief in DevTools.
 - [ ] **📲 Installeer als app** toont de uitleg; op Chrome/Edge verschijnt **Installeer nu**.
+- [ ] Het venster toont maar één platformstap, altijd een knop, een duidelijke uitleg als er geen prompt is en **✅ Is het gelukt?**.
+- [ ] Open de site in WhatsApp of Instagram: het venster waarschuwt dat installeren alleen in Chrome of Safari kan.
+- [ ] Het hulpblok legt uit dat “Beveiligd en privé” en het slotje alleen over HTTPS gaan en de installatie niet blokkeren.
 - [ ] Het installatievenster toont de automatische update-uitleg en de beveiligde live-link, zonder handmatige updateknop.
 - [ ] De app controleert automatisch op updates bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent.
 - [ ] De app opent in een eigen venster met het EasyCodey-icoon en het nieuwe logo.

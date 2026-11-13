@@ -16,7 +16,8 @@ const DEFAULT_STATE = {
     apiKey: "",
     model: "",
     baseUrl: "",
-    accessCode: ""
+    accessCode: "",
+    useOnlineAI: true
   },
   customIdeas: [],
   editor: {
@@ -495,7 +496,8 @@ export function saveSettings(settings) {
     apiKey: String(settings.apiKey || "").trim(),
     model: String(settings.model || "").trim(),
     baseUrl: String(settings.baseUrl || "").trim(),
-    accessCode: String(settings.accessCode || "").trim()
+    accessCode: String(settings.accessCode || "").trim(),
+    useOnlineAI: settings.useOnlineAI !== false
   };
   persist();
 }

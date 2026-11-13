@@ -134,18 +134,20 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De header heeft **geen** tweede chatknop: dat voorkomt dubbele knoppen en houdt de navigatie rustig.
 
 ### AI-coach EasyCoach
-- Zijpaneel met streaming antwoorden.
-- Nederlandse systeemprompt staat server-side in `server.js`.
+- Zijpaneel met streaming antwoorden, zoals een chatgesprek.
+- **Standaard gratis online AI** via Pollinations (`text.pollinations.ai`, model `openai`). Geen account en geen sleutel nodig; werkt ook op GitHub Pages.
+- Nederlandse systeemprompt met een vaste antwoordstijl: eerst het directe antwoord, korte alinea's, code in een `python`-blok, geen tabellen, en altijd één concrete volgende stap.
 - Project- en stapcontext wordt met elk verzoek meegestuurd.
-- Offline coach werkt direct zonder API-sleutel:
+- Na elk antwoord verschijnen **vervolgvragen** als knoppen, bijvoorbeeld “Leg dit simpeler uit”.
+- Bij een netwerkfout of als de gratis dienst te druk is: duidelijke melding, offline antwoord en een knop **Opnieuw proberen met AI**.
+- Offline coach werkt zonder internet of met de online AI uitgezet:
   - legt een specifieke stap uit;
-  - helpt met foutmeldingen;
-  - helpt een project kiezen;
-  - geeft een algemene aanpak.
-- Bij een fout of rate limit valt de site terug op de offline coach.
-- Instellingen in de browser voor API-sleutel, model, basis-URL en toegangscode.
+  - herkent 11 veelvoorkomende foutmeldingen (NameError, SyntaxError, TypeError enz.);
+  - legt 14 Python-begrippen uit met codevoorbeeld;
+  - helpt een project kiezen en geeft een algemene aanpak.
+- Instellingen in de browser: online AI aan/uit, eigen API-sleutel, model, basis-URL en toegangscode.
 - De sleutel wordt nooit in de code opgeslagen; server-side via `.env` of omgevingsvariabelen heeft de voorkeur.
-- Optionele toegangscode (`ACCESS_CODE`) en rate limiting per IP (`RATE_LIMIT`, standaard 30 per uur).
+- Optionele toegangscode (`ACCESS_CODE`) en rate limiting per IP (`RATE_LIMIT`, standaard 30 per uur) voor een eigen server.
 
 ### AI-ideeÃ«ngenerator
 - Beschrijf een onderwerp, niveau, tijdsduur en optioneel een categorie.
@@ -317,8 +319,9 @@ FLL/
 | Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | 37 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
-| Nieuwe flows lokaal | âœ… 37/37 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster en eigenaarspaneel |
-| Eigenaarslogin en inzichten lokaal | 40/40 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
+| Nieuwe flows lokaal | 39/39 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster en eigenaarspaneel |
+| AI-coach en installatiehulp lokaal | 26/26 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v13 |
+| Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
 | Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |
 | Invoer-pop-up met de echte vraag | âœ… 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
@@ -532,7 +535,7 @@ De site staat live:
 | Privacybeleid | âœ… `/privacy/` met lokale opslag, geen verkoop en contact |
 | Sitemap met 168 URL's | âœ… gegenereerd door `npm run pages` |
 | Google Play (TWA) | â³ technisch klaar: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
-| Online AI-coach | â³ alleen op Render; Pages gebruikt de offline coach |
+| Online AI-coach | gratis online AI standaard; eigen server of OpenAI-sleutel optioneel |
 | Doneren | âœ… Belfius IBAN via `site-config.json` en de doneerpagina |
 
 Wat optioneel nog kan:

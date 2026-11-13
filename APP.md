@@ -37,6 +37,8 @@ Je kunt ook op het **📲-icoon** in de header tikken. Verscheen de knop **Insta
 **Geen "App installeren" in het menu?**
 
 - Gebruik **Chrome** (of Edge/Samsung Internet), niet Firefox of een in-app browser.
+- Open je de site via **WhatsApp, Instagram, Facebook of TikTok**? Daarin kun je niet installeren. Tik op ⋯ of ⋮ en kies **Openen in Chrome** (Android) of **Open in Safari** (iPhone).
+- Zie je **“Beveiligd en privé”** of een slotje? Dat betekent alleen dat de verbinding veilig is (HTTPS). Het blokkeert de installatie niet.
 - Sluit incognito en open de site in een normaal tabblad.
 - Bezoek de site één keer online en wacht een paar seconden, zodat de service worker klaar is.
 - Installeer altijd via de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**, niet via een lokaal bestand of een oude snelkoppeling.
@@ -64,12 +66,15 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Voortgang, thema, accounts en eigen projecten | ✅ |
 | Python-speelveld en editor | ✅ na de eerste keer online |
 | Offline AI-coach | ✅ |
-| Online AI-coach (OpenAI) | ❌ internet nodig |
+| Online AI-coach (gratis dienst) | ❌ internet nodig |
+| Online AI-coach met eigen OpenAI-sleutel | ❌ internet nodig |
 | Doneren per bank (pagina `/doneren/`) | ❌ internet nodig |
 
 De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldingen) bij de eerste installatie. De Python-runtime (Pyodide, ongeveer 10 MB) wordt bewaard zodra je hem één keer gebruikt. Daarna werken **▶ Speel**, **▶ Speel dit idee** en de editor ook zonder internet.
 
 Je voortgang staat per browser en per apparaat in `localStorage`. Met een optioneel account op `#/profiel` houd je gebruikers op hetzelfde apparaat gescheiden. Er is geen account op een server en geen automatische synchronisatie tussen apparaten; gebruik de back-up om je gegevens te verhuizen.
+
+De **online AI-coach staat standaard aan** en gebruikt een gratis AI-dienst. Je vraag, het gesprek en de projectcontext gaan dan naar die dienst; je voortgang, account en contactgegevens nooit. Je kunt de online coach in de instellingen uitzetten en dan volledig offline werken. Na elk antwoord krijg je vervolgvragen en bij een storing een knop **Opnieuw proberen met AI**.
 
 ### Android-app als APK
 
@@ -77,6 +82,7 @@ Naast de installeerbare webapp is er een echte Android-app als **APK**: `downloa
 
 - De APK is ondertekend met de uploadsleutel; de fingerprint staat in `/.well-known/assetlinks.json`, dus de app opent zonder adresbalk.
 - De pagina toont de **SHA-256**, een QR-code voor je telefoon, installatiestappen, uitleg over Play Protect en een hashcontrole.
+- Android waarschuwt soms bij een APK buiten Google Play. Tik op **Meer details** → **Toch installeren** en zet **Onbekende apps installeren** aan voor je browser. Een melding **“Beveiligd en privé”** gaat over de beveiligde website en blokkeert de installatie niet.
 - De inhoud werkt automatisch bij via de website. Alleen een nieuwe Android-schil vraagt een nieuwe APK; zie `PLAYSTORE.md`.
 
 ---

@@ -185,9 +185,9 @@
 
     <div class="ai-context" id="ai-context" hidden></div>
     <div class="ai-setup" id="ai-setup" hidden>
-      <p>De <strong>offline coach</strong> staat aan. Die geeft je een stappenplan op basis van je woorden.</p>
-      <p>Wil je echte AI-antwoorden? Voeg een OpenAI-sleutel toe.</p>
-      <button class="btn tiny" type="button" data-action="settings">Sleutel instellen</button>
+      <p>De <strong>offline coach</strong> staat aan. Die geeft je een algemeen stappenplan.</p>
+      <p>Wil je duidelijke antwoorden op jouw vraag? Zet de online AI-coach aan. Dat is gratis en je hebt geen account nodig.</p>
+      <button class="btn tiny" type="button" data-action="settings">Online AI aanzetten</button>
     </div>
 
     <div class="ai-messages" id="ai-messages" aria-live="polite"></div>
@@ -207,7 +207,7 @@
         </svg>
       </button>
     </form>
-    <p class="ai-note">AI kan fouten maken. Test je code altijd zelf.</p>
+    <p class="ai-note">AI kan fouten maken. Test je code altijd zelf. Je bericht gaat alleen naar de AI-dienst als de online coach aan staat.</p>
   </aside>
 
   <!-- Instellingen -->
@@ -218,13 +218,18 @@
         <button class="icon-btn small" type="button" data-action="close-settings" aria-label="Sluiten">✕</button>
       </div>
       <p class="modal-lead">
-        De AI-coach gebruikt de OpenAI-API (of een andere OpenAI-compatibele dienst).
-        Je sleutel wordt alleen lokaal in deze browser opgeslagen en via deze server doorgestuurd.
+        De AI-coach werkt standaard met een <strong>gratis online AI-dienst</strong>. Je hebt geen account
+        en geen sleutel nodig. Alleen je vraag en de context van het project worden verstuurd, nooit je
+        voortgang of je account.
       </p>
+      <label class="profile-check">
+        <input type="checkbox" id="cfg-online" checked />
+        <span><strong>Online AI-coach gebruiken</strong> — duidelijkere antwoorden op jouw vraag</span>
+      </label>
       <label class="field">
-        <span>API-sleutel</span>
+        <span>Eigen OpenAI-sleutel (optioneel)</span>
         <input type="password" id="cfg-key" placeholder="sk-…" autocomplete="off" spellcheck="false" />
-        <small id="cfg-key-hint">Leeg laten = offline coach gebruiken.</small>
+        <small id="cfg-key-hint">Leeg laten = gratis online AI-coach gebruiken.</small>
       </label>
       <div class="field-row">
         <label class="field">
@@ -246,8 +251,9 @@
         <button class="btn" type="button" data-action="save-settings">Opslaan</button>
       </div>
       <p class="modal-fineprint">
-        Tip: op een gedeelde computer kun je de sleutel beter via een <code>.env</code>-bestand op de server zetten.
-        Zie de README.
+        Je eigen sleutel wordt alleen in deze browser bewaard. Zet de online coach uit als je liever
+        volledig offline werkt. Op een gedeelde computer kun je de sleutel beter via een
+        <code>.env</code>-bestand op de server zetten. Zie de README.
       </p>
     </div>
   </div>
@@ -419,22 +425,23 @@
       <div class="trust-strip" role="note">
         <span class="trust-lock" aria-hidden="true">🔒</span>
         <div>
-          <strong>Beveiligd en privé</strong>
-          <span>HTTPS-versleuteling, geen advertenties of trackers. Je voortgang en account blijven op dit apparaat.</span>
+          <strong>Veilige verbinding</strong>
+          <span>HTTPS-versleuteling, geen advertenties of trackers. Je voortgang en account blijven op dit apparaat. Dit blokkeert de installatie niet.</span>
         </div>
       </div>
+      <p class="install-warning" data-install-inapp hidden></p>
       <p class="install-note" data-install-state hidden></p>
       <ol class="install-steps">
-        <li>
+        <li data-platform="desktop">
           <strong>Chrome of Edge op de computer</strong>
           Klik rechtsboven in de adresbalk op het installatie-icoon, of gebruik het menu ⋮ →
           <em>App installeren</em>.
         </li>
-        <li>
+        <li data-platform="android">
           <strong>Android (Chrome)</strong>
           Menu ⋮ → <em>App installeren</em> of <em>Toevoegen aan startscherm</em>.
         </li>
-        <li>
+        <li data-platform="ios">
           <strong>iPhone of iPad (Safari)</strong>
           Tik op <em>Deel</em> → <em>Zet op beginscherm</em>.
         </li>
@@ -458,8 +465,30 @@
         Liever de echte Android-app als bestand? <a href="download/">Download de APK</a> — gratis,
         zonder Google Play en zonder account.
       </p>
+      <details class="install-help">
+        <summary>Lukt installeren niet? Probeer dit</summary>
+        <ul>
+          <li>
+            <strong>Je ziet “Beveiligd en privé” of een slotje.</strong> Dat is juist goed: de verbinding
+            is veilig. Het blokkeert de installatie niet.
+          </li>
+          <li>
+            <strong>Je opent de site in WhatsApp, Instagram of Facebook.</strong> Daarin kun je niet
+            installeren. Tik op ⋯ of ⋮ en kies <em>Openen in Chrome</em> (Android) of <em>Open in Safari</em> (iPhone).
+          </li>
+          <li>
+            <strong>Android blokkeert de APK met Play Protect.</strong> Tik op <em>Meer details</em> →
+            <em>Toch installeren</em>. Zet eventueel <em>Onbekende apps installeren</em> aan voor Chrome.
+          </li>
+          <li>
+            <strong>Er staat nog een oude EasyCodey op je toestel.</strong> Verwijder die eerst en
+            installeer daarna opnieuw via de beveiligde link.
+          </li>
+        </ul>
+      </details>
       <div class="modal-actions">
         <button class="btn brand" type="button" id="install-now" data-action="install-now" hidden>📲 Installeer nu</button>
+        <button class="btn ghost" type="button" data-action="check-install">✅ Is het gelukt?</button>
         <a class="btn ghost" href="https://yousefabujarad2014-beep.github.io/easycodey/" target="_blank" rel="noopener">Open de website ↗</a>
         <button class="btn ghost" type="button" data-action="close-install">Sluiten</button>
       </div>

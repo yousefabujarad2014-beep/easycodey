@@ -811,6 +811,16 @@ function renderDownloadPage() {
     <section class="panel install-section donate-faq">
       <h2><span class="h2-num">?</span> Veelgestelde vragen</h2>
       <details class="faq-item">
+        <summary>Android waarschuwt of blokkeert de installatie. Wat nu?</summary>
+        <p>
+          Een APK die je niet via Google Play installeert, krijgt soms een waarschuwing van
+          <em>Play Protect</em>. Dat is normaal. Tik op <em>Meer details</em> → <em>Toch installeren</em>.
+          Zet daarna <em>Onbekende apps installeren</em> aan voor Chrome of je browser.
+          Zie je ergens “Beveiligd en privé”? Dat gaat over de beveiligde website (HTTPS) en
+          blokkeert de installatie niet.
+        </p>
+      </details>
+      <details class="faq-item">
         <summary>Ik zie “App niet geïnstalleerd”. Wat nu?</summary>
         <p>
           Meestal staat er nog een oude EasyCodey of snelkoppeling op je toestel, of is er te weinig
@@ -1613,9 +1623,16 @@ function renderPrivacyPage() {
         in de app staat, wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder
         cookies.
       </p>
+      <p class="profile-text">
+        <strong>AI-coach.</strong> De online AI-coach staat standaard aan en gebruikt een gratis
+        AI-dienst (Pollinations). Alleen wanneer je een bericht stuurt, gaan je vraag, het gesprek en
+        de context van het project dat je bekijkt naar die dienst. Je voortgang, je account en je
+        contactgegevens worden nooit meegestuurd. Zet je de online coach uit in de instellingen, dan
+        gebruikt EasyCodey alleen de offline coach en gaat er niets naar een AI-dienst.
+      </p>
       <p class="static-note">
-        De online AI-coach is alleen beschikbaar als de eigenaar een server met API-sleutel koppelt.
-        Op GitHub Pages wordt de offline coach gebruikt en gaat er geen chat naar een AI-server.
+        De eigenaar kan ook een eigen server of OpenAI-sleutel koppelen. In dat geval gaan je
+        chatberichten naar die server in plaats van naar de gratis AI-dienst.
       </p>
     </section>
 

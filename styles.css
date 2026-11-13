@@ -1441,6 +1441,41 @@ button { cursor: pointer; }
 
 .ai-quick button:hover { border-color: var(--brand); color: var(--brand); }
 
+.chat-followups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: -6px 0 2px 38px;
+}
+
+.chat-followups button {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--brand);
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.chat-followups button:hover {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+}
+
+.chat-retry {
+  margin-top: 10px;
+  border: 1px solid var(--brand);
+  background: var(--brand-soft);
+  color: var(--brand);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.chat-retry:hover { background: var(--brand); color: var(--brand-ink); }
+
 .ai-composer {
   display: flex;
   align-items: flex-end;
@@ -1610,6 +1645,44 @@ button { cursor: pointer; }
   color: var(--muted);
   line-height: 1.6;
 }
+
+.install-warning {
+  margin: 12px 0 4px;
+  padding: 11px 14px;
+  border: 1px solid color-mix(in srgb, var(--amber) 45%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--amber) 12%, var(--panel));
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.install-warning strong { color: var(--ink); }
+
+.install-help {
+  margin: 10px 0 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+  font-size: 0.79rem;
+  color: var(--muted);
+}
+
+.install-help summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.install-help ul {
+  margin: 10px 0 2px;
+  padding-left: 18px;
+  display: grid;
+  gap: 7px;
+}
+
+.install-help strong { color: var(--ink-soft); }
 
 /* ------------------------------ doneren ------------------------------ */
 
@@ -4656,6 +4729,54 @@ body.ai-open .chat-fab {
 
 .owner-counter .profile-actions {
   margin-bottom: 6px;
+}
+
+.owner-trends {
+  margin: 14px 0 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-2);
+}
+
+.owner-trends h4 {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.owner-trend-list {
+  display: grid;
+  gap: 8px;
+}
+
+.owner-trend-list > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.owner-trend-list strong {
+  color: var(--ink);
+  font-weight: 700;
+  text-align: right;
+}
+
+.owner-trends .static-note {
+  margin: 8px 0 0;
+}
+
+@media (max-width: 560px) {
+  .owner-trend-list > div {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .owner-trend-list strong {
+    text-align: left;
+  }
 }
 
 .owner-analytics-form {

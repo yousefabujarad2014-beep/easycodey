@@ -10,7 +10,7 @@ De site staat online op **GitHub Pages**:
 
 **https://yousefabujarad2014-beep.github.io/easycodey/**
 
-Op GitHub Pages werkt alles behalve de online AI-coach (daar is de Node-server voor nodig). De site valt daar automatisch terug op de offline coach. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
+Op GitHub Pages werkt de hele site, inclusief de **gratis online AI-coach**: die gebruikt een gratis AI-dienst waarvoor je geen account of sleutel nodig hebt. Werkt die dienst even niet, dan valt de site automatisch terug op de offline coach. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
 
 ## Snel starten
 
@@ -46,8 +46,8 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
 - **Leerpad** met alle projecten per niveau en een categorie-filter.
 - **Mijn ideeën**: eigen AI-projecten bewaren, verwijderen en exporteren/importeren als JSON.
-- **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt.
-- **Offline coach**: werkt direct zonder API-sleutel. Herkent je onderwerp en geeft een stappenplan plus passende projecten.
+- **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt. Antwoordt standaard via een **gratis online AI** (geen account of sleutel nodig) en geeft bij elke vraag een concreet antwoord met code, uitleg en een volgende stap.
+- **Offline coach**: werkt zonder internet of met de online AI uitgezet. Herkent je onderwerp, veelvoorkomende foutmeldingen en Python-begrippen, en geeft een stappenplan plus codevoorbeeld.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.
 - **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
@@ -150,7 +150,11 @@ De controle kijkt op dubbele id's, ontbrekende velden, kapotte tekencodering, te
 
 ## AI-coach instellen
 
-De site werkt meteen met de offline coach. Voor echte AI-antwoorden heb je een OpenAI-sleutel (of een andere OpenAI-compatibele API) nodig.
+De AI-coach werkt **meteen**, zonder account en zonder sleutel. Standaard gebruikt hij een gratis online AI-dienst (Pollinations). Je vraag, het gesprek en de context van het project gaan dan naar die dienst; je voortgang, account en contactgegevens nooit. Zet je de online coach uit in de instellingen, dan gebruik je alleen de offline coach en gaat er niets naar buiten.
+
+### Eigen sleutel of eigen server (optioneel)
+
+Wil je een eigen OpenAI-sleutel of een andere OpenAI-compatibele API gebruiken? Dat kan op twee manieren.
 
 ### Optie 1: via `.env` (aanbevolen)
 
@@ -318,8 +322,9 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 5. Test zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren.
 6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
 7. Vink alle stappen af en controleer de confetti en de afgeronde status.
-8. Open de AI-coach zonder sleutel: je krijgt de offline coach.
-9. Stel eventueel een sleutel in via ⚙ en stel een vraag.
+8. Open de AI-coach: standaard krijg je een **gratis online AI-antwoord** zonder sleutel. Stel een vraag en controleer dat er vervolgvragen verschijnen.
+9. Zet de online AI uit via ⚙ en stel opnieuw een vraag: je krijgt de offline coach met uitleg en code. Zet hem daarna weer aan.
+10. Stel eventueel een eigen sleutel in via ⚙ en stel een vraag.
 10. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
 11. Open een project en test **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
 12. Maak op `#/profiel` een account met naam en wachtwoord, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**. Controleer dat de chatknop verschijnt zodra je ingelogd bent.

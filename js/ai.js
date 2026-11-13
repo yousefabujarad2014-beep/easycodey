@@ -119,6 +119,105 @@ export function renderMarkdown(value) {
     .join("");
 }
 
+const FREE_ENDPOINT = "https://text.pollinations.ai/openai";
+const FREE_MODEL = "openai";
+
+const CHAT_SYSTEM_PROMPT = `Je bent EasyCoach, de Nederlandstalige AI-coach van EasyCodey.
+EasyCodey is een leerwebsite waar kinderen en beginners Python leren met 161 projecten.
+
+Je doel: de gebruiker echt verder helpen, zoals een goede leraar. Duidelijk, vriendelijk en concreet.
+
+ANTWOORDSTIJL
+- Antwoord altijd in het Nederlands, ook in code en commentaar.
+- Begin met het directe antwoord in 1 of 2 zinnen. Geen inleiding zoals "Goede vraag".
+- Gebruik korte alinea's. Maximaal 5 opsommingen.
+- Gebruik een kopje (##) alleen als het antwoord langer is dan ongeveer 6 regels.
+- Gebruik nooit tabellen.
+- Houd code kort en uitvoerbaar. Zet code altijd in een blok met drie backticks en het woord python.
+- Leg moeilijke woorden meteen uit tussen haakjes.
+- Sluit af met één concrete volgende stap of één korte vraag.
+- Als de vraag vaag is: stel maximaal 2 korte vragen, maar geef alvast een nuttig begin.
+- Als de gebruiker een foutmelding plakt: noem de oorzaak, wijs de regel aan en geef de oplossing.
+- Verzin nooit bibliotheken of functies. Gebruik de Python-standaardbibliotheek, tenzij de gebruiker iets anders vraagt.
+- Bij een eigen idee: maak het kleiner en haalbaarder voordat je code geeft.
+- Blijf bij programmeren, leren en EasyCodey. Bij andere onderwerpen zeg je vriendelijk dat je daar niet mee helpt.
+- Geef geen lange theorie. De gebruiker wil iets maken dat werkt.`;
+
+const GENERATE_SYSTEM_PROMPT = `Je bent EasyCoach, de Nederlandstalige projectgenerator van EasyCodey.
+Maak een compleet, haalbaar Python-projectidee voor een lerende gebruiker.
+
+Antwoord met ALLEEN geldige JSON, zonder markdown, uitleg of code fences. Gebruik exact deze structuur:
+{
+  "title": "korte pakkende titel",
+  "emoji": "één emoji",
+  "category": "Games|Web|GUI|Data & AI|Handige tools|Automatisering|Security|Wetenschap|Kunst & Creatief|Onderwijs",
+  "level": "Beginner|Gemiddeld|Gevorderd",
+  "time": "bijv. 45 min",
+  "summary": "één zin",
+  "description": "twee of drie zinnen uitleg",
+  "learn": ["vaardigheid1", "vaardigheid2", "vaardigheid3"],
+  "steps": [
+    {
+      "title": "titel van de stap",
+      "text": "uitleg in 1-3 zinnen",
+      "code": "werkende Python-code met \\n voor nieuwe regels"
+    }
+  ],
+  "tips": ["tip 1", "tip 2"]
+}
+
+Regels:
+- Nederlands.
+- Minimaal 3 en maximaal 5 stappen.
+- Elke stap bevat echte, uitvoerbare Python-code.
+- Geen betaalde diensten of verplichte API-sleutels.
+- Geen externe bestanden die de gebruiker niet heeft.
+- Houd het project haalbaar binnen de opgegeven tijd.`;
+
+function contextToPrompt(context) {
+  if (!context || typeof context !== "object") return "";
+
+  const lines = ["", "", "Context van de gebruiker:"];
+  if (context.idea) {
+    lines.push(
+      `- Project: "${context.idea.title}" (${context.idea.category}, niveau ${context.idea.level}).`
+    );
+    if (context.idea.summary) lines.push(`- Samenvatting: ${context.idea.summary}`);
+  }
+  if (context.step) {
+    lines.push(
+      `- Huidige stap ${context.step.index + 1} van ${context.step.total}: "${context.step.title}".`
+    );
+    if (context.step.text) lines.push(`- Uitleg van de stap: ${context.step.text}`);
+    if (context.step.code) {
+      lines.push(
+        `- Code van de stap:\n\`\`\`python\n${String(context.step.code).slice(0, 1600)}\n\`\`\``
+      );
+    }
+  }
+  return lines.join("\n");
+}
+
+function buildMessages(messages, context, mode = "chat") {
+  const history = (Array.isArray(messages) ? messages : [])
+    .filter(
+      (message) =>
+        message &&
+        ["user", "assistant"].includes(message.role) &&
+        typeof message.content === "string" &&
+        message.content.trim()
+    )
+    .slice(-20)
+    .map(({ role, content }) => ({ role, content }));
+
+  const system =
+    mode === "generate"
+      ? GENERATE_SYSTEM_PROMPT
+      : CHAT_SYSTEM_PROMPT + contextToPrompt(context);
+
+  return [{ role: "system", content: system }, ...history];
+}
+
 function normalizeConfig(data) {
   return {
     hasServerKey: Boolean(data.hasServerKey),
@@ -163,41 +262,46 @@ export async function fetchConfig() {
   }
 }
 
-export function isAIConfigured(settings, serverConfig) {
-  const hasKey = Boolean(serverConfig?.hasServerKey || settings?.apiKey);
-  const hasAccess = !serverConfig?.accessCodeRequired || Boolean(settings?.accessCode);
-  return hasKey && hasAccess;
+export function aiMode(settings, serverConfig) {
+  if (settings && settings.useOnlineAI === false) return "offline";
+  if (serverConfig?.hasServerKey) return "server";
+  if (settings?.apiKey) return "own";
+  return "free";
 }
 
-export async function streamChat({ messages, context, settings, mode = "chat", onDelta, signal }) {
-  const payload = {
-    messages: messages.map(({ role, content }) => ({ role, content })),
-    context,
-    mode
-  };
+export function isAIConfigured(settings, serverConfig) {
+  const mode = aiMode(settings, serverConfig);
+  if (mode === "offline") return false;
+  if (mode === "server" && serverConfig?.accessCodeRequired && !settings?.accessCode) {
+    return false;
+  }
+  return true;
+}
 
-  if (settings?.apiKey) payload.apiKey = settings.apiKey;
-  if (settings?.model) payload.model = settings.model;
-  if (settings?.baseUrl) payload.baseUrl = settings.baseUrl;
-  if (settings?.accessCode) payload.accessCode = settings.accessCode;
+export function aiModeLabel(mode) {
+  if (mode === "server") return "AI-coach online";
+  if (mode === "own") return "AI-coach met jouw sleutel";
+  if (mode === "free") return "AI-coach gratis online";
+  return "offline coach";
+}
 
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-    signal
-  });
-
+async function readCompletion(response, onDelta) {
   if (!response.ok) {
     let data = null;
+    let text = "";
     try {
-      data = await response.json();
+      text = await response.text();
+      data = JSON.parse(text);
     } catch {
       // Geen JSON-foutmelding beschikbaar.
     }
-    const error = new Error(data?.message || data?.error || `AI-fout (${response.status})`);
+    const raw = data?.message || data?.error?.message || data?.error || text;
+    const error = new Error(
+      typeof raw === "string" && raw.trim()
+        ? raw.trim().slice(0, 300)
+        : `AI-fout (${response.status})`
+    );
     error.status = response.status;
-    error.code = data?.error;
     throw error;
   }
 
@@ -254,6 +358,93 @@ export async function streamChat({ messages, context, settings, mode = "chat", o
   return full;
 }
 
+async function requestWithRetry(url, options) {
+  let response = await fetch(url, options);
+  // De gratis dienst is soms even druk. Eén korte tweede poging helpt vaak.
+  if (response.status === 429 || response.status >= 500) {
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    if (!options.signal?.aborted) {
+      response = await fetch(url, options);
+    }
+  }
+  return response;
+}
+
+async function requestServerChat({ messages, context, settings, mode, onDelta, signal }) {
+  const payload = {
+    messages: messages.map(({ role, content }) => ({ role, content })),
+    context,
+    mode
+  };
+
+  if (settings?.apiKey) payload.apiKey = settings.apiKey;
+  if (settings?.model) payload.model = settings.model;
+  if (settings?.baseUrl) payload.baseUrl = settings.baseUrl;
+  if (settings?.accessCode) payload.accessCode = settings.accessCode;
+
+  const response = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+    signal
+  });
+
+  return readCompletion(response, onDelta);
+}
+
+async function requestDirectChat({ plan, messages, context, settings, mode, onDelta, signal }) {
+  const baseUrl = String(settings?.baseUrl || "").trim().replace(/\/+$/, "");
+  const url = plan === "own" && baseUrl ? `${baseUrl}/chat/completions` : FREE_ENDPOINT;
+  const headers = { "Content-Type": "application/json" };
+
+  if (plan === "own") {
+    headers.Authorization = `Bearer ${settings.apiKey}`;
+  }
+
+  const body = {
+    model: plan === "own" ? settings.model || "gpt-4o-mini" : FREE_MODEL,
+    messages: buildMessages(messages, context, mode),
+    temperature: mode === "generate" ? 0.7 : 0.6,
+    max_tokens: mode === "generate" ? 1800 : 1000,
+    stream: true
+  };
+
+  if (plan === "free") body.reasoning_effort = "low";
+
+  const response = await requestWithRetry(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+    signal
+  });
+
+  return readCompletion(response, onDelta);
+}
+
+export async function streamChat({
+  messages,
+  context,
+  settings,
+  serverConfig,
+  mode = "chat",
+  onDelta,
+  signal
+}) {
+  const plan = aiMode(settings, serverConfig);
+
+  if (plan === "offline") {
+    const error = new Error("De online AI-coach staat uit.");
+    error.code = "offline";
+    throw error;
+  }
+
+  if (plan === "server") {
+    return requestServerChat({ messages, context, settings, mode, onDelta, signal });
+  }
+
+  return requestDirectChat({ plan, messages, context, settings, mode, onDelta, signal });
+}
+
 function capitalize(value) {
   const text = String(value || "").trim();
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
@@ -273,13 +464,169 @@ export function guessCategory(topic) {
   return "Handige tools";
 }
 
-export function offlineReply({ text, context }) {
-  const question = String(text || "").toLowerCase();
+const GLOSSARY = [
+  {
+    match: /(f-?string|format string)/,
+    title: "Een f-string",
+    text: "Een f-string is een tekst waarin je variabelen tussen accolades zet. Python vult ze meteen in. Zet een **f** voor de aanhalingstekens.",
+    code: `naam = "Yousef"\nleeftijd = 11\nprint(f"Hallo {naam}, je bent {leeftijd} jaar.")`
+  },
+  {
+    match: /(lijst|list)/,
+    title: "Een lijst",
+    text: "Een lijst bewaart meerdere waarden in volgorde. Je maakt er een met vierkante haken. De eerste plek is **0**, niet 1.",
+    code: `kleuren = ["rood", "groen", "blauw"]\nprint(kleuren[0])      # rood\nkleuren.append("geel")  # toevoegen\nprint(len(kleuren))     # 4`
+  },
+  {
+    match: /(dictionary|dict\b)/,
+    title: "Een dictionary",
+    text: "Een dictionary bewaart paren van sleutel en waarde. Je zoekt op met de sleutel, niet met een nummer.",
+    code: `leerling = {"naam": "Yousef", "niveau": "Beginner"}\nprint(leerling["naam"])\nleerling["niveau"] = "Gemiddeld"`
+  },
+  {
+    match: /(functie|def\b)/,
+    title: "Een functie",
+    text: "Een functie is een blokje code met een naam. Je schrijft het één keer en kunt het daarna steeds opnieuw gebruiken.",
+    code: `def begroet(naam):\n    return f"Hallo {naam}!"\n\nprint(begroet("Yousef"))`
+  },
+  {
+    match: /(for-?loop|for\b|loop)/,
+    title: "Een for-loop",
+    text: "Een for-loop herhaalt code voor elk item in een lijst of reeks. Zo hoef je niet steeds hetzelfde te typen.",
+    code: `for kleur in ["rood", "groen", "blauw"]:\n    print(kleur)\n\nfor getal in range(1, 4):\n    print(getal)`
+  },
+  {
+    match: /(while\b)/,
+    title: "Een while-loop",
+    text: "Een while-loop blijft herhalen zolang de voorwaarde waar is. Zorg dat de voorwaarde ooit onwaar wordt, anders blijft het programma hangen.",
+    code: `teller = 0\nwhile teller < 3:\n    print(teller)\n    teller += 1`
+  },
+  {
+    match: /(if\b|else\b|conditie|voorwaarde)/,
+    title: "Een if-conditie",
+    text: "Met if kies je wat er gebeurt. De code achter if moet waar of onwaar zijn. Vergeet de dubbele punt niet.",
+    code: `cijfer = 14\nif cijfer >= 10:\n    print("Geslaagd")\nelse:\n    print("Nog even oefenen")`
+  },
+  {
+    match: /(variabele|variable)/,
+    title: "Een variabele",
+    text: "Een variabele is een naam voor een waarde. Je maakt hem met een =-teken. Daarna kun je de waarde gebruiken of veranderen.",
+    code: `naam = "Yousef"\npunten = 10\npunten = punten + 5`
+  },
+  {
+    match: /(string|tekst)/,
+    title: "Een string",
+    text: "Een string is tekst tussen aanhalingstekens. Je kunt stukken tekst aan elkaar plakken met + of met een f-string.",
+    code: `voornaam = "Yousef"\nachternaam = "Abujarad"\nprint(voornaam + " " + achternaam)`
+  },
+  {
+    match: /(input\b)/,
+    title: "input()",
+    text: "Met input() vraag je iets aan de gebruiker. Het antwoord is altijd tekst. Wil je een getal, zet er dan int() of float() omheen.",
+    code: `naam = input("Hoe heet je? ")\nleeftijd = int(input("Hoe oud ben je? "))\nprint(f"Hallo {naam}, je bent {leeftijd}.")`
+  },
+  {
+    match: /(print\b)/,
+    title: "print()",
+    text: "Met print() laat je iets zien in de uitvoer. Je kunt meerdere dingen met een komma scheiden.",
+    code: `print("Hallo")\nprint("Ik ben", 11, "jaar")`
+  },
+  {
+    match: /(import|module|bibliotheek)/,
+    title: "Importeren",
+    text: "Met import gebruik je code die al in Python zit of die je hebt geïnstalleerd. Zet imports altijd bovenaan je bestand.",
+    code: `import random\n\nprint(random.randint(1, 6))`
+  },
+  {
+    match: /(try|except|fout afvangen)/,
+    title: "try en except",
+    text: "Met try en except vang je een fout op, zodat je programma niet stopt. Zet alleen de code die kan mislukken in het try-blok.",
+    code: `try:\n    getal = int(input("Getal: "))\n    print(10 / getal)\nexcept ValueError:\n    print("Dat is geen getal.")\nexcept ZeroDivisionError:\n    print("Delen door nul kan niet.")`
+  },
+  {
+    match: /(klasse|class\b|object)/,
+    title: "Een klasse",
+    text: "Een klasse is een soort mal voor objecten. Je maakt er een object mee en dat object heeft eigenschappen en functies.",
+    code: `class Hond:\n    def __init__(self, naam):\n        self.naam = naam\n\n    def blaf(self):\n        print(f"{self.naam} zegt woef!")\n\nhond = Hond("Max")\nhond.blaf()`
+  }
+];
 
-  if (context?.step) {
-    const { idea, step } = context;
-    const number = step.index + 1;
-    return `## ${idea.title} — stap ${number}
+const ERROR_HELP = [
+  {
+    match: /nameerror/i,
+    title: "NameError",
+    text: "Python kent een naam niet. Meestal is de variabele nog niet gemaakt, staat er een typfout, of gebruik je hem vóór de regel waarin je hem maakt.",
+    code: `# Fout:\nprint(kleur)\n\n# Goed:\nkleur = "rood"\nprint(kleur)`
+  },
+  {
+    match: /syntaxerror/i,
+    title: "SyntaxError",
+    text: "Er staat iets in de code dat Python niet kan lezen. Kijk naar de regel die genoemd wordt en naar de regel erboven. Meestal ontbreekt een dubbele punt, haakje of aanhalingsteken.",
+    code: `# Fout: dubbele punt ontbreekt\nif 5 > 3\n    print("ja")\n\n# Goed:\nif 5 > 3:\n    print("ja")`
+  },
+  {
+    match: /indentationerror/i,
+    title: "IndentationError",
+    text: "De inspringing klopt niet. Gebruik altijd 4 spaties per niveau en meng geen tabs met spaties. Regels die bij een if, for of def horen, moeten inspringen.",
+    code: `for i in range(3):\n    print(i)   # 4 spaties inspringen`
+  },
+  {
+    match: /typeerror/i,
+    title: "TypeError",
+    text: "Je gebruikt een waarde van het verkeerde soort. Bijvoorbeeld tekst en een getal optellen. Maak ze eerst hetzelfde type met str() of int().",
+    code: `leeftijd = "11"\nprint("Ik ben " + leeftijd)   # tekst + tekst\nprint(int(leeftijd) + 1)      # getal + getal`
+  },
+  {
+    match: /valueerror/i,
+    title: "ValueError",
+    text: "Het soort waarde klopt, maar de inhoud niet. Bijvoorbeeld int(\"abc\"). Controleer wat de gebruiker invult of vang de fout op.",
+    code: `tekst = "abc"\ntry:\n    getal = int(tekst)\nexcept ValueError:\n    print("Dat is geen getal.")`
+  },
+  {
+    match: /modulenotfounderror|importerror/i,
+    title: "ModuleNotFoundError",
+    text: "Python vindt een module niet. Controleer de spelling en of je de module hebt geïnstalleerd met pip. Gebruik bij voorkeur de standaardbibliotheek.",
+    code: `# In de terminal:\n# pip install requests\n\nimport requests   # daarna werkt dit`
+  },
+  {
+    match: /indexerror/i,
+    title: "IndexError",
+    text: "Je vraagt een plek in een lijst die niet bestaat. Een lijst met 3 items heeft de plekken 0, 1 en 2.",
+    code: `kleuren = ["rood", "groen", "blauw"]\nprint(kleuren[2])   # blauw\nprint(len(kleuren)) # 3`
+  },
+  {
+    match: /keyerror/i,
+    title: "KeyError",
+    text: "Je zoekt een sleutel op die niet in de dictionary staat. Controleer de spelling of gebruik .get() met een standaardwaarde.",
+    code: `leerling = {"naam": "Yousef"}\nprint(leerling.get("niveau", "onbekend"))`
+  },
+  {
+    match: /attributeerror/i,
+    title: "AttributeError",
+    text: "Je gebruikt een functie die niet bij dat type hoort. Bijvoorbeeld .append() op een tekst in plaats van op een lijst.",
+    code: `lijst = []\nlijst.append("item")   # werkt\n# "tekst".append("x")  # geeft AttributeError`
+  },
+  {
+    match: /zerodivisionerror/i,
+    title: "ZeroDivisionError",
+    text: "Je deelt door nul. Dat kan niet. Controleer de deler voordat je deelt.",
+    code: `getal = 0\nif getal != 0:\n    print(10 / getal)\nelse:\n    print("Delen door nul kan niet.")`
+  },
+  {
+    match: /filenotfounderror/i,
+    title: "FileNotFoundError",
+    text: "Het bestand staat niet op de plek die je opgeeft. Controleer de naam, de map en of je het bestand eerst hebt gemaakt.",
+    code: `import os\n\nprint(os.getcwd())      # waar zoekt Python?\nprint(os.listdir("."))  # wat staat er?`
+  }
+];
+
+function offlineNote() {
+  return "\n\n*Dit is de offline coach. Zet de online AI-coach aan in de instellingen voor een antwoord op maat.*";
+}
+
+function offlineStepReply({ idea, step }) {
+  const number = step.index + 1;
+  return `## ${idea.title} — stap ${number}
 
 **${step.title}**
 
@@ -294,56 +641,117 @@ ${step.code || "# Deze stap heeft geen codevoorbeeld."}
 ### Zo test je het
 1. Voer precies deze code uit.
 2. Kijk of de uitvoer overeenkomt met wat je verwacht.
-3. Krijg je een foutmelding? Plak de hele melding hier, dan help ik je verder.
+3. Werkt het niet? Kijk naar de **laatste regel** van de foutmelding en plak die hier.
 
-*Ik werk nu als offline coach. Stel je OpenAI-sleutel in voor uitgebreidere antwoorden.*`;
-  }
+**Volgende stap:** leg me uit wat je ziet, dan help ik je verder.${offlineNote()}`;
+}
 
-  if (/(fout|error|traceback|werkt niet|crash|bug)/.test(question)) {
-    return `## Samen debuggen
+function offlineErrorReply(question) {
+  const found = ERROR_HELP.find((item) => item.match.test(question));
+  if (found) {
+    return `## ${found.title}
 
-Een foutmelding is meestal een aanwijzing, geen ramp. Loop dit rijtje af:
-
-1. **Lees de laatste regel** van de traceback. Daar staat het type fout en vaak de oorzaak.
-2. **Kijk naar het regelnummer** boven de fout. Daar ging het mis.
-3. **Print tussenresultaten** met \`print()\` vlak voor de fout.
-4. **Isoleer het probleem** in een klein bestand met alleen die paar regels.
-5. **Plak hier de volledige foutmelding en je code**, dan wijs ik de waarschijnlijke oorzaak aan.
+${found.text}
 
 \`\`\`python
-# Handig bij twijfel:
+${found.code}
+\`\`\`
+
+### Zo vind je de oorzaak
+1. Kijk naar het **regelnummer** in de foutmelding.
+2. Kijk één regel daarboven: daar begint het meestal.
+3. Plak hier je code en de volledige foutmelding. Dan wijs ik de fout aan.${offlineNote()}`;
+  }
+
+  return `## Samen debuggen
+
+Een foutmelding is een aanwijzing, geen ramp. Doe dit in deze volgorde:
+
+1. **Lees de laatste regel.** Daar staat het soort fout, bijvoorbeeld NameError of TypeError.
+2. **Kijk naar het regelnummer** erboven. Daar ging het mis.
+3. **Print tussenresultaten** met \`print()\` vlak voor die regel.
+4. **Maak het klein.** Haal code weg tot de fout verdwijnt, dan weet je waar het zit.
+
+\`\`\`python
+# Handig om te zien wat een waarde echt is:
 print(type(mijn_waarde), repr(mijn_waarde))
 \`\`\`
 
-*Offline coach: voor een gericht antwoord op jouw code heb je een AI-sleutel nodig.*`;
+**Volgende stap:** plak je code en de volledige foutmelding hier.${offlineNote()}`;
+}
+
+function offlineConceptReply(question) {
+  const found = GLOSSARY.find((item) => item.match.test(question));
+  if (!found) return null;
+  return `## ${found.title}
+
+${found.text}
+
+\`\`\`python
+${found.code}
+\`\`\`
+
+**Volgende stap:** probeer dit voorbeeld uit en verander één regel. Wat gebeurt er?${offlineNote()}`;
+}
+
+export function offlineReply({ text, context }) {
+  const question = String(text || "").toLowerCase();
+
+  if (context?.step) {
+    return offlineStepReply(context);
   }
 
-  if (/(geen idee|welk project|bedenk|idee|begin)/.test(question)) {
+  if (/(fout|error|traceback|werkt niet|crash|bug|nameerror|syntaxerror|typeerror|valueerror|indexerror|keyerror)/.test(question)) {
+    return offlineErrorReply(question);
+  }
+
+  if (/(wat is|wat doet|wat betekent|leg uit|hoe werkt|uitleg)/.test(question)) {
+    const concept = offlineConceptReply(question);
+    if (concept) return concept;
+  }
+
+  if (/(geen idee|welk project|bedenk|idee|begin|start)/.test(question)) {
     return `## Een project kiezen
 
 Beantwoord eerst deze drie vragen voor jezelf:
 
 1. **Hoeveel tijd heb je?** Een korte tool van 30 minuten of een project van een paar uur?
-2. **Wat wil je leren?** Bestanden, een website, een GUI, data of spelletjes?
-3. **Wat gebruik je al?** Als je net begint, kies een project met alleen \`print\`, \`input\` en \`if\`.
+2. **Wat wil je leren?** Bestanden, een website, een scherm met knoppen, data of spelletjes?
+3. **Wat kun je al?** Net begonnen? Kies een project met alleen \`print\`, \`input\` en \`if\`.
 
-Daarna kun je op de homepage filteren op **niveau** en **tijdsduur**. Wil je iets heel specifieks? Gebruik dan **AI-idee maken** en beschrijf je onderwerp in één zin.
+Daarna kun je op de homepage filteren op **niveau** en **tijdsduur**. Wil je iets heel specifieks? Gebruik **AI-idee maken** en beschrijf je onderwerp in één zin.
 
-*Offline coach: met een AI-sleutel kan ik een compleet project op maat voor je bedenken.*`;
+**Volgende stap:** noem je interesse en hoeveel tijd je hebt, dan kies ik mee.${offlineNote()}`;
   }
 
-  return `## Zo pak ik dit aan
+  if (/(simpeler|makkelijker|korter|begrijp het niet|snap het niet)/.test(question)) {
+    return `## In gewone taal
 
-Ik werk nu als **offline coach**. Dit is een algemene aanpak die bij bijna elk Python-project werkt:
+Programmeren is stapjes geven aan de computer. Doe het zo:
 
-1. **Schrijf op wat het programma moet doen.** Eén zin is genoeg.
-2. **Maak de kleinste werkende versie.** Eerst alleen de kern, nog geen mooie vormgeving.
-3. **Test na elke wijziging.** Voer je script uit en kijk of de uitvoer klopt.
-4. **Bouw daarna pas uit.** Voeg één functie tegelijk toe.
-5. **Bewaar een werkende versie.** Dan kun je altijd terug.
+1. **Zeg wat het programma moet doen.** Eén zin is genoeg.
+2. **Maak de kleinste versie die werkt.** Nog geen mooie knoppen of extra's.
+3. **Test meteen.** Klopt de uitvoer? Ga dan pas verder.
+4. **Voeg één ding tegelijk toe.** Dan weet je waar een fout vandaan komt.
 
 \`\`\`python
-# Begin altijd met een minimale versie:
+# De kleinste start:
+print("Hallo EasyCodey!")
+\`\`\`
+
+**Volgende stap:** vertel me in één zin wat je wilt maken.${offlineNote()}`;
+  }
+
+  return `## Zo help ik je het beste
+
+Ik kan je snel en gericht helpen. Geef me één van deze drie dingen:
+
+1. **Je doel:** "Ik wil een raadspel maken."
+2. **Je code:** plak de regels waar je mee bezig bent.
+3. **Je foutmelding:** plak de hele tekst, inclusief het regelnummer.
+
+\`\`\`python
+# Begin altijd met een kleine versie:
 def main():
     print("Hallo EasyCodey!")
 
@@ -351,7 +759,7 @@ if __name__ == "__main__":
     main()
 \`\`\`
 
-Wil je hulp bij jouw specifieke idee of foutmelding? Stel je OpenAI-sleutel in via de instellingen, dan kan ik gericht meekijken.`;
+**Volgende stap:** stuur je vraag, code of foutmelding. Dan ga ik meteen mee kijken.${offlineNote()}`;
 }
 
 export function buildProjectRequest({ topic, level, time, category }) {

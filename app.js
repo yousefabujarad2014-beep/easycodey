@@ -19,6 +19,8 @@ import {
   renderMarkdown,
   fetchConfig,
   isAIConfigured,
+  aiMode,
+  aiModeLabel,
   streamChat,
   offlineReply,
   buildProjectRequest,
@@ -73,9 +75,12 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
-const APP_VERSION = "v12";
+const APP_VERSION = "v13";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
+const COUNTER_SNAPSHOT_KEY = "easycodey.counter.snapshots.v1";
+const COUNTER_SNAPSHOT_LIMIT = 240;
+const COUNTER_SNAPSHOT_GAP = 2 * 60 * 1000;
 
 const app = document.querySelector("#app");
 const aiPanel = document.querySelector("#ai-panel");
@@ -833,6 +838,15 @@ function renderOwner() {
         <div class="profile-actions">
           <button class="btn ghost" type="button" data-action="owner-counter-refresh">Cijfers verversen</button>
         </div>
+        <div class="owner-trends" data-counter-trends hidden>
+          <h4>Verloop</h4>
+          <div class="owner-trend-list">
+            <div><span>Vandaag</span><strong data-trend="today">—</strong></div>
+            <div><span>Sinds 7 dagen</span><strong data-trend="week">—</strong></div>
+            <div><span>Sinds je vorige bezoek</span><strong data-trend="previous">—</strong></div>
+          </div>
+          <p class="static-note" data-trend-note></p>
+        </div>
         <p class="static-note" data-counter-note>
           Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies.
           Unieke installaties = toestellen waarop de app als app start. APK-downloads = klikken op de
@@ -898,11 +912,90 @@ function renderOwner() {
   loadOwnerCounter();
 }
 
+function readCounterSnapshots() {
+  try {
+    const list = JSON.parse(localStorage.getItem(COUNTER_SNAPSHOT_KEY) || "[]");
+    return Array.isArray(list)
+      ? list.filter((item) => item && Number.isFinite(item.t))
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeCounterSnapshots(list) {
+  try {
+    localStorage.setItem(
+      COUNTER_SNAPSHOT_KEY,
+      JSON.stringify(list.slice(-COUNTER_SNAPSHOT_LIMIT))
+    );
+  } catch {
+    // Zonder opslag blijven de totalen gewoon werken.
+  }
+}
+
+function snapshotValue(snapshot, key) {
+  const value = snapshot?.[key];
+  return Number.isFinite(value) ? value : null;
+}
+
+function trendDelta(current, base) {
+  if (!Number.isFinite(current) || !Number.isFinite(base)) return null;
+  const diff = current - base;
+  return diff >= 0 ? diff : null;
+}
+
+function trendText(totals, base) {
+  if (!base) return "—";
+  const parts = [];
+  const add = (key, singular, plural) => {
+    const diff = trendDelta(totals[key], snapshotValue(base, key));
+    if (diff === null) return;
+    parts.push(`+${new Intl.NumberFormat("nl-BE").format(diff)} ${diff === 1 ? singular : plural}`);
+  };
+  add("unique", "unieke bezoeker", "unieke bezoekers");
+  add("visits", "bezoek", "bezoeken");
+  add("installs", "installatie", "installaties");
+  add("downloads", "download", "downloads");
+  return parts.length ? parts.join(" · ") : "—";
+}
+
+function renderCounterTrends(totals, snapshots, now) {
+  const wrap = document.querySelector("[data-counter-trends]");
+  if (!wrap) return;
+
+  const previous = snapshots.length ? snapshots[snapshots.length - 1] : null;
+  const startOfToday = new Date(now);
+  startOfToday.setHours(0, 0, 0, 0);
+  const todayBase = snapshots.find((item) => item.t >= startOfToday.getTime()) || null;
+  const weekBase = snapshots.find((item) => item.t >= now - 7 * 24 * 60 * 60 * 1000) || null;
+
+  const put = (name, base) => {
+    const el = wrap.querySelector(`[data-trend="${name}"]`);
+    if (el) el.textContent = trendText(totals, base);
+  };
+  put("today", todayBase);
+  put("week", weekBase);
+  put("previous", previous);
+  wrap.hidden = false;
+
+  const note = wrap.querySelector("[data-trend-note]");
+  if (note) {
+    note.textContent = snapshots.length
+      ? "De vergelijking groeit terwijl je het paneel vaker opent. Alleen op dit toestel bewaard."
+      : "Nog geen vergelijking. Open het paneel later opnieuw om het verschil te zien.";
+  }
+}
+
 async function loadOwnerCounter() {
   const grid = document.querySelector("[data-counter-totals]");
   if (!grid) return;
   const note = document.querySelector("[data-counter-note]");
   const totals = await counter.getTotals();
+  const now = Date.now();
+  const snapshots = readCounterSnapshots();
+  renderCounterTrends(totals, snapshots, now);
+
   const put = (name, value) => {
     const el = grid.querySelector(`[data-counter="${name}"]`);
     if (!el) return;
@@ -913,6 +1006,21 @@ async function loadOwnerCounter() {
   put("unique", totals.unique);
   put("installs", totals.installs);
   put("downloads", totals.downloads);
+
+  // Bewaar af en toe een momentopname. Zo zie je later het verschil zonder
+  // extra gegevens naar buiten te sturen.
+  const previous = snapshots.length ? snapshots[snapshots.length - 1] : null;
+  if (totals.available && (!previous || now - previous.t >= COUNTER_SNAPSHOT_GAP)) {
+    snapshots.push({
+      t: now,
+      unique: totals.unique,
+      visits: totals.visits,
+      installs: totals.installs,
+      downloads: totals.downloads
+    });
+    writeCounterSnapshots(snapshots);
+  }
+
   if (note) {
     note.textContent = totals.available
       ? "Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start. APK-downloads = klikken op de downloadknop."
@@ -1760,19 +1868,23 @@ function renderMyIdeas() {
 /* ------------------------------ AI-paneel ------------------------------ */
 
 function updateAIStatus() {
-  const configured = isAIConfigured(store.getSettings(), serverConfig);
+  const settings = store.getSettings();
+  const mode = aiMode(settings, serverConfig);
+  const configured = isAIConfigured(settings, serverConfig);
   aiStatusEl.classList.toggle("offline", !configured);
-  aiStatusEl.innerHTML = `<span class="dot"></span> ${configured ? "AI-coach online" : "offline coach"}`;
+  aiStatusEl.innerHTML = `<span class="dot"></span> ${e(aiModeLabel(mode))}`;
   aiSetupEl.hidden = configured;
 
   if (!configured) {
-    const settings = store.getSettings();
-    const needsCode = serverConfig.accessCodeRequired && !settings.accessCode;
-    aiSetupEl.innerHTML = needsCode
-      ? `<p>Deze site vraagt een <strong>toegangscode</strong> voor de AI-coach.</p><button class="btn tiny" type="button" data-action="settings">Toegangscode instellen</button>`
-      : `<p>De <strong>offline coach</strong> staat aan. Die geeft je een stappenplan op basis van je woorden.</p>
-         <p>Wil je echte AI-antwoorden? Voeg een OpenAI-sleutel toe.</p>
-         <button class="btn tiny" type="button" data-action="settings">Sleutel instellen</button>`;
+    const needsCode =
+      mode === "server" && serverConfig.accessCodeRequired && !settings.accessCode;
+    if (needsCode) {
+      aiSetupEl.innerHTML = `<p>Deze site vraagt een <strong>toegangscode</strong> voor de AI-coach.</p><button class="btn tiny" type="button" data-action="settings">Toegangscode instellen</button>`;
+    } else {
+      aiSetupEl.innerHTML = `<p>De <strong>offline coach</strong> staat aan. Je krijgt dan een algemeen stappenplan.</p>
+         <p>Wil je duidelijke antwoorden op jouw vraag? Zet de online AI-coach aan. Dat is gratis en je hebt geen account nodig.</p>
+         <button class="btn tiny" type="button" data-action="settings">Online AI aanzetten</button>`;
+    }
   }
 }
 
@@ -1846,14 +1958,37 @@ function ensureGreeting() {
     "assistant",
     `## ${hello}, ik ben EasyCoach
 
-Ik help je met Python, je project en je fouten. Je kunt mij vragen:
-- "Leg stap 2 van dit project uit."
-- "Mijn code geeft een foutmelding, help me debuggen."
-- "Ik wil een eigen idee maken, maar weet niet waar ik moet beginnen."
+Ik help je met Python, je project en je fouten. Hoe duidelijker je vraag, hoe beter mijn antwoord.
 
-Kies links een project of open **AI-idee maken** voor een compleet nieuw stappenplan.`,
+**Zo vraag je het beste:**
+1. Wat wil je maken of begrijpen?
+2. Wat heb je al geprobeerd?
+3. Welke foutmelding zie je? Plak de hele tekst.
+
+Je kunt me ook vragen om **stap 2 van dit project** uit te leggen of om je code te verbeteren.`,
     { keep: false }
   );
+}
+
+function appendFollowUps(body, contextPayload) {
+  const wrapper = body?.closest?.(".msg");
+  if (!wrapper) return;
+
+  const prompts = contextPayload?.step
+    ? ["Leg deze stap simpeler uit.", "Waarom werkt deze code?", "Wat gaat er vaak fout?"]
+    : ["Leg dit simpeler uit.", "Geef een voorbeeld.", "Help me met mijn fout."];
+
+  const row = document.createElement("div");
+  row.className = "chat-followups";
+  prompts.forEach((prompt) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.dataset.action = "follow-up";
+    button.dataset.prompt = prompt;
+    button.textContent = prompt;
+    row.append(button);
+  });
+  wrapper.insertAdjacentElement("afterend", row);
 }
 
 function scrollAIMessages() {
@@ -1890,18 +2025,19 @@ function setAIBusy(busy) {
   aiInput.disabled = busy;
 }
 
-async function sendAIMessage(text) {
+async function sendAIMessage(text, { skipUser = false } = {}) {
   const message = String(text || "").trim();
   if (!message || aiStreaming) return;
 
   ensureGreeting();
-  appendAIMessage("user", message);
+  if (!skipUser) appendAIMessage("user", message);
   aiInput.value = "";
   aiInput.style.height = "auto";
 
   const body = appendAIMessage("assistant", "", { typing: true, keep: false });
   const contextPayload = buildContextPayload();
   const settings = store.getSettings();
+  const mode = aiMode(settings, serverConfig);
   const configured = isAIConfigured(settings, serverConfig);
   setAIBusy(true);
 
@@ -1910,6 +2046,7 @@ async function sendAIMessage(text) {
     const reply = offlineReply({ text: message, context: contextPayload });
     body.innerHTML = renderMarkdown(reply);
     aiMessages.push({ role: "assistant", content: reply });
+    appendFollowUps(body, contextPayload);
     setAIBusy(false);
     scrollAIMessages();
     return;
@@ -1921,6 +2058,7 @@ async function sendAIMessage(text) {
       messages: aiMessages.slice(-22),
       context: contextPayload,
       settings,
+      serverConfig,
       onDelta: (delta) => {
         full += delta;
         body.innerHTML = renderMarkdown(full);
@@ -1931,6 +2069,7 @@ async function sendAIMessage(text) {
     if (!full.trim()) throw new Error("Leeg antwoord van de AI.");
     aiMessages.push({ role: "assistant", content: full });
     body.innerHTML = renderMarkdown(full);
+    appendFollowUps(body, contextPayload);
   } catch (error) {
     if (error.status === 401 || error.code === "no-key") {
       aiSetupEl.hidden = false;
@@ -1938,15 +2077,35 @@ async function sendAIMessage(text) {
     const fallback = offlineReply({ text: message, context: contextPayload });
     const note =
       error.status === 429
-        ? "**Even te veel AI-verzoeken.** Ik help je tijdelijk met de offline coach.\n\n"
+        ? "**Het is even druk bij de AI.** Ik help je tijdelijk met de offline coach.\n\n"
         : "**De AI is even niet bereikbaar.** Ik help je met de offline coach.\n\n";
     const reply = note + fallback;
-    body.innerHTML = renderMarkdown(reply);
+    body.innerHTML =
+      renderMarkdown(reply) +
+      `<button class="chat-retry" type="button" data-action="retry-ai" data-prompt="${e(message)}">↻ Opnieuw proberen met AI</button>`;
     aiMessages.push({ role: "assistant", content: reply });
+    appendFollowUps(body, contextPayload);
+    if (mode === "free") {
+      analytics.trackEvent("ai-coach-fout");
+    }
   } finally {
     setAIBusy(false);
     scrollAIMessages();
   }
+}
+
+function retryAIMessage(text) {
+  const message = String(text || "").trim();
+  if (!message || aiStreaming) return;
+
+  // Haal het mislukte antwoord weg, zodat het gesprek niet dubbel wordt.
+  const nodes = aiMessagesEl.querySelectorAll(".msg.assistant");
+  const last = nodes[nodes.length - 1];
+  last?.remove();
+  if (aiMessages.length && aiMessages[aiMessages.length - 1].role === "assistant") {
+    aiMessages.pop();
+  }
+  sendAIMessage(message, { skipUser: true });
 }
 
 function clearChat() {
@@ -1965,9 +2124,10 @@ function openSettings() {
   document.querySelector("#cfg-model").value = settings.model;
   document.querySelector("#cfg-base").value = settings.baseUrl;
   document.querySelector("#cfg-access").value = settings.accessCode;
+  document.querySelector("#cfg-online").checked = settings.useOnlineAI !== false;
   document.querySelector("#cfg-key-hint").textContent = serverConfig.hasServerKey
     ? "Op de server staat al een sleutel. Laat dit leeg om die te gebruiken."
-    : "Leeg laten = offline coach gebruiken.";
+    : "Leeg laten = gratis online AI-coach gebruiken.";
   settingsModal.hidden = false;
   window.setTimeout(() => document.querySelector("#cfg-key").focus(), 80);
 }
@@ -1981,7 +2141,8 @@ function saveSettings() {
     apiKey: document.querySelector("#cfg-key").value,
     model: document.querySelector("#cfg-model").value,
     baseUrl: document.querySelector("#cfg-base").value,
-    accessCode: document.querySelector("#cfg-access").value
+    accessCode: document.querySelector("#cfg-access").value,
+    useOnlineAI: document.querySelector("#cfg-online").checked
   });
   closeSettings();
   updateAIStatus();
@@ -2634,6 +2795,7 @@ async function handleGenerate(event) {
       await streamChat({
         messages: [{ role: "user", content: buildProjectRequest(meta) }],
         settings: store.getSettings(),
+        serverConfig,
         mode: "generate",
         onDelta: (delta) => {
           raw += delta;
@@ -2729,6 +2891,12 @@ document.addEventListener("click", (event) => {
       openAI();
       sendAIMessage(actionEl.dataset.prompt || actionEl.textContent);
     }
+    if (action === "follow-up") {
+      sendAIMessage(actionEl.dataset.prompt || actionEl.textContent);
+    }
+    if (action === "retry-ai") {
+      retryAIMessage(actionEl.dataset.prompt || "");
+    }
     if (action === "open-generator") openGenerator();
     if (action === "close-generator") closeGenerator();
     if (action === "open-donate") openDonate();
@@ -2739,6 +2907,7 @@ document.addEventListener("click", (event) => {
     if (action === "install-app") openInstall();
     if (action === "close-install") closeInstall();
     if (action === "install-now") installApp();
+    if (action === "check-install") checkInstall();
     if (action === "profile-logout") {
       store.logoutProfile();
       try {
@@ -3100,8 +3269,30 @@ function isStandaloneApp() {
   );
 }
 
+function installPlatform() {
+  const ua = navigator.userAgent || "";
+  if (/iPad|iPhone|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
+    return "ios";
+  }
+  if (/Android/i.test(ua)) return "android";
+  return "desktop";
+}
+
+function installPlatformName(platform) {
+  if (platform === "ios") return "iPhone of iPad";
+  if (platform === "android") return "Android";
+  return "computer";
+}
+
+function isInAppBrowser() {
+  const ua = navigator.userAgent || "";
+  return /(FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Snapchat|TikTok|Twitter|LinkedIn|Pinterest)/i.test(ua);
+}
+
 function updateInstallUI() {
   const standalone = isStandaloneApp();
+  const platform = installPlatform();
+  const inApp = isInAppBrowser();
   if (installHeader) {
     installHeader.hidden = false;
     installHeader.setAttribute(
@@ -3116,20 +3307,44 @@ function updateInstallUI() {
     installNowBtn.textContent = deferredInstallPrompt ? "📲 Installeer nu" : "📲 Zo installeer je";
   }
 
+  // Toon alleen de uitleg die bij dit toestel past.
+  installModal?.querySelectorAll(".install-steps li[data-platform]").forEach((item) => {
+    item.hidden = item.dataset.platform !== platform;
+  });
+
+  const warning = document.querySelector("[data-install-inapp]");
+  if (warning) {
+    warning.hidden = !inApp;
+    if (inApp) {
+      warning.innerHTML =
+        "<strong>Je opent EasyCodey in een app, bijvoorbeeld WhatsApp of Instagram.</strong> Daarin kun je de app niet installeren. Tik rechtsboven op ⋯ of ⋮ en kies <em>Openen in Chrome</em> (Android) of <em>Open in Safari</em> (iPhone). Open daarna deze pagina opnieuw.";
+    }
+  }
+
   const state = document.querySelector("[data-install-state]");
   if (state) {
     if (standalone) {
       state.hidden = false;
       state.innerHTML =
         "<strong>Je gebruikt EasyCodey al als app.</strong> Je hoeft niets meer te installeren. Open de website als je de browser-versie wilt.";
+    } else if (inApp) {
+      state.hidden = false;
+      state.innerHTML =
+        "<strong>Installeren kan alleen in Chrome of Safari.</strong> Open deze pagina eerst in je gewone browser met de knop hierboven.";
     } else if (deferredInstallPrompt) {
       state.hidden = false;
-      state.innerHTML =
-        "<strong>Klaar om te installeren.</strong> Tik hieronder op <em>Installeer nu</em> en bevestig.";
-    } else {
+      state.innerHTML = `<strong>Klaar om te installeren.</strong> Tik hieronder op <em>Installeer nu</em> en bevestig. Daarna opent EasyCodey als app op je ${installPlatformName(
+        platform
+      )}.`;
+    } else if (platform === "ios") {
       state.hidden = false;
       state.innerHTML =
-        "<strong>Je browser toont nu geen installatievenster.</strong> Gebruik het menu ⋮ → <em>App installeren</em>, of volg de stappen hieronder. Op iPhone of iPad werkt alleen <em>Deel → Zet op beginscherm</em>.";
+        "<strong>Op iPhone en iPad werkt installeren via Safari.</strong> Tik onderaan op <em>Deel</em> en daarna op <em>Zet op beginscherm</em>.";
+    } else {
+      state.hidden = false;
+      state.innerHTML = `<strong>Je browser toont nu geen installatievenster.</strong> Gebruik het menu ⋮ → <em>App installeren</em> op je ${installPlatformName(
+        platform
+      )}, of volg de stap hieronder.`;
     }
   }
 
@@ -3141,6 +3356,14 @@ function updateInstallUI() {
     entryWeb.textContent = standalone ? "Open de website ↗" : "Bekijk de website ↗";
     entryWeb.setAttribute("aria-label", standalone ? "Open EasyCodey in je browser" : "Bekijk de EasyCodey-website");
   }
+}
+
+function checkInstall() {
+  if (isStandaloneApp()) {
+    toast("Ja! EasyCodey opent al als app. Je hoeft niets meer te doen.");
+    return;
+  }
+  toast("Nog niet. Je zit nu in de browser. Volg de stap hierboven en probeer opnieuw.");
 }
 
 function openInstall() {
@@ -3315,7 +3538,7 @@ async function init() {
 
   document.querySelector("#cfg-key-hint").textContent = serverConfig.hasServerKey
     ? "Op de server staat al een sleutel. Laat dit leeg om die te gebruiken."
-    : "Leeg laten = offline coach gebruiken.";
+    : "Leeg laten = gratis online AI-coach gebruiken.";
 }
 
 init();
