@@ -94,7 +94,7 @@ Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. 
 
 Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v10` naar `easycodey-v11`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v11` naar `easycodey-v12`). De oude cache wordt dan bij de volgende start verwijderd.
 
 ### Als de app of website niet opent
 
@@ -188,8 +188,9 @@ Je ziet dan:
 - een mededeling die bovenaan de app verschijnt;
 - **Inzicht en updates:** app-versie, service worker, aantal offline bestanden, opslaggebruik en de
   laatste automatische update;
-- **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen **bezoeken**, **installaties** en
-  **APK-downloads**. Geen account nodig; geen cookies of persoonsgegevens. Met **Cijfers verversen**
+- **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen **unieke bezoekers**, **bezoeken**,
+  **unieke installaties** en **APK-downloads**. Geen account nodig; geen cookies of persoonsgegevens.
+  Met **Cijfers verversen**
   haal je de nieuwste stand op;
 - **Bezoekers meten:** vul daarnaast je GoatCounter-sitecode in voor uitgebreidere inzichten:
   populairste projecten, versies en regio. Zonder sitecode wordt er niets naar GoatCounter geladen

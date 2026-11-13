@@ -423,6 +423,7 @@
           <span>HTTPS-versleuteling, geen advertenties of trackers. Je voortgang en account blijven op dit apparaat.</span>
         </div>
       </div>
+      <p class="install-note" data-install-state hidden></p>
       <ol class="install-steps">
         <li>
           <strong>Chrome of Edge op de computer</strong>
@@ -601,6 +602,21 @@
       };
       window.__easycodeyBootFail = showFallback;
       timer = window.setTimeout(showFallback, 8000);
+    })();
+  </script>
+  <script>
+    /* Chrome en Edge geven het installatievenster maar één keer. Bewaar het
+       meteen, ook als app.js nog aan het laden is. Zo blijft de knop werken. */
+    (function () {
+      window.__easycodeyInstallPrompt = null;
+      window.addEventListener("beforeinstallprompt", function (event) {
+        event.preventDefault();
+        window.__easycodeyInstallPrompt = event;
+        window.dispatchEvent(new Event("easycodey-installprompt"));
+      });
+      window.addEventListener("appinstalled", function () {
+        window.__easycodeyInstallPrompt = null;
+      });
     })();
   </script>
   <script type="module" src="app.js" onerror="window.__easycodeyBootFail && window.__easycodeyBootFail()"></script>

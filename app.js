@@ -73,7 +73,7 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
-const APP_VERSION = "v11";
+const APP_VERSION = "v12";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 
@@ -825,16 +825,18 @@ function renderOwner() {
           account nodig.
         </p>
         <div class="owner-stats owner-counter-grid" data-counter-totals>
+          <div class="owner-stat"><strong data-counter="unique">…</strong><span>unieke bezoekers</span></div>
           <div class="owner-stat"><strong data-counter="visits">…</strong><span>bezoeken</span></div>
-          <div class="owner-stat"><strong data-counter="installs">…</strong><span>installaties</span></div>
+          <div class="owner-stat"><strong data-counter="installs">…</strong><span>unieke installaties</span></div>
           <div class="owner-stat"><strong data-counter="downloads">…</strong><span>APK-downloads</span></div>
         </div>
         <div class="profile-actions">
           <button class="btn ghost" type="button" data-action="owner-counter-refresh">Cijfers verversen</button>
         </div>
         <p class="static-note" data-counter-note>
-          Bezoeken = nieuwe sessies. Installaties = toestellen waarop de app als app start.
-          APK-downloads = klikken op de downloadknop. Iemand die vaker komt, telt vaker mee.
+          Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies.
+          Unieke installaties = toestellen waarop de app als app start. APK-downloads = klikken op de
+          downloadknop.
         </p>
       </div>
 
@@ -884,9 +886,9 @@ function renderOwner() {
       </div>
       <p class="static-note">
         Wil je álle klanten van álle toestellen zien? Dat kan alleen met een echte server en database.
-        EasyCodey bewaart alles lokaal. Alleen de anonieme cijfers — bezoeken, installaties en
-        APK-downloads — gaan naar de ingebouwde teller. Voor populairste projecten kun je daarnaast
-        GoatCounter aanzetten.
+        EasyCodey bewaart alles lokaal. Alleen de anonieme cijfers — unieke bezoekers, bezoeken,
+        unieke installaties en APK-downloads — gaan naar de ingebouwde teller. Voor populairste
+        projecten kun je daarnaast GoatCounter aanzetten.
       </p>
     </section>
   `;
@@ -908,11 +910,12 @@ async function loadOwnerCounter() {
       value === null ? "—" : new Intl.NumberFormat("nl-BE").format(value);
   };
   put("visits", totals.visits);
+  put("unique", totals.unique);
   put("installs", totals.installs);
   put("downloads", totals.downloads);
   if (note) {
     note.textContent = totals.available
-      ? "Bezoeken = nieuwe sessies. Installaties = toestellen waarop de app als app start. APK-downloads = klikken op de downloadknop. Iemand die vaker komt, telt vaker mee."
+      ? "Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start. APK-downloads = klikken op de downloadknop."
       : "De teller is nu niet bereikbaar. Probeer het later opnieuw met de knop hierboven.";
   }
 }
@@ -3108,7 +3111,27 @@ function updateInstallUI() {
     installHeader.setAttribute("title", standalone ? "App-info en website" : "Installeer als app");
   }
   if (installFooter) installFooter.hidden = standalone;
-  if (installNowBtn) installNowBtn.hidden = !deferredInstallPrompt;
+  if (installNowBtn) {
+    installNowBtn.hidden = false;
+    installNowBtn.textContent = deferredInstallPrompt ? "📲 Installeer nu" : "📲 Zo installeer je";
+  }
+
+  const state = document.querySelector("[data-install-state]");
+  if (state) {
+    if (standalone) {
+      state.hidden = false;
+      state.innerHTML =
+        "<strong>Je gebruikt EasyCodey al als app.</strong> Je hoeft niets meer te installeren. Open de website als je de browser-versie wilt.";
+    } else if (deferredInstallPrompt) {
+      state.hidden = false;
+      state.innerHTML =
+        "<strong>Klaar om te installeren.</strong> Tik hieronder op <em>Installeer nu</em> en bevestig.";
+    } else {
+      state.hidden = false;
+      state.innerHTML =
+        "<strong>Je browser toont nu geen installatievenster.</strong> Gebruik het menu ⋮ → <em>App installeren</em>, of volg de stappen hieronder. Op iPhone of iPad werkt alleen <em>Deel → Zet op beginscherm</em>.";
+    }
+  }
 
   const entryInstall = document.querySelector("#app-entry-install");
   if (entryInstall) entryInstall.hidden = standalone;
@@ -3132,10 +3155,15 @@ function closeInstall() {
 async function installApp() {
   if (!deferredInstallPrompt) {
     installModal.hidden = false;
+    updateInstallUI();
+    const steps = installModal.querySelector(".install-steps");
+    if (steps) steps.scrollIntoView({ behavior: "smooth", block: "center" });
+    toast("Je browser toont geen installatievenster. Volg de stappen hierboven of open de uitleg.");
     return;
   }
   const promptEvent = deferredInstallPrompt;
   deferredInstallPrompt = null;
+  window.__easycodeyInstallPrompt = null;
   promptEvent.prompt();
   const choice = await promptEvent.userChoice.catch(() => null);
   updateInstallUI();
@@ -3205,15 +3233,32 @@ function registerServiceWorker() {
 function initPWA() {
   updateInstallUI();
 
+  // Het vroege script in index.html bewaart het installatievenster al.
+  if (window.__easycodeyInstallPrompt) {
+    deferredInstallPrompt = window.__easycodeyInstallPrompt;
+    updateInstallUI();
+  }
+  window.addEventListener("easycodey-installprompt", () => {
+    if (window.__easycodeyInstallPrompt) {
+      deferredInstallPrompt = window.__easycodeyInstallPrompt;
+      updateInstallUI();
+    }
+  });
+
   window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredInstallPrompt = event;
+    window.__easycodeyInstallPrompt = event;
     updateInstallUI();
   });
 
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
+    window.__easycodeyInstallPrompt = null;
     updateInstallUI();
+    counter.countInstall().then((value) => {
+      if (value !== null) analytics.trackEvent("app-geinstalleerd");
+    });
     analytics.trackEvent("installatie");
     toast("EasyCodey staat als app op je apparaat.");
   });
@@ -3249,6 +3294,7 @@ async function init() {
   });
   counter.loadCounterConfig().then(() => {
     counter.countVisit();
+    counter.countUniqueVisitor();
   });
 
   // Welke weergave kiezen mensen: de app of de code?

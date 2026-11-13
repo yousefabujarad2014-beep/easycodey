@@ -190,10 +190,12 @@
         trackers.
       </p>
       <p class="profile-text">
-        EasyCodey telt <strong>anoniem</strong> hoe vaak de app wordt geopend, hoe vaak de app als
-        app start (installatie) en hoe vaak de APK wordt gedownload. Dat gebeurt met een eigen teller
-        zonder cookies, zonder vingerafdruk en zonder persoonsgegevens. Alleen een getal per
-        onderwerp gaat heen en weer; er is geen account nodig.
+        EasyCodey telt <strong>anoniem</strong> hoe vaak de app wordt geopend, hoeveel unieke
+        toestellen of browsers de site bezoeken, hoe vaak de app als app start (installatie) en hoe
+        vaak de APK wordt gedownload. Dat gebeurt met een eigen teller zonder cookies, zonder
+        vingerafdruk en zonder persoonsgegevens. Alleen een getal per onderwerp gaat heen en weer;
+        er is geen account nodig. Een “unieke bezoeker” is dus één toestel of browser, geen echte
+        persoon: iemand met twee toestellen of gewiste opslag telt opnieuw.
       </p>
       <p class="profile-text">
         De eigenaar kan daarnaast <strong>uitgebreidere bezoekcijfers</strong> laten meten met
@@ -215,7 +217,8 @@
         geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
         browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
         je projecten of profielen naar deze diensten. De ingebouwde teller (Abacus) ontvangt alleen
-        een anoniem getal voor bezoeken, installaties en APK-downloads. Alleen als er een meetcode
+        een anoniem getal voor bezoeken, unieke bezoekers, installaties en APK-downloads. Alleen als
+        er een meetcode
         in de app staat, wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder
         cookies.
       </p>
@@ -341,6 +344,25 @@
               "/bezoeken-v1",
             { cache: "no-store", keepalive: true }
           ).catch(() => {});
+        }
+        let unique = false;
+        try {
+          unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
+        } catch (error) {}
+        if (!unique) {
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/unieke-bezoekers-v1",
+            { cache: "no-store", keepalive: true }
+          )
+            .then((response) => {
+              if (!response.ok) return;
+              try {
+                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+              } catch (error) {}
+            })
+            .catch(() => {});
         }
       }
 

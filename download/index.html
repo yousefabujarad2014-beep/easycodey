@@ -253,6 +253,24 @@
     <section class="panel install-section donate-faq">
       <h2><span class="h2-num">?</span> Veelgestelde vragen</h2>
       <details class="faq-item">
+        <summary>Ik zie “App niet geïnstalleerd”. Wat nu?</summary>
+        <p>
+          Meestal staat er nog een oude EasyCodey of snelkoppeling op je toestel, of is er te weinig
+          vrije ruimte. Verwijder de oude versie, controleer je opslag en probeer opnieuw. Zet ook
+          <em>Onbekende apps installeren</em> aan voor Chrome of je browser. Lukt het daarna nog niet?
+          Gebruik de webapp: open de site in Chrome en kies <em>Menu ⋮ → App installeren</em>.
+          Je voortgang blijft bewaard.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Kan ik de APK ook op iPhone of iPad installeren?</summary>
+        <p>
+          Nee, een APK is alleen voor Android. Op iPhone en iPad zet je EasyCodey via Safari op je
+          beginscherm: tik op <em>Deel</em> → <em>Zet op beginscherm</em>. Dat werkt hetzelfde,
+          is gratis en je krijgt ook een eigen icoon.
+        </p>
+      </details>
+      <details class="faq-item">
         <summary>Is dit veilig?</summary>
         <p>
           Ja. De APK is ondertekend met de eigen uploadsleutel van EasyCodey en opent alleen
@@ -366,6 +384,25 @@
               "/bezoeken-v1",
             { cache: "no-store", keepalive: true }
           ).catch(() => {});
+        }
+        let unique = false;
+        try {
+          unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
+        } catch (error) {}
+        if (!unique) {
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/unieke-bezoekers-v1",
+            { cache: "no-store", keepalive: true }
+          )
+            .then((response) => {
+              if (!response.ok) return;
+              try {
+                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+              } catch (error) {}
+            })
+            .catch(() => {});
         }
         document.addEventListener(
           "click",

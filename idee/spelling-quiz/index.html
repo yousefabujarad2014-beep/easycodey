@@ -419,6 +419,25 @@ vragen = json.loads(Path(&quot;spelling.json&quot;).read_text(encoding=&quot;utf
             { cache: "no-store", keepalive: true }
           ).catch(() => {});
         }
+        let unique = false;
+        try {
+          unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
+        } catch (error) {}
+        if (!unique) {
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/unieke-bezoekers-v1",
+            { cache: "no-store", keepalive: true }
+          )
+            .then((response) => {
+              if (!response.ok) return;
+              try {
+                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+              } catch (error) {}
+            })
+            .catch(() => {});
+        }
       }
 
       const site = String((config && config.analyticsSite) || "")

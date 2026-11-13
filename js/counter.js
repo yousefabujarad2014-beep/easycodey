@@ -1,14 +1,15 @@
 /* EasyCodey — eenvoudige, anonieme teller.
-   Telt bezoeken, installaties en APK-downloads zonder account en zonder
-   cookie. Er gaat alleen een getal heen en weer; geen namen, geen e-mail,
-   geen profielen en geen apparaat-id. De eigenaar kan dit uitzetten met
-   dezelfde opt-out als de statistieken. */
+   Telt bezoeken, unieke bezoekers, installaties en APK-downloads zonder
+   account en zonder cookie. Er gaat alleen een getal heen en weer; geen
+   namen, geen e-mail, geen profielen en geen apparaat-id. De eigenaar kan
+   dit uitzetten met dezelfde opt-out als de statistieken. */
 
 const API = "https://abacus.jasoncameron.dev";
 const CONFIG_FILE = "site-config.json";
 const OPTOUT_KEY = "easycodey.analytics.optout.v1";
 const SESSION_KEY = "easycodey.counter.session.v1";
 const INSTALLED_KEY = "easycodey.installed.v1";
+const UNIQUE_KEY = "easycodey.uniqueVisitor.v1";
 
 let namespace = "";
 let configLoaded = false;
@@ -106,17 +107,31 @@ export async function hitCount(key) {
 }
 
 export async function getTotals() {
-  const [visits, installs, downloads] = await Promise.all([
+  const [visits, unique, installs, downloads] = await Promise.all([
     getCount("bezoeken-v1"),
+    getCount("unieke-bezoekers-v1"),
     getCount("installaties-v1"),
     getCount("apk-downloads-v1")
   ]);
   return {
     visits,
+    unique,
     installs,
     downloads,
-    available: visits !== null || installs !== null || downloads !== null
+    available:
+      visits !== null || unique !== null || installs !== null || downloads !== null
   };
+}
+
+/* Eén unieke bezoeker per toestel/browser. De vlag gaat pas aan als de teller
+   antwoordt, zodat een offline bezoek het later alsnog kan tellen. Dit is een
+   benadering: iemand met twee toestellen of gewiste opslag telt opnieuw. */
+export async function countUniqueVisitor() {
+  if (isCounterOptedOut()) return null;
+  if (read(UNIQUE_KEY) === "1") return null;
+  const value = await hitCount("unieke-bezoekers-v1");
+  if (value !== null) write(UNIQUE_KEY, "1");
+  return value;
 }
 
 /* Eén bezoek per browsersessie, zodat herladen niet dubbel telt. */

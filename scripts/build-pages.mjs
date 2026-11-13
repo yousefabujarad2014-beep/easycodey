@@ -811,6 +811,24 @@ function renderDownloadPage() {
     <section class="panel install-section donate-faq">
       <h2><span class="h2-num">?</span> Veelgestelde vragen</h2>
       <details class="faq-item">
+        <summary>Ik zie “App niet geïnstalleerd”. Wat nu?</summary>
+        <p>
+          Meestal staat er nog een oude EasyCodey of snelkoppeling op je toestel, of is er te weinig
+          vrije ruimte. Verwijder de oude versie, controleer je opslag en probeer opnieuw. Zet ook
+          <em>Onbekende apps installeren</em> aan voor Chrome of je browser. Lukt het daarna nog niet?
+          Gebruik de webapp: open de site in Chrome en kies <em>Menu ⋮ → App installeren</em>.
+          Je voortgang blijft bewaard.
+        </p>
+      </details>
+      <details class="faq-item">
+        <summary>Kan ik de APK ook op iPhone of iPad installeren?</summary>
+        <p>
+          Nee, een APK is alleen voor Android. Op iPhone en iPad zet je EasyCodey via Safari op je
+          beginscherm: tik op <em>Deel</em> → <em>Zet op beginscherm</em>. Dat werkt hetzelfde,
+          is gratis en je krijgt ook een eigen icoon.
+        </p>
+      </details>
+      <details class="faq-item">
         <summary>Is dit veilig?</summary>
         <p>
           Ja. De APK is ondertekend met de eigen uploadsleutel van EasyCodey en opent alleen
@@ -902,6 +920,25 @@ const DOWNLOAD_TRACKING = `<script>
             { cache: "no-store", keepalive: true }
           ).catch(() => {});
         }
+        let unique = false;
+        try {
+          unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
+        } catch (error) {}
+        if (!unique) {
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/unieke-bezoekers-v1",
+            { cache: "no-store", keepalive: true }
+          )
+            .then((response) => {
+              if (!response.ok) return;
+              try {
+                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+              } catch (error) {}
+            })
+            .catch(() => {});
+        }
         document.addEventListener(
           "click",
           (event) => {
@@ -980,6 +1017,25 @@ function SITE_TRACKING(prefix) {
               "/bezoeken-v1",
             { cache: "no-store", keepalive: true }
           ).catch(() => {});
+        }
+        let unique = false;
+        try {
+          unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
+        } catch (error) {}
+        if (!unique) {
+          fetch(
+            "https://abacus.jasoncameron.dev/hit/" +
+              encodeURIComponent(counter) +
+              "/unieke-bezoekers-v1",
+            { cache: "no-store", keepalive: true }
+          )
+            .then((response) => {
+              if (!response.ok) return;
+              try {
+                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+              } catch (error) {}
+            })
+            .catch(() => {});
         }
       }
 
@@ -1525,10 +1581,12 @@ function renderPrivacyPage() {
         trackers.
       </p>
       <p class="profile-text">
-        EasyCodey telt <strong>anoniem</strong> hoe vaak de app wordt geopend, hoe vaak de app als
-        app start (installatie) en hoe vaak de APK wordt gedownload. Dat gebeurt met een eigen teller
-        zonder cookies, zonder vingerafdruk en zonder persoonsgegevens. Alleen een getal per
-        onderwerp gaat heen en weer; er is geen account nodig.
+        EasyCodey telt <strong>anoniem</strong> hoe vaak de app wordt geopend, hoeveel unieke
+        toestellen of browsers de site bezoeken, hoe vaak de app als app start (installatie) en hoe
+        vaak de APK wordt gedownload. Dat gebeurt met een eigen teller zonder cookies, zonder
+        vingerafdruk en zonder persoonsgegevens. Alleen een getal per onderwerp gaat heen en weer;
+        er is geen account nodig. Een “unieke bezoeker” is dus één toestel of browser, geen echte
+        persoon: iemand met twee toestellen of gewiste opslag telt opnieuw.
       </p>
       <p class="profile-text">
         De eigenaar kan daarnaast <strong>uitgebreidere bezoekcijfers</strong> laten meten met
@@ -1550,7 +1608,8 @@ function renderPrivacyPage() {
         geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
         browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
         je projecten of profielen naar deze diensten. De ingebouwde teller (Abacus) ontvangt alleen
-        een anoniem getal voor bezoeken, installaties en APK-downloads. Alleen als er een meetcode
+        een anoniem getal voor bezoeken, unieke bezoekers, installaties en APK-downloads. Alleen als
+        er een meetcode
         in de app staat, wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder
         cookies.
       </p>
