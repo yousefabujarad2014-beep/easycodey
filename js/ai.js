@@ -255,13 +255,19 @@ const EMPTY_CONFIG = {
 export async function fetchConfig() {
   // Eerst de Node-server (lokaal/Render). Die kent ook de online AI-coach.
   try {
-    const response = await fetch("/api/config", { headers: { Accept: "application/json" } });
+    const response = await fetch("/api/config", {
+      cache: "no-store",
+      headers: { Accept: "application/json" }
+    });
     if (!response.ok) throw new Error("config");
     return normalizeConfig(await response.json());
   } catch {
     // GitHub Pages heeft geen server: gebruik de statische config voor donaties.
     try {
-      const response = await fetch("site-config.json", { headers: { Accept: "application/json" } });
+      const response = await fetch("site-config.json", {
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      });
       if (!response.ok) throw new Error("config");
       return normalizeConfig(await response.json());
     } catch {
