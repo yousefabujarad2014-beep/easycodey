@@ -8,10 +8,9 @@ meegeleverd, zodat een bezoek geen verbinding met Google Fonts nodig heeft.
 - plus-jakarta-sans.woff2 Plus Jakarta Sans (variabel, gewicht 400-800)
 - jetbrains-mono.woff2    JetBrains Mono (variabel, gewicht 400-500)
 - fonts.css               De @font-face-regels die naar deze bestanden wijzen.
+- OFL.txt                 De volledige licentie per lettertype.
 
 Alle drie de lettertypen zijn gratis te gebruiken en te verspreiden onder de
-SIL Open Font License 1.1 (OFL). De originele bestanden komen van Google Fonts:
-https://fonts.google.com
-
-De volledige licentietekst staat op:
-https://openfontlicense.org/open-font-license-official-text/
+SIL Open Font License 1.1 (OFL). De volledige licentietekst met de copyrightregel
+per lettertype staat in OFL.txt in deze map. De originele bestanden komen van
+Google Fonts: https://fonts.google.com
