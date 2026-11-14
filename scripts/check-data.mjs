@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -404,6 +404,45 @@ if (!existsSync(sitemapFile)) {
   }
 }
 
+/* Controleert alle tekstbestanden op kapotte tekencodering, zoals "categorieÃ«n"
+   in plaats van "categorieën". Zo blijft een fout niet ongemerkt staan. */
+function scanTextFiles() {
+  const skipDirs = new Set(["node_modules", ".git"]);
+  const extensions = new Set([".html", ".js", ".mjs", ".json", ".md", ".css", ".xml", ".webmanifest", ".toml", ".txt", ".svg"]);
+  const self = path.join(root, "scripts", "check-data.mjs");
+  const pattern = /Ã[\u0080-\u00ff]|Â[\u0080-\u00ff]|â€|â”|ðŸ|ï¿½|\uFFFD/;
+  let checked = 0;
+
+  function walk(dir) {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith(".")) continue;
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (!skipDirs.has(entry.name)) walk(full);
+        continue;
+      }
+      if (full === self || !extensions.has(path.extname(entry.name))) continue;
+      checked += 1;
+      let text;
+      try {
+        text = readFileSync(full, "utf8");
+      } catch {
+        continue;
+      }
+      text.split(/\r?\n/).forEach((line, index) => {
+        if (pattern.test(line)) {
+          fail(`${path.relative(root, full)}:${index + 1}: kapotte tekencodering gevonden.`);
+        }
+      });
+    }
+  }
+
+  walk(root);
+  return checked;
+}
+
+const scannedFiles = scanTextFiles();
+
 const counts = {};
 for (const idea of IDEAS) counts[idea.category] = (counts[idea.category] || 0) + 1;
 
@@ -417,6 +456,7 @@ console.log("=====================");
 console.log(`Projecten: ${IDEAS.length}`);
 console.log(`Stappen:   ${IDEAS.reduce((sum, idea) => sum + (idea.steps?.length || 0), 0)}`);
 console.log(`App:       manifest + service worker (${offlineFileCount} offline-bestanden)`);
+console.log(`Tekst:     ${scannedFiles} bestanden gecontroleerd op beschadigde tekens`);
 console.log(`Pagina's:  ${pageCount} projectpagina's + overzicht + installeren + download + contact + doneren + privacy`);
 console.log(`Sitemap:   ${sitemapCount} URL's`);
 console.log("");
