@@ -1,4 +1,4 @@
-# EasyCodey â€” eindrapport
+# EasyCodey — eindrapport
 
 **Datum:** 14 november 2026
 **Map:** `C:\Users\Home\Desktop\FLL`
@@ -10,7 +10,7 @@
 
 EasyCodey is een Nederlandstalige website waarmee je Python leert door echte projecten te bouwen. Je kiest een project, volgt een stappenplan met uitleg en code, vinkt stappen af en vraagt de AI-coach om hulp als je vastloopt.
 
-De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES-modules), Ã©Ã©n Node.js-server zonder externe dependencies en alle projectdata lokaal in `data/`.
+De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES-modules), één Node.js-server zonder externe dependencies en alle projectdata lokaal in `data/`.
 
 ---
 
@@ -29,27 +29,27 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Projectbibliotheek
 - **161 projecten** met **711 stappen**.
-- Verdeling over 10 categorieÃ«n:
+- Verdeling over 10 categorieën:
 
 | Categorie | Projecten |
 |---|---:|
-| ðŸŽ® Games | 36 |
-| ðŸŒ Web | 22 |
-| ðŸªŸ GUI | 15 |
-| ðŸ¤– Data & AI | 12 |
-| ðŸ§° Handige tools | 14 |
+| 🎮 Games | 36 |
+| 🌐 Web | 22 |
+| 🪟 GUI | 15 |
+| 🤖 Data & AI | 12 |
+| 🧰 Handige tools | 14 |
 | âš™ï¸ Automatisering | 10 |
-| ðŸ” Security | 14 |
-| ðŸ”¬ Wetenschap | 18 |
-| ðŸŽ¨ Kunst & Creatief | 10 |
-| ðŸŽ“ Onderwijs | 10 |
+| 🔐 Security | 14 |
+| 🔬 Wetenschap | 18 |
+| 🎨 Kunst & Creatief | 10 |
+| 🎓 Onderwijs | 10 |
 | **Totaal** | **161** |
 
 - Elk project heeft: `id`, `title`, `emoji`, `category`, `level` (Beginner/Gemiddeld/Gevorderd), `time`, `summary`, `description`, minimaal 3 leerdoelen, minimaal 3 stappen met titel/uitleg/code, tips en geldige `next`-links.
 - Alle `next`-links worden bij het laden gecontroleerd en aangevuld door `data/index.js`.
 
 ### Afbeeldingen
-- 10 lokale SVG-omslagen in `assets/covers/` (Ã©Ã©n per categorie).
+- 10 lokale SVG-omslagen in `assets/covers/` (één per categorie).
 - Projecten kunnen optioneel een eigen `image`-veld hebben.
 - Zonder eigen afbeelding gebruikt de site automatisch de categorie-cover.
 - AI-projecten krijgen dus altijd een passende cover.
@@ -70,10 +70,10 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Categorie-chips met aantallen per categorie.
 - Filters op niveau, tijdsduur en meerdere vaardigheden tegelijk.
 - "Alleen niet afgerond" en sorteren op aanbevolen, kortste duur, moeilijkheid en A-Z.
-- Resultaatenteller, filters wissen, lege staat en "ðŸŽ² Verras me".
+- Resultaatenteller, filters wissen, lege staat en "🎲 Verras me".
 - Filters staan in de URL, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`.
 - Eerste 30 resultaten, daarna "Meer laden" in stappen van 30.
-- Statistieken: aantal projecten, categorieÃ«n, afgeronde projecten en totale voortgang.
+- Statistieken: aantal projecten, categorieën, afgeronde projecten en totale voortgang.
 - Sneltoets `/` focust het zoekveld.
 - **App-entry** bovenaan: een opvallend blok dat uitlegt dat je je leerpad overal mee naartoe kunt nemen, met knoppen naar de editor en het installeren van de app.
 - De hero-knop **â–¶ Snel proberen** opent het Python-speelveld.
@@ -90,7 +90,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Actiebalk met **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**.
 - **Speel dit idee** toont de speelbare app-weergave van het project, meteen in de pagina.
 - **Gebruik dit idee** toont in dezelfde plek alle code, stap voor stap.
-- **Programmeer zelf** opent de editor met alle stappen als Ã©Ã©n programma, met commentaar per stap.
+- **Programmeer zelf** opent de editor met alle stappen als één programma, met commentaar per stap.
 - **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm, waarin ook de **vraag van het programma** staat, en daarna op **Enter** drukt.
 - **App-weergave**: de pagina opent standaard in een schone preview zonder code. De knoppen **▶ Speel dit idee** en **⌨ Gebruik dit idee** zijn samen de schakelaar: app en code zitten dus in dezelfde twee acties. In de app-stand speel je meteen mee; in de code-stand zie je alle stappen en uitleg. De code blijft altijd in de HTML staan voor SEO en tests.
 - Elke preview is een echte, offline demo die bij het onderwerp past: Snake, Tetris, Pong, Galgje, rekenmachine, weer, portscanner, molecuulmassa, warmteverspreiding enz. Alle 161 projecten hebben een preview; waar nodig via een passende categorie-fallback.
@@ -103,12 +103,12 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Categorie-filter en totale voortgang.
 - Filter staat in de URL (`#/leerpad?categorie=Games`).
 
-### Mijn ideeÃ«n (`#/mijn-ideeen`)
+### Mijn ideeën (`#/mijn-ideeen`)
 - Overzicht van zelfgemaakte AI-projecten uit `localStorage`.
 - Project openen, verwijderen en opnieuw bekijken.
 - Exporteren als JSON-bestand (`easycodey-eigen-ideeen.json`).
-- Importeren van een eerder geÃ«xporteerd JSON-bestand.
-- GeÃ¯mporteerde projecten worden gevalideerd en schoongemaakt: ongeldige velden, categorieÃ«n en niveaus worden hersteld en projecten met minder dan 3 geldige stappen worden geweigerd.
+- Importeren van een eerder geëxporteerd JSON-bestand.
+- Geïmporteerde projecten worden gevalideerd en schoongemaakt: ongeldige velden, categorieën en niveaus worden hersteld en projecten met minder dan 3 geldige stappen worden geweigerd.
 - Duidelijke waarschuwing dat projecten per browser/apparaat zijn opgeslagen.
 
 ### Optioneel account (`#/profiel`)
@@ -120,7 +120,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Bij het aanmaken kun je de huidige gastvoortgang meenemen.
 - Oude accounts met een PIN blijven werken: de PIN wordt automatisch als wachtwoord gelezen.
 - **Back-up downloaden** bewaart voortgang, eigen projecten en editor-code als JSON; **Back-up herstellen** zet het bestand terug.
-- De header heeft een **ðŸ‘¤-icoon** en de footer een link **Mijn profiel**.
+- De header heeft een **👤-icoon** en de footer een link **Mijn profiel**.
 - Duidelijke uitleg dat accounts alleen op dit apparaat staan en dat het wachtwoord geen sterke beveiliging is.
 
 ### Privacy, tekst en netwerk
@@ -135,7 +135,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik, starttijd van de app en de laatste automatische update.
 - **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen unieke bezoekers (één per toestel/browser), bezoeken, unieke installaties en APK-downloads. Geen account nodig en cookieloos.
 - **Bezoekers meten (optioneel):** daarnaast een gratis GoatCounter-sitecode instellen voor uitgebreidere inzichten: populairste projecten, versies en regio. De sitecode voor alle bezoekers staat in `site-config.json` (`analyticsSite`). Zonder sitecode wordt niets naar GoatCounter verstuurd; gebruikers kunnen alle meting uitzetten via **Mijn profiel → Privacy en statistieken**.
-- Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeÃ«n.
+- Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeën.
 - Profielentabel met naam, optioneel contact, aanmaakdatum, laatste activiteit en voortgang.
 - **Voortgang wissen** en **Verwijderen** per profiel, met bevestiging.
 - Mededeling opslaan/wissen; gebruikers zien die bovenaan de app en kunnen hem sluiten.
@@ -171,7 +171,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De sleutel wordt nooit in de code opgeslagen; server-side via `.env` of omgevingsvariabelen heeft de voorkeur.
 - Optionele toegangscode (`ACCESS_CODE`) en rate limiting per IP (`RATE_LIMIT`, standaard 30 per uur) voor een eigen server.
 
-### AI-ideeÃ«ngenerator
+### AI-ideeëngenerator
 - Beschrijf een onderwerp, niveau, tijdsduur en optioneel een categorie.
 - Met AI: streaming JSON-antwoord wordt geparsed naar een compleet project.
 - Zonder AI: de offline generator maakt direct een bruikbaar project met 4 stappen.
@@ -187,7 +187,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Een Python-fout wordt in **eenvoudig Nederlands** uitgelegd met het **regelnummer**, het stukje code, wat er misgaat en een concrete tip. De technische melding blijft eronder staan voor gevorderden.
 - Bij een Python-fout verschijnt **✦ Vraag EasyCoach om hulp**, zodat je met één klik verder kunt.
 - Bij een fout verschijnt ook **Bekijk regel N**; in de editor springt die naar de juiste regel.
-- `input()` toont bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. De statusregel zegt **â€œTyp je antwoord in het venster bovenaanâ€¦â€**.
+- `input()` toont bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. De statusregel zegt **“Typ je antwoord in het venster bovenaan…”**.
 - Bij het speelveld, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
 - Geen code of uitvoer gaat naar de server.
 - Bij een netwerkfout verschijnt een duidelijke melding; de rest van de site blijft werken.
@@ -207,21 +207,21 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Editor-code is gekoppeld aan het project waarvoor je hem opende. Typ je daarna in de algemene editor (`#/programmeren`), dan wordt die code niet per ongeluk aan het oude project gekoppeld; **Programmeer zelf** laadt altijd de juiste projectcode.
 - Voorbeelden laden, uitvoer wissen, **Tab** invoegen als vier spaties en de editor leegmaken.
 - **Projectcode opnieuw laden** en **Terug naar project** in de projectbalk.
-- Op mobiel staat de navigatie op een eigen scrollbare rij en wordt de editor Ã©Ã©n kolom.
+- Op mobiel staat de navigatie op een eigen scrollbare rij en wordt de editor één kolom.
 
 ### Installeerbare app (PWA)
-- `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeÃ«n**.
+- `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeën**.
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
 - `sw.js` bewaart de app-shell (38 bestanden) bij de eerste installatie.
-- **Network-first** voor navigatie Ã©n same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
+- **Network-first** voor navigatie én same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
 - De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`), bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
 - Er is **geen handmatige updateknop** meer: de app werkt zichzelf volledig automatisch bij.
 - HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Het installatievenster en de installatiepagina leggen uit dat je altijd de beveiligde live-link moet gebruiken.
 - De Python-runtime en lettertypen komen in een aparte runtime-cache, zodat Python na de eerste keer offline werkt.
 - `offline.html` verschijnt als een pagina niet in de cache staat.
-- **ðŸ“² Installeer als app** in de header en footer, met uitleg per platform en een **Installeer nu**-knop zodra de browser dat ondersteunt.
+- **📲 Installeer als app** in de header en footer, met uitleg per platform en een **Installeer nu**-knop zodra de browser dat ondersteunt.
 - Het installatievenster herkent je **browser en toestel** en toont alleen de stap die daarbij past. Een knop **Is het gelukt?** zegt eerlijk of de app al geïnstalleerd is, met de mogelijkheid **Ik zie EasyCodey in mijn apps** te bevestigen. Die bevestiging wordt lokaal bewaard.
-- In een geÃ¯nstalleerde app verdwijnt de installeerknop en opent de site in een eigen venster.
+- In een geïnstalleerde app verdwijnt de installeerknop en opent de site in een eigen venster.
 - Werkt op GitHub Pages zonder server; de service worker draait alleen via `https://` of `localhost`.
 
 ### Gratis Android-app (APK)
@@ -264,45 +264,45 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ```
 FLL/
-â”œâ”€â”€ index.html                 Basislayout, header, AI-paneel, instellingen, generator
-â”œâ”€â”€ styles.css                 Alle styling, thema's, covers en responsive regels
-â”œâ”€â”€ app.js                     Routing, filters, detailpagina, editor, voortgang, events, AI-paneel
-â”œâ”€â”€ manifest.webmanifest       App-manifest: naam, iconen, snelkoppelingen, venster
-â”œâ”€â”€ sw.js                      Service worker: offline-cache en app-shell
-â”œâ”€â”€ offline.html               Offline-pagina
-â”œâ”€â”€ js/
-â”‚   â”œâ”€â”€ ai.js                  Streaming, markdown, offline coach en generator
-â”‚   â””â”€â”€ store.js               localStorage: voortgang, instellingen, thema, editor, eigen projecten
-â”œâ”€â”€ data/
-â”‚   â”œâ”€â”€ index.js               Datalaag: normaliseren, categorieÃ«n, covers, next-links
-â”‚   â”œâ”€â”€ helper.js              Compacte helpers voor projecten en stappen
-â”‚   â””â”€â”€ ideas-01.js t/m ideas-07.js
-â”œâ”€â”€ assets/covers/             10 lokale SVG-omslagen
-â”œâ”€â”€ assets/icons/              Logo (`logo.svg`) en app-iconen: 192, 512, maskable en Apple
-â”œâ”€â”€ assets/qr/                 QR-code naar de live site voor installatie op Android
-â”œâ”€â”€ assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
-â”œâ”€â”€ scripts/check-data.mjs     Controle van projectdata, manifest, offline-cache, pagina's en sitemap
-â”œâ”€â”€ scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht, de installatie-, contact- en doneerpagina en de sitemap
-â”œâ”€â”€ scripts/make-icons.mjs     App-iconen opnieuw maken met headless Chrome
-â”œâ”€â”€ idee/<id>/index.html       161 vaste, indexeerbare projectpagina's
-â”œâ”€â”€ projecten/index.html       Overzicht van alle projecten per categorie
-â”œâ”€â”€ installeren/index.html     Installatie-uitleg per platform met QR-code
-â”œâ”€â”€ contact/index.html         Nederlandstalige contactpagina met telefoon, WhatsApp en e-mail
-â”œâ”€â”€ doneren/index.html         Doneerpagina met IBAN, rekeninghouder, bank, BIC en transparantie
-â”œâ”€â”€ sitemap.xml                Startpagina, overzicht, installeren, download, contact, doneren en 161 projectpagina's (168 URL's)
-â”œâ”€â”€ server.js                  Statische server + AI-proxy (geen dependencies)
-â”œâ”€â”€ package.json               Scripts: start, dev, check, pages, build, icons
-â”œâ”€â”€ render.yaml                Render Blueprint
-â”œâ”€â”€ .env.example               Voorbeeldconfiguratie
-â”œâ”€â”€ .gitignore                 Sluit .env, node_modules en logs uit
-â”œâ”€â”€ README.md                  Handleiding voor gebruik en deployment
-â”œâ”€â”€ APP.md                     EasyCodey als app installeren en offline gebruiken
-â”œâ”€â”€ EINDRAPPORT.md             Overzicht van de oplevering en testresultaten
-â”œâ”€â”€ PUBLICATIE.md              Stap-voor-stap publicatie op GitHub en Render
-â”œâ”€â”€ GOOGLE.md                  Openbaar maken en laten indexeren door Google
-â”œâ”€â”€ EasyCodey.url              Snelkoppeling naar de beveiligde live-app
-â”œâ”€â”€ start-easycodey.bat        Opent de beveiligde live-app (lokaal met `local`)
-â””â”€â”€ start-easycodey-local.bat  Start de lokale ontwikkelserver
+├── index.html                 Basislayout, header, AI-paneel, instellingen, generator
+├── styles.css                 Alle styling, thema's, covers en responsive regels
+├── app.js                     Routing, filters, detailpagina, editor, voortgang, events, AI-paneel
+├── manifest.webmanifest       App-manifest: naam, iconen, snelkoppelingen, venster
+├── sw.js                      Service worker: offline-cache en app-shell
+├── offline.html               Offline-pagina
+├── js/
+│   ├── ai.js                  Streaming, markdown, offline coach en generator
+│   └── store.js               localStorage: voortgang, instellingen, thema, editor, eigen projecten
+├── data/
+│   ├── index.js               Datalaag: normaliseren, categorieën, covers, next-links
+│   ├── helper.js              Compacte helpers voor projecten en stappen
+│   └── ideas-01.js t/m ideas-07.js
+├── assets/covers/             10 lokale SVG-omslagen
+├── assets/icons/              Logo (`logo.svg`) en app-iconen: 192, 512, maskable en Apple
+├── assets/qr/                 QR-code naar de live site voor installatie op Android
+├── assets/easycodey.ico       Icoon voor de Windows-snelkoppeling
+├── scripts/check-data.mjs     Controle van projectdata, manifest, offline-cache, pagina's en sitemap
+├── scripts/build-pages.mjs    Genereert 161 vaste projectpagina's, het overzicht, de installatie-, contact- en doneerpagina en de sitemap
+├── scripts/make-icons.mjs     App-iconen opnieuw maken met headless Chrome
+├── idee/<id>/index.html       161 vaste, indexeerbare projectpagina's
+├── projecten/index.html       Overzicht van alle projecten per categorie
+├── installeren/index.html     Installatie-uitleg per platform met QR-code
+├── contact/index.html         Nederlandstalige contactpagina met telefoon, WhatsApp en e-mail
+├── doneren/index.html         Doneerpagina met IBAN, rekeninghouder, bank, BIC en transparantie
+├── sitemap.xml                Startpagina, overzicht, installeren, download, contact, doneren en 161 projectpagina's (168 URL's)
+├── server.js                  Statische server + AI-proxy (geen dependencies)
+├── package.json               Scripts: start, dev, check, pages, build, icons
+├── render.yaml                Render Blueprint
+├── .env.example               Voorbeeldconfiguratie
+├── .gitignore                 Sluit .env, node_modules en logs uit
+├── README.md                  Handleiding voor gebruik en deployment
+├── APP.md                     EasyCodey als app installeren en offline gebruiken
+├── EINDRAPPORT.md             Overzicht van de oplevering en testresultaten
+├── PUBLICATIE.md              Stap-voor-stap publicatie op GitHub en Render
+├── GOOGLE.md                  Openbaar maken en laten indexeren door Google
+├── EasyCodey.url              Snelkoppeling naar de beveiligde live-app
+├── start-easycodey.bat        Opent de beveiligde live-app (lokaal met `local`)
+└── start-easycodey-local.bat  Start de lokale ontwikkelserver
 ```
 
 ---
@@ -333,9 +333,9 @@ FLL/
 | Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
 | Projectacties op detailpagina | ✅ **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
 | Projectcode in de editor | ✅ alle stappen met commentaar en projectbanner |
-| KopiÃ«ren naar klembord | ✅ volledige projectcode op het klembord |
+| Kopiëren naar klembord | ✅ volledige projectcode op het klembord |
 | Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
-| Mobiele navigatie en editorlayout | ✅ nav op eigen rij, editor Ã©Ã©n kolom |
+| Mobiele navigatie en editorlayout | ✅ nav op eigen rij, editor één kolom |
 | Live GitHub Pages: editor, hero-link en projectacties | ✅ 9/9 live checks geslaagd |
 | Manifest, iconen en snelkoppelingen | ✅ 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
 | Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
@@ -371,18 +371,18 @@ FLL/
 | Alle 161 projecten | ✅ elk project heeft een preview (135 eigen demo's + 26 nieuwe demo's; 0 fallbacks over) |
 | Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
 | Projectpagina zonder slash | ✅ 301 naar de map met slash |
-| Overzicht `/projecten/` | ✅ 161 links, 10 categorieÃ«n, zoekfilter en `CollectionPage` |
+| Overzicht `/projecten/` | ✅ 161 links, 10 categorieën, zoekfilter en `CollectionPage` |
 | Sitemap lokaal | ✅ geldige XML, 168 URL's, productie-startpagina aanwezig |
 | Speel dit idee vanaf vaste pagina | ✅ app-weergave in de pagina; **Programmeer zelf** opent `?play=1` met volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
-| Mobiel overzicht | ✅ geen horizontale overflow, Ã©Ã©n kolom |
+| Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
 | Installatiepagina `/installeren/` | ✅ 8 secties, 3 Android-stappen, eigen titel en canonical |
 | QR-code op installatiepagina | ✅ laadt als SVG en is zichtbaar op mobiel |
-| Installatiepagina mobiel | ✅ geen horizontale overflow, Ã©Ã©n kolom |
+| Installatiepagina mobiel | ✅ geen horizontale overflow, één kolom |
 | Contactpagina `/contact/` | ✅ telefoon/WhatsApp, e-mail, eigen titel, canonical en JSON-LD |
-| Contactpagina mobiel | ✅ drie kaarten in Ã©Ã©n kolom, geen overflow |
+| Contactpagina mobiel | ✅ drie kaarten in één kolom, geen overflow |
 | Doneerpagina `/doneren/` | ✅ IBAN, rekeninghouder, bank, BIC, kopieerknop en JSON-LD (`DonateAction`) |
-| Doneerpagina mobiel | ✅ twee blokken in Ã©Ã©n kolom, geen overflow |
+| Doneerpagina mobiel | ✅ twee blokken in één kolom, geen overflow |
 | Doneermodal in de app | ✅ toont IBAN en houder en linkt naar `/doneren/` |
 | SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
 | `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
@@ -396,10 +396,10 @@ FLL/
 | Startpagina in headless Chrome | ✅ 30 kaarten, 30 covers, geen `undefined` |
 | Projectpagina `#/idee/raad-het-getal` | ✅ 5 stappen, 5 codeblokken, 1 cover, juiste titel |
 | Leerpad `#/leerpad` | ✅ 161 projecten gegroepeerd per niveau |
-| Mijn ideeÃ«n `#/mijn-ideeen` | ✅ lege staat zonder projecten, 1 kaart met testproject |
+| Mijn ideeën `#/mijn-ideeen` | ✅ lege staat zonder projecten, 1 kaart met testproject |
 | Filters via URL (`q`, `categorie`, `niveau`) | ✅ 2 resultaten, zoekveld en actieve chips kloppen |
 | Filters wissen | ✅ 161 projecten, 30 kaarten, URL terug naar `#/` |
-| Categorie Games + meer laden | ✅ 36 resultaten, 30 â†’ 36 kaarten |
+| Categorie Games + meer laden | ✅ 36 resultaten, 30 → 36 kaarten |
 | Verras me | ✅ navigeert naar een bestaande projectpagina |
 | Voortgang: 2 van 5 stappen | ✅ 40% en 2 afgevinkte stappen |
 | Stap afvinken | ✅ opgeslagen als `[0,1,2]`, weergave 60% |
@@ -426,7 +426,7 @@ FLL/
 - Het wachtwoord houdt accounts op hetzelfde apparaat uit elkaar, maar is geen sterke beveiliging.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Met **Back-up downloaden/herstellen** op `#/profiel` verplaats je voortgang, eigen projecten en editor-code.
-- Eigen projecten kun je daarnaast exporteren/importeren op **Mijn ideeÃ«n**.
+- Eigen projecten kun je daarnaast exporteren/importeren op **Mijn ideeën**.
 - De API-sleutel hoort bij voorkeur in `.env` of in de Render-omgevingsvariabelen, niet in de broncode.
 - `.env` staat in `.gitignore` en wordt nooit gecommit.
 - De server blokkeert publieke toegang tot `server.js`, `package.json`, `render.yaml`, `README.md`, `.env*`, `scripts/` en `.git/`.
@@ -469,8 +469,8 @@ Gebruik op Render `npm install` als build-stap. `npm run build` bestaat wel, maa
 ### Via GitHub (aanbevolen)
 
 1. Maak een GitHub-repository.
-2. Upload de inhoud van deze map. Gebruik GitHub Desktop als `git` niet geÃ¯nstalleerd is.
-3. Ga naar [render.com](https://render.com) en kies **New â†’ Web Service**.
+2. Upload de inhoud van deze map. Gebruik GitHub Desktop als `git` niet geïnstalleerd is.
+3. Ga naar [render.com](https://render.com) en kies **New → Web Service**.
 4. Koppel de repository.
 5. Kies runtime **Node**.
 6. Vul Build Command `npm install` en Start Command `npm start` in.
@@ -479,7 +479,7 @@ Gebruik op Render `npm install` als build-stap. `npm run build` bestaat wel, maa
 
 ### Via render.yaml (Blueprint)
 
-`render.yaml` staat klaar. Kies **New â†’ Blueprint**, koppel de repository en vul daarna de geheime variabelen in het Render-dashboard in.
+`render.yaml` staat klaar. Kies **New → Blueprint**, koppel de repository en vul daarna de geheime variabelen in het Render-dashboard in.
 
 ### Omgevingsvariabelen
 
@@ -503,7 +503,7 @@ Gebruik op Render `npm install` als build-stap. `npm run build` bestaat wel, maa
 ### Gratis Render-tier
 
 - De service gaat na ongeveer 15 minuten zonder verkeer in slaapstand.
-- De eerste aanvraag daarna kan 30â€“60 seconden duren.
+- De eerste aanvraag daarna kan 30–60 seconden duren.
 - Er is een beperkt aantal gratis uren per maand.
 - Er is geen permanente schijf; gebruik geen server-side bestandsopslag voor gebruikersdata.
 - `localStorage` in de browser blijft gewoon werken.
@@ -520,11 +520,11 @@ import { idea, step } from "./helper.js";
 idea(
   "mijn-project",
   "Mijn project",
-  "ðŸš€",
+  "🚀",
   "Games",
   "Beginner",
   "45 min",
-  "EÃ©n zin voor op de kaart.",
+  "Eén zin voor op de kaart.",
   "Langere uitleg voor de detailpagina.",
   ["lists", "loops", "functies"],
   [
@@ -571,7 +571,7 @@ De site staat live:
 | Doneerpagina | ✅ `/doneren/` met IBAN, houder, bank, BIC en transparantie |
 | Privacybeleid | ✅ `/privacy/` met lokale opslag, geen verkoop en contact |
 | Sitemap met 168 URL's | ✅ gegenereerd door `npm run pages` |
-| Google Play (TWA) | â³ technisch klaar: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
+| Google Play (TWA) | ⏳ technisch klaar: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
 | Online AI-coach | gratis online AI standaard; eigen server of OpenAI-sleutel optioneel |
 | Doneren | ✅ Belfius IBAN via `site-config.json` en de doneerpagina |
 
@@ -595,7 +595,7 @@ Wat optioneel nog kan:
 - Het Python-speelveld en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
 - `input()` opent een venster bovenaan het scherm met de **vraag van het programma** en een tekstvak. Een oneindige loop stopt pas als je het tabblad of venster sluit.
 - Editor-code en profielen staan per browser/apparaat in `localStorage`; er is geen account op een server of automatische synchronisatie.
-- De geÃ¯nstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.
+- De geïnstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.
 - Offline werkt alles behalve de online AI-coach en doneren; de offline coach blijft beschikbaar.
 - De service worker werkt alleen via `https://` of `localhost`, niet als los bestand (`file://`).
 - De vaste projectpagina's worden statisch gegenereerd. Na een datawijziging moet je `npm run pages` of `npm run build` opnieuw uitvoeren.
