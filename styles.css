@@ -2843,6 +2843,15 @@ html[data-text-size="extra"] { font-size: 20px; }
   max-width: var(--max);
   margin: 0 auto;
   padding: 26px 24px 80px;
+  /* Lange adressen en e-mailadressen mogen nooit buiten het scherm lopen,
+     ook niet op een telefoon van 320 pixels breed. */
+  overflow-wrap: break-word;
+}
+
+.static-main code,
+.static-main strong,
+.static-main a {
+  overflow-wrap: anywhere;
 }
 
 .skip-link {
