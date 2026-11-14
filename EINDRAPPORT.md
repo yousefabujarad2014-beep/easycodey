@@ -25,7 +25,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - **AI-intake** die eerst vraagt waar je hulp bij nodig hebt.
 - **Betrouwbaardere AI**: drie pogingen en kortere antwoorden.
 - **Optionele eigen teller** via een gratis Cloudflare Worker + D1 (`worker/`), met terugval op Abacus.
-- **Zoekbalkfix**: je gebruikersnaam verschijnt na verversen niet meer in het zoekveld.
+- **Zoekbalkfix**: je gebruikersnaam verschijnt na verversen niet meer in het zoekveld, ook niet als de browser het veld pas later of bij focus vult.
 
 ### Projectbibliotheek
 - **161 projecten** met **711 stappen**.
@@ -199,6 +199,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Een **cursorindicator** onder de code toont **Regel N, kolom M**.
 - Een **toetsenbalk voor je telefoon** met `:`, haakjes, aanhalingstekens, `=`, `#`, 4 spaties en Enter. Het toetsenbord blijft open tijdens het typen.
 - **Bekijk regel N** bij een Python-fout: de editor springt naar de regel die Python noemt en selecteert die regel. De uitleg in eenvoudig Nederlands blijft staan.
+- **Slimme inspringing:** **Enter** na een dubbele punt zet automatisch vier spaties klaar, neemt de inspringing van de vorige regel over en **Shift+Tab** haalt vier spaties weg. De Enter-knop op de telefoontoetsenbalk doet hetzelfde.
 - **â–¶ Uitvoeren** en **Ctrl + Enter** voeren de code uit via dezelfde Pyodide-runtime.
 - **Download .py** bewaart het programma als Python-bestand.
 - **Kopieer** zet de code op het klembord.
@@ -357,7 +358,8 @@ FLL/
 | Gratis APK-download | ✅ `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |
 | Editor, privacy en netwerk (v16) | 25/25 checks: regelnummers, code-kleuren, cursorpositie, invoegknop, Tab, **Bekijk regel N**, tekstgrootte, privacyoverzicht, alles wissen, online/offline badge, AI-intake en de wissen-melding |
-| Zoekbalkfix | ✅ autofill wordt genegeerd, een profielnaam wordt niet als zoekopdracht bewaard en de URL blijft schoon |
+| Zoekfix en slimme inspringing | 14/14 checks: autofill met focus en late autofill worden opgeruimd, de URL blijft schoon, echt typen werkt, Enter na `:` zet vier spaties, Enter neemt inspringing over, de telefoon-Enter doet hetzelfde, Shift+Tab haalt spaties weg en Ctrl+Enter voert nog uit |
+| Zoekbalkfix | ✅ autofill wordt genegeerd, ook met focus in het veld en bij late autofill; een profielnaam wordt niet als zoekopdracht bewaard en de URL blijft schoon |
 | Optionele eigen teller (Cloudflare Worker + D1) | ✅ `worker/` met `/hit`, `/counts`, `/health`, dedupe per toestel en automatische terugval op Abacus; `counterApi` wordt door `check-data` gevalideerd |
 | Invoer-pop-up met de echte vraag | ✅ 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |

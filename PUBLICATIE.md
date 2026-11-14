@@ -221,6 +221,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
 - [ ] Editor toont **regelnummers** en **code-kleuren**; de cursorindicator toont **Regel N, kolom M**.
 - [ ] De **telefoontoetsenbalk** voegt `:`, haakjes, aanhalingstekens, `=`, `#`, 4 spaties en Enter in zonder het toetsenbord te sluiten.
+- [ ] **Enter** na een dubbele punt zet automatisch vier spaties klaar; Enter neemt de inspringing over en **Shift+Tab** haalt vier spaties weg.
+- [ ] De **Enter-knop** op de telefoontoetsenbalk springt ook automatisch in.
 - [ ] Bij een fout op regel 2 toont **Bekijk regel 2** de juiste regel en selecteert die.
 - [ ] In **Instellingen** toont het **privacyoverzicht** hoeveel profielen, voortgang, ideeën, chatberichten en editortekens lokaal staan.
 - [ ] **🧹 Al mijn gegevens wissen** vraagt twee bevestigingen (waaronder het typen van `WISSEN`), wist alles en meldt daarna dat alles gewist is.
@@ -228,7 +230,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De **online/offline badge** verschijnt bij offline, legt uit dat werk bewaard blijft en meldt **Weer online** als je terug bent.
 - [ ] De **AI-intake** staat klaar bij een nieuw gesprek, verdwijnt na de eerste vraag en komt terug na **Gesprek wissen**.
 - [ ] De AI-coach probeert het bij drukte automatisch drie keer en houdt antwoorden kort.
-- [ ] Na verversen staat je **gebruikersnaam niet in het zoekveld** en niet in de URL.
+- [ ] Na verversen staat je **gebruikersnaam niet in het zoekveld** en niet in de URL, ook niet als het veld focus heeft of de browser pas later invult.
 - [ ] Invoerhulp is zichtbaar bij het speelveld en op een projectpagina; `input()` toont de vraag en een tekstvak in het venster bovenaan.
 - [ ] **📥 Offline klaarzetten** laadt Python één keer en toont daarna **✅ Python werkt nu ook offline**; na een app-update blijft dat zo.
 - [ ] `#/profiel` laadt en legt uit dat een e-mailadres of telefoonnummer optioneel is.

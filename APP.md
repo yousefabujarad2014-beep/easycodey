@@ -17,13 +17,14 @@ Doneren: https://yousefabujarad2014-beep.github.io/easycodey/doneren/ — IBAN *
 ## Nieuw in v16
 
 - **Editor met regelnummers en kleuren.** Je ziet meteen waar je bent. Onder de code staat je positie (regel en kolom) en op je telefoon heb je een toetsenbalk met `:`, haakjes, aanhalingstekens, `=`, `#`, 4 spaties en Enter.
+- **Slimme inspringing.** Na een dubbele punt zet **Enter** automatisch vier spaties klaar. Enter neemt de inspringing van de vorige regel over en **Shift+Tab** haalt vier spaties weg.
 - **Bekijk regel N.** Geeft je code een fout, dan zegt EasyCodey in eenvoudig Nederlands wat er misgaat en springt **Bekijk regel N** naar de juiste regel.
 - **Privacy-overzicht.** In **Instellingen** zie je hoeveel profielen, voortgang, eigen ideeën, chatberichten en editortekens er lokaal staan, en hoeveel ruimte dat inneemt. Met **🧹 Al mijn gegevens wissen** wis je alles in twee bevestigingen.
 - **Tekstgrootte.** Kies **Normaal**, **Groot** of **Extra groot**. De app past zich ook aan als je toestel om meer contrast vraagt.
 - **Online/offline badge.** Bovenaan zie je duidelijk wanneer je offline bent en dat je werk bewaard blijft. Kom je terug online, dan meldt de app dat alles weer werkt.
 - **AI-intake.** EasyCoach vraagt eerst waar je hulp bij nodig hebt. Na je eerste vraag verdwijnt die hulp; na **Gesprek wissen** komt hij terug.
 - **Betrouwbaardere AI.** De coach probeert het automatisch drie keer en houdt antwoorden kort (ongeveer 150 woorden).
-- **Zoekbalkfix.** Na verversen verschijnt je gebruikersnaam niet meer in het zoekveld.
+- **Zoekbalkfix.** Na verversen verschijnt je gebruikersnaam niet meer in het zoekveld, ook niet als de browser het veld pas later of bij focus vult.
 - **Optionele eigen teller.** De eigenaar kan een gratis Cloudflare Worker + D1 koppelen (`worker/README.md`). De app valt automatisch terug op Abacus.
 
 ---

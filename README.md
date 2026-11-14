@@ -35,6 +35,7 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 ## Wat is nieuw in v16?
 
 - **Editor met regelnummers en kleuren.** Je ziet meteen waar je bent, met een cursorindicator (regel en kolom) en een toetsenbalk voor je telefoon.
+- **Slimme inspringing.** Druk je op Enter na een dubbele punt, dan zet de editor automatisch vier spaties klaar. Enter neemt ook de inspringing van de vorige regel over; **Shift+Tab** haalt vier spaties weg.
 - **Bekijk regel N.** Bij een Python-fout springt de editor naar de regel die Python noemt. De uitleg blijft in eenvoudig Nederlands staan.
 - **Privacy-overzicht en wissen.** In **Instellingen** zie je wat er lokaal bewaard is en kun je met twee bevestigingen alles wissen.
 - **Tekstgrootte.** Kies Normaal, Groot of Extra groot. De app past zich ook aan als je toestel om meer contrast vraagt.
@@ -42,7 +43,7 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **AI-intake.** EasyCoach vraagt eerst waar je hulp bij nodig hebt, verbergt die hulp na je eerste vraag en toont hem opnieuw na **Gesprek wissen**.
 - **Betrouwbaardere AI.** Drie automatische pogingen met een korte pauze, en kortere antwoorden van ongeveer 150 woorden.
 - **Optionele eigen teller.** Een gratis Cloudflare Worker + D1 in `worker/`, met automatische terugval op Abacus.
-- **Zoekbalkfix.** Na verversen verschijnt je gebruikersnaam niet meer in het zoekveld.
+- **Zoekbalkfix.** Na verversen verschijnt je gebruikersnaam niet meer in het zoekveld, ook niet als de browser het veld pas later of bij focus vult.
 
 ## Wat zit erin?
 

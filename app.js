@@ -126,6 +126,7 @@ let deferredInstallPrompt = null;
 let greetingShown = false;
 let currentContext = null;
 let homeBound = false;
+let searchTyped = false;
 let toastTimer = null;
 let roadCategory = "Alle";
 let lastPythonError = null;
@@ -1521,11 +1522,51 @@ function renderHome(params) {
   `;
 
   document.title = "EasyCodey — Leer Python door te bouwen";
-  document.querySelector("#home-search").value = homeState.q;
+  const search = document.querySelector("#home-search");
+  search.value = homeState.q;
+  searchTyped = false;
+  guardSearchField(search);
   homeBound = true;
   updateInstallUI();
   applyHomeFilters();
-  [0, 350, 1200].forEach((delay) => window.setTimeout(clearAutofilledSearch, delay));
+  [0, 100, 300, 700, 1200, 2000, 3500, 5000, 8000].forEach((delay) =>
+    window.setTimeout(clearAutofilledSearch, delay)
+  );
+}
+
+/* Houdt bij of de bezoeker echt in het zoekveld typt. Chrome en sommige
+   wachtwoordmanagers vullen het veld soms met de opgeslagen gebruikersnaam,
+   zelfs terwijl het veld focus heeft. Zo'n autofill mogen we nooit als
+   zoekopdracht gebruiken. Een echte toetsaanslag, plakactie of spraakinvoer
+   zet deze vlag wel aan. */
+function guardSearchField(search) {
+  if (!search || search.dataset.guarded === "1") return;
+  search.dataset.guarded = "1";
+  search.addEventListener("keydown", (event) => {
+    // Alleen toetsen die de tekst echt veranderen tellen. Zo zet een pijltje
+    // of Tab de beveiliging niet onbedoeld uit.
+    if (event.key.length === 1 || event.key === "Backspace" || event.key === "Delete") {
+      searchTyped = true;
+    }
+  });
+  ["paste", "cut", "drop", "compositionstart"].forEach((type) => {
+    search.addEventListener(type, () => {
+      searchTyped = true;
+    });
+  });
+  search.addEventListener("beforeinput", (event) => {
+    if (event.isTrusted && /^(insert|delete)/.test(event.inputType || "")) {
+      searchTyped = true;
+    }
+  });
+  // Als de browser het veld vult op het moment dat het focus krijgt, ruim
+  // dat meteen weer op.
+  search.addEventListener("focus", () => {
+    window.setTimeout(clearAutofilledSearch, 60);
+  });
+  search.addEventListener("change", () => {
+    if (!searchTyped) clearAutofilledSearch();
+  });
 }
 
 /* Browsers vullen een tekstveld soms met de opgeslagen gebruikersnaam.
@@ -1533,9 +1574,10 @@ function renderHome(params) {
 function clearAutofilledSearch() {
   const search = document.querySelector("#home-search");
   if (!search) return;
-  if (homeState.q.trim()) return;
-  if (document.activeElement === search) return;
-  if (search.value) search.value = "";
+  if (searchTyped) return;
+  // Zet het veld altijd terug naar de echte zoekopdracht. Zo verdwijnt ook
+  // een naam die pas na enkele seconden of bij focus wordt ingevuld.
+  if (search.value !== homeState.q) search.value = homeState.q;
 }
 
 function filteredIdeas() {
@@ -2911,9 +2953,23 @@ function updateEditorDecorations() {
 function insertEditorText(text) {
   const textarea = document.querySelector("#editor-code");
   if (!textarea) return;
+  let insert = String(text ?? "");
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
-  textarea.setRangeText(String(text ?? ""), start, end, "end");
+
+  // Enter op een nieuwe regel: neem de inspringing over en zet na een
+  // dubbele punt automatisch vier spaties klaar. Dat is precies wat Python
+  // nodig heeft en scheelt beginners veel frustratie.
+  if (insert === "\n" && start === end) {
+    const value = textarea.value;
+    const lineStart = value.lastIndexOf("\n", start - 1) + 1;
+    const line = value.slice(lineStart, start);
+    const indent = (line.match(/^[ \t]*/) || [""])[0];
+    const extra = /:\s*(#.*)?$/.test(line) ? "    " : "";
+    insert = `\n${indent}${extra}`;
+  }
+
+  textarea.setRangeText(insert, start, end, "end");
   textarea.dispatchEvent(new Event("input", { bubbles: true }));
   textarea.focus();
   updateEditorCursor();
@@ -3045,7 +3101,7 @@ function renderEditor(params) {
         </div>
         <div class="editor-hint-row">
           <span class="editor-cursor" id="editor-cursor" role="status" aria-live="polite">Regel 1, kolom 1</span>
-          <span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> om uit te voeren</span>
+          <span><kbd>Enter</kbd> springt in · <kbd>Ctrl</kbd> + <kbd>Enter</kbd> voert uit</span>
           <button class="link-btn" type="button" data-action="editor-reset">Leegmaken</button>
         </div>
       </section>
@@ -3092,8 +3148,24 @@ function renderEditor(params) {
       event.preventDefault();
       const start = textarea.selectionStart;
       const end = textarea.selectionEnd;
+      if (event.shiftKey) {
+        const lineStart = textarea.value.lastIndexOf("\n", start - 1) + 1;
+        const before = textarea.value.slice(lineStart, start);
+        const remove = before.match(/ {1,4}$/);
+        if (remove) {
+          textarea.setRangeText("", start - remove[0].length, start, "end");
+          textarea.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+        return;
+      }
       textarea.setRangeText("    ", start, end, "end");
       textarea.dispatchEvent(new Event("input", { bubbles: true }));
+      return;
+    }
+    if (event.key === "Enter" && !event.shiftKey && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      event.preventDefault();
+      insertEditorText("\n");
+      return;
     }
     if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
       event.preventDefault();
@@ -3729,8 +3801,12 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("input", (event) => {
   if (event.target.id === "home-search") {
-    // Alleen echt typen telt. Autofill van de browser negeren we.
-    if (document.activeElement !== event.target) return;
+    // Alleen echt typen telt. Autofill van de browser negeren we, ook als
+    // het veld daarbij focus heeft gekregen.
+    if (!searchTyped) {
+      event.target.value = homeState.q;
+      return;
+    }
     homeState.q = event.target.value;
     homeState.visible = 30;
     applyHomeFilters();
@@ -3857,8 +3933,16 @@ document.addEventListener("keydown", (event) => {
 
 window.addEventListener("hashchange", route);
 window.addEventListener("pageshow", () => {
-  window.setTimeout(clearAutofilledSearch, 120);
+  // Na verversen of terugkeren kan de browser het formulier herstellen.
+  [0, 120, 600, 1500, 3000].forEach((delay) =>
+    window.setTimeout(clearAutofilledSearch, delay)
+  );
 });
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") clearAutofilledSearch();
+});
+window.addEventListener("focus", () => window.setTimeout(clearAutofilledSearch, 60));
+window.addEventListener("load", () => window.setTimeout(clearAutofilledSearch, 200));
 
 /* ------------------------------ app / PWA ------------------------------ */
 
