@@ -6,7 +6,7 @@ const ACTIVE_PROFILE_KEY = "easycodey.activeProfile.v1";
 /* Het eigenaarsaccount. Alleen deze naam met dit wachtwoord krijgt beheer.
    Er staat bewust geen leesbaar wachtwoord in de code: alleen de hash. */
 const OWNER_NAME = "Yousef Abujarad";
-const OWNER_PASSWORD_HASH = "4rqs35"; // hashSecret("[verwijderd]")
+const OWNER_PASSWORD_HASH = "4rqs35"; // hash van het eigenaars-wachtwoord; het wachtwoord zelf staat nergens
 
 const DEFAULT_STATE = {
   version: 1,

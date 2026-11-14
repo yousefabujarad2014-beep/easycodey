@@ -240,8 +240,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Elk account heeft eigen voortgang; **Back-up downloaden** en **Back-up herstellen** werken.
 - [ ] Header en footer linken naar **Mijn profiel**.
 - [ ] `#/eigenaar` vraagt om de eigenaarscode of het eigenaars-wachtwoord en toont daarna het aantal lokale profielen, de voortgang, de mededeling en **Alles downloaden**.
-- [ ] Na **Vergrendelen** opent **[verwijderd]** het paneel opnieuw; een verkeerde code geeft een duidelijke foutmelding.
-- [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
+- [ ] Na **Vergrendelen** opent je **eigenaars-wachtwoord** het paneel opnieuw; een verkeerde code geeft een duidelijke foutmelding.
+- [ ] Inloggen met de **eigenaarsnaam en het eigenaars-wachtwoord** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
 - [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag, starttijd en de laatste update.
 - [ ] Het installatievenster noemt je **browser en toestel**, toont alleen de passende stap en heeft **✅ Is het gelukt?** met de bevestiging **Ik zie EasyCodey in mijn apps**.
 - [ ] Toegankelijkheid: de springlink **Ga naar de inhoud** werkt, Tab blijft binnen een open venster en gaat na sluiten terug naar de knop, en **aria-expanded** klopt op de AI-knoppen.
