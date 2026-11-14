@@ -12,6 +12,10 @@ const SHELL = [
   "./index.html",
   "./offline.html",
   "./manifest.webmanifest",
+  "./assets/fonts/fonts.css",
+  "./assets/fonts/fraunces.woff2",
+  "./assets/fonts/jetbrains-mono.woff2",
+  "./assets/fonts/plus-jakarta-sans.woff2",
   "./styles.css",
   "./app.js",
   "./js/ai.js",
@@ -206,9 +210,9 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Lettertypen en de Python-runtime (Pyodide) worden pas bij gebruik bewaard,
-  // zodat de app daarna ook zonder internet werkt.
-  const cdnHosts = ["cdn.jsdelivr.net", "fonts.googleapis.com", "fonts.gstatic.com"];
+  // De Python-runtime (Pyodide) wordt pas bij gebruik bewaard, zodat de app
+  // daarna ook zonder internet werkt. De lettertypen staan lokaal in de app.
+  const cdnHosts = ["cdn.jsdelivr.net"];
   if (cdnHosts.includes(url.hostname)) {
     event.respondWith(cacheFirst(request, RUNTIME_CACHE));
   }

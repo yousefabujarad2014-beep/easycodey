@@ -408,7 +408,7 @@ Het bestand `render.yaml` staat klaar. Kies **New → Blueprint**, koppel je rep
 - Node.js `http`-server zonder externe dependencies.
 - Data lokaal in `data/`; voortgang in `localStorage`.
 - Lokale SVG-covers in `assets/covers/`.
-- Huisstijl met CSS-variabelen (ivoor, diepgroen, goud) en Fraunces/Plus Jakarta Sans via Google Fonts.
+- Huisstijl met CSS-variabelen (ivoor, diepgroen, goud) en Fraunces/Plus Jakarta Sans, lokaal meegeleverd zonder verzoek aan Google.
 - AI via de OpenAI-compatibele Chat Completions API met streaming.
 - Nederlandse systeemprompt staat server-side in `server.js`.
 

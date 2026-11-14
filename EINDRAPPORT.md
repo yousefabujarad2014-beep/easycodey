@@ -212,7 +212,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### Installeerbare app (PWA)
 - `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeën**.
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
-- `sw.js` bewaart de app-shell (38 bestanden) bij de eerste installatie.
+- `sw.js` bewaart de app-shell (42 bestanden) bij de eerste installatie.
 - **Network-first** voor navigatie én same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
 - De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`), bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
 - Er is **geen handmatige updateknop** meer: de app werkt zichzelf volledig automatisch bij.
@@ -339,7 +339,7 @@ FLL/
 | Live GitHub Pages: editor, hero-link en projectacties | ✅ 9/9 live checks geslaagd |
 | Manifest, iconen en snelkoppelingen | ✅ 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
 | Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
-| Offline-cache gevuld | 38 bestanden |
+| Offline-cache gevuld | 42 bestanden |
 | Installatie-uitleg in de app | ✅ 3 platformstappen, sluit correct |
 | **Speel dit idee** op een projectpagina | ✅ speelbare app in de pagina; **Gebruik dit idee** toont alle code |
 | **Programmeer zelf** met autoplay | ✅ volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
@@ -349,7 +349,7 @@ FLL/
 | Chrome-installeerbaarheid | ✅ geen installability errors |
 | PWA-testsuite op de live site | 13/13 checks geslaagd |
 | Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
-| Live: offline-cache en offline Python | 38 bestanden, Pyodide werkt offline |
+| Live: offline-cache en offline Python | 42 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | ✅ 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | 46/46 checks: invoerhulp, app-entry, springlink, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster met browserherkenning en bevestiging, en eigenaarspaneel |
 | AI-coach en installatiehulp lokaal | 29/29 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v16 |

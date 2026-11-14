@@ -118,9 +118,7 @@ function head({ title, description, canonical, image, prefix, extraLd }) {
   <script type="application/ld+json">
 ${jsonLd(extraLd)}
   </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="${prefix}assets/fonts/fonts.css" />
   <link rel="stylesheet" href="${prefix}styles.css" />
   <script>
     (function () {
@@ -1632,9 +1630,10 @@ function renderPrivacyPage() {
     <section class="panel">
       <h2>Externe diensten</h2>
       <p class="profile-text">
-        De website wordt gehost via GitHub Pages. Lettertypen komen van Google Fonts en Python wordt
-        geladen via jsDelivr (Pyodide). Daarbij kunnen technische gegevens zoals je IP-adres en
-        browsergegevens bij die aanbieders terechtkomen. EasyCodey verstuurt zelf geen inhoud van
+        De website wordt gehost via GitHub Pages. De lettertypen worden met de site meegeleverd en
+        komen dus niet van een externe dienst. Python wordt geladen via jsDelivr (Pyodide). Daarbij
+        kunnen technische gegevens zoals je IP-adres en browsergegevens bij die aanbieder
+        terechtkomen. EasyCodey verstuurt zelf geen inhoud van
         je projecten of profielen naar deze diensten. De ingebouwde teller (Abacus) ontvangt alleen
         een anoniem getal voor bezoeken, unieke bezoekers, installaties en APK-downloads. Alleen als
         er een meetcode
