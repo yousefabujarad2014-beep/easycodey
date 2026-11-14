@@ -1,6 +1,6 @@
 # EasyCodey — publicatie op GitHub en Render
 
-**Laatst bijgewerkt:** 9 november 2026
+**Laatst bijgewerkt:** 14 november 2026
 **Projectmap:** `C:\Users\Home\Desktop\FLL`
 
 Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie naar GitHub en Render verloopt. Geheime waarden (tokens, sleutels, toegangscodes) staan **niet** in dit bestand.
@@ -11,12 +11,18 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste code-build | ✅ commit `a7d6cdc`, Pages-build geslaagd |
+| Laatste code-build | ✅ commit `a799225` (v15); **v16 staat lokaal klaar** — na pushen: Pages-build controleren |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
+| Editor (v16) | ✅ regelnummers, code-kleuren, cursorpositie, telefoontoetsenbalk en **Bekijk regel N** |
+| Privacy en leesbaarheid (v16) | ✅ privacyoverzicht, alles wissen met twee bevestigingen, tekstgrootte en meer contrast |
+| Netwerkbadge (v16) | ✅ duidelijke online/offline melding; werk blijft bewaard |
+| AI-intake en betrouwbaarheid (v16) | ✅ eerst vragen waar je hulp bij nodig hebt, drie automatische pogingen, kortere antwoorden |
+| Zoekbalkfix (v16) | ✅ je gebruikersnaam verschijnt na verversen niet meer in het zoekveld |
 | Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord, optioneel contact en JSON-back-up |
 | Chatknop na inloggen | ✅ footer, zwevende knop en chatkaart op het profiel (geen dubbele knop in de header) |
 | Eigenaarspaneel | ✅ `#/eigenaar`, eigenaarslogin zonder code, lokale profielen, voortgang, mededeling, app-status en download |
 | Inzichten | ✅ ingebouwde anonieme teller voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; optioneel GoatCounter voor populairste projecten, versies en regio; opt-out per toestel |
+| Eigen teller (optioneel) | ✅ gratis Cloudflare Worker + D1 in `worker/`, met automatische terugval op Abacus |
 | Gratis Android-download | ✅ `/download/` met ondertekende APK 1.0.0, SHA-256, installatie-uitleg en FAQ — zonder Google Play |
 | Invoerhulp | ✅ `input()` toont de vraag en een tekstvak in het venster bovenaan |
 | Programmeer-editor | ✅ `#/programmeren`, Pyodide in de browser |
@@ -213,6 +219,16 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Python-speelveld opent en `print("Hallo")` geeft uitvoer.
 - [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
 - [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
+- [ ] Editor toont **regelnummers** en **code-kleuren**; de cursorindicator toont **Regel N, kolom M**.
+- [ ] De **telefoontoetsenbalk** voegt `:`, haakjes, aanhalingstekens, `=`, `#`, 4 spaties en Enter in zonder het toetsenbord te sluiten.
+- [ ] Bij een fout op regel 2 toont **Bekijk regel 2** de juiste regel en selecteert die.
+- [ ] In **Instellingen** toont het **privacyoverzicht** hoeveel profielen, voortgang, ideeën, chatberichten en editortekens lokaal staan.
+- [ ] **🧹 Al mijn gegevens wissen** vraagt twee bevestigingen (waaronder het typen van `WISSEN`), wist alles en meldt daarna dat alles gewist is.
+- [ ] **Tekstgrootte** Normaal/Groot/Extra groot werkt en blijft bewaard; bij meer contrast wordt de rand dikker.
+- [ ] De **online/offline badge** verschijnt bij offline, legt uit dat werk bewaard blijft en meldt **Weer online** als je terug bent.
+- [ ] De **AI-intake** staat klaar bij een nieuw gesprek, verdwijnt na de eerste vraag en komt terug na **Gesprek wissen**.
+- [ ] De AI-coach probeert het bij drukte automatisch drie keer en houdt antwoorden kort.
+- [ ] Na verversen staat je **gebruikersnaam niet in het zoekveld** en niet in de URL.
 - [ ] Invoerhulp is zichtbaar bij het speelveld en op een projectpagina; `input()` toont de vraag en een tekstvak in het venster bovenaan.
 - [ ] **📥 Offline klaarzetten** laadt Python één keer en toont daarna **✅ Python werkt nu ook offline**; na een app-update blijft dat zo.
 - [ ] `#/profiel` laadt en legt uit dat een e-mailadres of telefoonnummer optioneel is.
@@ -224,13 +240,14 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `#/eigenaar` vraagt om de eigenaarscode of het eigenaars-wachtwoord en toont daarna het aantal lokale profielen, de voortgang, de mededeling en **Alles downloaden**.
 - [ ] Na **Vergrendelen** opent **[verwijderd]** het paneel opnieuw; een verkeerde code geeft een duidelijke foutmelding.
 - [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
-- [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag en de laatste update.
+- [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag, starttijd en de laatste update.
 - [ ] Het installatievenster noemt je **browser en toestel**, toont alleen de passende stap en heeft **✅ Is het gelukt?** met de bevestiging **Ik zie EasyCodey in mijn apps**.
 - [ ] Toegankelijkheid: de springlink **Ga naar de inhoud** werkt, Tab blijft binnen een open venster en gaat na sluiten terug naar de knop, en **aria-expanded** klopt op de AI-knoppen.
 - [ ] **Bezoekcijfers** tonen getallen voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; **Cijfers verversen** haalt de nieuwste stand op.
 - [ ] **Cijferverloop** toont vandaag, sinds 7 dagen en sinds je vorige bezoek; de momentopname blijft alleen op dit toestel.
 - [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** zet de meting uit; de opt-out op het profiel werkt.
-- [ ] Met `analyticsSite` in `site-config.json` meldt het paneel “actief voor alle bezoekers” en laadt het GoatCounter-script.
+- [ ] Met `analyticsSite` in `site-config.json` meldt het paneel "actief voor alle bezoekers" en laadt het GoatCounter-script.
+- [ ] Met `counterApi` in `site-config.json` gebruikt de app de eigen Cloudflare-teller; zonder `counterApi` valt hij terug op Abacus.
 - [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.
 - [ ] Projectpagina: **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
 - [ ] **Speel dit idee** toont de app, **Gebruik dit idee** toont de code en **Programmeer zelf** voert het volledige project uit in het speelveld.

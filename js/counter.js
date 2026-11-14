@@ -10,8 +10,10 @@ const OPTOUT_KEY = "easycodey.analytics.optout.v1";
 const SESSION_KEY = "easycodey.counter.session.v1";
 const INSTALLED_KEY = "easycodey.installed.v1";
 const UNIQUE_KEY = "easycodey.uniqueVisitor.v1";
+const DEVICE_KEY = "easycodey.device.v1";
 
 let namespace = "";
+let counterApi = "";
 let configLoaded = false;
 let loadPromise = null;
 
@@ -31,6 +33,24 @@ function write(key, value) {
   }
 }
 
+/* Een willekeurig nummer dat alleen op dit toestel bestaat. Het zegt niets
+   over wie je bent en verandert nooit. De server bewaart er alleen een
+   onleesbare hash van, om te voorkomen dat één toestel dubbel telt. */
+function deviceToken() {
+  const existing = read(DEVICE_KEY);
+  if (existing) return existing;
+  let token = "";
+  try {
+    const bytes = new Uint8Array(16);
+    crypto.getRandomValues(bytes);
+    token = [...bytes].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+  } catch {
+    token = `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}`;
+  }
+  write(DEVICE_KEY, token);
+  return token;
+}
+
 export function isCounterOptedOut() {
   return read(OPTOUT_KEY) === "1";
 }
@@ -38,7 +58,8 @@ export function isCounterOptedOut() {
 export function counterInfo() {
   return {
     namespace,
-    enabled: Boolean(namespace) && !isCounterOptedOut(),
+    api: counterApi,
+    enabled: Boolean(namespace || counterApi) && !isCounterOptedOut(),
     optedOut: isCounterOptedOut()
   };
 }
@@ -55,8 +76,11 @@ export async function loadCounterConfig() {
         .trim()
         .toLowerCase()
         .replace(/[^a-z0-9._-]/g, "");
+      const api = String(config?.counterApi || "").trim().replace(/\/+$/, "");
+      counterApi = /^https:\/\/[^\s]+$/i.test(api) ? api : "";
     } catch {
       namespace = "";
+      counterApi = "";
     }
     configLoaded = true;
     return namespace;
@@ -73,11 +97,52 @@ async function request(path) {
   return response.json();
 }
 
+/* Lezen uit de eigen Cloudflare-teller. Lukt dat niet, dan proberen we de
+   eenvoudige Abacus-teller. */
+async function readFromWorker(key) {
+  if (!counterApi) return null;
+  try {
+    const response = await fetch(
+      `${counterApi}/counts?keys=${encodeURIComponent(key)}`,
+      { cache: "no-store", headers: { Accept: "application/json" } }
+    );
+    if (!response.ok) return null;
+    const data = await response.json();
+    const value = Number(data?.counts?.[key]);
+    return Number.isFinite(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+async function hitWorker(key) {
+  if (!counterApi) return null;
+  try {
+    const response = await fetch(`${counterApi}/hit`, {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({ key, device: deviceToken() })
+    });
+    if (!response.ok) return null;
+    const data = await response.json();
+    const value = Number(data?.value);
+    return Number.isFinite(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
 /* Lezen mag altijd: de eigenaar bekijkt alleen een getal. Een teller die nog
    niet bestaat, telt als 0. */
 export async function getCount(key) {
   if (!configLoaded) await loadCounterConfig();
+  if (!namespace && !counterApi) return null;
+
+  const fromWorker = await readFromWorker(key);
+  if (fromWorker !== null) return fromWorker;
   if (!namespace) return null;
+
   try {
     const response = await fetch(
       `${API}/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
@@ -96,7 +161,12 @@ export async function getCount(key) {
 /* Ophogen gebeurt nooit als de bezoeker zich heeft afgemeld. */
 export async function hitCount(key) {
   if (!configLoaded) await loadCounterConfig();
-  if (!namespace || isCounterOptedOut()) return null;
+  if (isCounterOptedOut()) return null;
+
+  const fromWorker = await hitWorker(key);
+  if (fromWorker !== null) return fromWorker;
+  if (!namespace) return null;
+
   try {
     const data = await request(`/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`);
     const value = Number(data?.value);

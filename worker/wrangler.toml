@@ -1,0 +1,12 @@
+#:schema node_modules/wrangler/config-schema.json
+name = "easycodey-counter"
+main = "src/index.js"
+compatibility_date = "2026-01-01"
+
+# Maak eerst een database:
+#   npx wrangler d1 create easycodey-counter
+# Kopieer de database_id hieronder.
+[[d1_databases]]
+binding = "DB"
+database_name = "easycodey-counter"
+database_id = "VUL_HIER_JE_DATABASE_ID_IN"

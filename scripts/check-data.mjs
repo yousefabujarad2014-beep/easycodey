@@ -311,6 +311,13 @@ if (!existsSync(siteConfigFile)) {
     if (typeof siteConfig.publicCounter !== "string") {
       fail("site-config.json mist het veld publicCounter (mag leeg zijn).");
     }
+    if (
+      siteConfig.counterApi !== undefined &&
+      (typeof siteConfig.counterApi !== "string" ||
+        (siteConfig.counterApi && !/^https:\/\/[^\s]+$/i.test(siteConfig.counterApi)))
+    ) {
+      fail("site-config.json: counterApi moet leeg zijn of met https:// beginnen.");
+    }
   } catch (error) {
     fail(`site-config.json is geen geldige JSON: ${error.message}`);
   }

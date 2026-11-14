@@ -76,7 +76,7 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
-const APP_VERSION = "v15";
+const APP_VERSION = "v16";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 const INSTALL_CONFIRMED_KEY = "easycodey.install.confirmed.v1";
@@ -107,6 +107,7 @@ const installHeader = document.querySelector("#install-header");
 const installFooter = document.querySelector("#install-footer");
 const installNowBtn = document.querySelector("#install-now");
 const toastEl = document.querySelector("#toast");
+const networkBadge = document.querySelector("#network-badge");
 
 let serverConfig = {
   hasServerKey: false,
@@ -130,6 +131,8 @@ let roadCategory = "Alle";
 let lastPythonError = null;
 let pythonOfflineReady = false;
 let lastFocusedElement = null;
+let networkTimer = null;
+const performanceStats = { domReady: 0, load: 0, lcp: 0 };
 
 const homeState = {
   q: "",
@@ -233,6 +236,65 @@ function toast(message) {
   toastEl.classList.add("show");
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toastEl.classList.remove("show"), 2600);
+}
+
+/* ------------------------------ netwerk ------------------------------ */
+
+function renderNetworkBadge(online, { announce = false } = {}) {
+  if (!networkBadge) return;
+  window.clearTimeout(networkTimer);
+  if (!online) {
+    networkBadge.hidden = false;
+    networkBadge.className = "network-badge offline";
+    networkBadge.innerHTML =
+      '<span aria-hidden="true">⚠</span> Je bent offline. Je werk blijft bewaard en de app blijft werken.';
+    return;
+  }
+  if (!announce) {
+    networkBadge.hidden = true;
+    return;
+  }
+  networkBadge.hidden = false;
+  networkBadge.className = "network-badge online";
+  networkBadge.innerHTML = '<span aria-hidden="true">✅</span> Weer online. Alles werkt weer.';
+  networkTimer = window.setTimeout(() => {
+    networkBadge.hidden = true;
+  }, 4000);
+}
+
+function initNetworkStatus() {
+  renderNetworkBadge(navigator.onLine !== false);
+  window.addEventListener("offline", () => renderNetworkBadge(false));
+  window.addEventListener("online", () => {
+    renderNetworkBadge(true, { announce: true });
+    toast("Je bent weer online.");
+  });
+}
+
+/* ------------------------------ snelheid ------------------------------ */
+
+function measurePerformance() {
+  try {
+    const navigation = performance.getEntriesByType("navigation")[0];
+    if (navigation) {
+      performanceStats.domReady = navigation.domContentLoadedEventEnd || 0;
+      performanceStats.load = navigation.loadEventEnd || 0;
+    }
+  } catch {
+    // Oudere browsers hebben geen Navigation Timing.
+  }
+  try {
+    if (typeof PerformanceObserver === "function") {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          performanceStats.lcp = Math.max(performanceStats.lcp, entry.startTime || 0);
+        }
+      });
+      observer.observe({ type: "largest-contentful-paint", buffered: true });
+    }
+  } catch {
+    // LCP is een extraatje, geen voorwaarde.
+  }
 }
 
 function rememberFocus() {
@@ -864,6 +926,7 @@ function renderOwner() {
         <div class="owner-stat"><strong data-status="sw">…</strong><span>service worker</span></div>
         <div class="owner-stat"><strong data-status="cache">…</strong><span>offline bestanden</span></div>
         <div class="owner-stat"><strong data-status="storage">…</strong><span>opslag gebruikt</span></div>
+        <div class="owner-stat"><strong data-status="speed">…</strong><span>starttijd</span></div>
         <div class="owner-stat"><strong data-status="update">…</strong><span>laatste update</span></div>
       </div>
       <div class="owner-counter">
@@ -1148,6 +1211,9 @@ async function loadOwnerStatus() {
       : "—"
   );
 
+  const speed = performanceStats.lcp || performanceStats.load || performanceStats.domReady;
+  set("speed", speed > 0 ? `${Math.round(speed)} ms` : "—");
+
   updateOwnerAnalyticsUI();
 }
 
@@ -1310,8 +1376,16 @@ function restoreBackupFile(file) {
 
 /* ------------------------------ home ------------------------------ */
 
+function isProfileName(value) {
+  const name = String(store.getActiveProfile()?.name || "").trim().toLowerCase();
+  return Boolean(name) && String(value || "").trim().toLowerCase() === name;
+}
+
 function resetHomeState(params) {
-  homeState.q = params.get("q") || "";
+  const query = params.get("q") || "";
+  // Sommige browsers vullen het zoekveld met de opgeslagen gebruikersnaam.
+  // Dat is geen echte zoekopdracht: laat hem dan weg.
+  homeState.q = isProfileName(query) ? "" : query;
   homeState.category = CATEGORIES.includes(params.get("categorie")) ? params.get("categorie") : "Alle";
   homeState.level = LEVELS.includes(params.get("niveau")) ? params.get("niveau") : "Alle";
   homeState.duration = DURATION_FILTERS.some((item) => item.id === params.get("duur"))
@@ -1376,7 +1450,7 @@ function renderHome(params) {
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
             </svg>
-            <input id="home-search" type="search" placeholder="Zoek op titel, vaardigheid of onderwerp…" autocomplete="off" />
+            <input id="home-search" name="zoek" type="search" placeholder="Zoek op titel, vaardigheid of onderwerp…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Zoek een project" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" />
           </label>
           <button class="btn ghost" type="button" data-action="random-idea">🎲 Verras me</button>
         </div>
@@ -1451,6 +1525,17 @@ function renderHome(params) {
   homeBound = true;
   updateInstallUI();
   applyHomeFilters();
+  [0, 350, 1200].forEach((delay) => window.setTimeout(clearAutofilledSearch, delay));
+}
+
+/* Browsers vullen een tekstveld soms met de opgeslagen gebruikersnaam.
+   Dat mag nooit als zoekopdracht blijven staan of in de URL belanden. */
+function clearAutofilledSearch() {
+  const search = document.querySelector("#home-search");
+  if (!search) return;
+  if (homeState.q.trim()) return;
+  if (document.activeElement === search) return;
+  if (search.value) search.value = "";
 }
 
 function filteredIdeas() {
@@ -1996,8 +2081,14 @@ function appendAIMessage(role, content, { typing = false, keep = true } = {}) {
   wrapper.append(avatar, body);
   aiMessagesEl.append(wrapper);
   if (keep) aiMessages.push({ role, content });
+  if (role === "user") hideAIIntake();
   scrollAIMessages();
   return body;
+}
+
+function hideAIIntake() {
+  const intake = document.querySelector("#ai-intake");
+  if (intake) intake.hidden = true;
 }
 
 let chatLoaded = false;
@@ -2014,6 +2105,7 @@ function loadChatHistory() {
   });
   aiMessages = history.map((message) => ({ ...message }));
   greetingShown = true;
+  if (aiMessages.some((message) => message.role === "user")) hideAIIntake();
   scrollAIMessages();
 }
 
@@ -2112,6 +2204,7 @@ async function sendAIMessage(text, { skipUser = false } = {}) {
   const mode = aiMode(settings, serverConfig);
   const configured = isAIConfigured(settings, serverConfig);
   setAIBusy(true);
+  aiStatusEl.innerHTML = '<span class="dot busy"></span> EasyCoach denkt na…';
 
   if (!configured) {
     await new Promise((resolve) => window.setTimeout(resolve, 250));
@@ -2121,6 +2214,7 @@ async function sendAIMessage(text, { skipUser = false } = {}) {
     persistChatHistory();
     appendFollowUps(body, contextPayload);
     setAIBusy(false);
+    updateAIStatus();
     scrollAIMessages();
     return;
   }
@@ -2166,6 +2260,7 @@ async function sendAIMessage(text, { skipUser = false } = {}) {
   } finally {
     persistChatHistory();
     setAIBusy(false);
+    updateAIStatus();
     scrollAIMessages();
   }
 }
@@ -2190,8 +2285,62 @@ function clearChat() {
   chatLoaded = true;
   aiMessagesEl.innerHTML = "";
   store.clearChatHistory();
+  const intake = document.querySelector("#ai-intake");
+  if (intake) intake.hidden = false;
   ensureGreeting();
   toast("Gesprek gewist.");
+}
+
+function applyTextSize(size) {
+  const value = ["normaal", "groot", "extra"].includes(size) ? size : "normaal";
+  document.documentElement.dataset.textSize = value;
+}
+
+function formatBytes(bytes) {
+  const value = Number(bytes) || 0;
+  if (value < 1024) return `${value} bytes`;
+  if (value < 1024 * 1024) return `${Math.round(value / 1024)} kB`;
+  return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function renderPrivacySummary() {
+  const box = document.querySelector("#privacy-summary");
+  if (!box) return;
+  const data = store.getLocalDataSummary();
+  const rows = [
+    ["Profielen op dit toestel", data.profiles],
+    ["Projecten met voortgang", data.projectsWithProgress],
+    ["Eigen ideeën", data.customIdeas],
+    ["Berichten in je AI-gesprek", data.chatMessages],
+    ["Tekens in je editor", data.editorChars]
+  ];
+  box.innerHTML = `
+    <ul class="privacy-list">
+      ${rows.map(([label, value]) => `<li><span>${e(label)}</span><strong>${new Intl.NumberFormat("nl-BE").format(value)}</strong></li>`).join("")}
+    </ul>
+    <p class="static-note">Samen ongeveer <strong>${e(formatBytes(data.bytes))}</strong> in ${data.storageKeys} bewaarde onderdelen. Je voortgang en account blijven staan als je de app sluit.</p>
+  `;
+}
+
+function wipeAllData() {
+  const first = window.confirm(
+    "Weet je het zeker?\n\nJe voortgang, je code, je AI-gesprek, je instellingen en alle accounts op dit toestel worden gewist. Dit kan niet ongedaan worden gemaakt.\n\nTip: maak eerst een back-up via Mijn profiel."
+  );
+  if (!first) return;
+  const typed = window.prompt('Typ WISSEN (met hoofdletters) om alles te verwijderen:');
+  if (typed === null) return;
+  if (typed.trim().toUpperCase() !== "WISSEN") {
+    toast("Niets gewist. Typ precies WISSEN om te bevestigen.");
+    return;
+  }
+  store.clearAllLocalData();
+  try {
+    sessionStorage.setItem("easycodey.wiped.v1", "1");
+  } catch {
+    // Negeer.
+  }
+  window.location.hash = "#/";
+  window.location.reload();
 }
 
 /* ------------------------------ instellingen ------------------------------ */
@@ -2204,9 +2353,11 @@ function openSettings() {
   document.querySelector("#cfg-base").value = settings.baseUrl;
   document.querySelector("#cfg-access").value = settings.accessCode;
   document.querySelector("#cfg-online").checked = settings.useOnlineAI !== false;
+  document.querySelector("#cfg-text-size").value = settings.textSize || "normaal";
   document.querySelector("#cfg-key-hint").textContent = serverConfig.hasServerKey
     ? "Op de server staat al een sleutel. Laat dit leeg om die te gebruiken."
     : "Leeg laten = gratis online AI-coach gebruiken.";
+  renderPrivacySummary();
   settingsModal.hidden = false;
   window.setTimeout(() => document.querySelector("#cfg-key").focus(), 80);
 }
@@ -2222,11 +2373,13 @@ function saveSettings() {
     model: document.querySelector("#cfg-model").value,
     baseUrl: document.querySelector("#cfg-base").value,
     accessCode: document.querySelector("#cfg-access").value,
-    useOnlineAI: document.querySelector("#cfg-online").checked
+    useOnlineAI: document.querySelector("#cfg-online").checked,
+    textSize: document.querySelector("#cfg-text-size").value
   });
+  applyTextSize(store.getSettings().textSize);
   closeSettings();
   updateAIStatus();
-  toast("AI-instellingen opgeslagen.");
+  toast("Instellingen opgeslagen.");
 }
 
 /* ------------------------------ generator ------------------------------ */
@@ -2389,27 +2542,39 @@ function readPythonReady() {
   updatePythonBadges();
 }
 
+function pythonErrorElements(source) {
+  const editor = source === "editor";
+  return {
+    help: document.querySelector(editor ? "#editor-ai-help" : "#playground-ai-help"),
+    jump: document.querySelector(editor ? "#editor-jump-error" : "#playground-jump-error")
+  };
+}
+
 function clearPythonError(source) {
   lastPythonError = null;
-  const button = document.querySelector(
-    source === "editor" ? "#editor-ai-help" : "#playground-ai-help"
-  );
-  if (button) button.hidden = true;
+  const { help, jump } = pythonErrorElements(source);
+  if (help) help.hidden = true;
+  if (jump) jump.hidden = true;
 }
 
 function showPythonError(error, code, output, source) {
+  const info = explainPythonError(error, code);
   const friendly = formatPythonError(error, code);
   output.classList.add("error");
   output.textContent = friendly;
+  const line = Number(info?.line) || 0;
   lastPythonError = {
     source,
     code: String(code || ""),
-    message: String(error?.message || error || "")
+    message: String(error?.message || error || ""),
+    line
   };
-  const button = document.querySelector(
-    source === "editor" ? "#editor-ai-help" : "#playground-ai-help"
-  );
-  if (button) button.hidden = false;
+  const { help, jump } = pythonErrorElements(source);
+  if (help) help.hidden = false;
+  if (jump) {
+    jump.hidden = line <= 0;
+    if (line > 0) jump.textContent = `Bekijk regel ${line}`;
+  }
 }
 
 async function prepareOfflinePython(button) {
@@ -2600,6 +2765,195 @@ function editorExampleOptions(selected = "hallo") {
   ).join("");
 }
 
+/* ------------------------------ editor-decoratie ------------------------------ */
+
+const PYTHON_KEYWORDS = new Set([
+  "and", "as", "assert", "async", "await", "break", "class", "continue", "def", "del",
+  "elif", "else", "except", "False", "finally", "for", "from", "global", "if", "import",
+  "in", "is", "lambda", "None", "nonlocal", "not", "or", "pass", "raise", "return",
+  "True", "try", "while", "with", "yield"
+]);
+
+const PYTHON_BUILTINS = new Set([
+  "abs", "all", "any", "bool", "dict", "enumerate", "filter", "float", "format", "input",
+  "int", "isinstance", "len", "list", "map", "max", "min", "open", "print", "range",
+  "reversed", "round", "set", "sorted", "str", "sum", "tuple", "type", "zip"
+]);
+
+/* Kleurt de code zonder de textarea zelf aan te passen. De textarea blijft de
+   echte invoer; de laag eronder toont alleen kleuren. Zo blijft typen, undo en
+   selecteren precies werken zoals in een gewone textarea. */
+function highlightPython(code) {
+  const text = String(code ?? "");
+  const length = text.length;
+  let html = "";
+  let index = 0;
+
+  while (index < length) {
+    const char = text[index];
+
+    if (char === "#") {
+      let end = text.indexOf("\n", index);
+      if (end === -1) end = length;
+      html += `<span class="tok-comment">${e(text.slice(index, end))}</span>`;
+      index = end;
+      continue;
+    }
+
+    if (char === '"' || char === "'") {
+      const triple = text.slice(index, index + 3);
+      if (triple === '"""' || triple === "'''") {
+        const found = text.indexOf(triple, index + 3);
+        const end = found === -1 ? length : found + 3;
+        html += `<span class="tok-string">${e(text.slice(index, end))}</span>`;
+        index = end;
+        continue;
+      }
+      let cursor = index + 1;
+      while (cursor < length) {
+        const current = text[cursor];
+        if (current === "\\") {
+          cursor += 2;
+          continue;
+        }
+        if (current === "\n") break;
+        if (current === char) {
+          cursor += 1;
+          break;
+        }
+        cursor += 1;
+      }
+      html += `<span class="tok-string">${e(text.slice(index, cursor))}</span>`;
+      index = cursor;
+      continue;
+    }
+
+    if (/[A-Za-z_]/.test(char)) {
+      let end = index + 1;
+      while (end < length && /[A-Za-z0-9_]/.test(text[end])) end += 1;
+      const word = text.slice(index, end);
+      if (PYTHON_KEYWORDS.has(word)) html += `<span class="tok-keyword">${e(word)}</span>`;
+      else if (PYTHON_BUILTINS.has(word)) html += `<span class="tok-builtin">${e(word)}</span>`;
+      else html += e(word);
+      index = end;
+      continue;
+    }
+
+    if (/[0-9]/.test(char)) {
+      let end = index + 1;
+      while (end < length && /[0-9._]/.test(text[end])) end += 1;
+      html += `<span class="tok-number">${e(text.slice(index, end))}</span>`;
+      index = end;
+      continue;
+    }
+
+    if ("=+-*/%<>!&|^~".includes(char)) {
+      html += `<span class="tok-op">${e(char)}</span>`;
+      index += 1;
+      continue;
+    }
+
+    html += e(char);
+    index += 1;
+  }
+
+  return html;
+}
+
+function updateEditorCursor() {
+  const textarea = document.querySelector("#editor-code");
+  const cursor = document.querySelector("#editor-cursor");
+  if (!textarea || !cursor) return;
+  const before = textarea.value.slice(0, textarea.selectionStart);
+  const rows = before.split("\n");
+  cursor.textContent = `Regel ${rows.length}, kolom ${rows[rows.length - 1].length + 1}`;
+}
+
+function syncEditorScroll() {
+  const textarea = document.querySelector("#editor-code");
+  const pre = document.querySelector("#editor-highlight");
+  const gutter = document.querySelector("#editor-gutter");
+  if (!textarea) return;
+  if (pre) {
+    pre.scrollTop = textarea.scrollTop;
+    pre.scrollLeft = textarea.scrollLeft;
+  }
+  if (gutter) gutter.scrollTop = textarea.scrollTop;
+}
+
+function updateEditorDecorations() {
+  const textarea = document.querySelector("#editor-code");
+  if (!textarea) return;
+  const highlightCode = document.querySelector("#editor-highlight code");
+  const gutter = document.querySelector("#editor-gutter");
+  const stack = document.querySelector("#editor-code-stack");
+  const code = textarea.value;
+
+  try {
+    if (highlightCode) highlightCode.innerHTML = `${highlightPython(code)}\n`;
+    if (gutter) {
+      const count = Math.max(code.split("\n").length, 1);
+      let numbers = "";
+      for (let line = 1; line <= count; line += 1) numbers += `<span>${line}</span>`;
+      gutter.innerHTML = numbers;
+    }
+    if (stack) stack.classList.add("is-highlighted");
+  } catch (error) {
+    // Lukt het kleuren niet? Dan blijft de gewone, leesbare code staan.
+    console.warn("Code-kleuren konden niet worden getekend.", error);
+    stack?.classList.remove("is-highlighted");
+  }
+
+  updateEditorCursor();
+  syncEditorScroll();
+}
+
+function insertEditorText(text) {
+  const textarea = document.querySelector("#editor-code");
+  if (!textarea) return;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  textarea.setRangeText(String(text ?? ""), start, end, "end");
+  textarea.dispatchEvent(new Event("input", { bubbles: true }));
+  textarea.focus();
+  updateEditorCursor();
+}
+
+function jumpTextareaToLine(textarea, line) {
+  if (!textarea || !line) return false;
+  const rows = textarea.value.split("\n");
+  const target = Math.min(Math.max(1, Number(line) || 1), rows.length);
+  let offset = 0;
+  for (let index = 0; index < target - 1; index += 1) offset += rows[index].length + 1;
+  textarea.focus();
+  textarea.setSelectionRange(offset, offset + rows[target - 1].length);
+  const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight) || 20;
+  textarea.scrollTop = Math.max(0, (target - 1) * lineHeight - textarea.clientHeight / 3);
+  if (textarea.id === "editor-code") {
+    syncEditorScroll();
+    updateEditorCursor();
+    const cursor = document.querySelector("#editor-cursor");
+    if (cursor) cursor.textContent = `Regel ${target}, kolom 1`;
+  }
+  return true;
+}
+
+function initEditorDecorations() {
+  const textarea = document.querySelector("#editor-code");
+  if (!textarea) return;
+  textarea.addEventListener("input", updateEditorDecorations);
+  textarea.addEventListener("scroll", syncEditorScroll);
+  textarea.addEventListener("click", updateEditorCursor);
+  textarea.addEventListener("keyup", updateEditorCursor);
+  textarea.addEventListener("select", updateEditorCursor);
+  textarea.addEventListener("focus", updateEditorCursor);
+  // Op een telefoon mag het toetsenbord niet dichtgaan als je een tekenknop indrukt.
+  document.querySelectorAll(".editor-keys button").forEach((button) => {
+    button.addEventListener("pointerdown", (event) => event.preventDefault());
+  });
+  updateEditorDecorations();
+}
+
 function renderEditor(params) {
   const projectId = params.get("project");
   const project = projectId ? findIdea(projectId) : null;
@@ -2669,8 +3023,28 @@ function renderEditor(params) {
           <span class="editor-save-status" id="editor-save-status" role="status" aria-live="polite">Opgeslagen</span>
         </div>
         <label class="editor-code-label" for="editor-code">Python-code</label>
-        <textarea id="editor-code" class="editor-code" spellcheck="false" autocomplete="off" autocapitalize="off" aria-label="Python-code"></textarea>
+        <div class="editor-code-wrap">
+          <div class="editor-gutter" id="editor-gutter" aria-hidden="true"></div>
+          <div class="editor-code-stack" id="editor-code-stack">
+            <pre class="editor-highlight" id="editor-highlight" aria-hidden="true"><code></code></pre>
+            <textarea id="editor-code" class="editor-code" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" aria-label="Python-code" aria-describedby="editor-cursor"></textarea>
+          </div>
+        </div>
+        <div class="editor-keys" role="toolbar" aria-label="Sneltoetsen voor code">
+          <button type="button" data-action="editor-insert" data-insert=":">:</button>
+          <button type="button" data-action="editor-insert" data-insert="(">(</button>
+          <button type="button" data-action="editor-insert" data-insert=")">)</button>
+          <button type="button" data-action="editor-insert" data-insert="[">[</button>
+          <button type="button" data-action="editor-insert" data-insert="]">]</button>
+          <button type="button" data-action="editor-insert" data-insert="&quot;">&quot;</button>
+          <button type="button" data-action="editor-insert" data-insert="'">'</button>
+          <button type="button" data-action="editor-insert" data-insert="=">=</button>
+          <button type="button" data-action="editor-insert" data-insert="#">#</button>
+          <button type="button" class="editor-keys-wide" data-action="editor-insert" data-insert="    ">4 spaties</button>
+          <button type="button" data-action="editor-insert" data-insert="&#10;">Enter</button>
+        </div>
         <div class="editor-hint-row">
+          <span class="editor-cursor" id="editor-cursor" role="status" aria-live="polite">Regel 1, kolom 1</span>
           <span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> om uit te voeren</span>
           <button class="link-btn" type="button" data-action="editor-reset">Leegmaken</button>
         </div>
@@ -2688,6 +3062,7 @@ function renderEditor(params) {
         <pre class="editor-output" id="editor-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
         <div class="python-error-actions">
           <button class="btn ghost tiny" type="button" id="editor-ai-help" data-action="ask-error" data-source="editor" hidden>✦ Vraag EasyCoach om hulp</button>
+          <button class="btn ghost tiny" type="button" id="editor-jump-error" data-action="jump-error-line" data-source="editor" hidden>Bekijk regel</button>
           <span class="python-offline-badge" data-python-ready hidden>✅ Python werkt nu ook offline</span>
         </div>
         <div class="editor-note">
@@ -2727,6 +3102,7 @@ function renderEditor(params) {
   });
 
   if (project) toast(`Code van “${project.title}” staat in de editor.`);
+  initEditorDecorations();
   updatePythonBadges();
 }
 
@@ -3064,6 +3440,7 @@ document.addEventListener("click", (event) => {
     if (action === "settings") openSettings();
     if (action === "close-settings") closeSettings();
     if (action === "save-settings") saveSettings();
+    if (action === "wipe-data") wipeAllData();
     if (action === "clear-chat") clearChat();
     if (action === "quick-prompt") {
       openAI();
@@ -3213,6 +3590,20 @@ document.addEventListener("click", (event) => {
     }
     if (action === "copy-code") copyCode(actionEl);
     if (action === "editor-run") runEditorCode();
+    if (action === "editor-insert") insertEditorText(actionEl.dataset.insert || "");
+    if (action === "jump-error-line") {
+      const source = actionEl.dataset.source === "playground" ? "playground" : "editor";
+      const textarea =
+        source === "playground" ? playgroundCode : document.querySelector("#editor-code");
+      const line = lastPythonError?.line || 0;
+      if (textarea && line > 0) {
+        if (source === "playground" && playgroundModal.hidden) playgroundModal.hidden = false;
+        jumpTextareaToLine(textarea, line);
+        toast(`Regel ${line} staat klaar in de code.`);
+      } else {
+        toast("De foutregel is niet meer beschikbaar. Voer de code opnieuw uit.");
+      }
+    }
     if (action === "editor-load-example") loadEditorExample();
     if (action === "editor-clear-output") clearEditorOutput();
     if (action === "editor-reset") resetEditor();
@@ -3338,6 +3729,8 @@ document.addEventListener("click", (event) => {
 
 document.addEventListener("input", (event) => {
   if (event.target.id === "home-search") {
+    // Alleen echt typen telt. Autofill van de browser negeren we.
+    if (document.activeElement !== event.target) return;
     homeState.q = event.target.value;
     homeState.visible = 30;
     applyHomeFilters();
@@ -3463,6 +3856,9 @@ document.addEventListener("keydown", (event) => {
 });
 
 window.addEventListener("hashchange", route);
+window.addEventListener("pageshow", () => {
+  window.setTimeout(clearAutofilledSearch, 120);
+});
 
 /* ------------------------------ app / PWA ------------------------------ */
 
@@ -3813,8 +4209,19 @@ function initPWA() {
 async function init() {
   window.__easycodeyBoot?.();
   initTheme();
+  applyTextSize(store.getSettings().textSize);
+  initNetworkStatus();
+  measurePerformance();
   initPWA();
   readPythonReady();
+  try {
+    if (sessionStorage.getItem("easycodey.wiped.v1") === "1") {
+      sessionStorage.removeItem("easycodey.wiped.v1");
+      window.setTimeout(() => toast("Alles is gewist. Je begint met een lege app."), 600);
+    }
+  } catch {
+    // Zonder sessieopslag is er niets te melden.
+  }
   document.querySelector(".skip-link")?.addEventListener("click", (event) => {
     event.preventDefault();
     app.focus();

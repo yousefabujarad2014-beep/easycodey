@@ -16,8 +16,20 @@ function lastErrorLine(text) {
 }
 
 function findLine(text, type) {
-  const fileLine = text.match(/File\s+"[^"]*",\s+line\s+(\d+)/);
-  if (fileLine) return Number(fileLine[1]);
+  // Pyodide toont eerst zijn eigen bestanden. De code van de gebruiker staat
+  // in een frame met "<exec>" of "<string>". Dat frame is de juiste regel.
+  const userFrame = text.match(/File\s+"(?:<exec>|<string>|<module>)",\s+line\s+(\d+)/);
+  if (userFrame) return Number(userFrame[1]);
+
+  const frames = [...text.matchAll(/File\s+"([^"]*)",\s+line\s+(\d+)/g)];
+  const userFrames = frames.filter(
+    ([, file]) => !/\/(?:lib|site-packages)\//.test(file) && !/^<frozen/.test(file)
+  );
+  if (userFrames.length) {
+    return Number(userFrames[userFrames.length - 1][2]);
+  }
+  if (frames.length) return Number(frames[frames.length - 1][2]);
+
   if (type === "SyntaxError" || type === "IndentationError" || type === "TabError") {
     const plain = text.match(/\bline\s+(\d+)\b/);
     if (plain) return Number(plain[1]);

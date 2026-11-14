@@ -17,7 +17,8 @@ const DEFAULT_STATE = {
     model: "",
     baseUrl: "",
     accessCode: "",
-    useOnlineAI: true
+    useOnlineAI: true,
+    textSize: "normaal"
   },
   customIdeas: [],
   editor: {
@@ -519,15 +520,82 @@ export function getSettings() {
   return { ...state.settings };
 }
 
+const TEXT_SIZES = ["normaal", "groot", "extra"];
+
 export function saveSettings(settings) {
   state.settings = {
     apiKey: String(settings.apiKey || "").trim(),
     model: String(settings.model || "").trim(),
     baseUrl: String(settings.baseUrl || "").trim(),
     accessCode: String(settings.accessCode || "").trim(),
-    useOnlineAI: settings.useOnlineAI !== false
+    useOnlineAI: settings.useOnlineAI !== false,
+    textSize: TEXT_SIZES.includes(settings.textSize) ? settings.textSize : "normaal"
   };
   persist();
+}
+
+/* ------------------------------ privacy ------------------------------ */
+
+const EASYCODEY_PREFIXES = ["easycodey.", "easycode."];
+
+function isEasyCodeyKey(key) {
+  return EASYCODEY_PREFIXES.some((prefix) => key.startsWith(prefix));
+}
+
+/* Een simpel, eerlijk overzicht van wat er lokaal bewaard is. Er wordt niets
+   verstuurd: alles komt uit localStorage en de bestaande store. */
+export function getLocalDataSummary() {
+  const profiles = readProfiles();
+  let bytes = 0;
+  let keys = 0;
+  try {
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (!key || !isEasyCodeyKey(key)) continue;
+      keys += 1;
+      bytes += key.length + String(localStorage.getItem(key) || "").length;
+    }
+  } catch {
+    // Zonder opslag tonen we alleen de tellingen die we al kennen.
+  }
+
+  const chat = getChatHistory();
+  const editor = getEditorDraft();
+
+  return {
+    profiles: profiles.length,
+    projectsWithProgress: Object.keys(state.progress || {}).length,
+    customIdeas: Array.isArray(state.customIdeas) ? state.customIdeas.length : 0,
+    chatMessages: chat.length,
+    editorChars: String(editor.code || "").length,
+    storageKeys: keys,
+    bytes
+  };
+}
+
+/* Wist alle EasyCodey-gegevens op dit toestel: profielen, voortgang, editor,
+   chat, instellingen, teller-vlaggen en de eigenaarssessie. De app-bestanden
+   in de offline-cache blijven staan, zodat de app blijft werken. */
+export function clearAllLocalData() {
+  try {
+    const keys = [];
+    for (let index = 0; index < localStorage.length; index += 1) {
+      const key = localStorage.key(index);
+      if (key && isEasyCodeyKey(key)) keys.push(key);
+    }
+    keys.forEach((key) => localStorage.removeItem(key));
+  } catch {
+    // Negeer: zonder opslag is er niets te wissen.
+  }
+  try {
+    sessionStorage.clear();
+  } catch {
+    // Negeer.
+  }
+  state = clone(DEFAULT_STATE);
+  profiles = [];
+  activeProfileId = "";
+  migratedFromLegacy = false;
 }
 
 export function getProgress(ideaId) {

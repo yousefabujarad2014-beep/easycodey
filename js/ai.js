@@ -139,6 +139,7 @@ ANTWOORDSTIJL
 - Antwoord altijd in het Nederlands, ook in code en commentaar.
 - Geen inleiding zoals "Goede vraag". Begin met je begrip van de vraag.
 - Gebruik korte alinea's. Maximaal 5 opsommingen.
+- Houd het antwoord kort: liever ongeveer 150 woorden en één codeblok dan een lange uitleg.
 - Gebruik een kopje (##) alleen als het antwoord langer is dan ongeveer 6 regels.
 - Gebruik nooit tabellen.
 - Houd code kort en uitvoerbaar. Zet code altijd in een blok met drie backticks en het woord python.
@@ -366,15 +367,31 @@ async function readCompletion(response, onDelta) {
 }
 
 async function requestWithRetry(url, options) {
-  let response = await fetch(url, options);
-  // De gratis dienst is soms even druk. Eén korte tweede poging helpt vaak.
-  if (response.status === 429 || response.status >= 500) {
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    if (!options.signal?.aborted) {
-      response = await fetch(url, options);
+  // De gratis dienst is soms even druk of heeft een korte storing. We proberen
+  // het automatisch opnieuw met een kleine pauze. Alleen vóór er iets van het
+  // antwoord binnen is, dus de bezoeker ziet nooit dubbele tekst.
+  const waits = [0, 900, 2400];
+  let response = null;
+  let lastError = null;
+
+  for (let attempt = 0; attempt < waits.length; attempt += 1) {
+    if (waits[attempt]) {
+      await new Promise((resolve) => setTimeout(resolve, waits[attempt]));
     }
+    if (options.signal?.aborted) break;
+    try {
+      response = await fetch(url, options);
+    } catch (error) {
+      lastError = error;
+      continue;
+    }
+    if (response.status !== 429 && response.status < 500) return response;
+    if (attempt === waits.length - 1) return response;
   }
-  return response;
+
+  if (lastError) throw lastError;
+  if (response) return response;
+  throw new Error("De AI is niet bereikbaar.");
 }
 
 async function requestServerChat({ messages, context, settings, mode, onDelta, signal }) {

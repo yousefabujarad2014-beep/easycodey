@@ -1,8 +1,8 @@
 # EasyCodey â€” eindrapport
 
-**Datum:** 9 november 2026
+**Datum:** 14 november 2026
 **Map:** `C:\Users\Home\Desktop\FLL`
-**Status:** inhoudelijk klaar, live op GitHub Pages
+**Status:** inhoudelijk klaar, live op GitHub Pages (versie v16)
 
 ---
 
@@ -15,6 +15,17 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ---
 
 ## 2. Wat er gebouwd is
+
+### Wat is nieuw in v16
+- **Editor met regelnummers, code-kleuren, cursorpositie en een telefoontoetsenbalk.**
+- **Bekijk regel N** springt bij een fout naar de juiste regel.
+- **Privacy-overzicht en wissen** in de instellingen, met twee bevestigingen.
+- **Tekstgrootte**: Normaal, Groot of Extra groot, plus ondersteuning voor meer contrast.
+- **Online/offline badge** bovenaan, met de melding dat werk bewaard blijft.
+- **AI-intake** die eerst vraagt waar je hulp bij nodig hebt.
+- **Betrouwbaardere AI**: drie pogingen en kortere antwoorden.
+- **Optionele eigen teller** via een gratis Cloudflare Worker + D1 (`worker/`), met terugval op Abacus.
+- **Zoekbalkfix**: je gebruikersnaam verschijnt na verversen niet meer in het zoekveld.
 
 ### Projectbibliotheek
 - **161 projecten** met **711 stappen**.
@@ -112,10 +123,16 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De header heeft een **ðŸ‘¤-icoon** en de footer een link **Mijn profiel**.
 - Duidelijke uitleg dat accounts alleen op dit apparaat staan en dat het wachtwoord geen sterke beveiliging is.
 
+### Privacy, tekst en netwerk
+- **Privacy-overzicht:** in **Instellingen** staat hoeveel profielen, projecten met voortgang, eigen ideeën, chatberichten en editortekens lokaal bewaard zijn, en hoeveel ruimte dat inneemt.
+- **Alles wissen:** met **🧹 Al mijn gegevens wissen** verwijdert de app alle lokale gegevens na twee bevestigingen (een vraag en het typen van `WISSEN`). Daarna start de app schoon en meldt hij dat alles gewist is.
+- **Tekstgrootte en contrast:** kies **Normaal**, **Groot** of **Extra groot**; de app volgt ook `prefers-contrast: more` en `prefers-reduced-motion`.
+- **Online/offline badge:** bovenaan verschijnt een duidelijke melding als je offline bent, met de uitleg dat je werk bewaard blijft. Kom je terug online, dan meldt de app dat alles weer werkt.
+
 ### Eigenaarspaneel (`#/eigenaar`)
 - De eigenaar logt in op **Mijn profiel** met de eigenaarsnaam en het eigenaars-wachtwoord. Dat account wordt bij de eerste login lokaal aangemaakt, dus het werkt op elk toestel. Het profiel krijgt het label **Eigenaar** en het beheer opent zonder code.
 - Alternatief: de eigenaarscode **of** het eigenaars-wachtwoord op `#/eigenaar`; de ontgrendeling geldt voor de sessie. Na **Vergrendelen** werkt het wachtwoord opnieuw.
-- **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik en de laatste automatische update.
+- **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik, starttijd van de app en de laatste automatische update.
 - **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen unieke bezoekers (één per toestel/browser), bezoeken, unieke installaties en APK-downloads. Geen account nodig en cookieloos.
 - **Bezoekers meten (optioneel):** daarnaast een gratis GoatCounter-sitecode instellen voor uitgebreidere inzichten: populairste projecten, versies en regio. De sitecode voor alle bezoekers staat in `site-config.json` (`analyticsSite`). Zonder sitecode wordt niets naar GoatCounter verstuurd; gebruikers kunnen alle meting uitzetten via **Mijn profiel → Privacy en statistieken**.
 - Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeÃ«n.
@@ -140,6 +157,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Nederlandse systeemprompt met een vaste antwoordstijl: eerst het directe antwoord, korte alinea's, code in een `python`-blok, geen tabellen, en altijd één concrete volgende stap.
 - Project- en stapcontext wordt met elk verzoek meegestuurd.
 - Na elk antwoord verschijnen **vervolgvragen** als knoppen, bijvoorbeeld “Leg dit simpeler uit”.
+- **AI-intake:** bij een nieuw gesprek vraagt de coach eerst waar je hulp bij nodig hebt. Na je eerste vraag verdwijnt die hulp; na **Gesprek wissen** komt hij terug.
+- **Betrouwbaar:** de coach probeert een verzoek automatisch drie keer (met korte pauzes) voordat hij terugvalt op de offline coach. Antwoorden blijven kort, ongeveer 150 woorden.
 - Het gesprek wordt **lokaal per profiel bewaard** (max. 40 berichten). Na verversen of opnieuw openen staat het er nog; **Gesprek wissen** ruimt het op.
 - **Ik bedoelde iets anders** vult het invoerveld met “Ik bedoelde iets anders. Ik bedoelde eigenlijk: ” en stuurt nog niets. Zo kun je eerst rustig typen wat je wél bedoelde.
 - Bij een netwerkfout of als de gratis dienst te druk is: duidelijke melding, offline antwoord en een knop **Opnieuw proberen met AI**.
@@ -166,7 +185,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Zes voorbeelden: hallo wereld, rekenen, loops, lijsten, functies en "Raad het getal" zonder `input()`.
 - Uitvoer en foutmeldingen verschijnen direct in het paneel.
 - Een Python-fout wordt in **eenvoudig Nederlands** uitgelegd met het **regelnummer**, het stukje code, wat er misgaat en een concrete tip. De technische melding blijft eronder staan voor gevorderden.
-- Bij een fout verschijnt **✦ Vraag EasyCoach om hulp**, zodat je met één klik verder kunt.
+- Bij een Python-fout verschijnt **✦ Vraag EasyCoach om hulp**, zodat je met één klik verder kunt.
+- Bij een fout verschijnt ook **Bekijk regel N**; in de editor springt die naar de juiste regel.
 - `input()` toont bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. De statusregel zegt **â€œTyp je antwoord in het venster bovenaanâ€¦â€**.
 - Bij het speelveld, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
 - Geen code of uitvoer gaat naar de server.
@@ -175,6 +195,10 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 
 ### Programmeer-editor (`#/programmeren`)
 - Volledige editor met een groot codeveld en een apart uitvoerpaneel.
+- **Regelnummers** in een gutter en **code-kleuren** voor trefwoorden, strings, getallen, commentaar en functies. De kleuren staan in een laag achter de echte textarea, zodat typen, undo, selecteren en plakken gewoon blijven werken. Lukt het kleuren niet, dan blijft de code leesbaar.
+- Een **cursorindicator** onder de code toont **Regel N, kolom M**.
+- Een **toetsenbalk voor je telefoon** met `:`, haakjes, aanhalingstekens, `=`, `#`, 4 spaties en Enter. Het toetsenbord blijft open tijdens het typen.
+- **Bekijk regel N** bij een Python-fout: de editor springt naar de regel die Python noemt en selecteert die regel. De uitleg in eenvoudig Nederlands blijft staan.
 - **â–¶ Uitvoeren** en **Ctrl + Enter** voeren de code uit via dezelfde Pyodide-runtime.
 - **Download .py** bewaart het programma als Python-bestand.
 - **Kopieer** zet de code op het klembord.
@@ -286,97 +310,100 @@ FLL/
 
 | Test | Resultaat |
 |---|---|
-| `npm run check` | âœ… 161 projecten, 711 stappen, 161 pagina's, 168 sitemap-URL's, 0 fouten |
-| Datacontrole op dubbele id's, verplichte velden, stappen, tips, `next`-links en covers | âœ… |
-| Syntaxcontrole `node --check` op `app.js`, `server.js`, `js/ai.js`, `js/store.js` | âœ… |
-| Startpagina `/` | âœ… 200, `text/html` |
-| `app.js`, `styles.css`, `data/index.js`, `data/ideas-07.js`, `js/ai.js`, `js/store.js` | âœ… 200 met juist `Content-Type` |
-| Alle 10 categorie-covers | âœ… 200, `image/svg+xml` |
-| `/api/config` | âœ… 200, `application/json`, inclusief doneervelden |
-| `/robots.txt` | âœ… 200, `text/plain`, verwijst naar de sitemap |
-| `/sitemap.xml` | âœ… 200, geldige XML met 168 URL's en `SITE_URL` |
-| Doneerknop zonder `DONATE_URL` | âœ… verborgen |
-| Doneerknop met `DONATE_URL` | âœ… zichtbaar, link en label kloppen |
-| Python-speelveld (headless Chrome, Pyodide) | âœ… `print("Test", 2 + 3)` geeft `Test 5` |
-| Speelveld sluiten en heropenen | âœ… werkt, runtime blijft geladen |
-| Programmeer-editor `#/programmeren` | âœ… editor, actieve nav, juiste titel |
-| Editor-uitvoer (headless Chrome, Pyodide) | âœ… `print("Editor test", 2 + 3)` geeft `Editor test 5` |
-| Editor automatisch bewaren | âœ… code staat direct in `localStorage` |
-| Editor: projectcode na eigen code | âœ… algemene editorcode wordt niet aan het oude project gekoppeld |
-| Editor na herladen | âœ… code blijft bewaard, ook bij een project |
-| Editor Ctrl + Enter | âœ… `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
-| Editor voorbeelden, uitvoer wissen en downloaden | âœ… |
-| Projectacties op detailpagina | âœ… **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
-| Projectcode in de editor | âœ… alle stappen met commentaar en projectbanner |
-| KopiÃ«ren naar klembord | âœ… volledige projectcode op het klembord |
-| Download `.py` vanaf detail en editor | âœ… bestanden bevatten de juiste code |
-| Mobiele navigatie en editorlayout | âœ… nav op eigen rij, editor Ã©Ã©n kolom |
-| Live GitHub Pages: editor, hero-link en projectacties | âœ… 9/9 live checks geslaagd |
-| Manifest, iconen en snelkoppelingen | âœ… 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
-| Service worker actief en pagina onder controle | âœ… scope `/`, app-shell uit cache |
+| `npm run check` | ✅ 161 projecten, 711 stappen, 161 pagina's, 168 sitemap-URL's, 0 fouten |
+| Datacontrole op dubbele id's, verplichte velden, stappen, tips, `next`-links en covers | ✅ |
+| Syntaxcontrole `node --check` op `app.js`, `server.js`, `js/ai.js`, `js/store.js` | ✅ |
+| Startpagina `/` | ✅ 200, `text/html` |
+| `app.js`, `styles.css`, `data/index.js`, `data/ideas-07.js`, `js/ai.js`, `js/store.js` | ✅ 200 met juist `Content-Type` |
+| Alle 10 categorie-covers | ✅ 200, `image/svg+xml` |
+| `/api/config` | ✅ 200, `application/json`, inclusief doneervelden |
+| `/robots.txt` | ✅ 200, `text/plain`, verwijst naar de sitemap |
+| `/sitemap.xml` | ✅ 200, geldige XML met 168 URL's en `SITE_URL` |
+| Doneerknop zonder `DONATE_URL` | ✅ verborgen |
+| Doneerknop met `DONATE_URL` | ✅ zichtbaar, link en label kloppen |
+| Python-speelveld (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
+| Speelveld sluiten en heropenen | ✅ werkt, runtime blijft geladen |
+| Programmeer-editor `#/programmeren` | ✅ editor, actieve nav, juiste titel |
+| Editor-uitvoer (headless Chrome, Pyodide) | ✅ `print("Editor test", 2 + 3)` geeft `Editor test 5` |
+| Editor automatisch bewaren | ✅ code staat direct in `localStorage` |
+| Editor: projectcode na eigen code | ✅ algemene editorcode wordt niet aan het oude project gekoppeld |
+| Editor na herladen | ✅ code blijft bewaard, ook bij een project |
+| Editor Ctrl + Enter | ✅ `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
+| Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
+| Projectacties op detailpagina | ✅ **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
+| Projectcode in de editor | ✅ alle stappen met commentaar en projectbanner |
+| KopiÃ«ren naar klembord | ✅ volledige projectcode op het klembord |
+| Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
+| Mobiele navigatie en editorlayout | ✅ nav op eigen rij, editor Ã©Ã©n kolom |
+| Live GitHub Pages: editor, hero-link en projectacties | ✅ 9/9 live checks geslaagd |
+| Manifest, iconen en snelkoppelingen | ✅ 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
+| Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
 | Offline-cache gevuld | 38 bestanden |
-| Installatie-uitleg in de app | âœ… 3 platformstappen, sluit correct |
-| **Speel dit idee** op een projectpagina | âœ… speelbare app in de pagina; **Gebruik dit idee** toont alle code |
-| **Programmeer zelf** met autoplay | âœ… volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
-| Site herladen zonder internet | âœ… laadt uit de cache |
-| Python uitvoeren zonder internet | âœ… werkt na eenmalig laden |
-| PWA-testsuite lokaal | âœ… 21/21 checks geslaagd |
-| Chrome-installeerbaarheid | âœ… geen installability errors |
+| Installatie-uitleg in de app | ✅ 3 platformstappen, sluit correct |
+| **Speel dit idee** op een projectpagina | ✅ speelbare app in de pagina; **Gebruik dit idee** toont alle code |
+| **Programmeer zelf** met autoplay | ✅ volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
+| Site herladen zonder internet | ✅ laadt uit de cache |
+| Python uitvoeren zonder internet | ✅ werkt na eenmalig laden |
+| PWA-testsuite lokaal | ✅ 21/21 checks geslaagd |
+| Chrome-installeerbaarheid | ✅ geen installability errors |
 | PWA-testsuite op de live site | 13/13 checks geslaagd |
-| Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
+| Live: manifest, iconen en service worker | ✅ `application/manifest+json`, scope `/easycodey/` |
 | Live: offline-cache en offline Python | 38 bestanden, Pyodide werkt offline |
-| Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
+| Live: wachtwoordaccount en chatknop | ✅ 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
 | Nieuwe flows lokaal | 46/46 checks: invoerhulp, app-entry, springlink, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster met browserherkenning en bevestiging, en eigenaarspaneel |
-| AI-coach en installatiehulp lokaal | 29/29 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v15 |
+| AI-coach en installatiehulp lokaal | 29/29 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v16 |
 | AI-gesprek, foutuitleg en toegankelijkheid lokaal | 13/13 checks: gesprek bewaard na verversen, “Ik bedoelde iets anders” vult het invoerveld, NameError/SyntaxError/TypeError in eenvoudig Nederlands met regelnummer, focusbeheer en aria-expanded |
 | Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
-| Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
+| Gratis APK-download | ✅ `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |
-| Invoer-pop-up met de echte vraag | âœ… 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
-| Chique huisstijl in headless Chrome | âœ… Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
-| Nieuw logo en app-iconen | âœ… `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
+| Editor, privacy en netwerk (v16) | 25/25 checks: regelnummers, code-kleuren, cursorpositie, invoegknop, Tab, **Bekijk regel N**, tekstgrootte, privacyoverzicht, alles wissen, online/offline badge, AI-intake en de wissen-melding |
+| Zoekbalkfix | ✅ autofill wordt genegeerd, een profielnaam wordt niet als zoekopdracht bewaard en de URL blijft schoon |
+| Optionele eigen teller (Cloudflare Worker + D1) | ✅ `worker/` met `/hit`, `/counts`, `/health`, dedupe per toestel en automatische terugval op Abacus; `counterApi` wordt door `check-data` gevalideerd |
+| Invoer-pop-up met de echte vraag | ✅ 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
+| Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
+| Nieuw logo en app-iconen | ✅ `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
 | Vaste pagina's lokaal | 103/103 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee, Snake-preview en de downloadpagina met QR |
-| App-preview per project | âœ… 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
-| Weerbaarheid bij laadfouten | âœ… 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
-| Snake-preview | âœ… canvas, D-pad en toetsen; speelbaar in de browser |
-| Alle 161 projecten | âœ… elk project heeft een preview (135 eigen demo's + 26 nieuwe demo's; 0 fallbacks over) |
-| Projectpagina `/idee/dobbelsteen-simulator/` | âœ… eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
-| Projectpagina zonder slash | âœ… 301 naar de map met slash |
-| Overzicht `/projecten/` | âœ… 161 links, 10 categorieÃ«n, zoekfilter en `CollectionPage` |
-| Sitemap lokaal | âœ… geldige XML, 168 URL's, productie-startpagina aanwezig |
-| Speel dit idee vanaf vaste pagina | âœ… app-weergave in de pagina; **Programmeer zelf** opent `?play=1` met volledige code en Pyodide-uitvoer |
-| Thema op vaste pagina | âœ… wisselt en wordt bewaard in `localStorage` |
-| Mobiel overzicht | âœ… geen horizontale overflow, Ã©Ã©n kolom |
-| Installatiepagina `/installeren/` | âœ… 8 secties, 3 Android-stappen, eigen titel en canonical |
-| QR-code op installatiepagina | âœ… laadt als SVG en is zichtbaar op mobiel |
-| Installatiepagina mobiel | âœ… geen horizontale overflow, Ã©Ã©n kolom |
-| Contactpagina `/contact/` | âœ… telefoon/WhatsApp, e-mail, eigen titel, canonical en JSON-LD |
-| Contactpagina mobiel | âœ… drie kaarten in Ã©Ã©n kolom, geen overflow |
-| Doneerpagina `/doneren/` | âœ… IBAN, rekeninghouder, bank, BIC, kopieerknop en JSON-LD (`DonateAction`) |
-| Doneerpagina mobiel | âœ… twee blokken in Ã©Ã©n kolom, geen overflow |
-| Doneermodal in de app | âœ… toont IBAN en houder en linkt naar `/doneren/` |
-| SPA-fallback voor onbekend pad | âœ… 200, levert `index.html` |
-| `/api/chat` zonder sleutel | âœ… 401 met `no-key` |
-| Toegangscode zonder code | âœ… 401 met `access-code` |
-| Toegangscode met juiste code | âœ… verzoek toegestaan |
-| Rate limiting | âœ… 429 na het ingestelde maximum |
-| `/server.js`, `/package.json`, `/render.yaml`, alle `*.md`, `/.env.example`, `/scripts/check-data.mjs`, `/.git/config` | âœ… 404 (geblokkeerd) |
-| Path traversal (`/../server.js`, `/%2e%2e/server.js`) | âœ… 404 |
-| Oude projectnaam en oude coachnaam | âœ… geen verwijzingen meer |
-| Import van kapotte JSON (lege stappen, ongeldige categorie/duur, dubbele id's) | âœ… schoongemaakt of geweigerd |
-| Startpagina in headless Chrome | âœ… 30 kaarten, 30 covers, geen `undefined` |
-| Projectpagina `#/idee/raad-het-getal` | âœ… 5 stappen, 5 codeblokken, 1 cover, juiste titel |
-| Leerpad `#/leerpad` | âœ… 161 projecten gegroepeerd per niveau |
-| Mijn ideeÃ«n `#/mijn-ideeen` | âœ… lege staat zonder projecten, 1 kaart met testproject |
-| Filters via URL (`q`, `categorie`, `niveau`) | âœ… 2 resultaten, zoekveld en actieve chips kloppen |
-| Filters wissen | âœ… 161 projecten, 30 kaarten, URL terug naar `#/` |
-| Categorie Games + meer laden | âœ… 36 resultaten, 30 â†’ 36 kaarten |
-| Verras me | âœ… navigeert naar een bestaande projectpagina |
-| Voortgang: 2 van 5 stappen | âœ… 40% en 2 afgevinkte stappen |
-| Stap afvinken | âœ… opgeslagen als `[0,1,2]`, weergave 60% |
-| Project afronden | âœ… alle 5 stappen opgeslagen, knop uitgeschakeld, 30 confettistukjes |
-| Voortgang resetten | âœ… opslag leeg en 0 afgevinkte stappen |
-| Onbekende route | âœ… "Niet gevonden"-pagina |
+| App-preview per project | ✅ 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
+| Weerbaarheid bij laadfouten | ✅ 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
+| Snake-preview | ✅ canvas, D-pad en toetsen; speelbaar in de browser |
+| Alle 161 projecten | ✅ elk project heeft een preview (135 eigen demo's + 26 nieuwe demo's; 0 fallbacks over) |
+| Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
+| Projectpagina zonder slash | ✅ 301 naar de map met slash |
+| Overzicht `/projecten/` | ✅ 161 links, 10 categorieÃ«n, zoekfilter en `CollectionPage` |
+| Sitemap lokaal | ✅ geldige XML, 168 URL's, productie-startpagina aanwezig |
+| Speel dit idee vanaf vaste pagina | ✅ app-weergave in de pagina; **Programmeer zelf** opent `?play=1` met volledige code en Pyodide-uitvoer |
+| Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
+| Mobiel overzicht | ✅ geen horizontale overflow, Ã©Ã©n kolom |
+| Installatiepagina `/installeren/` | ✅ 8 secties, 3 Android-stappen, eigen titel en canonical |
+| QR-code op installatiepagina | ✅ laadt als SVG en is zichtbaar op mobiel |
+| Installatiepagina mobiel | ✅ geen horizontale overflow, Ã©Ã©n kolom |
+| Contactpagina `/contact/` | ✅ telefoon/WhatsApp, e-mail, eigen titel, canonical en JSON-LD |
+| Contactpagina mobiel | ✅ drie kaarten in Ã©Ã©n kolom, geen overflow |
+| Doneerpagina `/doneren/` | ✅ IBAN, rekeninghouder, bank, BIC, kopieerknop en JSON-LD (`DonateAction`) |
+| Doneerpagina mobiel | ✅ twee blokken in Ã©Ã©n kolom, geen overflow |
+| Doneermodal in de app | ✅ toont IBAN en houder en linkt naar `/doneren/` |
+| SPA-fallback voor onbekend pad | ✅ 200, levert `index.html` |
+| `/api/chat` zonder sleutel | ✅ 401 met `no-key` |
+| Toegangscode zonder code | ✅ 401 met `access-code` |
+| Toegangscode met juiste code | ✅ verzoek toegestaan |
+| Rate limiting | ✅ 429 na het ingestelde maximum |
+| `/server.js`, `/package.json`, `/render.yaml`, alle `*.md`, `/.env.example`, `/scripts/check-data.mjs`, `/.git/config` | ✅ 404 (geblokkeerd) |
+| Path traversal (`/../server.js`, `/%2e%2e/server.js`) | ✅ 404 |
+| Oude projectnaam en oude coachnaam | ✅ geen verwijzingen meer |
+| Import van kapotte JSON (lege stappen, ongeldige categorie/duur, dubbele id's) | ✅ schoongemaakt of geweigerd |
+| Startpagina in headless Chrome | ✅ 30 kaarten, 30 covers, geen `undefined` |
+| Projectpagina `#/idee/raad-het-getal` | ✅ 5 stappen, 5 codeblokken, 1 cover, juiste titel |
+| Leerpad `#/leerpad` | ✅ 161 projecten gegroepeerd per niveau |
+| Mijn ideeÃ«n `#/mijn-ideeen` | ✅ lege staat zonder projecten, 1 kaart met testproject |
+| Filters via URL (`q`, `categorie`, `niveau`) | ✅ 2 resultaten, zoekveld en actieve chips kloppen |
+| Filters wissen | ✅ 161 projecten, 30 kaarten, URL terug naar `#/` |
+| Categorie Games + meer laden | ✅ 36 resultaten, 30 â†’ 36 kaarten |
+| Verras me | ✅ navigeert naar een bestaande projectpagina |
+| Voortgang: 2 van 5 stappen | ✅ 40% en 2 afgevinkte stappen |
+| Stap afvinken | ✅ opgeslagen als `[0,1,2]`, weergave 60% |
+| Project afronden | ✅ alle 5 stappen opgeslagen, knop uitgeschakeld, 30 confettistukjes |
+| Voortgang resetten | ✅ opslag leeg en 0 afgevinkte stappen |
+| Onbekende route | ✅ "Niet gevonden"-pagina |
 
 ### Handmatig te testen na deployment
 - Zoeken en alle filters combinieren.
@@ -526,25 +553,25 @@ De site staat live:
 
 | Onderdeel | Status |
 |---|---|
-| GitHub-repository | âœ… https://github.com/yousefabujarad2014-beep/easycodey |
-| GitHub Pages | âœ… https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Windows-snelkoppelingen | âœ… bureaublad + startmenu |
-| Python-speelveld op de live site | âœ… |
-| Programmeer-editor op de live site | âœ… |
-| Installeerbare app (PWA) | âœ… manifest, service worker, offline-cache en **volledig automatische updates** |
-| Chique huisstijl + logo | âœ… ivoor/diepgroen/goud en eigen monogram |
-| Optionele profielen + back-up | âœ… `#/profiel`, lokale profielen, optioneel contact en JSON-back-up |
-| Eigenaarspaneel | âœ… `#/eigenaar`, lokale statistieken, mededeling en download |
-| Invoerhulp bij `input()` | âœ… de vraag en het tekstvak verschijnen in het venster bovenaan |
-| 161 vaste projectpagina's + overzicht | âœ… `/idee/<id>/` en `/projecten/` |
-| Installatiepagina met QR-code | âœ… `/installeren/` |
-| Contactpagina | âœ… `/contact/` met telefoon/WhatsApp en e-mail |
-| Doneerpagina | âœ… `/doneren/` met IBAN, houder, bank, BIC en transparantie |
-| Privacybeleid | âœ… `/privacy/` met lokale opslag, geen verkoop en contact |
-| Sitemap met 168 URL's | âœ… gegenereerd door `npm run pages` |
+| GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey |
+| GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
+| Windows-snelkoppelingen | ✅ bureaublad + startmenu |
+| Python-speelveld op de live site | ✅ |
+| Programmeer-editor op de live site | ✅ |
+| Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **volledig automatische updates** |
+| Chique huisstijl + logo | ✅ ivoor/diepgroen/goud en eigen monogram |
+| Optionele profielen + back-up | ✅ `#/profiel`, lokale profielen, optioneel contact en JSON-back-up |
+| Eigenaarspaneel | ✅ `#/eigenaar`, lokale statistieken, mededeling en download |
+| Invoerhulp bij `input()` | ✅ de vraag en het tekstvak verschijnen in het venster bovenaan |
+| 161 vaste projectpagina's + overzicht | ✅ `/idee/<id>/` en `/projecten/` |
+| Installatiepagina met QR-code | ✅ `/installeren/` |
+| Contactpagina | ✅ `/contact/` met telefoon/WhatsApp en e-mail |
+| Doneerpagina | ✅ `/doneren/` met IBAN, houder, bank, BIC en transparantie |
+| Privacybeleid | ✅ `/privacy/` met lokale opslag, geen verkoop en contact |
+| Sitemap met 168 URL's | ✅ gegenereerd door `npm run pages` |
 | Google Play (TWA) | â³ technisch klaar: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
 | Online AI-coach | gratis online AI standaard; eigen server of OpenAI-sleutel optioneel |
-| Doneren | âœ… Belfius IBAN via `site-config.json` en de doneerpagina |
+| Doneren | ✅ Belfius IBAN via `site-config.json` en de doneerpagina |
 
 Wat optioneel nog kan:
 

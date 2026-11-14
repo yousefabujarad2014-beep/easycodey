@@ -1,6 +1,6 @@
 # EasyCodey als app
 
-**Laatst bijgewerkt:** 9 november 2026
+**Laatst bijgewerkt:** 14 november 2026
 
 EasyCodey is een **installeerbare webapp** (PWA). Je installeert dezelfde site als een app: met een eigen icoon, een eigen venster en offline ondersteuning. Er is geen app-store, account of download nodig.
 
@@ -11,6 +11,20 @@ Installatiepagina met QR-code: https://yousefabujarad2014-beep.github.io/easycod
 Contact: https://yousefabujarad2014-beep.github.io/easycodey/contact/ — telefoon/WhatsApp **+32 466 47 66 52**, e-mail **yousefabujarad2014@gmail.com**
 
 Doneren: https://yousefabujarad2014-beep.github.io/easycodey/doneren/ — IBAN **BE69 0638 3621 2278**, houder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB**
+
+---
+
+## Nieuw in v16
+
+- **Editor met regelnummers en kleuren.** Je ziet meteen waar je bent. Onder de code staat je positie (regel en kolom) en op je telefoon heb je een toetsenbalk met `:`, haakjes, aanhalingstekens, `=`, `#`, 4 spaties en Enter.
+- **Bekijk regel N.** Geeft je code een fout, dan zegt EasyCodey in eenvoudig Nederlands wat er misgaat en springt **Bekijk regel N** naar de juiste regel.
+- **Privacy-overzicht.** In **Instellingen** zie je hoeveel profielen, voortgang, eigen ideeën, chatberichten en editortekens er lokaal staan, en hoeveel ruimte dat inneemt. Met **🧹 Al mijn gegevens wissen** wis je alles in twee bevestigingen.
+- **Tekstgrootte.** Kies **Normaal**, **Groot** of **Extra groot**. De app past zich ook aan als je toestel om meer contrast vraagt.
+- **Online/offline badge.** Bovenaan zie je duidelijk wanneer je offline bent en dat je werk bewaard blijft. Kom je terug online, dan meldt de app dat alles weer werkt.
+- **AI-intake.** EasyCoach vraagt eerst waar je hulp bij nodig hebt. Na je eerste vraag verdwijnt die hulp; na **Gesprek wissen** komt hij terug.
+- **Betrouwbaardere AI.** De coach probeert het automatisch drie keer en houdt antwoorden kort (ongeveer 150 woorden).
+- **Zoekbalkfix.** Na verversen verschijnt je gebruikersnaam niet meer in het zoekveld.
+- **Optionele eigen teller.** De eigenaar kan een gratis Cloudflare Worker + D1 koppelen (`worker/README.md`). De app valt automatisch terug op Abacus.
 
 ---
 
@@ -214,6 +228,7 @@ EasyCodey is bewust rustig en veilig opgezet:
 
 - **HTTPS:** de live app werkt via `https://yousefabujarad2014-beep.github.io/easycodey/` met een geldig certificaat, HSTS en een automatische doorverwijzing van HTTP naar HTTPS.
 - **Lokaal:** voortgang, accounts en eigen projecten staan alleen in de opslag van je eigen browser. Er is geen database en geen server die je gegevens bewaart.
+- **Jij bepaalt wat er blijft:** in **Instellingen** zie je een overzicht van alle lokale gegevens en kun je met **🧹 Al mijn gegevens wissen** alles verwijderen. Je krijgt twee bevestigingen voordat er iets verdwijnt.
 - **Geen advertenties of trackers:** er zijn geen advertentienetwerken. Alleen als de eigenaar een GoatCounter-sitecode instelt, worden anonieme bezoekcijfers geteld — cookieloos, zonder persoonsgegevens en met een opt-out in **Mijn profiel → Privacy en statistieken**.
 - **Automatische updates:** de app controleert bij de start, elke 15 minuten, bij terugkeer naar de app, bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch geactiveerd.
 - **Geen sterke beveiliging:** het wachtwoord houdt accounts op hetzelfde apparaat uit elkaar. Gebruik geen belangrijk wachtwoord, want iemand met toegang tot je toestel kan bij de lokale opslag.

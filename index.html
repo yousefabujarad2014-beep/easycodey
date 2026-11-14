@@ -45,6 +45,9 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://text.pollinations.ai" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://abacus.jasoncameron.dev" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg" />
@@ -201,6 +204,16 @@
       <button type="button" data-action="open-generator">✦ Eigen idee</button>
     </div>
 
+    <div class="ai-intake" id="ai-intake">
+      <span class="ai-intake-label">Waar heb je hulp bij nodig?</span>
+      <div class="ai-intake-row">
+        <button type="button" data-action="quick-prompt" data-prompt="Ik wil iets maken, maar ik heb nog geen code. Help me eerst mijn doel kiezen.">Iets maken</button>
+        <button type="button" data-action="quick-prompt" data-prompt="Mijn code werkt niet. Ik plak zo mijn code en de foutmelding.">Code werkt niet</button>
+        <button type="button" data-action="quick-prompt" data-prompt="Ik begrijp een begrip niet goed. Leg het me stap voor stap uit met een klein voorbeeld.">Begrip uitleggen</button>
+        <button type="button" data-action="quick-prompt" data-prompt="Kies samen met mij een project dat past bij mijn niveau en de tijd die ik heb.">Project kiezen</button>
+      </div>
+    </div>
+
     <form class="ai-composer" id="ai-form">
       <textarea id="ai-input" rows="1" placeholder="Beschrijf je idee of stel een vraag…" aria-label="Bericht aan AI-coach"></textarea>
       <button type="submit" class="send-btn" id="ai-send" aria-label="Verstuur bericht">
@@ -216,7 +229,7 @@
   <div class="modal-backdrop" id="settings-modal" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
       <div class="modal-head">
-        <h2 id="settings-title">AI-instellingen</h2>
+        <h2 id="settings-title">Instellingen</h2>
         <button class="icon-btn small" type="button" data-action="close-settings" aria-label="Sluiten">✕</button>
       </div>
       <p class="modal-lead">
@@ -227,6 +240,15 @@
       <label class="profile-check">
         <input type="checkbox" id="cfg-online" checked />
         <span><strong>Online AI-coach gebruiken</strong> — duidelijkere antwoorden op jouw vraag</span>
+      </label>
+      <label class="field">
+        <span>Tekstgrootte</span>
+        <select id="cfg-text-size" class="field-select">
+          <option value="normaal">Normaal</option>
+          <option value="groot">Groot</option>
+          <option value="extra">Extra groot</option>
+        </select>
+        <small>Grotere letters zijn prettig op een telefoon of als je minder goed ziet.</small>
       </label>
       <label class="field">
         <span>Eigen OpenAI-sleutel (optioneel)</span>
@@ -252,6 +274,18 @@
         <button class="btn ghost" type="button" data-action="close-settings">Annuleren</button>
         <button class="btn" type="button" data-action="save-settings">Opslaan</button>
       </div>
+      <section class="settings-privacy" aria-labelledby="settings-privacy-title">
+        <h3 id="settings-privacy-title">Jouw gegevens op dit toestel</h3>
+        <p class="modal-lead">
+          EasyCodey bewaart je voortgang, je code, je gesprek en je account alleen in deze browser.
+          Er is geen server die meeleest. Hieronder zie je precies wat er staat.
+        </p>
+        <div class="privacy-summary" id="privacy-summary">Overzicht laden…</div>
+        <div class="profile-actions">
+          <button class="btn ghost tiny owner-danger" type="button" data-action="wipe-data">🧹 Al mijn gegevens wissen</button>
+          <a class="btn ghost tiny" href="privacy/">Lees het privacybeleid</a>
+        </div>
+      </section>
       <p class="modal-fineprint">
         Je eigen sleutel wordt alleen in deze browser bewaard. Zet de online coach uit als je liever
         volledig offline werkt. Op een gedeelde computer kun je de sleutel beter via een
@@ -407,6 +441,7 @@
       <pre class="playground-output" id="playground-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
       <div class="python-error-actions">
         <button class="btn ghost tiny" type="button" id="playground-ai-help" data-action="ask-error" data-source="playground" hidden>✦ Vraag EasyCoach om hulp</button>
+        <button class="btn ghost tiny" type="button" id="playground-jump-error" data-action="jump-error-line" data-source="playground" hidden>Bekijk regel</button>
         <span class="python-offline-badge" data-python-ready hidden>✅ Python werkt nu ook offline</span>
       </div>
       <p class="modal-fineprint">
@@ -522,6 +557,7 @@
     </div>
   </div>
 
+  <div class="network-badge" id="network-badge" role="status" aria-live="polite" hidden></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <style>

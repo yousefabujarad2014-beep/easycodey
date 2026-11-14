@@ -32,6 +32,18 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 
 > Open de site via de server, niet via `file://`. De site gebruikt ES-modules en die werken niet als je `index.html` direct opent. Gebruik voor de echte app altijd de HTTPS-link hierboven; dan zie je het slotje in de adresbalk.
 
+## Wat is nieuw in v16?
+
+- **Editor met regelnummers en kleuren.** Je ziet meteen waar je bent, met een cursorindicator (regel en kolom) en een toetsenbalk voor je telefoon.
+- **Bekijk regel N.** Bij een Python-fout springt de editor naar de regel die Python noemt. De uitleg blijft in eenvoudig Nederlands staan.
+- **Privacy-overzicht en wissen.** In **Instellingen** zie je wat er lokaal bewaard is en kun je met twee bevestigingen alles wissen.
+- **Tekstgrootte.** Kies Normaal, Groot of Extra groot. De app past zich ook aan als je toestel om meer contrast vraagt.
+- **Online/offline badge.** Je ziet duidelijk wanneer je offline bent en dat je werk bewaard blijft.
+- **AI-intake.** EasyCoach vraagt eerst waar je hulp bij nodig hebt, verbergt die hulp na je eerste vraag en toont hem opnieuw na **Gesprek wissen**.
+- **Betrouwbaardere AI.** Drie automatische pogingen met een korte pauze, en kortere antwoorden van ongeveer 150 woorden.
+- **Optionele eigen teller.** Een gratis Cloudflare Worker + D1 in `worker/`, met automatische terugval op Abacus.
+- **Zoekbalkfix.** Na verversen verschijnt je gebruikersnaam niet meer in het zoekveld.
+
 ## Wat zit erin?
 
 - **161 projecten** van Beginner tot Gevorderd, verdeeld over Games, Web, GUI, Data & AI, Handige tools, Automatisering, Security, Wetenschap, Kunst & Creatief en Onderwijs.
@@ -51,7 +63,11 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
 - **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account. Een fout wordt in **eenvoudig Nederlands** uitgelegd met regelnummer, codefragment en tip; met **✦ Vraag EasyCoach om hulp** ga je meteen verder.
 - **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
-- **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
+- **Programmeer-editor** (`#/programmeren`): een volledige editor met **regelnummers**, **code-kleuren**, een **toetsenbalk voor je telefoon** (:, haakjes, aanhalingstekens, 4 spaties, Enter), een cursorindicator (regel en kolom), uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren. Bij een fout opent **Bekijk regel N** meteen de juiste regel.
+- **Privacy-overzicht en wissen**: in **Instellingen** zie je precies hoeveel profielen, voortgang, eigen ideeën, chatberichten en editortekens er lokaal staan, plus hoeveel ruimte dat inneemt. Met **🧹 Al mijn gegevens wissen** ruim je alles in twee bevestigingen op.
+- **Leesbaar voor iedereen**: kies in de instellingen **Normaal**, **Groot** of **Extra groot**. De app respecteert ook `prefers-contrast: more` en `prefers-reduced-motion`.
+- **Online/offline badge**: bovenaan verschijnt een duidelijke melding als je offline bent, met de uitleg dat je werk bewaard blijft. Kom je terug online, dan meldt de app dat alles weer werkt.
+- **Optionele eigen teller**: naast de ingebouwde Abacus-teller kan de eigenaar een gratis **Cloudflare Worker + D1** koppelen (`worker/`). De app valt automatisch terug op Abacus als die teller even niet bereikbaar is.
 - **Projectcode in de editor**: elk project heeft **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. **Speel dit idee** toont de speelbare app, **Gebruik dit idee** toont alle code en **Programmeer zelf** opent het hele project als één programma in de editor, met commentaar per stap.
 - **App-weergave per project**: elke projectpagina opent standaard in een schone, app-achtige preview zonder code. Met de knoppen **▶ Speel dit idee** en **⌨ Gebruik dit idee** schakel je tussen spelen en leren; de app en de code zitten dus samen in dezelfde twee acties. De previews zijn echte, interactieve demo's (Snake, Tetris, Pong, rekenmachine, weer, portscanner, simulaties enz.) en hebben voor alle 161 projecten een passende weergave.
 - **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Je hoeft zelf niets te doen. Het installatievenster herkent je **browser en toestel**, toont alleen de stap die daarbij past en heeft een knop **✅ Is het gelukt?** om te controleren of de app echt geïnstalleerd is.
@@ -73,7 +89,10 @@ FLL/
 ├── offline.html            Pagina die verschijnt als je offline bent
 ├── js/
 │   ├── ai.js               Streaming, markdown, offline coach en generator
+│   ├── analytics.js        Optionele, cookieloze GoatCounter-meting
+│   ├── counter.js          Anonieme teller (Cloudflare Worker of Abacus)
 │   ├── previews.js         Interactieve app-previews en de schakelaar tussen app en code
+│   ├── python-errors.js    Engelse Python-fouten naar eenvoudig Nederlands
 │   └── store.js            Opslag van voortgang, instellingen, thema, editor en eigen projecten
 ├── data/
 │   ├── index.js            Centrale datalaag: normaliseren, covers en metadata
@@ -85,6 +104,7 @@ FLL/
 ├── scripts/check-data.mjs  Controle van de projectdata en de app-bestanden
 ├── scripts/build-pages.mjs Genereert de vaste pagina's, het overzicht en de sitemap
 ├── scripts/make-icons.mjs  App-iconen opnieuw maken met headless Chrome
+├── worker/                 Optionele gratis teller: Cloudflare Worker + D1
 ├── idee/<id>/index.html    161 vaste, indexeerbare projectpagina's
 ├── projecten/index.html    Overzicht van alle projecten
 ├── installeren/index.html  Installatie-uitleg met QR-code
@@ -256,6 +276,7 @@ Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config
 {
   "analyticsSite": "",
   "publicCounter": "easycodey-yousef",
+  "counterApi": "",
   "donateUrl": "",
   "donateLabel": "",
   "donateNote": "Elke bijdrage helpt om EasyCodey online te houden en nieuwe projecten toe te voegen.",
@@ -266,6 +287,7 @@ Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config
 ```
 
 - `publicCounter` is de naam van de ingebouwde anonieme teller. Laat je hem leeg, dan worden bezoeken, unieke bezoekers, unieke installaties en APK-downloads niet geteld.
+- `counterApi` is optioneel. Zet hier het adres van je eigen gratis Cloudflare Worker (zie `worker/README.md`). Laat je hem leeg, dan gebruikt de app Abacus.
 - `analyticsSite` is optioneel. Vul hier je gratis GoatCounter-sitecode in voor uitgebreidere inzichten (populaire projecten, versies, regio). Zonder code wordt er niets naar GoatCounter verstuurd.
 
 Commit en push daarna. De site gebruikt `site-config.json` automatisch als `/api/config` niet beschikbaar is.
