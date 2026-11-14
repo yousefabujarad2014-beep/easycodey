@@ -14,6 +14,22 @@
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <meta name="author" content="EasyCodey" />
   <meta name="theme-color" content="#f7f5ef" />
+  <script>
+    /* Zet het gekozen thema al vóór de eerste tekening, zodat de pagina
+       niet kort licht flitst als je donker hebt gekozen. */
+    (function () {
+      try {
+        var raw = localStorage.getItem("easycodey.v1") || localStorage.getItem("easycode.v1");
+        var stored = raw ? JSON.parse(raw).theme : null;
+        var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#12110f" : "#f7f5ef");
+      } catch (error) {
+        // Zonder opslag start de app gewoon in het lichte thema.
+      }
+    })();
+  </script>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -46,6 +62,8 @@
   <link rel="preconnect" href="https://text.pollinations.ai" crossorigin />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
   <link rel="preconnect" href="https://abacus.jasoncameron.dev" crossorigin />
+  <link rel="preload" href="assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/fonts/fonts.css" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" type="image/svg+xml" href="assets/icons/logo.svg" />

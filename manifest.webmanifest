@@ -39,6 +39,25 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "./assets/screenshots/home-mobile.png",
+      "sizes": "1080x2400",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Kies een Python-project op je telefoon"
+    },
+    {
+      "src": "./assets/screenshots/home-desktop.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Ontdek 161 projecten op je computer"
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "shortcuts": [
     {
       "name": "Programmeren",

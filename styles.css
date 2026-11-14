@@ -3,6 +3,7 @@
    ======================================================================== */
 
 :root {
+  color-scheme: light;
   --bg: #f7f3ea;
   --bg-soft: #efe7d8;
   --panel: #fffdf8;
@@ -37,6 +38,7 @@
 }
 
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg: #12110f;
   --bg-soft: #191713;
   --panel: #1b1915;
@@ -8677,3 +8679,16 @@ select.pv-input option {
 .pv-log-line.error { color: var(--pv-coral); }
 .pv-log-line.warn { color: var(--pv-gold); }
 .pv-log-line.info { color: var(--pv-brand); }
+
+/* Op een aanraakscherm zijn grotere knoppen prettiger en betrouwbaarder. */
+@media (pointer: coarse) {
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .icon-btn.small {
+    width: 40px;
+    height: 40px;
+  }
+}

@@ -118,6 +118,8 @@ function head({ title, description, canonical, image, prefix, extraLd }) {
   <script type="application/ld+json">
 ${jsonLd(extraLd)}
   </script>
+  <link rel="preload" href="${prefix}assets/fonts/plus-jakarta-sans.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="${prefix}assets/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="${prefix}assets/fonts/fonts.css" />
   <link rel="stylesheet" href="${prefix}styles.css" />
   <script>
@@ -127,6 +129,8 @@ ${jsonLd(extraLd)}
         var stored = raw ? JSON.parse(raw).theme : null;
         var dark = stored === "dark" || (!stored && window.matchMedia("(prefers-color-scheme: dark)").matches);
         document.documentElement.dataset.theme = dark ? "dark" : "light";
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#12110f" : "#f7f5ef");
         var meta = document.querySelector('meta[name="theme-color"]');
         if (meta) meta.setAttribute("content", dark ? "#12110f" : "#f7f5ef");
       } catch (error) {}
