@@ -1092,7 +1092,7 @@
       </p>
       <div class="static-filter">
         <label for="project-filter">Zoek een project</label>
-        <input id="project-filter" type="search" placeholder="Bijvoorbeeld: snake, webscraper, beginner" autocomplete="off" />
+        <input id="project-filter" type="search" placeholder="Bijvoorbeeld: snake, webscraper, beginner" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Zoek een project" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" />
       </div>
     </header>
 
@@ -2466,6 +2466,7 @@
       var empty = document.getElementById("no-results");
       var sections = [].slice.call(document.querySelectorAll(".static-category"));
       if (!input) return;
+      var typed = false;
       function apply() {
         var query = (input.value || "").trim().toLowerCase();
         var total = 0;
@@ -2482,8 +2483,72 @@
         });
         empty.hidden = total !== 0;
       }
-      input.addEventListener("input", apply);
+      /* Een browser of wachtwoordmanager vult dit veld soms met de opgeslagen
+         gebruikersnaam. Dat is geen zoekopdracht: haal het meteen weg. Een
+         echte zoekopdracht (ook van een zoeksuggestie) laten we staan. */
+      var OWNER_FALLBACK = ["yousef abujarad"];
+      function normName(value) {
+        return String(value || "").replace(/ /g, " ").replace(/s+/g, " ").trim().toLowerCase();
+      }
+      function knownNames() {
+        var names = OWNER_FALLBACK.slice();
+        try {
+          var list = JSON.parse(localStorage.getItem("easycodey.profiles.v1") || "[]");
+          if (Array.isArray(list)) {
+            list.forEach(function (profile) {
+              if (profile && typeof profile.name === "string") names.push(profile.name);
+            });
+          }
+        } catch (error) {
+          // Zonder profielopslag blijft alleen de eigenaarsnaam bekend.
+        }
+        return names.map(normName).filter(Boolean);
+      }
+      function looksLikeUsername() {
+        var value = normName(input.value);
+        return Boolean(value) && knownNames().indexOf(value) !== -1;
+      }
+      function clearAuto() {
+        if (typed || !looksLikeUsername()) return;
+        input.value = "";
+        apply();
+      }
+      input.addEventListener("keydown", function (event) {
+        if (event.key.length === 1 || event.key === "Backspace" || event.key === "Delete") typed = true;
+      });
+      ["paste", "cut", "drop", "compositionstart"].forEach(function (type) {
+        input.addEventListener(type, function () { typed = true; });
+      });
+      input.addEventListener("beforeinput", function (event) {
+        var type = event.inputType || "";
+        if (event.isTrusted && /^(insert|delete)/.test(type) && !/autofill|replacement/i.test(type)) {
+          typed = true;
+        }
+      });
+      input.addEventListener("focus", function () { window.setTimeout(clearAuto, 60); });
+      input.addEventListener("change", clearAuto);
+      input.addEventListener("input", function () {
+        var before = input.value;
+        clearAuto();
+        if (input.value !== before) return;
+        apply();
+      });
       input.addEventListener("search", apply);
+      [0, 100, 300, 700, 1200, 2000, 3500, 5000].forEach(function (delay) {
+        window.setTimeout(clearAuto, delay);
+      });
+      var guardRuns = 0;
+      var guardTimer = window.setInterval(function () {
+        clearAuto();
+        guardRuns += 1;
+        if (guardRuns >= 20) window.clearInterval(guardTimer);
+      }, 1500);
+      window.addEventListener("load", function () { window.setTimeout(clearAuto, 200); });
+      window.addEventListener("pageshow", function () { window.setTimeout(clearAuto, 200); });
+      window.addEventListener("focus", function () { window.setTimeout(clearAuto, 60); });
+      document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) window.setTimeout(clearAuto, 60);
+      });
     })();
   </script>
 </body>

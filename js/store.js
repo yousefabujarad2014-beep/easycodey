@@ -323,6 +323,17 @@ export function getActiveProfile() {
   return safeProfile(profiles.find((profile) => profile.id === activeProfileId));
 }
 
+/* Alle namen die als gebruikersnaam kunnen voorkomen: elk lokaal profiel en
+   het eigenaarsaccount. Zo herkent de app een naam die per ongeluk in het
+   zoekveld of de URL belandde, ook als er niemand is ingelogd. */
+export function getKnownNames() {
+  const names = new Set([OWNER_NAME]);
+  for (const profile of profiles) names.add(profile.name);
+  return [...names]
+    .map((name) => String(name || "").replace(/\u00a0/g, " ").replace(/\s+/g, " ").trim().toLowerCase())
+    .filter(Boolean);
+}
+
 export function registerProfile(name, password, options = {}) {
   const cleanName = String(name || "").trim().replace(/\s+/g, " ").slice(0, 40);
   const cleanPassword = String(password || "").trim();

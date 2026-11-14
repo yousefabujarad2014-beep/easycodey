@@ -1378,8 +1378,54 @@ function restoreBackupFile(file) {
 /* ------------------------------ home ------------------------------ */
 
 function isProfileName(value) {
-  const name = String(store.getActiveProfile()?.name || "").trim().toLowerCase();
-  return Boolean(name) && String(value || "").trim().toLowerCase() === name;
+  const clean = String(value || "")
+    .replace(/\u00a0/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+  if (!clean) return false;
+  return store.getKnownNames().includes(clean);
+}
+
+/* Haalt een gebruikersnaam ook uit het echte adres (vóór de #) en uit de
+   query achter de #. Zo blijft een naam nooit in de adresbalk staan. */
+function cleanUsernameFromAddress() {
+  const keys = ["q", "zoek", "search", "naam", "name", "username", "gebruiker"];
+  try {
+    const url = new URL(location.href);
+    let changed = false;
+    for (const key of keys) {
+      if (isProfileName(url.searchParams.get(key))) {
+        url.searchParams.delete(key);
+        changed = true;
+      }
+    }
+    if (changed) {
+      const next = `${url.pathname}${url.search}${url.hash}`;
+      if (next !== `${location.pathname}${location.search}${location.hash}`) {
+        history.replaceState(null, "", next);
+      }
+    }
+
+    const hash = location.hash;
+    const mark = hash.indexOf("?");
+    if (mark === -1) return;
+    const routePart = hash.slice(0, mark);
+    const params = new URLSearchParams(hash.slice(mark + 1));
+    let hashChanged = false;
+    for (const key of keys) {
+      if (isProfileName(params.get(key))) {
+        params.delete(key);
+        hashChanged = true;
+      }
+    }
+    if (hashChanged) {
+      const query = params.toString();
+      history.replaceState(null, "", `${routePart}${query ? `?${query}` : ""}`);
+    }
+  } catch {
+    // Zonder history-API laten we het adres zoals het is.
+  }
 }
 
 function resetHomeState(params) {
@@ -1570,6 +1616,14 @@ function guardSearchField(search) {
   search.addEventListener("change", () => {
     if (!searchTyped) clearAutofilledSearch();
   });
+  // Blijf de eerste 30 seconden opletten: sommige wachtwoordmanagers vullen
+  // het veld pas later. Stoppen zodra de bezoeker echt typt.
+  let guardRuns = 0;
+  const guardTimer = window.setInterval(() => {
+    clearAutofilledSearch();
+    guardRuns += 1;
+    if (guardRuns >= 20) window.clearInterval(guardTimer);
+  }, 1500);
 }
 
 /* Browsers vullen een tekstveld soms met de opgeslagen gebruikersnaam.
@@ -1622,7 +1676,9 @@ function filteredIdeas() {
 
 function updateHomeURL() {
   const params = new URLSearchParams();
-  if (homeState.q.trim()) params.set("q", homeState.q.trim());
+  // Een gebruikersnaam is nooit een zoekopdracht: die mag niet in de URL staan.
+  const searchQuery = isProfileName(homeState.q) ? "" : homeState.q.trim();
+  if (searchQuery) params.set("q", searchQuery);
   if (homeState.category !== "Alle") params.set("categorie", homeState.category);
   if (homeState.level !== "Alle") params.set("niveau", homeState.level);
   if (homeState.duration !== "alle") params.set("duur", homeState.duration);
@@ -3937,14 +3993,21 @@ document.addEventListener("keydown", (event) => {
 window.addEventListener("hashchange", route);
 window.addEventListener("pageshow", () => {
   // Na verversen of terugkeren kan de browser het formulier herstellen.
+  cleanUsernameFromAddress();
   [0, 120, 600, 1500, 3000].forEach((delay) =>
     window.setTimeout(clearAutofilledSearch, delay)
   );
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "visible") clearAutofilledSearch();
+  if (document.visibilityState === "visible") {
+    cleanUsernameFromAddress();
+    clearAutofilledSearch();
+  }
 });
-window.addEventListener("focus", () => window.setTimeout(clearAutofilledSearch, 60));
+window.addEventListener("focus", () => {
+  cleanUsernameFromAddress();
+  window.setTimeout(clearAutofilledSearch, 60);
+});
 window.addEventListener("load", () => window.setTimeout(clearAutofilledSearch, 200));
 
 /* ------------------------------ app / PWA ------------------------------ */
@@ -4297,6 +4360,7 @@ async function init() {
   window.__easycodeyBoot?.();
   initTheme();
   applyTextSize(store.getSettings().textSize);
+  cleanUsernameFromAddress();
   initNetworkStatus();
   measurePerformance();
   initPWA();
