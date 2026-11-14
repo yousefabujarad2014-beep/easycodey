@@ -11,13 +11,13 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste code-build | ✅ commit `a799225` (v15); **v16 staat lokaal klaar** — na pushen: Pages-build controleren |
+| Laatste code-build | ✅ commit `d8d6a8a` (v16 + robuuste zoekfix + slimme inspringing); live gecontroleerd met 28/28 checks |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
-| Editor (v16) | ✅ regelnummers, code-kleuren, cursorpositie, telefoontoetsenbalk en **Bekijk regel N** |
+| Editor (v16) | ✅ regelnummers, code-kleuren, cursorpositie, telefoontoetsenbalk, **Bekijk regel N** en slimme inspringing (Enter na `:`, Shift+Tab) |
 | Privacy en leesbaarheid (v16) | ✅ privacyoverzicht, alles wissen met twee bevestigingen, tekstgrootte en meer contrast |
 | Netwerkbadge (v16) | ✅ duidelijke online/offline melding; werk blijft bewaard |
 | AI-intake en betrouwbaarheid (v16) | ✅ eerst vragen waar je hulp bij nodig hebt, drie automatische pogingen, kortere antwoorden |
-| Zoekbalkfix (v16) | ✅ je gebruikersnaam verschijnt na verversen niet meer in het zoekveld |
+| Zoekbalkfix (v16) | ✅ je gebruikersnaam verschijnt na verversen niet meer in het zoekveld, ook niet als de browser het veld pas later of bij focus vult |
 | Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord, optioneel contact en JSON-back-up |
 | Chatknop na inloggen | ✅ footer, zwevende knop en chatkaart op het profiel (geen dubbele knop in de header) |
 | Eigenaarspaneel | ✅ `#/eigenaar`, eigenaarslogin zonder code, lokale profielen, voortgang, mededeling, app-status en download |
