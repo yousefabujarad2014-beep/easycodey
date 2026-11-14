@@ -1495,7 +1495,7 @@ function renderHome(params) {
     <div class="toolbar">
       <div class="chips" id="category-chips">${categoryChips}</div>
       <div class="toolbar-spacer"></div>
-      <span class="result-count" id="result-count"></span>
+      <span class="result-count" id="result-count" role="status" aria-live="polite"></span>
     </div>
 
     <div class="level-row">

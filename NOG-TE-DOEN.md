@@ -213,6 +213,32 @@ GitHub-link.
 
 ---
 
+## Deel 8 — Oude GitHub-kopieën (optioneel, alleen als je dat wilt)
+
+**Waarom:** het oude wachtwoord is uit de **normale** geschiedenis verwijderd.
+GitHub bewaart oude commits soms nog even bereikbaar via een directe link.
+Dat is een beperking van GitHub, niet van de app. De site en je login werken
+gewoon en het wachtwoord staat niet meer in de zichtbare bestanden.
+
+**Wat je kunt doen:**
+
+1. Open **https://support.github.com/contact**.
+2. Kies **Repository** en daarna **Remove data**.
+3. Vul de naam van je repo in: `yousefabujarad2014-beep/easycodey`.
+4. Schrijf in gewone taal:
+
+   > Please purge old commits that are no longer reachable from `main`.
+   > A password was accidentally committed earlier and I rewrote the history.
+
+5. Verstuur het bericht en wacht op antwoord van GitHub.
+
+> Dit is **niet verplicht**. Je hoeft niets te doen als je dit te veel werk
+> vindt. In de nieuwste code staat alleen de hash, en de site werkt gewoon.
+> Alleen een oude, directe GitHub-link naar een verwijderde commit kan nog
+> bestaan tot GitHub die opruimt.
+
+---
+
 ## Wat al klaar is
 
 - 161 projecten met uitleg, code en tips.

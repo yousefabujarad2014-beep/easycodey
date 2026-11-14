@@ -15,6 +15,33 @@ const SITE = "https://yousefabujarad2014-beep.github.io/easycodey";
 const errors = [];
 const warnings = [];
 
+/* Donatiegegevens uit site-config.json: dezelfde bron als de generator. */
+const siteConfig = (() => {
+  try {
+    return JSON.parse(readFileSync(path.join(root, "site-config.json"), "utf8"));
+  } catch {
+    return {};
+  }
+})();
+const configValue = (value, fallback) => String(value || "").trim() || fallback;
+const DONATE_IBAN = configValue(siteConfig.donateIban, "BE69 0638 3621 2278");
+const DONATE_NAME = configValue(siteConfig.donateName, "Yousef Abujarad (EasyCodey)");
+const DONATE_BANK = configValue(siteConfig.donateBank, "Belfius");
+const DONATE_BIC = "GKCCBEBB";
+
+/* Controleert het IBAN met de officiële mod-97-regel. */
+function ibanValid(iban) {
+  const clean = String(iban || "").replace(/\s+/g, "").toUpperCase();
+  if (!/^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/.test(clean)) return false;
+  const rearranged = clean.slice(4) + clean.slice(0, 4);
+  let remainder = 0;
+  for (const char of rearranged) {
+    const chunk = /[A-Z]/.test(char) ? String(char.charCodeAt(0) - 55) : char;
+    for (const digit of chunk) remainder = (remainder * 10 + Number(digit)) % 97;
+  }
+  return remainder === 1;
+}
+
 function escapeHtml(value) {
   return String(value ?? "")
     .replace(/&/g, "&amp;")
@@ -278,9 +305,10 @@ if (!existsSync(donateFile)) {
   if (!donate.includes(`<link rel="canonical" href="${SITE}/doneren/"`)) {
     fail("Doneerpagina heeft niet de juiste canonical.");
   }
-  for (const value of ["BE69 0638 3621 2278", "Yousef Abujarad (EasyCodey)", "Belfius", "GKCCBEBB", "EasyCodey donatie"]) {
+  for (const value of [DONATE_IBAN, DONATE_NAME, DONATE_BANK, DONATE_BIC, "EasyCodey donatie"]) {
     if (!donate.includes(value)) fail(`Doneerpagina mist ${value}.`);
   }
+  if (!ibanValid(DONATE_IBAN)) fail(`Het donatie-IBAN in site-config.json is ongeldig: ${DONATE_IBAN}.`);
   if (!donate.includes("<h1>")) fail("Doneerpagina mist een <h1>.");
   if (!donate.includes('type="application/ld+json"')) fail("Doneerpagina mist JSON-LD.");
   if (!donate.includes("DonateAction")) fail("Doneerpagina mist DonateAction JSON-LD.");

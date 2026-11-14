@@ -20,9 +20,20 @@ const CONTACT_PHONE_DISPLAY = "+32 466 47 66 52";
 const CONTACT_PHONE_TEL = "+32466476652";
 const CONTACT_WHATSAPP = "https://wa.me/32466476652";
 const CONTACT_EMAIL = "yousefabujarad2014@gmail.com";
-const DONATE_IBAN = "BE69 0638 3621 2278";
-const DONATE_NAME = "Yousef Abujarad (EasyCodey)";
-const DONATE_BANK = "Belfius";
+
+/* Donatiegegevens komen uit site-config.json, zodat er maar één bron van
+   waarheid is. Ontbreekt een waarde, dan blijft de bekende standaard gelden. */
+const siteConfig = (() => {
+  try {
+    return JSON.parse(fs.readFileSync(path.join(root, "site-config.json"), "utf8"));
+  } catch {
+    return {};
+  }
+})();
+const configValue = (value, fallback) => String(value || "").trim() || fallback;
+const DONATE_IBAN = configValue(siteConfig.donateIban, "BE69 0638 3621 2278");
+const DONATE_NAME = configValue(siteConfig.donateName, "Yousef Abujarad (EasyCodey)");
+const DONATE_BANK = configValue(siteConfig.donateBank, "Belfius");
 const DONATE_BIC = "GKCCBEBB";
 const BUILD_DATE = new Date().toISOString().slice(0, 10);
 const IDEAS_DIR = path.join(root, "idee");
