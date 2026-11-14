@@ -66,8 +66,8 @@ Je hebt een gratis Cloudflare-account nodig.
 8. Test het:
 
    ```powershell
-   curl https://easycodey-counter.jouw-naam.workers.dev/health
-   curl "https://easycodey-counter.jouw-naam.workers.dev/counts?keys=bezoeken-v1"
+   curl.exe https://easycodey-counter.jouw-naam.workers.dev/health
+   curl.exe "https://easycodey-counter.jouw-naam.workers.dev/counts?keys=bezoeken-v1"
    ```
 
 ## Zo werkt het

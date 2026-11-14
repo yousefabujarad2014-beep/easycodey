@@ -115,7 +115,7 @@ Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. 
 
 Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v11` naar `easycodey-v12`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v16` naar `easycodey-v17`). De oude cache wordt dan bij de volgende start verwijderd.
 
 ### Als de app of website niet opent
 
@@ -169,7 +169,7 @@ Het script start zelf een tijdelijke headless Chrome. Staat Chrome ergens anders
 
 - **Chrome DevTools → Application → Manifest**: naam, iconen en start-URL moeten groen zijn.
 - **Application → Service Workers**: status *activated and is running*.
-- **Application → Cache Storage**: `easycodey-v8-shell` en `easycodey-v8-runtime`.
+- **Application → Cache Storage**: `easycodey-v16-shell` en `easycodey-runtime-v1`.
 - **Lighthouse → Progressive Web App**: controleert installeerbaarheid en offline werking.
 - `npm run check` controleert het manifest, de service worker, alle offline-bestanden, de 161 vaste pagina's en de sitemap.
 

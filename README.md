@@ -12,6 +12,8 @@ De site staat online op **GitHub Pages**:
 
 Op GitHub Pages werkt de hele site, inclusief de **gratis online AI-coach**: die gebruikt een gratis AI-dienst waarvoor je geen account of sleutel nodig hebt. Werkt die dienst even niet, dan valt de site automatisch terug op de offline coach. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
 
+> **Wat moet ik nog doen?** De stappen die jouw eigen account of toestel nodig hebben (APK testen, gratis teller, Google, Play Store) staan in **[NOG-TE-DOEN.md](NOG-TE-DOEN.md)** in zeer eenvoudig Nederlands.
+
 ## Snel starten
 
 De makkelijkste en veiligste manier is de live app:
@@ -120,6 +122,7 @@ FLL/
 ├── EINDRAPPORT.md          Overzicht van de oplevering en testresultaten
 ├── PUBLICATIE.md           Stap-voor-stap publicatie op GitHub en Render
 ├── GOOGLE.md               Site openbaar maken en laten indexeren door Google
+├── NOG-TE-DOEN.md          Eenvoudige stappen die nog jouw account of toestel nodig hebben
 ├── EasyCodey.url           Snelkoppeling naar de beveiligde live-app
 ├── start-easycodey.bat     Opent de beveiligde live-app (of lokaal met `local`)
 └── start-easycodey-local.bat  Start de lokale ontwikkelserver

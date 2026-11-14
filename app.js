@@ -1555,7 +1555,10 @@ function guardSearchField(search) {
     });
   });
   search.addEventListener("beforeinput", (event) => {
-    if (event.isTrusted && /^(insert|delete)/.test(event.inputType || "")) {
+    const type = event.inputType || "";
+    // Echte invoer telt. Autofill en tekstvervanging (bijvoorbeeld door een
+    // wachtwoordmanager) niet.
+    if (event.isTrusted && /^(insert|delete)/.test(type) && !/autofill|replacement/i.test(type)) {
       searchTyped = true;
     }
   });

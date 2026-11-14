@@ -32,7 +32,7 @@ Als je een eigen domein gebruikt, pas je deze waarden aan naar bijvoorbeeld `htt
 ## 2. Wat al klaar staat in de site
 
 - `robots.txt` en `sitemap.xml` staan als statische bestanden in de repository, zodat GitHub Pages ze serveert. De Node-server genereert ze daarnaast dynamisch met `SITE_URL`.
-- **Elk project heeft een eigen vaste pagina** op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD. De sitemap bevat **166 URL's**: de startpagina, het overzicht, de installatiepagina, de contactpagina, de doneerpagina en alle 161 projecten.
+- **Elk project heeft een eigen vaste pagina** op `/idee/<id>/` met een eigen titel, meta-description, canonical, Open Graph en JSON-LD. De sitemap bevat **168 URL's**: de startpagina, het overzicht, de installatiepagina, de contactpagina, de doneerpagina en alle 161 projecten.
 - `/projecten/` is een indexeerbaar overzicht van alle projecten, gegroepeerd per categorie en met een zoekveld.
 - `/installeren/` legt per platform uit hoe je de app installeert en bevat een QR-code naar de live site.
 - `/contact/` is de Nederlandstalige contactpagina met telefoon/WhatsApp **+32 466 47 66 52** en e-mail **yousefabujarad2014@gmail.com**, met JSON-LD `ContactPage` + `Organization`.
@@ -105,12 +105,12 @@ Na elke wijziging in `data/`:
 npm run build
 ```
 
-Dit genereert de 161 pagina's, het overzicht, de installatie-, contact- en doneerpagina en de sitemap (166 URL's) en controleert alles.
+Dit genereert de 161 pagina's, het overzicht, de installatie-, contact- en doneerpagina en de sitemap (168 URL's) en controleert alles.
 
 ### Let op
 
 - De canonical gebruikt de productie-URL `https://yousefabujarad2014-beep.github.io/easycodey`. Bij een eigen domein pas je `SITE` aan in `scripts/build-pages.mjs` en `SITE_URL` in `server.js`.
-- De service worker-cache (`VERSION` in `sw.js`, nu `easycodey-v8`) moet omhoog bij grote wijzigingen. Code en styles worden network-first opgehaald en de app controleert automatisch op updates, zodat terugkerende bezoekers niet achter een oude versie blijven hangen.
+- De service worker-cache (`VERSION` in `sw.js`, nu `easycodey-v16`) moet omhoog bij grote wijzigingen. Code en styles worden network-first opgehaald en de app controleert automatisch op updates, zodat terugkerende bezoekers niet achter een oude versie blijven hangen.
 
 ---
 
@@ -119,13 +119,13 @@ Dit genereert de 161 pagina's, het overzicht, de installatie-, contact- en donee
 - [ ] Site is bereikbaar op de live-URL.
 - [ ] `SITE_URL` klopt in Render en in `index.html`.
 - [ ] `/robots.txt` toont de juiste sitemap-URL.
-- [ ] `/sitemap.xml` is geldige XML en bevat **166 URL's**.
+- [ ] `/sitemap.xml` is geldige XML en bevat **168 URL's**.
 - [ ] `/projecten/` toont alle 161 projecten.
 - [ ] `/installeren/` toont de QR-code en de uitleg per platform.
 - [ ] `/contact/` toont telefoon/WhatsApp, e-mail en de juiste canonical.
 - [ ] `/doneren/` toont het IBAN, de rekeninghouder, de bank en de transparantie.
 - [ ] Het nieuwe logo en de app-iconen laden (tabblad, startscherm).
-- [ ] De sitemap met **166 URL's** is opnieuw aangemeld na de wijzigingen.
+- [ ] De sitemap met **168 URL's** is opnieuw aangemeld na de wijzigingen.
 - [ ] Een projectpagina zoals `/idee/raad-het-getal/` heeft een eigen titel en description.
 - [ ] Een projectpagina zonder slash (`/idee/raad-het-getal`) stuurt door naar de versie met slash.
 - [ ] Search Console is geverifieerd.
