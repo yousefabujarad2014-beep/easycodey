@@ -408,7 +408,7 @@ function renderProjectPage(idea) {
     <article class="static-project">
       <header class="detail-hero static-hero">
         <div class="detail-cover">
-          <img src="${prefix}${esc(coverFor(idea))}" alt="Omslagillustratie voor ${esc(idea.title)}" width="800" height="450" />
+          <img src="${prefix}${esc(coverFor(idea))}" alt="Omslagillustratie voor ${esc(idea.title)}" width="800" height="450" fetchpriority="high" decoding="async" />
           <span class="detail-cover-emoji" aria-hidden="true">${esc(idea.emoji)}</span>
           <span class="detail-cover-cat">${esc(meta.emoji)} ${esc(idea.category)}</span>
         </div>
