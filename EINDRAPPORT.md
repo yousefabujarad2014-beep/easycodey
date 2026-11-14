@@ -140,6 +140,8 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Nederlandse systeemprompt met een vaste antwoordstijl: eerst het directe antwoord, korte alinea's, code in een `python`-blok, geen tabellen, en altijd één concrete volgende stap.
 - Project- en stapcontext wordt met elk verzoek meegestuurd.
 - Na elk antwoord verschijnen **vervolgvragen** als knoppen, bijvoorbeeld “Leg dit simpeler uit”.
+- Het gesprek wordt **lokaal per profiel bewaard** (max. 40 berichten). Na verversen of opnieuw openen staat het er nog; **Gesprek wissen** ruimt het op.
+- **Ik bedoelde iets anders** vult het invoerveld met “Ik bedoelde iets anders. Ik bedoelde eigenlijk: ” en stuurt nog niets. Zo kun je eerst rustig typen wat je wél bedoelde.
 - Bij een netwerkfout of als de gratis dienst te druk is: duidelijke melding, offline antwoord en een knop **Opnieuw proberen met AI**.
 - Offline coach werkt zonder internet of met de online AI uitgezet:
   - legt een specifieke stap uit;
@@ -163,10 +165,13 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De runtime wordt pas geladen als iemand het speelveld opent en op **Uitvoeren** klikt.
 - Zes voorbeelden: hallo wereld, rekenen, loops, lijsten, functies en "Raad het getal" zonder `input()`.
 - Uitvoer en foutmeldingen verschijnen direct in het paneel.
+- Een Python-fout wordt in **eenvoudig Nederlands** uitgelegd met het **regelnummer**, het stukje code, wat er misgaat en een concrete tip. De technische melding blijft eronder staan voor gevorderden.
+- Bij een fout verschijnt **✦ Vraag EasyCoach om hulp**, zodat je met één klik verder kunt.
 - `input()` toont bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. De statusregel zegt **â€œTyp je antwoord in het venster bovenaanâ€¦â€**.
 - Bij het speelveld, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
 - Geen code of uitvoer gaat naar de server.
 - Bij een netwerkfout verschijnt een duidelijke melding; de rest van de site blijft werken.
+- **📥 Offline klaarzetten** laadt de Python-runtime één keer en bewaart hem in een vaste cache. Daarna verschijnt **✅ Python werkt nu ook offline**, ook na een app-update.
 
 ### Programmeer-editor (`#/programmeren`)
 - Volledige editor met een groot codeveld en een apart uitvoerpaneel.
@@ -182,7 +187,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ### Installeerbare app (PWA)
 - `manifest.webmanifest` met naam, korte naam, beschrijving, start-URL, kleuren en snelkoppelingen naar **Programmeren**, **Leerpad** en **Mijn ideeÃ«n**.
 - Vier PNG-app-iconen (192 en 512 px, gewoon en maskable) plus een Apple-touch-icoon.
-- `sw.js` bewaart de app-shell (37 bestanden) bij de eerste installatie.
+- `sw.js` bewaart de app-shell (38 bestanden) bij de eerste installatie.
 - **Network-first** voor navigatie Ã©n same-origin code/styles, **cache-first** voor afbeeldingen, lettertypen en de CDN. Zo zie je nooit een oude versie.
 - De service worker registreert met `updateViaCache: "none"` en controleert automatisch op een nieuwe versie: bij de start, elke 15 minuten, bij terugkeer naar de app (`visibilitychange`/`focus`), bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch overgenomen en de pagina herlaadt.
 - Er is **geen handmatige updateknop** meer: de app werkt zichzelf volledig automatisch bij.
@@ -190,6 +195,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - De Python-runtime en lettertypen komen in een aparte runtime-cache, zodat Python na de eerste keer offline werkt.
 - `offline.html` verschijnt als een pagina niet in de cache staat.
 - **ðŸ“² Installeer als app** in de header en footer, met uitleg per platform en een **Installeer nu**-knop zodra de browser dat ondersteunt.
+- Het installatievenster herkent je **browser en toestel** en toont alleen de stap die daarbij past. Een knop **Is het gelukt?** zegt eerlijk of de app al geïnstalleerd is, met de mogelijkheid **Ik zie EasyCodey in mijn apps** te bevestigen. Die bevestiging wordt lokaal bewaard.
 - In een geÃ¯nstalleerde app verdwijnt de installeerknop en opent de site in een eigen venster.
 - Werkt op GitHub Pages zonder server; de service worker draait alleen via `https://` of `localhost`.
 
@@ -280,7 +286,7 @@ FLL/
 
 | Test | Resultaat |
 |---|---|
-| `npm run check` | âœ… 161 projecten, 711 stappen, 161 pagina's, 167 sitemap-URL's, 0 fouten |
+| `npm run check` | âœ… 161 projecten, 711 stappen, 161 pagina's, 168 sitemap-URL's, 0 fouten |
 | Datacontrole op dubbele id's, verplichte velden, stappen, tips, `next`-links en covers | âœ… |
 | Syntaxcontrole `node --check` op `app.js`, `server.js`, `js/ai.js`, `js/store.js` | âœ… |
 | Startpagina `/` | âœ… 200, `text/html` |
@@ -308,7 +314,7 @@ FLL/
 | Live GitHub Pages: editor, hero-link en projectacties | âœ… 9/9 live checks geslaagd |
 | Manifest, iconen en snelkoppelingen | âœ… 4 PNG-iconen (192/512, maskable) met juiste afmetingen |
 | Service worker actief en pagina onder controle | âœ… scope `/`, app-shell uit cache |
-| Offline-cache gevuld | 37 bestanden |
+| Offline-cache gevuld | 38 bestanden |
 | Installatie-uitleg in de app | âœ… 3 platformstappen, sluit correct |
 | **Speel dit idee** op een projectpagina | âœ… speelbare app in de pagina; **Gebruik dit idee** toont alle code |
 | **Programmeer zelf** met autoplay | âœ… volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
@@ -318,10 +324,11 @@ FLL/
 | Chrome-installeerbaarheid | âœ… geen installability errors |
 | PWA-testsuite op de live site | 13/13 checks geslaagd |
 | Live: manifest, iconen en service worker | âœ… `application/manifest+json`, scope `/easycodey/` |
-| Live: offline-cache en offline Python | 37 bestanden, Pyodide werkt offline |
+| Live: offline-cache en offline Python | 38 bestanden, Pyodide werkt offline |
 | Live: wachtwoordaccount en chatknop | âœ… 8/8 live checks: aanmaken, inloggen, chatknop en updatecontrole |
-| Nieuwe flows lokaal | 39/39 checks: invoerhulp, app-entry, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster en eigenaarspaneel |
-| AI-coach en installatiehulp lokaal | 26/26 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v14 |
+| Nieuwe flows lokaal | 46/46 checks: invoerhulp, app-entry, springlink, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster met browserherkenning en bevestiging, en eigenaarspaneel |
+| AI-coach en installatiehulp lokaal | 29/29 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v15 |
+| AI-gesprek, foutuitleg en toegankelijkheid lokaal | 13/13 checks: gesprek bewaard na verversen, “Ik bedoelde iets anders” vult het invoerveld, NameError/SyntaxError/TypeError in eenvoudig Nederlands met regelnummer, focusbeheer en aria-expanded |
 | Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
 | Gratis APK-download | âœ… `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |

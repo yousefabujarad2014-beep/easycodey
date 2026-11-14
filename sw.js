@@ -1,9 +1,11 @@
 /* EasyCodey service worker — installeerbare app en offline modus.
    Bij een grote wijziging: verhoog VERSION, dan wordt de oude cache opgeruimd. */
 
-const VERSION = "easycodey-v14";
+const VERSION = "easycodey-v15";
 const SHELL_CACHE = `${VERSION}-shell`;
-const RUNTIME_CACHE = `${VERSION}-runtime`;
+/* De Python-runtime is groot (ongeveer 10 MB). Bewaar hem in een vaste cache,
+   zodat een app-update hem niet opnieuw hoeft te downloaden. */
+const RUNTIME_CACHE = "easycodey-runtime-v1";
 
 const SHELL = [
   "./",
@@ -13,6 +15,7 @@ const SHELL = [
   "./styles.css",
   "./app.js",
   "./js/ai.js",
+  "./js/python-errors.js",
   "./js/store.js",
   "./js/analytics.js",
   "./js/counter.js",
@@ -64,7 +67,11 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
-      await Promise.all(keys.filter((key) => !key.startsWith(VERSION)).map((key) => caches.delete(key)));
+      await Promise.all(
+        keys
+          .filter((key) => !key.startsWith(VERSION) && key !== RUNTIME_CACHE)
+          .map((key) => caches.delete(key))
+      );
       await self.clients.claim();
     })()
   );

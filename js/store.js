@@ -24,6 +24,10 @@ const DEFAULT_STATE = {
     code: "",
     projectId: "",
     updatedAt: 0
+  },
+  chat: {
+    messages: [],
+    updatedAt: 0
   }
 };
 
@@ -131,7 +135,31 @@ function normalizeState(parsed) {
       code: typeof source.editor?.code === "string" ? source.editor.code : "",
       projectId: typeof source.editor?.projectId === "string" ? source.editor.projectId : "",
       updatedAt: Number(source.editor?.updatedAt) || 0
-    }
+    },
+    chat: normalizeChat(source.chat)
+  };
+}
+
+const CHAT_LIMIT = 40;
+const CHAT_MESSAGE_LIMIT = 12000;
+
+function normalizeChat(value) {
+  const messages = Array.isArray(value?.messages) ? value.messages : [];
+  return {
+    messages: messages
+      .filter(
+        (message) =>
+          message &&
+          ["user", "assistant"].includes(message.role) &&
+          typeof message.content === "string" &&
+          message.content.trim()
+      )
+      .slice(-CHAT_LIMIT)
+      .map(({ role, content }) => ({
+        role,
+        content: content.slice(0, CHAT_MESSAGE_LIMIT)
+      })),
+    updatedAt: Number(value?.updatedAt) || 0
   };
 }
 
@@ -576,6 +604,23 @@ export function saveEditorDraft(code, projectId) {
 
 export function clearEditorDraft() {
   state.editor = { code: "", projectId: "", updatedAt: 0 };
+  persist();
+}
+
+/* Het AI-gesprek blijft lokaal op dit toestel en per profiel bewaard.
+   Zo hoef je na het verversen van de pagina niet opnieuw te beginnen. */
+export function getChatHistory() {
+  return state.chat.messages.map((message) => ({ ...message }));
+}
+
+export function saveChatHistory(messages) {
+  state.chat = normalizeChat({ messages, updatedAt: Date.now() });
+  persist();
+  return getChatHistory();
+}
+
+export function clearChatHistory() {
+  state.chat = { messages: [], updatedAt: 0 };
   persist();
 }
 

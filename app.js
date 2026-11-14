@@ -28,6 +28,7 @@ import {
   parseGeneratedIdea,
   guessCategory
 } from "./js/ai.js";
+import { formatPythonError, explainPythonError } from "./js/python-errors.js";
 
 /* De preview-module is groot. We laden hem pas wanneer iemand een project opent,
    zodat een trage of mislukte download nooit de hele site kan blokkeren. */
@@ -75,9 +76,10 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
-const APP_VERSION = "v14";
+const APP_VERSION = "v15";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
+const INSTALL_CONFIRMED_KEY = "easycodey.install.confirmed.v1";
 const COUNTER_SNAPSHOT_KEY = "easycodey.counter.snapshots.v1";
 const COUNTER_SNAPSHOT_LIMIT = 240;
 const COUNTER_SNAPSHOT_GAP = 2 * 60 * 1000;
@@ -125,6 +127,9 @@ let currentContext = null;
 let homeBound = false;
 let toastTimer = null;
 let roadCategory = "Alle";
+let lastPythonError = null;
+let pythonOfflineReady = false;
+let lastFocusedElement = null;
 
 const homeState = {
   q: "",
@@ -228,6 +233,44 @@ function toast(message) {
   toastEl.classList.add("show");
   window.clearTimeout(toastTimer);
   toastTimer = window.setTimeout(() => toastEl.classList.remove("show"), 2600);
+}
+
+function rememberFocus() {
+  lastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+}
+
+function restoreFocus() {
+  if (lastFocusedElement?.isConnected) lastFocusedElement.focus();
+  lastFocusedElement = null;
+}
+
+function visibleModal() {
+  return (
+    [...document.querySelectorAll(".modal-backdrop")].find(
+      (element) => !element.hidden && element.getClientRects().length > 0
+    ) || null
+  );
+}
+
+function trapModalFocus(event) {
+  if (event.key !== "Tab") return;
+  const modal = visibleModal();
+  if (!modal) return;
+  const focusable = [
+    ...modal.querySelectorAll(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  ].filter((element) => !element.hidden && element.getClientRects().length > 0);
+  if (!focusable.length) return;
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 
 function progressRing(percent, size = 62) {
@@ -1910,6 +1953,7 @@ function renderAIContext() {
 }
 
 function openAI(context = null) {
+  rememberFocus();
   currentContext = context;
   renderAIContext();
   document.body.classList.add("ai-open");
@@ -1917,6 +1961,9 @@ function openAI(context = null) {
   aiBackdrop.classList.add("open");
   aiPanel.setAttribute("aria-hidden", "false");
   aiBackdrop.setAttribute("aria-hidden", "false");
+  document.querySelectorAll('[data-action="open-ai"]').forEach((button) => {
+    button.setAttribute("aria-expanded", "true");
+  });
   ensureGreeting();
   window.setTimeout(() => aiInput.focus(), 120);
 }
@@ -1927,6 +1974,10 @@ function closeAI() {
   aiBackdrop.classList.remove("open");
   aiPanel.setAttribute("aria-hidden", "true");
   aiBackdrop.setAttribute("aria-hidden", "true");
+  document.querySelectorAll('[data-action="open-ai"]').forEach((button) => {
+    button.setAttribute("aria-expanded", "false");
+  });
+  restoreFocus();
 }
 
 function appendAIMessage(role, content, { typing = false, keep = true } = {}) {
@@ -1949,7 +2000,29 @@ function appendAIMessage(role, content, { typing = false, keep = true } = {}) {
   return body;
 }
 
+let chatLoaded = false;
+
+function loadChatHistory() {
+  if (chatLoaded) return;
+  chatLoaded = true;
+  const history = store.getChatHistory();
+  if (!history.length) return;
+  aiMessagesEl.innerHTML = "";
+  aiMessages = [];
+  history.forEach((message) => {
+    appendAIMessage(message.role, message.content, { keep: false });
+  });
+  aiMessages = history.map((message) => ({ ...message }));
+  greetingShown = true;
+  scrollAIMessages();
+}
+
+function persistChatHistory() {
+  store.saveChatHistory(aiMessages);
+}
+
 function ensureGreeting() {
+  loadChatHistory();
   if (greetingShown) return;
   greetingShown = true;
   const active = store.getActiveProfile();
@@ -1970,8 +2043,7 @@ Is je vraag nog niet helemaal duidelijk? Dan stel ik eerst 1 of 2 korte vragen. 
   );
 }
 
-function appendFollowUps(body, contextPayload) {
-  const wrapper = body?.closest?.(".msg");
+function appendFollowUps(body, contextPayload) {  const wrapper = body?.closest?.(".msg");
   if (!wrapper) return;
 
   const prompts = contextPayload?.step
@@ -2046,6 +2118,7 @@ async function sendAIMessage(text, { skipUser = false } = {}) {
     const reply = offlineReply({ text: message, context: contextPayload });
     body.innerHTML = renderMarkdown(reply);
     aiMessages.push({ role: "assistant", content: reply });
+    persistChatHistory();
     appendFollowUps(body, contextPayload);
     setAIBusy(false);
     scrollAIMessages();
@@ -2068,6 +2141,7 @@ async function sendAIMessage(text, { skipUser = false } = {}) {
 
     if (!full.trim()) throw new Error("Leeg antwoord van de AI.");
     aiMessages.push({ role: "assistant", content: full });
+    persistChatHistory();
     body.innerHTML = renderMarkdown(full);
     appendFollowUps(body, contextPayload);
   } catch (error) {
@@ -2084,11 +2158,13 @@ async function sendAIMessage(text, { skipUser = false } = {}) {
       renderMarkdown(reply) +
       `<button class="chat-retry" type="button" data-action="retry-ai" data-prompt="${e(message)}">↻ Opnieuw proberen met AI</button>`;
     aiMessages.push({ role: "assistant", content: reply });
+    persistChatHistory();
     appendFollowUps(body, contextPayload);
     if (mode === "free") {
       analytics.trackEvent("ai-coach-fout");
     }
   } finally {
+    persistChatHistory();
     setAIBusy(false);
     scrollAIMessages();
   }
@@ -2111,7 +2187,9 @@ function retryAIMessage(text) {
 function clearChat() {
   aiMessages = [];
   greetingShown = false;
+  chatLoaded = true;
   aiMessagesEl.innerHTML = "";
+  store.clearChatHistory();
   ensureGreeting();
   toast("Gesprek gewist.");
 }
@@ -2119,6 +2197,7 @@ function clearChat() {
 /* ------------------------------ instellingen ------------------------------ */
 
 function openSettings() {
+  rememberFocus();
   const settings = store.getSettings();
   document.querySelector("#cfg-key").value = settings.apiKey;
   document.querySelector("#cfg-model").value = settings.model;
@@ -2134,6 +2213,7 @@ function openSettings() {
 
 function closeSettings() {
   settingsModal.hidden = true;
+  restoreFocus();
 }
 
 function saveSettings() {
@@ -2152,6 +2232,7 @@ function saveSettings() {
 /* ------------------------------ generator ------------------------------ */
 
 function openGenerator() {
+  rememberFocus();
   const form = document.querySelector("#generator-form");
   form.reset();
   document.querySelector("#gen-topic").value = "";
@@ -2166,6 +2247,7 @@ function openGenerator() {
 
 function closeGenerator() {
   generatorModal.hidden = true;
+  restoreFocus();
 }
 
 /* ------------------------------ doneren ------------------------------ */
@@ -2252,6 +2334,7 @@ function applyDonateConfig() {
 }
 
 function openDonate() {
+  rememberFocus();
   if (donateModal.hidden) {
     applyDonateConfig();
     donateModal.hidden = false;
@@ -2260,6 +2343,7 @@ function openDonate() {
 
 function closeDonate() {
   donateModal.hidden = true;
+  restoreFocus();
 }
 
 /* ------------------------------ python-speelveld ------------------------------ */
@@ -2278,6 +2362,80 @@ const PLAYGROUND_EXAMPLES = {
 
 let pyodidePromise = null;
 let pyodideLoaded = false;
+const PYTHON_READY_KEY = "easycodey.python.ready.v1";
+
+function setPythonReady(ready) {
+  pythonOfflineReady = Boolean(ready);
+  try {
+    if (ready) localStorage.setItem(PYTHON_READY_KEY, "1");
+  } catch {
+    // Zonder opslag blijft Python gewoon werken.
+  }
+  updatePythonBadges();
+}
+
+function updatePythonBadges() {
+  document.querySelectorAll("[data-python-ready]").forEach((badge) => {
+    badge.hidden = !pythonOfflineReady;
+  });
+}
+
+function readPythonReady() {
+  try {
+    pythonOfflineReady = localStorage.getItem(PYTHON_READY_KEY) === "1";
+  } catch {
+    pythonOfflineReady = false;
+  }
+  updatePythonBadges();
+}
+
+function clearPythonError(source) {
+  lastPythonError = null;
+  const button = document.querySelector(
+    source === "editor" ? "#editor-ai-help" : "#playground-ai-help"
+  );
+  if (button) button.hidden = true;
+}
+
+function showPythonError(error, code, output, source) {
+  const friendly = formatPythonError(error, code);
+  output.classList.add("error");
+  output.textContent = friendly;
+  lastPythonError = {
+    source,
+    code: String(code || ""),
+    message: String(error?.message || error || "")
+  };
+  const button = document.querySelector(
+    source === "editor" ? "#editor-ai-help" : "#playground-ai-help"
+  );
+  if (button) button.hidden = false;
+}
+
+async function prepareOfflinePython(button) {
+  const source = button?.dataset?.source === "editor" ? "editor" : "playground";
+  const status = document.querySelector(source === "editor" ? "#editor-status" : "#playground-status");
+  if (status) {
+    status.className = "playground-status busy";
+    status.textContent = pythonOfflineReady ? "Python is al klaar voor offline gebruik." : "Python wordt gedownload (eenmalig, ±10 MB)…";
+  }
+  try {
+    const pyodide = await loadPyodideRuntime();
+    await pyodide.runPythonAsync("1 + 1");
+    setPythonReady(true);
+    if (status) {
+      status.className = "playground-status";
+      status.textContent = "Klaar: Python werkt nu ook zonder internet.";
+    }
+    toast("Python is klaar voor offline gebruik.");
+  } catch (error) {
+    if (status) {
+      status.className = "playground-status error";
+      status.textContent = "Downloaden lukte niet. Controleer je internet en probeer opnieuw.";
+    }
+    toast("Python kon niet worden gedownload. Probeer het later opnieuw.");
+  }
+}
 
 function loadPyodideRuntime() {
   if (!pyodidePromise) {
@@ -2307,12 +2465,14 @@ function loadPlaygroundExample() {
 }
 
 function openPlayground(initialCode = "") {
+  rememberFocus();
   if (typeof initialCode === "string" && initialCode.trim()) {
     playgroundCode.value = initialCode;
   } else if (!playgroundCode.value.trim()) {
     loadPlaygroundExample();
   }
   playgroundModal.hidden = false;
+  updatePythonBadges();
   window.setTimeout(() => {
     playgroundCode.focus();
     playgroundCode.setSelectionRange(playgroundCode.value.length, playgroundCode.value.length);
@@ -2321,12 +2481,14 @@ function openPlayground(initialCode = "") {
 
 function closePlayground() {
   playgroundModal.hidden = true;
+  restoreFocus();
 }
 
 function clearPlayground() {
   playgroundCode.value = "";
   playgroundOutput.textContent = "Uitvoer verschijnt hier.";
   playgroundOutput.classList.remove("error");
+  clearPythonError("playground");
   playgroundStatus.textContent = "";
   playgroundStatus.className = "playground-status";
   playgroundCode.focus();
@@ -2361,6 +2523,7 @@ let inputOverrideInstalled = false;
 async function executePython(code, append) {
   const pyodide = await loadPyodideRuntime();
   pyodideLoaded = true;
+  setPythonReady(true);
   pyodide.setStdout({ batched: append });
   pyodide.setStderr({ batched: append });
   pyodide.setStdin({
@@ -2390,6 +2553,8 @@ async function runPlayground() {
   playgroundRun.disabled = true;
   playgroundOutput.textContent = "";
   playgroundOutput.classList.remove("error");
+  playgroundOutput.setAttribute("aria-busy", "true");
+  clearPythonError("playground");
   playgroundStatus.className = "playground-status busy";
   playgroundStatus.textContent = pyodideLoaded ? "Bezig…" : "Python laden (eenmalig, ±10 MB)…";
 
@@ -2406,11 +2571,13 @@ async function runPlayground() {
     playgroundStatus.className = "playground-status";
     playgroundStatus.textContent = "Klaar.";
   } catch (error) {
-    playgroundOutput.classList.add("error");
-    playgroundOutput.textContent = output + (output ? "\n" : "") + "Fout: " + (error?.message || String(error));
+    const prefix = output.trim() ? `${output}\n` : "";
+    showPythonError(error, playgroundCode.value, playgroundOutput, "playground");
+    playgroundOutput.textContent = prefix + playgroundOutput.textContent;
     playgroundStatus.className = "playground-status error";
-    playgroundStatus.textContent = "Er ging iets mis.";
+    playgroundStatus.textContent = "Er ging iets mis. Lees de uitleg onder de uitvoer.";
   } finally {
+    playgroundOutput.setAttribute("aria-busy", "false");
     playgroundRun.disabled = false;
   }
 }
@@ -2514,10 +2681,15 @@ function renderEditor(params) {
           <h2>Uitvoer</h2>
           <div class="editor-output-tools">
             <span class="playground-status" id="editor-status" role="status" aria-live="polite"></span>
+            <button class="btn ghost tiny" type="button" data-action="prepare-python" data-source="editor">📥 Offline klaarzetten</button>
             <button class="btn ghost tiny" type="button" data-action="editor-clear-output">Wissen</button>
           </div>
         </div>
         <pre class="editor-output" id="editor-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
+        <div class="python-error-actions">
+          <button class="btn ghost tiny" type="button" id="editor-ai-help" data-action="ask-error" data-source="editor" hidden>✦ Vraag EasyCoach om hulp</button>
+          <span class="python-offline-badge" data-python-ready hidden>✅ Python werkt nu ook offline</span>
+        </div>
         <div class="editor-note">
           <p>Python draait via <strong>Pyodide</strong> in je browser. De eerste keer wordt ongeveer 10 MB geladen.</p>
           <p><code>input()</code> opent een pop-up met de vraag van je programma. Typ je antwoord in dat venster en druk op Enter. Een oneindige loop stopt pas als je het tabblad sluit.</p>
@@ -2555,6 +2727,7 @@ function renderEditor(params) {
   });
 
   if (project) toast(`Code van “${project.title}” staat in de editor.`);
+  updatePythonBadges();
 }
 
 async function runEditorCode() {
@@ -2575,6 +2748,8 @@ async function runEditorCode() {
   if (runButton) runButton.disabled = true;
   output.textContent = "";
   output.classList.remove("error");
+  output.setAttribute("aria-busy", "true");
+  clearPythonError("editor");
   status.className = "playground-status busy";
   status.textContent = pyodideLoaded ? "Bezig…" : "Python laden (eenmalig, ±10 MB)…";
 
@@ -2591,11 +2766,13 @@ async function runEditorCode() {
     status.className = "playground-status";
     status.textContent = "Klaar.";
   } catch (error) {
-    output.classList.add("error");
-    output.textContent = result + (result ? "\n" : "") + "Fout: " + (error?.message || String(error));
+    const prefix = result.trim() ? `${result}\n` : "";
+    showPythonError(error, textarea.value, output, "editor");
+    output.textContent = prefix + output.textContent;
     status.className = "playground-status error";
-    status.textContent = "Er ging iets mis.";
+    status.textContent = "Er ging iets mis. Lees de uitleg onder de uitvoer.";
   } finally {
+    output.setAttribute("aria-busy", "false");
     if (runButton) runButton.disabled = false;
   }
 }
@@ -2625,6 +2802,7 @@ function clearEditorOutput() {
     output.textContent = "Uitvoer verschijnt hier.";
     output.classList.remove("error");
   }
+  clearPythonError("editor");
   if (status) {
     status.textContent = "";
     status.className = "playground-status";
@@ -2892,11 +3070,36 @@ document.addEventListener("click", (event) => {
       sendAIMessage(actionEl.dataset.prompt || actionEl.textContent);
     }
     if (action === "follow-up") {
-      sendAIMessage(actionEl.dataset.prompt || actionEl.textContent);
+      const prompt = actionEl.dataset.prompt || actionEl.textContent;
+      if (/^ik bedoelde iets anders/i.test(prompt)) {
+        aiInput.value = "Ik bedoelde iets anders. Ik bedoelde eigenlijk: ";
+        aiInput.focus();
+        aiInput.setSelectionRange(aiInput.value.length, aiInput.value.length);
+        toast("Typ kort wat je wél bedoelde. Dan helpt EasyCoach je verder.");
+        return;
+      }
+      sendAIMessage(prompt);
     }
     if (action === "retry-ai") {
       retryAIMessage(actionEl.dataset.prompt || "");
     }
+    if (action === "ask-error") {
+      if (!lastPythonError || !lastPythonError.message) {
+        toast("Voer eerst je code uit. Daarna kan ik de fout uitleggen.");
+        return;
+      }
+      const info = explainPythonError(
+        { message: lastPythonError.message },
+        lastPythonError.code
+      );
+      const code = lastPythonError.code.slice(0, 1400);
+      const message = lastPythonError.message.slice(0, 1600);
+      openAI();
+      sendAIMessage(
+        `Ik krijg deze fout en snap niet hoe ik verder moet.\n\nMijn code:\n\`\`\`python\n${code}\n\`\`\`\n\nDe foutmelding:\n${message}\n\nKort gezegd: ${info.hint}\n\nKun je me eerst vragen stellen als je nog iets mist?`
+      );
+    }
+    if (action === "prepare-python") prepareOfflinePython(actionEl);
     if (action === "open-generator") openGenerator();
     if (action === "close-generator") closeGenerator();
     if (action === "open-donate") openDonate();
@@ -2908,6 +3111,7 @@ document.addEventListener("click", (event) => {
     if (action === "close-install") closeInstall();
     if (action === "install-now") installApp();
     if (action === "check-install") checkInstall();
+    if (action === "confirm-install") confirmInstall();
     if (action === "profile-logout") {
       store.logoutProfile();
       try {
@@ -3230,6 +3434,7 @@ document.addEventListener("submit", (event) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  trapModalFocus(event);
   const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName);
 
   if (event.key === "/" && !typing) {
@@ -3284,6 +3489,62 @@ function installPlatformName(platform) {
   return "computer";
 }
 
+function browserInfo() {
+  const ua = navigator.userAgent || "";
+  const known = [
+    ["Microsoft Edge", /Edg(?:A|iOS)?\/([\d.]+)/],
+    ["Opera", /OPR\/([\d.]+)/],
+    ["Samsung Internet", /SamsungBrowser\/([\d.]+)/],
+    ["Chrome", /(?:Chrome|CriOS)\/([\d.]+)/],
+    ["Firefox", /(?:Firefox|FxiOS)\/([\d.]+)/],
+    ["Safari", /Version\/([\d.]+).*Safari/]
+  ];
+  for (const [name, pattern] of known) {
+    const match = ua.match(pattern);
+    if (match) {
+      return {
+        name,
+        version: match[1] || "",
+        major: (match[1] || "").split(".")[0],
+        canInstall: ["Microsoft Edge", "Chrome", "Opera", "Samsung Internet"].includes(name)
+      };
+    }
+  }
+  return { name: "je browser", version: "", major: "", canInstall: false };
+}
+
+function osName() {
+  const ua = navigator.userAgent || "";
+  if (/Android/i.test(ua)) return "Android";
+  if (/iPad|iPhone|iPod/i.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) {
+    return "iPhone of iPad";
+  }
+  if (/Windows/i.test(ua)) return "Windows";
+  if (/Macintosh|Mac OS X/i.test(ua)) return "macOS";
+  if (/CrOS/i.test(ua)) return "ChromeOS";
+  if (/Linux/i.test(ua)) return "Linux";
+  return "dit toestel";
+}
+
+function installConfirmed() {
+  try {
+    return localStorage.getItem(INSTALL_CONFIRMED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function confirmInstall() {
+  try {
+    localStorage.setItem(INSTALL_CONFIRMED_KEY, "1");
+  } catch {
+    // Zonder opslag blijft de rest werken.
+  }
+  updateInstallUI();
+  checkInstall();
+  toast("Mooi! Je hebt bevestigd dat EasyCodey als app op je apparaat staat.");
+}
+
 function isInAppBrowser() {
   const ua = navigator.userAgent || "";
   return /(FBAN|FBAV|FB_IAB|Instagram|WhatsApp|Line\/|Snapchat|TikTok|Twitter|LinkedIn|Pinterest)/i.test(ua);
@@ -3293,6 +3554,9 @@ function updateInstallUI() {
   const standalone = isStandaloneApp();
   const platform = installPlatform();
   const inApp = isInAppBrowser();
+  const browser = browserInfo();
+  const os = osName();
+  const confirmed = installConfirmed();
   if (installHeader) {
     installHeader.hidden = false;
     installHeader.setAttribute(
@@ -3312,6 +3576,13 @@ function updateInstallUI() {
     item.hidden = item.dataset.platform !== platform;
   });
 
+  const browserEl = document.querySelector("[data-install-browser]");
+  if (browserEl) {
+    const version = browser.major ? ` ${browser.major}` : "";
+    browserEl.hidden = inApp;
+    browserEl.innerHTML = `Je gebruikt <strong>${e(browser.name)}${e(version)}</strong> op <strong>${e(os)}</strong>.`;
+  }
+
   const warning = document.querySelector("[data-install-inapp]");
   if (warning) {
     warning.hidden = !inApp;
@@ -3323,28 +3594,36 @@ function updateInstallUI() {
 
   const state = document.querySelector("[data-install-state]");
   if (state) {
+    state.hidden = false;
     if (standalone) {
-      state.hidden = false;
       state.innerHTML =
-        "<strong>Je gebruikt EasyCodey al als app.</strong> Je hoeft niets meer te installeren. Open de website als je de browser-versie wilt.";
+        "<strong>✅ Gelukt: je gebruikt EasyCodey al als app.</strong> Je hoeft niets meer te installeren. Open de website als je de browser-versie wilt.";
     } else if (inApp) {
-      state.hidden = false;
       state.innerHTML =
         "<strong>Installeren kan alleen in Chrome of Safari.</strong> Open deze pagina eerst in je gewone browser met de knop hierboven.";
+    } else if (confirmed) {
+      state.innerHTML =
+        "<strong>✅ Je hebt bevestigd dat EasyCodey als app op je apparaat staat.</strong> Open de app via je startmenu, beginscherm of app-lijst. Je hoeft niets meer te doen.";
     } else if (deferredInstallPrompt) {
-      state.hidden = false;
       state.innerHTML = `<strong>Klaar om te installeren.</strong> Tik hieronder op <em>Installeer nu</em> en bevestig. Daarna opent EasyCodey als app op je ${installPlatformName(
         platform
       )}.`;
     } else if (platform === "ios") {
-      state.hidden = false;
       state.innerHTML =
         "<strong>Op iPhone en iPad werkt installeren via Safari.</strong> Tik onderaan op <em>Deel</em> en daarna op <em>Zet op beginscherm</em>.";
+    } else if (platform === "desktop" && !browser.canInstall) {
+      state.innerHTML = `<strong>${e(
+        browser.name
+      )} kan op de computer geen apps installeren.</strong> Open EasyCodey in <strong>Chrome</strong> of <strong>Microsoft Edge</strong> en probeer het daar opnieuw. Je kunt de site in deze browser gewoon blijven gebruiken.`;
+    } else if (platform === "desktop") {
+      const menu =
+        browser.name === "Microsoft Edge"
+          ? "<strong>⋯</strong> → <em>Apps</em> → <em>Deze site als app installeren</em>"
+          : "<strong>⋮</strong> → <em>Cast, opslaan en delen</em> → <em>App installeren</em>";
+      state.innerHTML = `<strong>Je browser toont nu geen installatievenster.</strong> Gebruik het menu ${menu}. Staat EasyCodey daar niet tussen? Dan is de app waarschijnlijk al geïnstalleerd. Typ <em>EasyCodey</em> in het startmenu om te controleren.`;
     } else {
-      state.hidden = false;
-      state.innerHTML = `<strong>Je browser toont nu geen installatievenster.</strong> Gebruik het menu ⋮ → <em>App installeren</em> op je ${installPlatformName(
-        platform
-      )}, of volg de stap hieronder.`;
+      state.innerHTML =
+        "<strong>Je browser toont nu geen installatievenster.</strong> Open het menu ⋮ en kies <em>App installeren</em> of <em>Toevoegen aan startscherm</em>.";
     }
   }
 
@@ -3359,20 +3638,32 @@ function updateInstallUI() {
 }
 
 function checkInstall() {
-  if (isStandaloneApp()) {
-    toast("Ja! EasyCodey opent al als app. Je hoeft niets meer te doen.");
-    return;
+  const ok = isStandaloneApp() || installConfirmed();
+  const result = document.querySelector("[data-install-check]");
+  if (result) {
+    result.hidden = false;
+    result.className = `install-check ${ok ? "ok" : "warn"}`;
+    result.innerHTML = ok
+      ? "<strong>✅ Gelukt!</strong> EasyCodey staat als app op je apparaat. Je hoeft niets meer te doen. Open de app via je startmenu, beginscherm of app-lijst."
+      : "<strong>Nog niet gelukt.</strong> Je zit nu in de browser. Volg de stap hierboven en probeer opnieuw. Zie je EasyCodey wel in je startmenu of app-lijst? Dan is het toch gelukt: <button class=\"btn ghost tiny\" type=\"button\" data-action=\"confirm-install\">Ik zie EasyCodey in mijn apps</button>";
+    result.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
-  toast("Nog niet. Je zit nu in de browser. Volg de stap hierboven en probeer opnieuw.");
+  toast(
+    ok
+      ? "Ja! EasyCodey staat als app op je apparaat."
+      : "Nog niet. Volg de stap hierboven en probeer opnieuw."
+  );
 }
 
 function openInstall() {
+  rememberFocus();
   updateInstallUI();
   installModal.hidden = false;
 }
 
 function closeInstall() {
   installModal.hidden = true;
+  restoreFocus();
 }
 
 async function installApp() {
@@ -3478,7 +3769,19 @@ function initPWA() {
   window.addEventListener("appinstalled", () => {
     deferredInstallPrompt = null;
     window.__easycodeyInstallPrompt = null;
+    try {
+      localStorage.setItem(INSTALL_CONFIRMED_KEY, "1");
+    } catch {
+      // Zonder opslag blijft de rest werken.
+    }
     updateInstallUI();
+    const result = document.querySelector("[data-install-check]");
+    if (result) {
+      result.hidden = false;
+      result.className = "install-check ok";
+      result.innerHTML =
+        "<strong>✅ Gelukt!</strong> EasyCodey staat als app op je apparaat. Je hoeft niets meer te doen.";
+    }
     counter.countInstall().then((value) => {
       if (value !== null) analytics.trackEvent("app-geinstalleerd");
     });
@@ -3511,6 +3814,12 @@ async function init() {
   window.__easycodeyBoot?.();
   initTheme();
   initPWA();
+  readPythonReady();
+  document.querySelector(".skip-link")?.addEventListener("click", (event) => {
+    event.preventDefault();
+    app.focus();
+    app.scrollIntoView({ block: "start" });
+  });
   analytics.loadAnalyticsConfig().then(() => {
     analytics.initAnalytics();
     analytics.trackOnce(`start-${APP_VERSION}`);

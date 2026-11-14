@@ -65,6 +65,8 @@
     </section>
   </noscript>
 
+  <a class="skip-link" href="#app">Ga naar de inhoud</a>
+
   <header class="site-header">
     <div class="header-inner">
       <a class="logo" href="#/" aria-label="EasyCodey home">
@@ -83,7 +85,7 @@
         <a href="#/programmeren" data-nav="programmeren">Programmeren</a>
         <a href="#/mijn-ideeen" data-nav="mijn-ideeen">Mijn ideeën</a>
         <a href="contact/">Contact</a>
-        <button class="nav-ai" type="button" data-action="open-ai">
+        <button class="nav-ai" type="button" data-action="open-ai" aria-controls="ai-panel" aria-expanded="false">
           <span class="ai-spark">✦</span> AI-coach
         </button>
       </nav>
@@ -143,7 +145,7 @@
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="download/">⬇ Android-app</a>
         <span aria-hidden="true" id="chat-footer-sep" hidden>·</span>
-        <button class="link-btn" id="chat-footer" type="button" data-action="open-ai" hidden>✦ Chat met je coach</button>
+        <button class="link-btn" id="chat-footer" type="button" data-action="open-ai" aria-controls="ai-panel" aria-expanded="false" hidden>✦ Chat met je coach</button>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="#/profiel">👤 Mijn profiel</a>
         <span aria-hidden="true">·</span>
@@ -160,7 +162,7 @@
     </div>
   </footer>
 
-  <button class="chat-fab" id="chat-fab" type="button" data-action="open-ai" aria-label="Chat met EasyCoach" hidden>
+  <button class="chat-fab" id="chat-fab" type="button" data-action="open-ai" aria-label="Chat met EasyCoach" aria-controls="ai-panel" aria-expanded="false" hidden>
     <span class="chat-fab-icon" aria-hidden="true">✦</span>
     <span class="chat-fab-label">Chat</span>
   </button>
@@ -399,9 +401,14 @@
       <div class="playground-actions">
         <button class="btn brand" id="playground-run" type="button" data-action="run-playground">▶ Uitvoeren</button>
         <button class="btn ghost" type="button" data-action="clear-playground">Wissen</button>
+        <button class="btn ghost tiny" type="button" data-action="prepare-python" data-source="playground">📥 Offline klaarzetten</button>
         <span class="playground-status" id="playground-status" role="status" aria-live="polite"></span>
       </div>
       <pre class="playground-output" id="playground-output" aria-live="polite">Uitvoer verschijnt hier.</pre>
+      <div class="python-error-actions">
+        <button class="btn ghost tiny" type="button" id="playground-ai-help" data-action="ask-error" data-source="playground" hidden>✦ Vraag EasyCoach om hulp</button>
+        <span class="python-offline-badge" data-python-ready hidden>✅ Python werkt nu ook offline</span>
+      </div>
       <p class="modal-fineprint">
         Python draait via <code>Pyodide</code> (WebAssembly) in je browser. Bij <code>input()</code> typ je
         je antwoord in het venster dat bovenaan verschijnt. Vermijd oneindige loops; die kun je alleen
@@ -431,6 +438,7 @@
       </div>
       <p class="install-warning" data-install-inapp hidden></p>
       <p class="install-note" data-install-state hidden></p>
+      <p class="install-browser" data-install-browser hidden></p>
       <ol class="install-steps">
         <li data-platform="desktop">
           <strong>Chrome of Edge op de computer</strong>
@@ -475,6 +483,10 @@
             <strong>⋯</strong> → <em>Apps</em> → <em>Deze site als app installeren</em>.
           </li>
           <li>
+            <strong>Je gebruikt Firefox of Safari op de computer.</strong> Die browsers kunnen geen
+            webapp installeren. Open EasyCodey in <strong>Chrome</strong> of <strong>Microsoft Edge</strong>.
+          </li>
+          <li>
             <strong>Je hebt de APK op de computer gedownload.</strong> De APK is alleen voor Android.
             Op Windows of macOS gebruik je de webapp via de knop hierboven; je hoeft niets te installeren.
           </li>
@@ -500,6 +512,7 @@
           </li>
         </ul>
       </details>
+      <p class="install-check" data-install-check role="status" aria-live="polite" hidden></p>
       <div class="modal-actions">
         <button class="btn brand" type="button" id="install-now" data-action="install-now" hidden>📲 Installeer nu</button>
         <button class="btn ghost" type="button" data-action="check-install">✅ Is het gelukt?</button>

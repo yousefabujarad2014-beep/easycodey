@@ -1310,7 +1310,7 @@ function renderInstallPage() {
     <section class="panel install-section">
       <h2><span class="h2-num">6</span> Hulp nodig?</h2>
       <ul class="tips">
-        <li>Gebruik Chrome, Edge of Safari. Firefox en in-app browsers ondersteunen installeren minder goed.</li>
+        <li>Gebruik Chrome, Edge of Safari. Firefox en Safari op de computer kunnen geen webapp installeren; in-app browsers zoals WhatsApp ook niet.</li>
         <li>Sluit incognito en open de site in een normaal tabblad.</li>
         <li>Installeer altijd via de beveiligde link <strong>https://yousefabujarad2014-beep.github.io/easycodey/</strong>, niet via een lokaal bestand of een oude snelkoppeling.</li>
         <li>EasyCodey controleert zelf op updates en werkt zich automatisch bij zodra je online bent. Je hoeft niets te doen.</li>

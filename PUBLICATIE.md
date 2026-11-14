@@ -202,6 +202,9 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] AI-coach begrijpt eerst de vraag, vat samen wat je bedoelt en stelt zo nodig 1 of 2 korte vragen vóór de oplossing.
 - [ ] AI-coach geeft standaard een gratis online antwoord, zonder account of sleutel.
 - [ ] Na elk antwoord verschijnen vervolgvragen, waaronder **Ik bedoelde iets anders**; bij een fout verschijnt **Opnieuw proberen met AI**.
+- [ ] **Ik bedoelde iets anders** vult het invoerveld met “Ik bedoelde iets anders. Ik bedoelde eigenlijk: ” en verstuurt nog niets.
+- [ ] Het AI-gesprek blijft na verversen bewaard per profiel; **Gesprek wissen** ruimt het op.
+- [ ] Een Python-fout (bijv. `print(naam)`) verschijnt in eenvoudig Nederlands met regelnummer, codefragment en tip; **✦ Vraag EasyCoach om hulp** opent de coach met de fout erbij.
 - [ ] Online AI uitzetten in de instellingen geeft de offline coach met eigen uitleg en code.
 - [ ] Met `OPENAI_API_KEY`: streaming antwoorden via de eigen server en foutfallback.
 - [ ] Met `ACCESS_CODE`: zonder code geen AI-antwoord via de eigen server.
@@ -211,6 +214,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
 - [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
 - [ ] Invoerhulp is zichtbaar bij het speelveld en op een projectpagina; `input()` toont de vraag en een tekstvak in het venster bovenaan.
+- [ ] **📥 Offline klaarzetten** laadt Python één keer en toont daarna **✅ Python werkt nu ook offline**; na een app-update blijft dat zo.
 - [ ] `#/profiel` laadt en legt uit dat een e-mailadres of telefoonnummer optioneel is.
 - [ ] Account aanmaken met naam + wachtwoord, uitloggen, opnieuw inloggen en een fout wachtwoord geven de juiste melding.
 - [ ] Na inloggen verschijnt de chatknop in de footer en als zwevende knop; op mobiel en laptop. De header heeft geen tweede chatknop.
@@ -221,6 +225,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Na **Vergrendelen** opent **[verwijderd]** het paneel opnieuw; een verkeerde code geeft een duidelijke foutmelding.
 - [ ] Inloggen met **Yousef Abujarad / [verwijderd]** op `#/profiel` geeft het label **Eigenaar** en opent `#/eigenaar` zonder code.
 - [ ] **Inzicht en updates** toont app-versie, service worker, offline bestanden, opslag en de laatste update.
+- [ ] Het installatievenster noemt je **browser en toestel**, toont alleen de passende stap en heeft **✅ Is het gelukt?** met de bevestiging **Ik zie EasyCodey in mijn apps**.
+- [ ] Toegankelijkheid: de springlink **Ga naar de inhoud** werkt, Tab blijft binnen een open venster en gaat na sluiten terug naar de knop, en **aria-expanded** klopt op de AI-knoppen.
 - [ ] **Bezoekcijfers** tonen getallen voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; **Cijfers verversen** haalt de nieuwste stand op.
 - [ ] **Cijferverloop** toont vandaag, sinds 7 dagen en sinds je vorige bezoek; de momentopname blijft alleen op dit toestel.
 - [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** zet de meting uit; de opt-out op het profiel werkt.

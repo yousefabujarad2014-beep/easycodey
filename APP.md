@@ -19,12 +19,12 @@ Doneren: https://yousefabujarad2014-beep.github.io/easycodey/doneren/ — IBAN *
 ### Windows of macOS (Chrome of Edge)
 
 1. Open de live site.
-2. Klik rechtsboven in de adresbalk op het **installatie-icoon**, of gebruik het menu ⋮ → **App installeren**.
+2. Klik rechtsboven in de adresbalk op het **installatie-icoon**. Zie je dat niet? Gebruik het menu: Chrome **⋮ → Cast, opslaan en delen → App installeren**; Edge **⋯ → Apps → Deze site als app installeren**.
 3. Bevestig met **Installeren**.
 
 EasyCodey staat daarna in het startmenu en op het bureaublad, en opent in een eigen venster zonder adresbalk.
 
-Je kunt ook op het **📲-icoon** in de header of op **📲 Installeer als app** in de footer klikken. Daar staat de uitleg per platform en, als je browser het ondersteunt, de knop **Installeer nu**.
+Je kunt ook op het **📲-icoon** in de header of op **📲 Installeer als app** in de footer klikken. Het venster herkent je **browser en toestel**, toont alleen de stap die daarbij past en heeft een knop **✅ Is het gelukt?**. Zegt die “Nog niet gelukt”, volg dan de stap hierboven. Zie je EasyCodey wél in je startmenu of app-lijst? Bevestig dan met **Ik zie EasyCodey in mijn apps**.
 
 ### Android (Chrome)
 
@@ -70,11 +70,11 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Online AI-coach met eigen OpenAI-sleutel | ❌ internet nodig |
 | Doneren per bank (pagina `/doneren/`) | ❌ internet nodig |
 
-De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldingen) bij de eerste installatie. De Python-runtime (Pyodide, ongeveer 10 MB) wordt bewaard zodra je hem één keer gebruikt. Daarna werken **▶ Speel**, **▶ Speel dit idee** en de editor ook zonder internet.
+De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldingen) bij de eerste installatie. De Python-runtime (Pyodide, ongeveer 10 MB) wordt bewaard zodra je hem één keer gebruikt, of met **📥 Offline klaarzetten**. Daarna werken **▶ Speel**, **▶ Speel dit idee** en de editor ook zonder internet, en zie je **✅ Python werkt nu ook offline**. De runtime-cache blijft bewaard bij een app-update.
 
 Je voortgang staat per browser en per apparaat in `localStorage`. Met een optioneel account op `#/profiel` houd je gebruikers op hetzelfde apparaat gescheiden. Er is geen account op een server en geen automatische synchronisatie tussen apparaten; gebruik de back-up om je gegevens te verhuizen.
 
-De **online AI-coach staat standaard aan** en gebruikt een gratis AI-dienst. Hij **begrijpt eerst je vraag**: hij vat samen wat je bedoelt en stelt 1 of 2 korte vragen als er iets ontbreekt. Pas daarna krijg je uitleg of code. Je vraag, het gesprek en de projectcontext gaan naar die dienst; je voortgang, account en contactgegevens nooit. Je kunt de online coach in de instellingen uitzetten en dan volledig offline werken. Na elk antwoord krijg je vervolgvragen, waaronder **Ik bedoelde iets anders**, en bij een storing een knop **Opnieuw proberen met AI**.
+De **online AI-coach staat standaard aan** en gebruikt een gratis AI-dienst. Hij **begrijpt eerst je vraag**: hij vat samen wat je bedoelt en stelt 1 of 2 korte vragen als er iets ontbreekt. Pas daarna krijg je uitleg of code. Je vraag, het gesprek en de projectcontext gaan naar die dienst; je voortgang, account en contactgegevens nooit. Je kunt de online coach in de instellingen uitzetten en dan volledig offline werken. Na elk antwoord krijg je vervolgvragen, waaronder **Ik bedoelde iets anders** (dat vult je invoerveld en verstuurt nog niets), en bij een storing een knop **Opnieuw proberen met AI**. Het gesprek wordt lokaal per profiel bewaard en blijft na verversen staan; **Gesprek wissen** ruimt het op.
 
 ### Android-app als APK
 

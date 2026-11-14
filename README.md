@@ -46,15 +46,15 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
 - **Leerpad** met alle projecten per niveau en een categorie-filter.
 - **Mijn ideeën**: eigen AI-projecten bewaren, verwijderen en exporteren/importeren als JSON.
-- **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt. Hij **begrijpt eerst je vraag**, stelt zo nodig 1 of 2 korte vragen en geeft daarna pas een concreet antwoord met code, uitleg en een volgende stap. Standaard via een **gratis online AI** (geen account of sleutel nodig).
+- **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt. Hij **begrijpt eerst je vraag**, stelt zo nodig 1 of 2 korte vragen en geeft daarna pas een concreet antwoord met code, uitleg en een volgende stap. Standaard via een **gratis online AI** (geen account of sleutel nodig). Je gesprek blijft **lokaal per profiel** bewaard, en met **Ik bedoelde iets anders** vult hij je invoerveld zodat je rustig kunt uitleggen wat je wél bedoelde.
 - **Offline coach**: werkt zonder internet of met de online AI uitgezet. Herkent je onderwerp, veelvoorkomende foutmeldingen en Python-begrippen, en geeft een stappenplan plus codevoorbeeld.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
-- **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account.
+- **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account. Een fout wordt in **eenvoudig Nederlands** uitgelegd met regelnummer, codefragment en tip; met **✦ Vraag EasyCoach om hulp** ga je meteen verder.
 - **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren.
 - **Projectcode in de editor**: elk project heeft **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. **Speel dit idee** toont de speelbare app, **Gebruik dit idee** toont alle code en **Programmeer zelf** opent het hele project als één programma in de editor, met commentaar per stap.
 - **App-weergave per project**: elke projectpagina opent standaard in een schone, app-achtige preview zonder code. Met de knoppen **▶ Speel dit idee** en **⌨ Gebruik dit idee** schakel je tussen spelen en leren; de app en de code zitten dus samen in dezelfde twee acties. De previews zijn echte, interactieve demo's (Snake, Tetris, Pong, rekenmachine, weer, portscanner, simulaties enz.) en hebben voor alle 161 projecten een passende weergave.
-- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Je hoeft zelf niets te doen.
+- **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Je hoeft zelf niets te doen. Het installatievenster herkent je **browser en toestel**, toont alleen de stap die daarbij past en heeft een knop **✅ Is het gelukt?** om te controleren of de app echt geïnstalleerd is.
 - **Chique huisstijl**: warm ivoor, diepgroen en goud, met Fraunces voor koppen, verfijnde kaarten en donkere code- en footerblokken. Het logo is een eigen monogram (diepgroen vierkant, gouden rand en ivoren **E**).
 - **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
 - **Vindbaar op Google**: robots.txt, sitemap.xml, canonical, Open Graph en gestructureerde data zijn ingebouwd. Elk project heeft daarnaast een eigen vaste pagina op `/idee/<id>/` met eigen titel, description en JSON-LD.
@@ -222,7 +222,7 @@ EasyCodey is een installeerbare webapp. Je gebruikt dezelfde site en dezelfde vo
 
 Er is ook een aparte pagina **`/installeren/`** met een QR-code en uitleg per platform. Scan de QR-code met je Android-telefoon om de site meteen te openen.
 
-Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
+Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt, of met **📥 Offline klaarzetten** in het speelveld of de editor. Daarna zie je **✅ Python werkt nu ook offline**. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
 
 EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Je hoeft zelf niets te doen. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). De live app gebruikt HTTPS met een geldig certificaat en HSTS.
 
@@ -323,15 +323,17 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 6. Herlaad de pagina: de filters moeten in de URL staan en je voortgang moet bewaard blijven.
 7. Vink alle stappen af en controleer de confetti en de afgeronde status.
 8. Open de AI-coach: standaard krijg je een **gratis online AI-antwoord** zonder sleutel. Stel een vraag en controleer dat er vervolgvragen verschijnen.
-9. Zet de online AI uit via ⚙ en stel opnieuw een vraag: je krijgt de offline coach met uitleg en code. Zet hem daarna weer aan.
-10. Stel eventueel een eigen sleutel in via ⚙ en stel een vraag.
-10. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven.
-11. Open een project en test **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
-12. Maak op `#/profiel` een account met naam en wachtwoord, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**. Controleer dat de chatknop verschijnt zodra je ingelogd bent.
-13. Open `#/eigenaar`, ontgrendel met de eigenaarscode en controleer het aantal profielen, de mededeling en **Alles downloaden**.
-14. Open **📲 Installeer als app** en controleer de uitleg. In DevTools → Application moet de service worker actief zijn. Bij een nieuwe versie moet de app zichzelf automatisch bijwerken.
-15. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit.
-16. Test op een smal scherm en wissel tussen licht en donker thema. Controleer dat er geen horizontale scrollbalk is.
+9. Klik op **Ik bedoelde iets anders**: het invoerveld vult zich met “Ik bedoelde iets anders. Ik bedoelde eigenlijk: ” en er wordt nog niets verstuurd.
+10. Herlaad de pagina en open de coach opnieuw: je gesprek staat er nog. Test daarna **Gesprek wissen**.
+11. Zet de online AI uit via ⚙ en stel opnieuw een vraag: je krijgt de offline coach met uitleg en code. Zet hem daarna weer aan.
+12. Stel eventueel een eigen sleutel in via ⚙ en stel een vraag.
+13. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven. Voer daarna `print(naam)` uit en controleer de Nederlandse uitleg met regelnummer en de knop **✦ Vraag EasyCoach om hulp**.
+14. Open een project en test **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
+15. Maak op `#/profiel` een account met naam en wachtwoord, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**. Controleer dat de chatknop verschijnt zodra je ingelogd bent.
+16. Open `#/eigenaar`, ontgrendel met de eigenaarscode en controleer het aantal profielen, de mededeling en **Alles downloaden**.
+17. Open **📲 Installeer als app**: controleer dat je browser en toestel genoemd worden, dat alleen de juiste stap zichtbaar is en dat **Is het gelukt?** eerlijk antwoord geeft. In DevTools → Application moet de service worker actief zijn.
+18. Test offline: DevTools → Network → Offline, herlaad de pagina en voer Python uit. Gebruik eventueel **📥 Offline klaarzetten** en controleer de badge **✅ Python werkt nu ook offline**.
+19. Test op een smal scherm en wissel tussen licht en donker thema. Controleer dat er geen horizontale scrollbalk is. Tab door de app en controleer dat de focus in een venster blijft en na sluiten teruggaat naar de knop.
 
 ## Deployen naar Render
 
