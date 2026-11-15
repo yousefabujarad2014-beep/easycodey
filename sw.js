@@ -17,6 +17,7 @@ const SHELL = [
   "./assets/fonts/jetbrains-mono.woff2",
   "./assets/fonts/plus-jakarta-sans.woff2",
   "./styles.css",
+  "./site-config.json",
   "./app.js",
   "./js/ai.js",
   "./js/python-errors.js",
@@ -158,9 +159,10 @@ async function staleWhileRevalidate(request, cacheName) {
   return cached || network || new Response("", { status: 504 });
 }
 
-async function networkFirstAsset(request, cacheName) {
+async function networkFirstAsset(request, cacheName, ignoreSearch = false) {
   const cache = await caches.open(cacheName);
-  const cached = await cache.match(request);
+  const options = ignoreSearch ? { ignoreSearch: true } : undefined;
+  const cached = await cache.match(request, options);
   const network = fetch(request)
     .then((response) => {
       if (isCacheable(response)) putSafe(cache, request, response);
@@ -205,7 +207,10 @@ self.addEventListener("fetch", (event) => {
     if (request.destination === "image" || request.destination === "font") {
       event.respondWith(cacheFirst(request, SHELL_CACHE));
     } else {
-      event.respondWith(networkFirstAsset(request, SHELL_CACHE));
+      // site-config.json wordt met een versie-parameter opgehaald. Zonder deze
+      // uitzondering zou de bewaarde kopie nooit gevonden worden als je offline bent.
+      const ignoreSearch = url.pathname.endsWith("site-config.json");
+      event.respondWith(networkFirstAsset(request, SHELL_CACHE, ignoreSearch));
     }
     return;
   }
