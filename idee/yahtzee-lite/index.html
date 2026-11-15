@@ -395,6 +395,8 @@ print(&quot;Beste score:&quot;, beste)</code></pre>
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
+      if (/^(localhost|127.0.0.1|0.0.0.0|::1|[::1])$/.test(location.hostname)) return;
+      if (location.protocol === "file:") return;
       const response = await fetch("../../site-config.json", { cache: "no-store" });
       const config = await response.json();
 
@@ -403,55 +405,46 @@ print(&quot;Beste score:&quot;, beste)</code></pre>
         .toLowerCase()
         .replace(/[^a-z0-9._-]/g, "");
       if (counter) {
+        const hit = (key, tries = 3) => {
+          const url =
+            "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
+          return new Promise((resolve) => {
+            const attempt = (left) => {
+              fetch(url, { cache: "no-store", keepalive: true })
+                .then((response) => resolve(response))
+                .catch(() => {
+                  if (left > 0) setTimeout(() => attempt(left - 1), 1200);
+                  else resolve(null);
+                });
+            };
+            attempt(tries - 1);
+          });
+        };
         let seen = false;
         try {
           seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
         } catch (error) {}
         if (!seen) {
-          try {
-            sessionStorage.setItem("easycodey.counter.session.v1", "1");
-          } catch (error) {}
-          fetch(
-            "https://abacus.jasoncameron.dev/hit/" +
-              encodeURIComponent(counter) +
-              "/bezoeken-v1",
-            { cache: "no-store", keepalive: true }
-          ).catch(() => {});
+          hit("bezoeken-v1").then((response) => {
+            if (!response || !response.ok) return;
+            try {
+              sessionStorage.setItem("easycodey.counter.session.v1", "1");
+            } catch (error) {}
+          });
         }
         let unique = false;
         try {
           unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
         } catch (error) {}
         if (!unique) {
-          fetch(
-            "https://abacus.jasoncameron.dev/hit/" +
-              encodeURIComponent(counter) +
-              "/unieke-bezoekers-v1",
-            { cache: "no-store", keepalive: true }
-          )
-            .then((response) => {
-              if (!response.ok) return;
-              try {
-                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
-              } catch (error) {}
-            })
-            .catch(() => {});
+          hit("unieke-bezoekers-v1").then((response) => {
+            if (!response || !response.ok) return;
+            try {
+              localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+            } catch (error) {}
+          });
         }
       }
-
-      const site = String((config && config.analyticsSite) || "")
-        .trim()
-        .toLowerCase()
-        .replace(/^https?:\/\//, "")
-        .replace(/\/.*$/, "")
-        .replace(/\.goatcounter\.com$/, "")
-        .replace(/[^a-z0-9-]/g, "");
-      if (!site) return;
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = "https://gc.zgo.at/count.js";
-      script.dataset.goatcounter = "https://" + site + ".goatcounter.com/count";
-      document.head.appendChild(script);
     } catch (error) {}
   })();
 </script>

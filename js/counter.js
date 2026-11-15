@@ -15,12 +15,40 @@ const OWNER_DEVICE_KEY = "easycodey.owner.device.v1";
 const ACTIVE_DAY_KEY = "easycodey.activeAppDay.v1";
 const ACTIVE_PREFIX = "actieve-apps-";
 
-const REQUEST_TIMEOUT = 7000;
+const LAST_TOTALS_KEY = "easycodey.counter.last.v1";
+const REQUEST_TIMEOUT = 10000;
+const RETRY_DELAYS = [400, 1200];
 
 let namespace = "";
 let counterApi = "";
 let configLoaded = false;
 let loadPromise = null;
+let baseline = {};
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/* Op mijn eigen testcomputer en tijdens het bouwen mag niets meetellen. Zo
+   blijven de cijfers van echte bezoekers zuiver. */
+export function isDevHost() {
+  try {
+    const host = String(location.hostname || "").toLowerCase();
+    if (location.protocol === "file:") return true;
+    return (
+      host === "localhost" ||
+      host === "127.0.0.1" ||
+      host === "0.0.0.0" ||
+      host === "::1" ||
+      host === "[::1]"
+    );
+  } catch {
+    return false;
+  }
+}
+
+/* Eén plek die bepaalt of dit toestel mag meetellen. */
+export function countsHere() {
+  return !isDevHost() && !isOwnerDevice() && !isCounterOptedOut();
+}
 
 /* Een trage teller mag het paneel nooit laten hangen. Na 7 seconden stoppen
    we het verzoek; de app werkt gewoon verder zonder cijfer. */
@@ -114,9 +142,21 @@ export async function loadCounterConfig() {
         .replace(/[^a-z0-9._-]/g, "");
       const api = String(config?.counterApi || "").trim().replace(/\/+$/, "");
       counterApi = /^https:\/\/[^\s]+$/i.test(api) ? api : "";
+      // Een paar bekende cijfers uit site-config.json. Die gebruiken we alleen
+      // als de teller even niet antwoordt en dit toestel nog nooit een cijfer
+      // zag. Zo staat er nooit een leeg streepje in het beheerscherm.
+      const raw = config?.counterBaseline;
+      baseline = {};
+      if (raw && typeof raw === "object") {
+        for (const field of ["visits", "unique", "installs", "downloads"]) {
+          const value = Number(raw[field]);
+          if (Number.isFinite(value) && value >= 0) baseline[field] = value;
+        }
+      }
     } catch {
       namespace = "";
       counterApi = "";
+      baseline = {};
     }
     configLoaded = true;
     return namespace;
@@ -124,13 +164,27 @@ export async function loadCounterConfig() {
   return loadPromise;
 }
 
-async function request(path) {
-  const response = await fetchWithTimeout(`${API}${path}`, {
-    cache: "no-store",
-    headers: { Accept: "application/json" }
-  });
-  if (!response.ok) throw new Error("teller niet bereikbaar");
-  return response.json();
+/* Een trage of drukke teller krijgt een paar extra kansen. Zo zie je niet
+   meteen een streepje als Abacus heel even niet antwoordt. */
+async function request(path, tries = 3) {
+  let lastError = null;
+  for (let attempt = 0; attempt < tries; attempt += 1) {
+    try {
+      const response = await fetchWithTimeout(`${API}${path}`, {
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      });
+      if (response.status === 404) return { status: 404, ok: false, data: null };
+      if (response.ok) {
+        return { status: response.status, ok: true, data: await response.json() };
+      }
+      lastError = new Error(`teller gaf ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+    if (attempt < tries - 1) await sleep(RETRY_DELAYS[attempt] || 1200);
+  }
+  throw lastError || new Error("teller niet bereikbaar");
 }
 
 /* Lezen uit de eigen Cloudflare-teller. Lukt dat niet, dan proberen we de
@@ -180,82 +234,178 @@ export async function getCount(key) {
   if (!namespace) return null;
 
   try {
-    const response = await fetchWithTimeout(
-      `${API}/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
-      { cache: "no-store", headers: { Accept: "application/json" } }
+    const result = await request(
+      `/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
+      2
     );
-    if (response.status === 404) return 0;
-    if (!response.ok) return null;
-    const data = await response.json();
-    const value = Number(data?.value);
+    if (result.status === 404) return 0;
+    const value = Number(result.data?.value);
     return Number.isFinite(value) ? value : null;
   } catch {
     return null;
   }
 }
 
-/* Ophogen gebeurt nooit als de bezoeker zich heeft afgemeld. */
+/* Ophogen gebeurt nooit als de bezoeker zich heeft afgemeld, op een
+   ontwikkelcomputer of op het toestel van de eigenaar. */
 export async function hitCount(key) {
   if (!configLoaded) await loadCounterConfig();
-  if (isCounterOptedOut()) return null;
+  if (!countsHere()) return null;
 
   const fromWorker = await hitWorker(key);
   if (fromWorker !== null) return fromWorker;
   if (!namespace) return null;
 
   try {
-    const data = await request(`/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`);
-    const value = Number(data?.value);
+    const result = await request(
+      `/hit/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
+      2
+    );
+    const value = Number(result.data?.value);
     return Number.isFinite(value) ? value : null;
   } catch {
     return null;
   }
 }
 
+/* De laatst bekende cijfers bewaren we lokaal. Als de teller heel even niet
+   antwoordt, zie je toch een echt getal in plaats van een streepje. */
+function readLastTotals() {
+  try {
+    const parsed = JSON.parse(read(LAST_TOTALS_KEY) || "{}");
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeLastTotals(values) {
+  write(
+    LAST_TOTALS_KEY,
+    JSON.stringify({
+      at: Date.now(),
+      day: activeAppsKey(),
+      visits: values.visits,
+      unique: values.unique,
+      installs: values.installs,
+      downloads: values.downloads,
+      active: values.active
+    })
+  );
+}
+
+function knownTotals() {
+  const last = readLastTotals();
+  const merged = { ...baseline };
+  for (const field of ["visits", "unique", "installs", "downloads", "active", "at", "day"]) {
+    if (last[field] !== undefined && last[field] !== null) merged[field] = last[field];
+  }
+  return merged;
+}
+
+function cachedTotalsFrom(last) {
+  const sameDay = last.day === activeAppsKey();
+  const value = (cached) => (Number.isFinite(cached) ? cached : null);
+  const totals = {
+    visits: value(last.visits),
+    unique: value(last.unique),
+    installs: value(last.installs),
+    downloads: value(last.downloads),
+    // Voor "vandaag" tonen we 0 als we het nog niet weten, nooit een streepje.
+    active: sameDay && Number.isFinite(last.active) ? last.active : 0,
+    live: false,
+    at: Number(last.at) || 0
+  };
+  totals.available =
+    totals.visits !== null ||
+    totals.unique !== null ||
+    totals.installs !== null ||
+    totals.downloads !== null ||
+    totals.active !== null;
+  return totals;
+}
+
+/* De cijfers die we de vorige keer zagen. Het paneel toont die meteen, zodat
+   er nooit een leeg streepje staat terwijl de teller antwoordt. */
+export function getCachedTotals() {
+  return cachedTotalsFrom(knownTotals());
+}
+
 export async function getTotals() {
-  const [visits, unique, installs, downloads, active] = await Promise.all([
+  const fresh = await Promise.all([
     getCount("bezoeken-v1"),
     getCount("unieke-bezoekers-v1"),
     getCount("installaties-v1"),
     getCount("apk-downloads-v1"),
     getCount(activeAppsKey())
   ]);
-  return {
-    visits,
-    unique,
-    installs,
-    downloads,
-    active,
-    available:
-      visits !== null ||
-      unique !== null ||
-      installs !== null ||
-      downloads !== null ||
-      active !== null
+  const [visits, unique, installs, downloads, active] = fresh;
+  const known = knownTotals();
+  const sameDay = known.day === activeAppsKey();
+  const fallback = (value, cached) => (value === null && Number.isFinite(cached) ? cached : value);
+
+  const totals = {
+    visits: fallback(visits, known.visits),
+    unique: fallback(unique, known.unique),
+    installs: fallback(installs, known.installs),
+    downloads: fallback(downloads, known.downloads),
+    // "Actieve apps" gaat over vandaag. Weet de teller het even niet, dan
+    // tonen we 0 in plaats van een streepje: vandaag is er dan nog niets geteld.
+    active:
+      active === null ? (sameDay && Number.isFinite(known.active) ? known.active : 0) : active,
+    live: fresh.every((value) => value !== null),
+    at: Number(known.at) || 0
   };
+  totals.available =
+    totals.visits !== null ||
+    totals.unique !== null ||
+    totals.installs !== null ||
+    totals.downloads !== null ||
+    totals.active !== null;
+
+  if (totals.available && fresh.some((value) => value !== null)) {
+    writeLastTotals({
+      visits: totals.visits,
+      unique: totals.unique,
+      installs: totals.installs,
+      downloads: totals.downloads,
+      active: sameDay ? totals.active : known.active
+    });
+  }
+
+  return totals;
 }
 
 /* Eén unieke bezoeker per toestel/browser. De vlag gaat pas aan als de teller
    antwoordt, zodat een offline bezoek het later alsnog kan tellen. Dit is een
    benadering: iemand met twee toestellen of gewiste opslag telt opnieuw. */
 export async function countUniqueVisitor() {
-  if (isCounterOptedOut() || isOwnerDevice()) return null;
+  if (!countsHere()) return null;
   if (read(UNIQUE_KEY) === "1") return null;
   const value = await hitCount("unieke-bezoekers-v1");
   if (value !== null) write(UNIQUE_KEY, "1");
   return value;
 }
 
-/* Eén bezoek per browsersessie, zodat herladen niet dubbel telt. */
+/* Eén bezoek per browsersessie, zodat herladen niet dubbel telt. De vlag gaat
+   pas aan als de teller echt antwoordt; lukt het niet, dan mag het bij een
+   volgende pagina-opening opnieuw. */
 export async function countVisit() {
-  if (isCounterOptedOut() || isOwnerDevice()) return null;
+  if (!countsHere()) return null;
   try {
     if (sessionStorage.getItem(SESSION_KEY) === "1") return null;
-    sessionStorage.setItem(SESSION_KEY, "1");
   } catch {
     // Zonder sessieopslag telt elk bezoek; dat is niet erg.
   }
-  return hitCount("bezoeken-v1");
+  const value = await hitCount("bezoeken-v1");
+  if (value !== null) {
+    try {
+      sessionStorage.setItem(SESSION_KEY, "1");
+    } catch {
+      // Zonder sessieopslag telt elk bezoek; dat is niet erg.
+    }
+  }
+  return value;
 }
 
 /* Eén installatie per toestel. Dit werkt ook zonder account: zodra de app
@@ -263,18 +413,18 @@ export async function countVisit() {
    De vlag gaat pas aan als de teller antwoordt, zodat een offline eerste
    start het later alsnog kan tellen. */
 export async function countInstall() {
-  if (isCounterOptedOut() || isOwnerDevice()) return null;
+  if (!countsHere()) return null;
   if (read(INSTALLED_KEY) === "1") return null;
   const value = await hitCount("installaties-v1");
   if (value !== null) write(INSTALLED_KEY, "1");
   return value;
 }
 
-/* Een app die vandaag geopend is, telt één keer mee voor "actieve apps".
-   Zo zie je hoeveel apps er echt in gebruik zijn, niet hoeveel er ooit zijn
-   geïnstalleerd. */
+/* Een toestel dat de app vandaag gebruikte, telt één keer mee voor "actieve
+   apps". Zo zie je hoeveel apps er echt in gebruik zijn, niet hoeveel er ooit
+   zijn geïnstalleerd. */
 export async function countActiveApp() {
-  if (isCounterOptedOut() || isOwnerDevice()) return null;
+  if (!countsHere()) return null;
   const key = activeAppsKey();
   if (read(ACTIVE_DAY_KEY) === key) return null;
   const value = await hitCount(key);

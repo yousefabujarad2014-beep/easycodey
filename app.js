@@ -575,7 +575,6 @@ function renderProfile() {
   const active = store.getActiveProfile();
   const profiles = store.getProfiles();
   const stats = store.getStats(allIdeas());
-  const tracking = analytics.analyticsInfo();
   const initial = active ? active.name.trim().charAt(0).toUpperCase() : "?";
 
   const profileOptions = profiles
@@ -747,20 +746,16 @@ function renderProfile() {
     <section class="panel profile-privacy">
       <h2>Privacy en statistieken</h2>
       <p class="profile-text">
-        EasyCodey bewaart je voortgang lokaal. Alleen als de eigenaar een meetcode instelt, worden
-        anonieme bezoekcijfers geteld: welke pagina's en projecten populair zijn. Geen cookies,
-        geen namen, geen e-mail en geen profielgegevens.
+        EasyCodey bewaart je voortgang lokaal. Alleen anonieme getallen worden geteld: bezoeken,
+        unieke bezoekers, installaties, actieve apps en APK-downloads. Geen cookies, geen namen,
+        geen e-mail en geen profielgegevens.
       </p>
       <label class="profile-check">
-        <input id="profile-analytics-toggle" type="checkbox" ${tracking.optOut ? "" : "checked"} />
-        <span>Deel anonieme gebruiksstatistieken vanaf dit toestel</span>
+        <input id="profile-analytics-toggle" type="checkbox" ${analytics.isAnalyticsOptOut() ? "" : "checked"} />
+        <span>Deel anonieme cijfers vanaf dit toestel</span>
       </label>
       <p class="static-note">
-        ${
-          tracking.site
-            ? "De keuze geldt alleen voor dit toestel en je kunt hem altijd wijzigen."
-            : "De eigenaar heeft nog geen meting ingesteld, dus er wordt nu niets verstuurd."
-        }
+        De keuze geldt alleen voor dit toestel en je kunt hem altijd wijzigen.
       </p>
     </section>
   `;
@@ -975,7 +970,7 @@ function renderOwner() {
           <p class="static-note" data-trend-note></p>
         </div>
         <p class="static-note" data-counter-note>
-          Actieve apps = toestellen die EasyCodey vandaag als app hebben geopend. Unieke bezoekers =
+          Actieve apps = toestellen die EasyCodey vandaag gebruikten. Unieke bezoekers =
           één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties
           = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de
           downloadknop. Jouw eigen toestel telt niet mee.
@@ -983,36 +978,15 @@ function renderOwner() {
       </div>
 
       <div class="owner-analytics">
-        <h3>Bezoekers meten</h3>
+        <h3>Meting</h3>
         <p class="profile-text" data-analytics-state>Meting wordt gecontroleerd…</p>
-        <form class="owner-analytics-form" id="owner-analytics-form">
-          <label class="field">
-            <span>GoatCounter-sitecode</span>
-            <input id="owner-analytics-site" type="text" maxlength="40" autocomplete="off" placeholder="bijv. easycodey" />
-          </label>
-          <div class="profile-actions">
-            <button class="btn brand" type="submit">Meting opslaan</button>
-            <button class="btn ghost" type="button" data-action="owner-analytics-stop">Stop met meten</button>
-            <a class="btn ghost" data-owner-dashboard href="https://www.goatcounter.com/" target="_blank" rel="noopener">Maak een gratis account ↗</a>
-          </div>
-          <label class="profile-check">
-            <input id="owner-analytics-toggle" type="checkbox" />
-            <span>Deel anonieme statistieken vanaf dit toestel</span>
-          </label>
-        </form>
-        <ol class="owner-analytics-steps">
-          <li>Maak een gratis account op <strong>goatcounter.com</strong> (duurt ongeveer 2 minuten).</li>
-          <li>Kies een korte sitecode, bijvoorbeeld <code>easycodey</code>.</li>
-          <li>Vul die code hierboven in en klik op <strong>Meting opslaan</strong>.</li>
-        </ol>
+        <label class="profile-check">
+          <input id="owner-analytics-toggle" type="checkbox" />
+          <span>Deel anonieme cijfers vanaf dit toestel</span>
+        </label>
         <p class="static-note">
-          Daarna zie je in je dashboard: <strong>bezoeken</strong>, <strong>populairste projecten</strong>,
-          gebruikte versies, <strong>installaties</strong> en <strong>APK-downloads</strong>. De meting is
-          cookieloos en anoniem: geen namen, geen e-mail, geen profielen.
-        </p>
-        <p class="static-note">
-          De code in dit vak geldt alleen op <strong>dit toestel</strong>. Om alle bezoekers te tellen,
-          moet dezelfde code in <code>site-config.json</code> staan. Vraag je beheerder dat te doen.
+          EasyCodey gebruikt alleen de ingebouwde, anonieme teller. Er is geen account, sitecode of
+          externe meetdienst nodig. Jouw eigen toestel telt nooit mee.
         </p>
       </div>
     </section>
@@ -1029,8 +1003,7 @@ function renderOwner() {
       <p class="static-note">
         Wil je álle klanten van álle toestellen zien? Dat kan alleen met een echte server en database.
         EasyCodey bewaart alles lokaal. Alleen de anonieme cijfers — unieke bezoekers, bezoeken,
-        unieke installaties en APK-downloads — gaan naar de ingebouwde teller. Voor populairste
-        projecten kun je daarnaast GoatCounter aanzetten.
+        unieke installaties, actieve apps en APK-downloads — gaan naar de ingebouwde teller.
       </p>
     </section>
   `;
@@ -1119,10 +1092,6 @@ async function loadOwnerCounter() {
   const grid = document.querySelector("[data-counter-totals]");
   if (!grid) return;
   const note = document.querySelector("[data-counter-note]");
-  const totals = await counter.getTotals();
-  const now = Date.now();
-  const snapshots = readCounterSnapshots();
-  renderCounterTrends(totals, snapshots, now);
 
   const put = (name, value) => {
     const el = grid.querySelector(`[data-counter="${name}"]`);
@@ -1130,11 +1099,24 @@ async function loadOwnerCounter() {
     el.textContent =
       value === null ? "—" : new Intl.NumberFormat("nl-BE").format(value);
   };
-  put("active", totals.active);
-  put("visits", totals.visits);
-  put("unique", totals.unique);
-  put("installs", totals.installs);
-  put("downloads", totals.downloads);
+  const paint = (values) => {
+    put("active", values.active);
+    put("visits", values.visits);
+    put("unique", values.unique);
+    put("installs", values.installs);
+    put("downloads", values.downloads);
+  };
+
+  // Eerst de cijfers van de vorige keer. Zo staat er meteen een echt getal en
+  // nooit een leeg streepje terwijl de teller antwoordt.
+  const cached = counter.getCachedTotals();
+  if (cached.available) paint(cached);
+
+  const totals = await counter.getTotals();
+  const now = Date.now();
+  const snapshots = readCounterSnapshots();
+  renderCounterTrends(totals, snapshots, now);
+  paint(totals);
 
   // Bewaar af en toe een momentopname. Zo zie je later het verschil zonder
   // extra gegevens naar buiten te sturen.
@@ -1151,40 +1133,41 @@ async function loadOwnerCounter() {
   }
 
   if (note) {
-    note.textContent = totals.available
-      ? "Actieve apps = toestellen die de app vandaag openden. Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de downloadknop. Jouw eigen toestel telt niet mee."
-      : "De teller is nu niet bereikbaar. Probeer het later opnieuw met de knop hierboven.";
+    if (totals.live) {
+      note.textContent =
+        "Actieve apps = toestellen die de app vandaag gebruikten. Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de downloadknop. Jouw eigen toestel telt niet mee.";
+    } else if (totals.available) {
+      const when = totals.at
+        ? new Date(totals.at).toLocaleString("nl-BE", {
+            day: "2-digit",
+            month: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit"
+          })
+        : "";
+      note.textContent = `De teller antwoordt even niet. Dit zijn de laatst bekende cijfers${
+        when ? ` van ${when}` : ""
+      }. Probeer het zo opnieuw met de knop hierboven.`;
+    } else {
+      note.textContent =
+        "De teller is nu niet bereikbaar. Probeer het later opnieuw met de knop hierboven.";
+    }
   }
 }
 
 function updateOwnerAnalyticsUI() {
   const info = analytics.analyticsInfo();
   const stateEl = document.querySelector("[data-analytics-state]");
-  const siteInput = document.querySelector("#owner-analytics-site");
   const toggle = document.querySelector("#owner-analytics-toggle");
-  const link = document.querySelector("[data-owner-dashboard]");
 
-  if (siteInput && document.activeElement !== siteInput) siteInput.value = info.site;
   if (toggle) toggle.checked = !info.optOut;
-  if (link) {
-    link.href = info.dashboard || "https://www.goatcounter.com/";
-    link.textContent = info.site ? "Open dashboard ↗" : "Maak een gratis account ↗";
-  }
   if (stateEl) {
     if (info.optOut) {
       stateEl.innerHTML =
-        "Alle meting staat uit op dit toestel. Zet het vinkje aan om weer anoniem mee te tellen.";
-    } else if (!info.site) {
-      stateEl.innerHTML =
-        "De ingebouwde teller hierboven werkt al. Een gratis GoatCounter-code geeft <strong>extra</strong> inzichten, zoals populairste projecten en versies. Zonder code wordt er niets naar GoatCounter verstuurd.";
-    } else if (info.source === "public") {
-      stateEl.innerHTML = `Meting is <strong>actief voor alle bezoekers</strong> van EasyCodey (sitecode <strong>${e(
-        info.site
-      )}</strong>). Je ziet de cijfers in je dashboard.`;
+        "De anonieme teller staat <strong>uit</strong> op dit toestel. Zet het vinkje aan om weer mee te tellen.";
     } else {
-      stateEl.innerHTML = `Meting is <strong>actief op dit toestel</strong> (sitecode <strong>${e(
-        info.site
-      )}</strong>). Voor alle bezoekers moet dezelfde code in <code>site-config.json</code> staan.`;
+      stateEl.innerHTML =
+        "De anonieme teller staat <strong>aan</strong>. Er gaan alleen getallen heen en weer: geen namen, geen e-mail en geen profielen.";
     }
   }
 }
@@ -4031,11 +4014,6 @@ document.addEventListener("click", (event) => {
       loadOwnerCounter();
       toast("Cijfers worden opgehaald…");
     }
-    if (action === "owner-analytics-stop") {
-      analytics.setAnalyticsOptOut(true);
-      updateOwnerAnalyticsUI();
-      toast("Meting gestopt. Er wordt niets meer verstuurd.");
-    }
     if (action === "owner-notice-clear") {
       store.setOwnerNotice("");
       renderOwner();
@@ -4288,22 +4266,6 @@ document.addEventListener("submit", (event) => {
     renderOwner();
     showOwnerNotice();
     toast("Mededeling opgeslagen.");
-  }
-  if (event.target.id === "owner-analytics-form") {
-    event.preventDefault();
-    const raw = document.querySelector("#owner-analytics-site")?.value || "";
-    const site = analytics.setAnalyticsSite(raw);
-    if (site.length < 2) {
-      analytics.setAnalyticsSite("");
-      updateOwnerAnalyticsUI();
-      toast("Vul een geldige sitecode in, bijvoorbeeld easycodey.");
-      return;
-    }
-    analytics.setAnalyticsOptOut(false);
-    analytics.initAnalytics();
-    updateOwnerAnalyticsUI();
-    analytics.trackView("eigenaar", document.title);
-    toast(`Meting actief voor ${site}.`);
   }
 });
 
@@ -4798,26 +4760,14 @@ async function init() {
     app.focus();
     app.scrollIntoView({ block: "start" });
   });
-  analytics.loadAnalyticsConfig().then(() => {
-    analytics.initAnalytics();
-    analytics.trackOnce(`start-${APP_VERSION}`);
-  });
   counter.loadCounterConfig().then(() => {
-    if (counter.isOwnerDevice()) return;
+    // Op een ontwikkelcomputer of het toestel van de eigenaar telt niets mee.
+    if (!counter.countsHere()) return;
     counter.countVisit();
     counter.countUniqueVisitor();
+    // Eén keer per toestel per dag: hoeveel toestellen de app vandaag gebruikten.
+    counter.countActiveApp();
   });
-
-  // Welke weergave kiezen mensen: de app of de code?
-  document.addEventListener(
-    "click",
-    (event) => {
-      const tab = event.target.closest?.("[data-view-tab]");
-      if (!tab) return;
-      analytics.trackEvent(tab.dataset.viewTab === "code" ? "code-weergave" : "app-weergave");
-    },
-    true
-  );
 
   route();
   serverConfig = await fetchConfig();

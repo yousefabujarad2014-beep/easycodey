@@ -983,14 +983,16 @@ function renderDownloadPage() {
 }
 
 /* Meet APK-downloads op de downloadpagina. De ingebouwde teller werkt altijd
-   als publicCounter in site-config.json staat. De uitgebreide GoatCounter-
-   meting komt daar bovenop als er een analyticsSite is ingesteld. Cookieloos
-   en zonder persoonsgegevens; de opt-out stopt allebei. */
+   als publicCounter in site-config.json staat. Cookieloos, zonder
+   persoonsgegevens en met dezelfde opt-out als de app. Op een ontwikkel-
+   computer en op het toestel van de eigenaar wordt niets geteld. */
 const DOWNLOAD_TRACKING = `<script>
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
+      if (/^(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|\[::1\])$/.test(location.hostname)) return;
+      if (location.protocol === "file:") return;
       const response = await fetch("../site-config.json", { cache: "no-store" });
       const config = await response.json();
 
@@ -999,97 +1001,70 @@ const DOWNLOAD_TRACKING = `<script>
         .toLowerCase()
         .replace(/[^a-z0-9._-]/g, "");
       if (counter) {
+        const hit = (key, tries = 3) => {
+          const url =
+            "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
+          return new Promise((resolve) => {
+            const attempt = (left) => {
+              fetch(url, { cache: "no-store", keepalive: true })
+                .then((response) => resolve(response))
+                .catch(() => {
+                  if (left > 0) setTimeout(() => attempt(left - 1), 1200);
+                  else resolve(null);
+                });
+            };
+            attempt(tries - 1);
+          });
+        };
         let seen = false;
         try {
           seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
         } catch (error) {}
         if (!seen) {
-          try {
-            sessionStorage.setItem("easycodey.counter.session.v1", "1");
-          } catch (error) {}
-          fetch(
-            "https://abacus.jasoncameron.dev/hit/" +
-              encodeURIComponent(counter) +
-              "/bezoeken-v1",
-            { cache: "no-store", keepalive: true }
-          ).catch(() => {});
+          hit("bezoeken-v1").then((response) => {
+            if (!response || !response.ok) return;
+            try {
+              sessionStorage.setItem("easycodey.counter.session.v1", "1");
+            } catch (error) {}
+          });
         }
         let unique = false;
         try {
           unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
         } catch (error) {}
         if (!unique) {
-          fetch(
-            "https://abacus.jasoncameron.dev/hit/" +
-              encodeURIComponent(counter) +
-              "/unieke-bezoekers-v1",
-            { cache: "no-store", keepalive: true }
-          )
-            .then((response) => {
-              if (!response.ok) return;
-              try {
-                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
-              } catch (error) {}
-            })
-            .catch(() => {});
+          hit("unieke-bezoekers-v1").then((response) => {
+            if (!response || !response.ok) return;
+            try {
+              localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+            } catch (error) {}
+          });
         }
         document.addEventListener(
           "click",
           (event) => {
             if (!event.target.closest || !event.target.closest("a[download]")) return;
-            fetch(
-              "https://abacus.jasoncameron.dev/hit/" +
-                encodeURIComponent(counter) +
-                "/apk-downloads-v1",
-              { cache: "no-store", keepalive: true }
-            ).catch(() => {});
+            hit("apk-downloads-v1");
           },
           true
         );
       }
-
-      const site = String((config && config.analyticsSite) || "")
-        .trim()
-        .toLowerCase()
-        .replace(/^https?:\\/\\//, "")
-        .replace(/\\/.*$/, "")
-        .replace(/\\.goatcounter\\.com$/, "")
-        .replace(/[^a-z0-9-]/g, "");
-      if (!site) return;
-      window.goatcounter = { no_onload: true, allow_local: false };
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = "https://gc.zgo.at/count.js";
-      script.dataset.goatcounter = "https://" + site + ".goatcounter.com/count";
-      script.addEventListener("load", () => {
-        try {
-          window.goatcounter.count({ path: "/download", title: document.title, event: false });
-          document.addEventListener(
-            "click",
-            (event) => {
-              if (event.target.closest && event.target.closest("a[download]")) {
-                window.goatcounter.count({ path: "/event/apk-download", event: true });
-              }
-            },
-            true
-          );
-        } catch (error) {}
-      });
-      document.head.appendChild(script);
     } catch (error) {}
   })();
 </script>`;
 
 /* Telt op de vaste pagina's één bezoek per sessie met de ingebouwde teller.
-   Staat er een GoatCounter-code in site-config.json, dan telt GoatCounter ook
-   de paginaweergave. Cookieloos, zonder persoonsgegevens en met dezelfde
-   opt-out als de app. */
+   Cookieloos, zonder persoonsgegevens en met dezelfde opt-out als de app.
+   Op een ontwikkelcomputer en op het toestel van de eigenaar wordt niets
+   geteld. */
 function SITE_TRACKING(prefix) {
   return `<script>
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
+      if (/^(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|\[::1\])$/.test(location.hostname)) return;
+      if (location.protocol === "file:") return;
       const response = await fetch("${prefix}site-config.json", { cache: "no-store" });
       const config = await response.json();
 
@@ -1098,55 +1073,46 @@ function SITE_TRACKING(prefix) {
         .toLowerCase()
         .replace(/[^a-z0-9._-]/g, "");
       if (counter) {
+        const hit = (key, tries = 3) => {
+          const url =
+            "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
+          return new Promise((resolve) => {
+            const attempt = (left) => {
+              fetch(url, { cache: "no-store", keepalive: true })
+                .then((response) => resolve(response))
+                .catch(() => {
+                  if (left > 0) setTimeout(() => attempt(left - 1), 1200);
+                  else resolve(null);
+                });
+            };
+            attempt(tries - 1);
+          });
+        };
         let seen = false;
         try {
           seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
         } catch (error) {}
         if (!seen) {
-          try {
-            sessionStorage.setItem("easycodey.counter.session.v1", "1");
-          } catch (error) {}
-          fetch(
-            "https://abacus.jasoncameron.dev/hit/" +
-              encodeURIComponent(counter) +
-              "/bezoeken-v1",
-            { cache: "no-store", keepalive: true }
-          ).catch(() => {});
+          hit("bezoeken-v1").then((response) => {
+            if (!response || !response.ok) return;
+            try {
+              sessionStorage.setItem("easycodey.counter.session.v1", "1");
+            } catch (error) {}
+          });
         }
         let unique = false;
         try {
           unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
         } catch (error) {}
         if (!unique) {
-          fetch(
-            "https://abacus.jasoncameron.dev/hit/" +
-              encodeURIComponent(counter) +
-              "/unieke-bezoekers-v1",
-            { cache: "no-store", keepalive: true }
-          )
-            .then((response) => {
-              if (!response.ok) return;
-              try {
-                localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
-              } catch (error) {}
-            })
-            .catch(() => {});
+          hit("unieke-bezoekers-v1").then((response) => {
+            if (!response || !response.ok) return;
+            try {
+              localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+            } catch (error) {}
+          });
         }
       }
-
-      const site = String((config && config.analyticsSite) || "")
-        .trim()
-        .toLowerCase()
-        .replace(/^https?:\\/\\//, "")
-        .replace(/\\/.*$/, "")
-        .replace(/\\.goatcounter\\.com$/, "")
-        .replace(/[^a-z0-9-]/g, "");
-      if (!site) return;
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = "https://gc.zgo.at/count.js";
-      script.dataset.goatcounter = "https://" + site + ".goatcounter.com/count";
-      document.head.appendChild(script);
     } catch (error) {}
   })();
 </script>`;
@@ -1690,15 +1656,14 @@ function renderPrivacyPage() {
         onderwerp gaat heen en weer; er is geen account nodig, dus ook een installatie zonder account
         telt mee. Een “unieke bezoeker” is dus één toestel of browser, geen echte persoon: iemand met
         twee toestellen of gewiste opslag telt opnieuw. “Actieve apps” zijn toestellen die EasyCodey
-        vandaag als app hebben geopend. Het toestel van de eigenaar telt nooit mee, zodat de cijfers
+        vandaag gebruikten. Het toestel van de eigenaar telt nooit mee, zodat de cijfers
         van echte bezoekers zuiver blijven.
       </p>
       <p class="profile-text">
-        De eigenaar kan daarnaast <strong>uitgebreidere bezoekcijfers</strong> laten meten met
-        GoatCounter: welke pagina en welk project zijn bekeken, met een grove regio en het
-        browsertype. Ook dat is cookieloos. Je kunt alle meting altijd uitzetten via
-        <strong>Mijn profiel → Privacy en statistieken</strong>. Staat er geen meetcode in de app,
-        dan wordt er niets naar GoatCounter verstuurd.
+        Je kunt de anonieme cijfers altijd uitzetten via
+        <strong>Mijn profiel → Privacy en statistieken</strong>. Zodra je ze uitzet, wordt er vanaf
+        dat toestel niets meer opgehoogd. Lezen wat er al staat mag wel, zodat het beheerscherm
+        gewoon getallen kan tonen.
       </p>
       <p class="static-note">
         De eigenaar ziet alleen de profielen die op hetzelfde apparaat zijn gemaakt, via het lokale
@@ -1715,10 +1680,8 @@ function renderPrivacyPage() {
         terechtkomen. EasyCodey verstuurt zelf geen inhoud van
         je projecten of profielen naar deze diensten. De ingebouwde teller (Abacus) ontvangt alleen
         een anoniem getal voor bezoeken, unieke bezoekers, installaties, actieve apps en
-        APK-downloads. Alleen als
-        er een meetcode
-        in de app staat, wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder
-        cookies.
+        APK-downloads. Er is geen andere meetdienst en er wordt geen enkel meetscript van een derde
+        partij geladen.
       </p>
       <p class="profile-text">
         <strong>AI-coach.</strong> De online AI-coach staat standaard aan en gebruikt een gratis

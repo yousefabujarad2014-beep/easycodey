@@ -333,9 +333,6 @@ if (!existsSync(siteConfigFile)) {
 } else {
   try {
     const siteConfig = JSON.parse(readFileSync(siteConfigFile, "utf8"));
-    if (typeof siteConfig.analyticsSite !== "string") {
-      fail("site-config.json mist het veld analyticsSite (mag leeg zijn).");
-    }
     if (typeof siteConfig.publicCounter !== "string") {
       fail("site-config.json mist het veld publicCounter (mag leeg zijn).");
     }
@@ -345,6 +342,20 @@ if (!existsSync(siteConfigFile)) {
         (siteConfig.counterApi && !/^https:\/\/[^\s]+$/i.test(siteConfig.counterApi)))
     ) {
       fail("site-config.json: counterApi moet leeg zijn of met https:// beginnen.");
+    }
+    if (siteConfig.counterBaseline !== undefined) {
+      const base = siteConfig.counterBaseline;
+      if (!base || typeof base !== "object" || Array.isArray(base)) {
+        fail("site-config.json: counterBaseline moet een object zijn met getallen.");
+      } else {
+        for (const [field, value] of Object.entries(base)) {
+          if (!["visits", "unique", "installs", "downloads"].includes(field)) {
+            fail(`site-config.json: counterBaseline kent geen veld "${field}".`);
+          } else if (!Number.isFinite(value) || value < 0) {
+            fail(`site-config.json: counterBaseline.${field} moet een getal van 0 of hoger zijn.`);
+          }
+        }
+      }
     }
   } catch (error) {
     fail(`site-config.json is geen geldige JSON: ${error.message}`);
@@ -363,7 +374,7 @@ if (!existsSync(downloadFile)) {
   if (!download.includes("<h1>")) fail("Downloadpagina mist een <h1>.");
   if (!download.includes('type="application/ld+json"')) fail("Downloadpagina mist JSON-LD.");
   if (!download.includes("be.easycodey.app")) fail("Downloadpagina mist de pakketnaam.");
-  if (!download.includes("analyticsSite")) fail("Downloadpagina mist de anonieme meetcode.");
+  if (!download.includes("publicCounter")) fail("Downloadpagina mist de anonieme teller.");
   if (!download.includes("assets/qr/easycodey-download.svg")) {
     fail("Downloadpagina mist de QR-code.");
   }
