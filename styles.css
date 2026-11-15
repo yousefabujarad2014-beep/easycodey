@@ -8692,3 +8692,766 @@ select.pv-input option {
     height: 40px;
   }
 }
+
+/* ========================================================================
+   Verder waar je was, voortgang, diploma en toetsenbord
+   ======================================================================== */
+
+/* ------------------------------ verder waar je was ------------------------------ */
+
+.continue-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  margin: 0 0 26px;
+  padding: 22px 26px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--gold) 42%, var(--line));
+  border-radius: 20px;
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--accent-soft) 62%, var(--panel)) 0%, var(--panel) 68%);
+  box-shadow: 0 26px 52px -44px rgba(35, 29, 18, 0.7);
+}
+
+.continue-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--gold), transparent);
+}
+
+.continue-emoji {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 16px;
+  background: var(--panel);
+  border: 1px solid color-mix(in srgb, var(--gold) 35%, var(--line));
+  font-size: 1.55rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.continue-copy { min-width: 0; }
+
+.continue-kicker {
+  margin: 0 0 3px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
+}
+
+[data-theme="dark"] .continue-kicker { color: var(--gold); }
+
+.continue-copy h2 {
+  margin: 0 0 4px;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.continue-copy p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.continue-bar {
+  height: 5px;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 78%, transparent);
+  overflow: hidden;
+}
+
+.continue-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand), var(--gold));
+}
+
+.continue-btn { flex: 0 0 auto; white-space: nowrap; }
+
+/* ------------------------------ voortgang ------------------------------ */
+
+.overview-page,
+.diploma-page {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 28px 24px 80px;
+}
+
+.overview-hero,
+.diploma-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 36px;
+  margin-bottom: 22px;
+  padding: 38px 40px;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid color-mix(in srgb, var(--gold) 32%, transparent);
+  background:
+    radial-gradient(700px 300px at 88% -20%, rgba(227, 189, 106, 0.22), transparent 68%),
+    linear-gradient(148deg, #16483b 0%, #0b2a24 100%);
+  color: #f1f7f3;
+  box-shadow: 0 42px 84px -52px rgba(11, 40, 35, 0.95);
+}
+
+.overview-hero h1,
+.diploma-hero h1 {
+  margin: 6px 0 10px;
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fffdf8;
+}
+
+.overview-hero p,
+.diploma-hero p {
+  margin: 0;
+  max-width: 62ch;
+  color: #c9ded4;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.overview-hero .eyebrow,
+.diploma-hero .eyebrow { color: #e8c47c; }
+
+.overview-hero .eyebrow::before,
+.diploma-hero .eyebrow::before {
+  background: linear-gradient(90deg, #e3bd6a, transparent);
+}
+
+.overview-hero .btn.ghost,
+.diploma-hero .btn.ghost {
+  color: #f4ece0;
+  border-color: rgba(227, 189, 106, 0.5);
+}
+
+.overview-hero .btn.ghost:hover,
+.diploma-hero .btn.ghost:hover {
+  background: rgba(255, 253, 248, 0.08);
+  border-color: #e3bd6a;
+}
+
+.overview-diploma-hint {
+  margin-top: 16px !important;
+  font-size: 0.84rem !important;
+  color: #e8d8ae !important;
+}
+
+.overview-donut-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.overview-donut-wrap > p {
+  font-size: 0.78rem;
+  color: #c9ded4;
+  text-align: center;
+}
+
+.overview-donut {
+  --pct: 0;
+  display: grid;
+  place-items: center;
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  background: conic-gradient(#e3bd6a calc(var(--pct) * 1%), rgba(255, 255, 255, 0.16) 0);
+  box-shadow: 0 0 0 1px rgba(227, 189, 106, 0.3), 0 24px 44px -28px rgba(0, 0, 0, 0.7);
+}
+
+.overview-donut-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  background: #0d2f27;
+  text-align: center;
+}
+
+.overview-donut-inner strong {
+  font-family: var(--serif);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: #fffdf8;
+}
+
+.overview-donut-inner span {
+  margin-top: 4px;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #b7d2c7;
+}
+
+.overview-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.overview-panel { margin-bottom: 16px; }
+
+.overview-panel h2,
+.diploma-help h2 {
+  margin-top: 0;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.overview-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.overview-panel-head h2 { margin: 0; }
+
+.overview-pill {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--gold-strong);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.panel-lead {
+  margin: 6px 0 18px;
+  font-size: 0.84rem;
+  color: var(--muted);
+}
+
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.bar-row {
+  display: grid;
+  grid-template-columns: minmax(104px, 0.9fr) minmax(0, 1.6fr) auto;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.82rem;
+}
+
+.bar-label {
+  min-width: 0;
+  font-weight: 600;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-track {
+  height: 9px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 72%, transparent);
+  overflow: hidden;
+}
+
+.bar-track i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand), var(--gold));
+}
+
+.bar-value {
+  min-width: 44px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.almost-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.almost-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 84%, var(--bg));
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+.almost-item:hover {
+  border-color: color-mix(in srgb, var(--gold) 60%, var(--line));
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.almost-emoji {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--accent-soft);
+  font-size: 1.15rem;
+}
+
+.almost-copy { min-width: 0; }
+
+.almost-copy strong {
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.almost-copy span {
+  display: block;
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.almost-bar {
+  grid-column: 2;
+  height: 4px;
+  margin-top: 4px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.almost-bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--brand), var(--gold));
+}
+
+.overview-tip {
+  border-color: color-mix(in srgb, var(--gold) 36%, var(--line));
+  background: linear-gradient(130deg, color-mix(in srgb, var(--accent-soft) 45%, var(--panel)), var(--panel));
+}
+
+/* ------------------------------ diploma ------------------------------ */
+
+.diploma-hero {
+  grid-template-columns: minmax(0, 1fr);
+  padding: 34px 38px;
+}
+
+.diploma-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.diploma-grid-main {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.diploma-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 6px 0 12px;
+}
+
+.diploma-section-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.diploma-section-head p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.diploma-card {
+  position: relative;
+  padding: 10px;
+  border-radius: 20px;
+  background:
+    linear-gradient(140deg, color-mix(in srgb, var(--accent-soft) 70%, var(--panel)), var(--panel));
+  border: 1px solid color-mix(in srgb, var(--gold) 50%, var(--line));
+  box-shadow: 0 30px 60px -46px rgba(35, 29, 18, 0.8);
+}
+
+.diploma-card::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+  border-radius: 14px;
+  pointer-events: none;
+}
+
+.diploma-inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 270px;
+  padding: 26px 28px;
+  border-radius: 12px;
+  background:
+    radial-gradient(500px 200px at 50% -10%, rgba(227, 189, 106, 0.14), transparent 70%),
+    var(--panel);
+  text-align: center;
+}
+
+.diploma-grid-main .diploma-inner { min-height: 330px; }
+
+.diploma-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.diploma-brand {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--gold-strong);
+}
+
+[data-theme="dark"] .diploma-brand { color: var(--gold); }
+
+.diploma-id {
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.04em;
+}
+
+.diploma-kicker {
+  margin: 0;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold-strong);
+}
+
+[data-theme="dark"] .diploma-kicker { color: var(--gold); }
+
+.diploma-card h2 {
+  margin: 6px 0 8px;
+  font-family: var(--serif);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+.diploma-grid-main h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); }
+
+.diploma-lead {
+  margin: 6px 0 2px;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.diploma-name {
+  margin: 0 0 10px;
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-style: italic;
+  color: var(--brand);
+}
+
+[data-theme="dark"] .diploma-name { color: var(--brand); }
+
+.diploma-text {
+  max-width: 52ch;
+  margin: 0 auto;
+  font-size: 0.84rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.diploma-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.diploma-seal {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--gold) 60%, var(--line));
+  background: color-mix(in srgb, var(--accent-soft) 70%, var(--panel));
+  color: var(--gold-strong);
+  font-size: 1rem;
+}
+
+.diploma-meta {
+  font-size: 0.7rem;
+  line-height: 1.45;
+  text-align: left;
+  color: var(--muted);
+  font-family: var(--mono);
+}
+
+.diploma-print {
+  align-self: center;
+  margin-top: 16px;
+  font-size: 0.8rem;
+  padding: 9px 16px;
+}
+
+.diploma-card.is-locked {
+  background: var(--panel-2);
+  border-color: var(--line);
+  box-shadow: none;
+}
+
+.diploma-card.is-locked::before { border-color: var(--line); }
+
+.diploma-card.is-locked .diploma-inner {
+  background: var(--panel-2);
+  min-height: 240px;
+  justify-content: center;
+}
+
+.diploma-locked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.diploma-lock { font-size: 1.7rem; }
+
+.diploma-locked p {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.diploma-locked .progress-bar { width: min(240px, 100%); }
+
+.diploma-locked-meta {
+  font-size: 0.74rem !important;
+  color: var(--muted) !important;
+}
+
+.diploma-help ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.diploma-help li { margin-bottom: 5px; }
+
+/* ------------------------------ toetsenbord ------------------------------ */
+
+.idea-card:focus-visible,
+.almost-item:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  border-color: var(--gold);
+}
+
+#home-search:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--gold) 70%, transparent);
+  outline-offset: 3px;
+}
+
+/* ------------------------------ telefoon ------------------------------ */
+
+@media (max-width: 900px) {
+  .overview-hero,
+  .diploma-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 28px 26px;
+  }
+
+  .overview-donut-wrap {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .overview-donut { width: 130px; height: 130px; }
+  .overview-donut-inner { width: 96px; height: 96px; }
+  .overview-donut-inner strong { font-size: 1.55rem; }
+
+  .overview-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .overview-grid { grid-template-columns: minmax(0, 1fr); }
+  .almost-list { grid-template-columns: minmax(0, 1fr); }
+  .diploma-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 620px) {
+  .overview-page,
+  .diploma-page { padding: 18px 16px 64px; }
+
+  .continue-card {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .continue-btn {
+    grid-column: 1 / -1;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .bar-row {
+    grid-template-columns: minmax(84px, 1fr) minmax(0, 1.2fr) auto;
+    gap: 8px;
+    font-size: 0.76rem;
+  }
+
+  .diploma-inner { padding: 22px 18px; }
+  .diploma-section-head { flex-direction: column; gap: 2px; }
+}
+
+/* ------------------------------ printen ------------------------------ */
+
+@media print {
+  @page { margin: 14mm; }
+
+  .site-header,
+  .site-footer,
+  .chat-fab,
+  .ai-panel,
+  .ai-backdrop,
+  .skip-link,
+  .no-print,
+  .overview-hero,
+  .diploma-hero,
+  .diploma-section-head,
+  .diploma-help,
+  .diploma-card.is-locked {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+
+  .diploma-page,
+  .diploma-grid {
+    display: block !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .diploma-card {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 0 10mm !important;
+    padding: 6mm !important;
+    border: 2px solid #946a26 !important;
+    border-radius: 8px !important;
+    background: #fffdf8 !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+
+  .diploma-card::before { display: none !important; }
+
+  .diploma-inner {
+    min-height: 0 !important;
+    padding: 10mm !important;
+    background: #fffdf8 !important;
+    border: 1px solid #c9ab6e !important;
+    border-radius: 4px !important;
+  }
+
+  .diploma-card h2,
+  .diploma-name,
+  .diploma-brand,
+  .diploma-kicker,
+  .diploma-seal {
+    color: #145c4b !important;
+    -webkit-text-fill-color: #145c4b !important;
+  }
+
+  .diploma-name { color: #946a26 !important; -webkit-text-fill-color: #946a26 !important; }
+
+  .diploma-text,
+  .diploma-lead,
+  .diploma-meta,
+  .diploma-id,
+  .diploma-top {
+    color: #333 !important;
+  }
+
+  body.printing-diploma .diploma-grid-main .diploma-card:not(.is-printing) {
+    display: none !important;
+  }
+
+  body.printing-diploma .diploma-card.is-printing {
+    margin: 0 !important;
+  }
+}

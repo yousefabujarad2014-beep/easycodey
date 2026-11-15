@@ -41,16 +41,16 @@
   ],
   "screenshots": [
     {
-      "src": "./assets/screenshots/home-mobile.png",
-      "sizes": "1080x2400",
-      "type": "image/png",
+      "src": "./assets/screenshots/home-mobile.jpg",
+      "sizes": "720x1600",
+      "type": "image/jpeg",
       "form_factor": "narrow",
       "label": "Kies een Python-project op je telefoon"
     },
     {
-      "src": "./assets/screenshots/home-desktop.png",
+      "src": "./assets/screenshots/home-desktop.jpg",
       "sizes": "1280x800",
-      "type": "image/png",
+      "type": "image/jpeg",
       "form_factor": "wide",
       "label": "Ontdek 161 projecten op je computer"
     }

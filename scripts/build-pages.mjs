@@ -157,6 +157,7 @@ function header(prefix) {
         <a href="${prefix}#/leerpad">Leerpad</a>
         <a href="${prefix}#/programmeren">Programmeren</a>
         <a href="${prefix}#/mijn-ideeen">Mijn ideeën</a>
+        <a href="${prefix}#/voortgang">Voortgang</a>
         <a href="${prefix}contact/">Contact</a>
       </nav>
       <div class="header-tools">
@@ -205,6 +206,10 @@ function footer(prefix) {
         <a class="link-btn" href="${prefix}download/">⬇ Android-app</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/profiel">👤 Mijn profiel</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}#/voortgang">📊 Voortgang</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="${prefix}#/diploma">🎓 Diploma</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}doneren/">♥ Doneren</a>
         <span aria-hidden="true">·</span>
@@ -985,6 +990,7 @@ const DOWNLOAD_TRACKING = `<script>
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
+      if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
       const response = await fetch("../site-config.json", { cache: "no-store" });
       const config = await response.json();
 
@@ -1083,6 +1089,7 @@ function SITE_TRACKING(prefix) {
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
+      if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
       const response = await fetch("${prefix}site-config.json", { cache: "no-store" });
       const config = await response.json();
 
@@ -1677,11 +1684,14 @@ function renderPrivacyPage() {
       </p>
       <p class="profile-text">
         EasyCodey telt <strong>anoniem</strong> hoe vaak de app wordt geopend, hoeveel unieke
-        toestellen of browsers de site bezoeken, hoe vaak de app als app start (installatie) en hoe
-        vaak de APK wordt gedownload. Dat gebeurt met een eigen teller zonder cookies, zonder
-        vingerafdruk en zonder persoonsgegevens. Alleen een getal per onderwerp gaat heen en weer;
-        er is geen account nodig. Een “unieke bezoeker” is dus één toestel of browser, geen echte
-        persoon: iemand met twee toestellen of gewiste opslag telt opnieuw.
+        toestellen of browsers de site bezoeken, hoe vaak de app als app start (installatie), hoeveel
+        apps er vandaag actief zijn en hoe vaak de APK wordt gedownload. Dat gebeurt met een eigen
+        teller zonder cookies, zonder vingerafdruk en zonder persoonsgegevens. Alleen een getal per
+        onderwerp gaat heen en weer; er is geen account nodig, dus ook een installatie zonder account
+        telt mee. Een “unieke bezoeker” is dus één toestel of browser, geen echte persoon: iemand met
+        twee toestellen of gewiste opslag telt opnieuw. “Actieve apps” zijn toestellen die EasyCodey
+        vandaag als app hebben geopend. Het toestel van de eigenaar telt nooit mee, zodat de cijfers
+        van echte bezoekers zuiver blijven.
       </p>
       <p class="profile-text">
         De eigenaar kan daarnaast <strong>uitgebreidere bezoekcijfers</strong> laten meten met
@@ -1704,7 +1714,8 @@ function renderPrivacyPage() {
         kunnen technische gegevens zoals je IP-adres en browsergegevens bij die aanbieder
         terechtkomen. EasyCodey verstuurt zelf geen inhoud van
         je projecten of profielen naar deze diensten. De ingebouwde teller (Abacus) ontvangt alleen
-        een anoniem getal voor bezoeken, unieke bezoekers, installaties en APK-downloads. Alleen als
+        een anoniem getal voor bezoeken, unieke bezoekers, installaties, actieve apps en
+        APK-downloads. Alleen als
         er een meetcode
         in de app staat, wordt het GoatCounter-script geladen; dat telt anonieme bezoeken zonder
         cookies.

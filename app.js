@@ -472,6 +472,8 @@ function trackCurrentView() {
   else if (segments[0] === "mijn-ideeen") path = "mijn-ideeen";
   else if (segments[0] === "profiel") path = "profiel";
   else if (segments[0] === "eigenaar") path = "eigenaar";
+  else if (segments[0] === "voortgang") path = "voortgang";
+  else if (segments[0] === "diploma") path = "diploma";
   else if (segments.length) path = "404";
   analytics.trackView(path, document.title);
 }
@@ -481,7 +483,10 @@ function renderRoute() {
   syncSecurityBadge();
   showOwnerNotice();
   const { segments, params } = parseRoute();
-  currentContext = null;
+  // De AI-coach onthoudt het project waar je naar kijkt. Zo hoef je niet
+  // steeds opnieuw uit te leggen waar je mee bezig bent.
+  const routeIdeaId = segments[0] === "idee" && segments[1] ? decodeURIComponent(segments[1]) : "";
+  currentContext = routeIdeaId ? { ideaId: routeIdeaId } : null;
   renderAIContext();
   window.scrollTo({ top: 0 });
 
@@ -492,7 +497,7 @@ function renderRoute() {
   }
 
   if (segments[0] === "idee" && segments[1]) {
-    const ideaId = decodeURIComponent(segments[1]);
+    const ideaId = routeIdeaId;
     setNav("home");
     renderDetail(ideaId);
     if (params.get("play") === "1" && findIdea(ideaId)) {
@@ -522,6 +527,18 @@ function renderRoute() {
   if (segments[0] === "profiel") {
     setNav("");
     renderProfile();
+    return;
+  }
+
+  if (segments[0] === "voortgang") {
+    setNav("voortgang");
+    renderProgressOverview();
+    return;
+  }
+
+  if (segments[0] === "diploma") {
+    setNav("voortgang");
+    renderDiploma(params);
     return;
   }
 
@@ -781,6 +798,8 @@ function setOwnerUnlocked(value) {
   } catch {
     // Zonder sessieopslag blijft het paneel tot de volgende klik ontgrendeld.
   }
+  // Dit toestel is van de eigenaar. Bezoeken hiervan tellen niet mee.
+  if (value) counter.markOwnerDevice();
 }
 
 function ownerDate(value) {
@@ -937,6 +956,7 @@ function renderOwner() {
           account nodig.
         </p>
         <div class="owner-stats owner-counter-grid" data-counter-totals>
+          <div class="owner-stat"><strong data-counter="active">…</strong><span>actieve apps vandaag</span></div>
           <div class="owner-stat"><strong data-counter="unique">…</strong><span>unieke bezoekers</span></div>
           <div class="owner-stat"><strong data-counter="visits">…</strong><span>bezoeken</span></div>
           <div class="owner-stat"><strong data-counter="installs">…</strong><span>unieke installaties</span></div>
@@ -955,9 +975,10 @@ function renderOwner() {
           <p class="static-note" data-trend-note></p>
         </div>
         <p class="static-note" data-counter-note>
-          Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies.
-          Unieke installaties = toestellen waarop de app als app start. APK-downloads = klikken op de
-          downloadknop.
+          Actieve apps = toestellen die EasyCodey vandaag als app hebben geopend. Unieke bezoekers =
+          één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties
+          = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de
+          downloadknop. Jouw eigen toestel telt niet mee.
         </p>
       </div>
 
@@ -1109,6 +1130,7 @@ async function loadOwnerCounter() {
     el.textContent =
       value === null ? "—" : new Intl.NumberFormat("nl-BE").format(value);
   };
+  put("active", totals.active);
   put("visits", totals.visits);
   put("unique", totals.unique);
   put("installs", totals.installs);
@@ -1130,7 +1152,7 @@ async function loadOwnerCounter() {
 
   if (note) {
     note.textContent = totals.available
-      ? "Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start. APK-downloads = klikken op de downloadknop."
+      ? "Actieve apps = toestellen die de app vandaag openden. Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de downloadknop. Jouw eigen toestel telt niet mee."
       : "De teller is nu niet bereikbaar. Probeer het later opnieuw met de knop hierboven.";
   }
 }
@@ -1321,6 +1343,7 @@ function handleProfileLogin() {
     showProfileError("profile-login-error", result.error);
     return;
   }
+  if (result.owner) counter.markOwnerDevice();
   try {
     sessionStorage.removeItem(OWNER_SESSION_KEY);
   } catch {
@@ -1339,6 +1362,7 @@ function handleProfileRegister() {
     showProfileError("profile-register-error", result.error);
     return;
   }
+  if (result.owner) counter.markOwnerDevice();
   location.reload();
 }
 
@@ -1444,6 +1468,34 @@ function resetHomeState(params) {
   homeState.visible = 30;
 }
 
+function renderContinueCard() {
+  const last = store.getLastProject();
+  if (!last.ideaId) return "";
+  const idea = findIdea(last.ideaId);
+  if (!idea) return "";
+
+  const progress = ideaProgress(idea);
+  const when = last.at
+    ? new Date(last.at).toLocaleDateString("nl-BE", { day: "numeric", month: "long" })
+    : "";
+  return `<section class="continue-card" aria-label="Verder waar je was">
+    <span class="continue-emoji" aria-hidden="true">${e(idea.emoji)}</span>
+    <div class="continue-copy">
+      <p class="continue-kicker">Verder waar je was${when ? ` · ${e(when)}` : ""}</p>
+      <h2>${e(idea.title)}</h2>
+      <p>${
+        progress.isDone
+          ? "Je hebt dit project al afgerond. Bekijk het nog eens of kies iets nieuws."
+          : `${progress.done} van ${progress.total} stappen klaar. Ga gewoon verder.`
+      }</p>
+      <div class="continue-bar" aria-hidden="true"><i style="width:${progress.pct}%"></i></div>
+    </div>
+    <a class="btn brand continue-btn" href="#/idee/${encodeURIComponent(idea.id)}">${
+      progress.isDone ? "Bekijk project" : "Ga verder"
+    } →</a>
+  </section>`;
+}
+
 function renderHome(params) {
   resetHomeState(params);
   const ideas = allIdeas();
@@ -1501,7 +1553,7 @@ function renderHome(params) {
           </label>
           <button class="btn ghost" type="button" data-action="random-idea">🎲 Verras me</button>
         </div>
-        <p class="search-hint">Snel zoeken met <kbd>/</kbd> · filters staan in de URL, dus je kunt een selectie bewaren.</p>
+        <p class="search-hint">Snel zoeken met <kbd>/</kbd> · kies met <kbd>↓</kbd> <kbd>↑</kbd> en open met <kbd>Enter</kbd>.</p>
       </div>
       <div class="hero-side">
         <div class="hero-aside">
@@ -1522,6 +1574,8 @@ function renderHome(params) {
         </div>
       </div>
     </section>
+
+    ${renderContinueCard()}
 
     <section class="app-entry" id="app-entry" aria-label="EasyCodey als app">
       <div class="app-entry-copy">
@@ -1655,7 +1709,11 @@ function filteredIdeas() {
     list = list.filter((idea) => !ideaProgress(idea).isDone);
   }
   if (query) {
-    list = list.filter((idea) => haystackOf(idea).includes(query));
+    const words = query.split(/\s+/).filter(Boolean);
+    list = list.filter((idea) => {
+      const haystack = haystackOf(idea);
+      return words.every((word) => haystack.includes(word));
+    });
   }
   if (selectedSkills.length) {
     list = list.filter((idea) =>
@@ -1664,12 +1722,26 @@ function filteredIdeas() {
   }
 
   const levelOrder = new Map(LEVELS.map((level, index) => [level, index]));
+  const relevance = (idea) => {
+    if (!query) return 0;
+    const title = idea.title.toLowerCase();
+    const summary = (idea.summary || "").toLowerCase();
+    let score = 0;
+    if (title === query) score += 100;
+    if (title.startsWith(query)) score += 50;
+    if (title.includes(query)) score += 25;
+    if (summary.includes(query)) score += 10;
+    if ((idea.learn || []).some((item) => item.toLowerCase().includes(query))) score += 5;
+    return score;
+  };
   return [...list].sort((a, b) => {
     if (homeState.sort === "kort") return minutesOf(a) - minutesOf(b) || a.title.localeCompare(b.title, "nl");
     if (homeState.sort === "moeilijk") {
       return (levelOrder.get(a.level) || 0) - (levelOrder.get(b.level) || 0) || a.title.localeCompare(b.title, "nl");
     }
     if (homeState.sort === "az") return a.title.localeCompare(b.title, "nl");
+    // Bij zoeken komen de beste titelmatch eerst. Zo vind je sneller wat je zoekt.
+    if (query) return relevance(b) - relevance(a) || a.title.localeCompare(b.title, "nl");
     return 0;
   });
 }
@@ -1792,6 +1864,8 @@ function renderDetail(id) {
   }
 
   const progress = ideaProgress(idea);
+  // Onthoud dit project, zodat de homepagina "Verder waar je was" kan tonen.
+  store.setLastProject(idea.id);
   const doneSet = new Set(store.getProgress(idea.id).steps);
   document.title = `${idea.title} — EasyCodey`;
   const backHref = idea.custom ? "#/mijn-ideeen" : "#/";
@@ -2060,6 +2134,269 @@ function renderRoadmap(params = new URLSearchParams()) {
   document.title = "Leerpad — EasyCodey";
 }
 
+/* ------------------------------ voortgang ------------------------------ */
+
+function renderProgressOverview() {
+  const ideas = allIdeas();
+  const stats = store.getStats(ideas);
+  const items = ideas.map((idea) => ({ idea, progress: ideaProgress(idea) }));
+  const inProgress = items.filter(({ progress }) => progress.done > 0 && !progress.isDone);
+  const almost = inProgress
+    .filter(({ progress }) => progress.pct >= 70 || progress.total - progress.done <= 2)
+    .sort((a, b) => b.progress.pct - a.progress.pct)
+    .slice(0, 6);
+
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const weekStart = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const todayCount = items.filter(({ progress }) => progress.updatedAt >= todayStart.getTime()).length;
+  const weekCount = items.filter(({ progress }) => progress.updatedAt >= weekStart).length;
+
+  const categoryRows = CATEGORIES.map((category) => {
+    const list = items.filter(({ idea }) => idea.category === category);
+    const done = list.filter(({ progress }) => progress.isDone).length;
+    const pct = list.length ? Math.round((done / list.length) * 100) : 0;
+    return `<div class="bar-row">
+      <span class="bar-label">${CATEGORY_META[category].emoji} ${e(category)}</span>
+      <span class="bar-track" aria-hidden="true"><i style="width:${pct}%"></i></span>
+      <span class="bar-value">${done}/${list.length}</span>
+    </div>`;
+  }).join("");
+
+  const levelRows = LEVELS.map((level) => {
+    const list = items.filter(({ idea }) => idea.level === level);
+    const done = list.filter(({ progress }) => progress.isDone).length;
+    const pct = list.length ? Math.round((done / list.length) * 100) : 0;
+    return `<div class="bar-row">
+      <span class="bar-label"><span class="badge-level" data-level="${e(level)}">${e(level)}</span></span>
+      <span class="bar-track" aria-hidden="true"><i style="width:${pct}%"></i></span>
+      <span class="bar-value">${done}/${list.length}</span>
+    </div>`;
+  }).join("");
+
+  const almostRows = almost
+    .map(({ idea, progress }) => {
+      const left = progress.total - progress.done;
+      return `<a class="almost-item" href="#/idee/${encodeURIComponent(idea.id)}">
+        <span class="almost-emoji" aria-hidden="true">${e(idea.emoji)}</span>
+        <span class="almost-copy">
+          <strong>${e(idea.title)}</strong>
+          <span>${left} ${left === 1 ? "stap" : "stappen"} te gaan · ${progress.pct}%</span>
+        </span>
+        <span class="almost-bar" aria-hidden="true"><i style="width:${progress.pct}%"></i></span>
+      </a>`;
+    })
+    .join("");
+
+  const diplomaNeed = Math.max(0, 10 - stats.completed);
+  const levelStatus = LEVELS.map((level) => {
+    const list = items.filter(({ idea }) => idea.level === level);
+    const done = list.filter(({ progress }) => progress.isDone).length;
+    return { level, done, total: list.length, need: Math.max(0, 5 - done) };
+  }).sort((a, b) => a.need - b.need)[0];
+  const diplomaHint =
+    stats.completed >= 10
+      ? "Je grote diploma is klaar om te printen."
+      : `Nog ${diplomaNeed} ${diplomaNeed === 1 ? "project" : "projecten"} tot je grote diploma.${
+          levelStatus && levelStatus.need === 0 ? ` Je ${levelStatus.level}-diploma is al klaar!` : ""
+        }`;
+
+  app.innerHTML = `<div class="overview-page">
+    <div class="overview-hero">
+      <div class="overview-hero-copy">
+        <p class="eyebrow">EasyCodey · jouw voortgang</p>
+        <h1>Je ziet meteen hoe ver je bent.</h1>
+        <p>Alles hier komt uit jouw eigen browser. Je voortgang wordt nooit verstuurd.</p>
+        <div class="hero-actions">
+          <a class="btn brand" href="#/diploma">🎓 ${stats.completed >= 10 ? "Bekijk je diploma" : "Op weg naar je diploma"}</a>
+          <a class="btn ghost" href="#/leerpad">Verder met het leerpad</a>
+        </div>
+        <p class="overview-diploma-hint">${e(diplomaHint)}</p>
+      </div>
+      <div class="overview-donut-wrap">
+        <div class="overview-donut" style="--pct:${stats.percent}">
+          <div class="overview-donut-inner"><strong>${stats.percent}%</strong><span>van alle stappen</span></div>
+        </div>
+        <p>${stats.stepsDone} van ${stats.stepsTotal} stappen</p>
+      </div>
+    </div>
+
+    <div class="overview-stats">
+      <div class="stat"><strong>${stats.completed}</strong><span>projecten afgerond</span></div>
+      <div class="stat"><strong>${inProgress.length}</strong><span>projecten bezig</span></div>
+      <div class="stat"><strong>${todayCount}</strong><span>vandaag actief</span></div>
+      <div class="stat"><strong>${weekCount}</strong><span>deze week actief</span></div>
+    </div>
+
+    <div class="overview-grid">
+      <section class="panel overview-panel">
+        <h2>Per categorie</h2>
+        <p class="panel-lead">Afgeronde projecten per categorie.</p>
+        <div class="bar-chart">${categoryRows}</div>
+      </section>
+      <section class="panel overview-panel">
+        <h2>Per niveau</h2>
+        <p class="panel-lead">Zo zie je hoe je groeit van Beginner naar Gevorderd.</p>
+        <div class="bar-chart">${levelRows}</div>
+      </section>
+    </div>
+
+    <section class="panel overview-panel">
+      <div class="overview-panel-head">
+        <h2>Bijna klaar</h2>
+        <span class="overview-pill">${almost.length}</span>
+      </div>
+      <p class="panel-lead">Deze projecten zijn bijna afgerond. Nog even doorzetten!</p>
+      ${
+        almostRows ||
+        `<p class="muted">Nog geen projecten bijna klaar. Begin met een project en vink onderweg je stappen af.</p>`
+      }
+    </section>
+
+    <section class="panel overview-panel overview-tip">
+      <h2>Volgende stap</h2>
+      <p>Kies een project dat je leuk vindt. Je hoeft niet alles in één keer te doen: één stap per dag is al genoeg.</p>
+      <div class="hero-actions">
+        <a class="btn brand" href="#/">Kies een project</a>
+        <button class="btn ghost" type="button" data-action="random-idea">🎲 Verras me</button>
+      </div>
+    </section>
+  </div>`;
+
+  document.title = "Jouw voortgang — EasyCodey";
+}
+
+/* ------------------------------ diploma ------------------------------ */
+
+function renderDiploma() {
+  const ideas = allIdeas();
+  const stats = store.getStats(ideas);
+  const active = store.getActiveProfile();
+  const name = active?.name?.trim() || "Python-programmeur";
+  const today = new Date().toLocaleDateString("nl-BE", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+  const year = new Date().getFullYear();
+
+  const bigUnlocked = stats.completed >= 10;
+  const bigNeed = Math.max(0, 10 - stats.completed);
+  const bigPct = Math.min(100, Math.round((stats.completed / 10) * 100));
+
+  const certificate = ({ id, title, unlocked, text, done, total, need, lockedText }) => {
+    const pct = total ? Math.min(100, Math.round((done / total) * 100)) : 0;
+    return `<article class="diploma-card${unlocked ? "" : " is-locked"} diploma-print-area" data-diploma-id="${e(id)}">
+      <div class="diploma-inner">
+        <div class="diploma-top">
+          <span class="diploma-brand">✦ EasyCodey</span>
+          <span class="diploma-id">${e(id)}</span>
+        </div>
+        <p class="diploma-kicker">Diploma</p>
+        <h2>${e(title)}</h2>
+        ${
+          unlocked
+            ? `<p class="diploma-lead">Uitgereikt aan</p>
+              <p class="diploma-name">${e(name)}</p>
+              <p class="diploma-text">${e(text)}</p>
+              <div class="diploma-footer">
+                <span class="diploma-seal" aria-hidden="true">★</span>
+                <span class="diploma-meta">${e(today)}<br />${e(id)}</span>
+              </div>
+              <button class="btn ghost diploma-print no-print" type="button" data-action="print-diploma">🖨 Print of bewaar als pdf</button>`
+            : `<div class="diploma-locked">
+                <span class="diploma-lock" aria-hidden="true">🔒</span>
+                <p>${e(lockedText)}</p>
+                <div class="progress-bar"><i style="width:${pct}%"></i></div>
+                <p class="diploma-locked-meta">${done} van ${total} klaar${need > 0 ? ` · nog ${need}` : ""}</p>
+              </div>`
+        }
+      </div>
+    </article>`;
+  };
+
+  const bigCertificate = certificate({
+    id: `EC-${year}-PRO`,
+    title: "Groot EasyCodey-diploma",
+    unlocked: bigUnlocked,
+    text: "Je hebt 10 Python-projecten helemaal afgerond en laten zien dat je stap voor stap kunt bouwen, testen en verbeteren.",
+    done: stats.completed,
+    total: 10,
+    need: bigNeed,
+    lockedText: `Nog ${bigNeed} ${bigNeed === 1 ? "project" : "projecten"} tot je grote diploma.`
+  });
+
+  const levelCertificates = LEVELS.map((level) => {
+    const list = ideas.filter((idea) => idea.level === level);
+    const done = list.filter((idea) => ideaProgress(idea).isDone).length;
+    const need = Math.max(0, 5 - done);
+    return certificate({
+      id: `EC-${year}-${level.slice(0, 3).toUpperCase()}`,
+      title: `Diploma ${level}`,
+      unlocked: need === 0,
+      text: `Je hebt 5 projecten in het niveau ${level} afgerond. Je mag trots zijn op je doorzettingsvermogen.`,
+      done,
+      total: 5,
+      need,
+      lockedText: `Nog ${need} ${need === 1 ? "project" : "projecten"} in ${level} tot dit diploma.`
+    });
+  }).join("");
+
+  app.innerHTML = `<div class="diploma-page">
+    <div class="diploma-hero">
+      <p class="eyebrow">EasyCodey · diploma</p>
+      <h1>Een diploma voor jouw doorzetten.</h1>
+      <p>Rond projecten af en verdien een mooi diploma. Je kunt het printen of als pdf bewaren.</p>
+      <div class="hero-actions">
+        <a class="btn ghost" href="#/voortgang">← Terug naar je voortgang</a>
+        <a class="btn" href="#/">Kies een project</a>
+      </div>
+    </div>
+
+    <div class="diploma-grid diploma-grid-main">
+      ${bigCertificate}
+    </div>
+
+    <div class="diploma-section-head">
+      <h2>Diploma per niveau</h2>
+      <p>Rond 5 projecten in hetzelfde niveau af.</p>
+    </div>
+    <div class="diploma-grid">${levelCertificates}</div>
+
+    <section class="panel diploma-help no-print">
+      <h2>Hoe verdien je een diploma?</h2>
+      <ul>
+        <li><strong>Groot diploma:</strong> 10 projecten helemaal afronden.</li>
+        <li><strong>Niveau-diploma:</strong> 5 projecten in hetzelfde niveau afronden.</li>
+        <li>Je naam komt van je profiel. Zonder account staat er <strong>Python-programmeur</strong>.</li>
+        <li>Je voortgang blijft op dit toestel. Er wordt niets verstuurd.</li>
+      </ul>
+      <p class="muted">Tip: druk op <kbd>Ctrl</kbd> + <kbd>P</kbd> en kies <strong>Bewaar als pdf</strong> als je geen printer hebt.</p>
+    </section>
+  </div>`;
+
+  document.title = "Diploma — EasyCodey";
+}
+
+function printDiploma(button) {
+  const card = button.closest(".diploma-card");
+  if (!card) return;
+  document.querySelectorAll(".diploma-card.is-printing").forEach((item) => item.classList.remove("is-printing"));
+  card.classList.add("is-printing");
+  document.body.classList.add("printing-diploma");
+  const cleanup = () => {
+    card.classList.remove("is-printing");
+    document.body.classList.remove("printing-diploma");
+    window.removeEventListener("afterprint", cleanup);
+  };
+  window.addEventListener("afterprint", cleanup);
+  try {
+    window.print();
+  } finally {
+    cleanup();
+  }
+}
+
 /* ------------------------------ mijn ideeën ------------------------------ */
 
 function renderMyIdeas() {
@@ -2132,15 +2469,17 @@ function renderAIContext() {
   }
 
   const step = Number.isInteger(currentContext.stepIndex) ? idea.steps[currentContext.stepIndex] : null;
+  const progress = ideaProgress(idea);
   aiContextEl.hidden = false;
   aiContextEl.innerHTML = `<span>📌 <strong>${e(idea.title)}</strong>${
-    step ? ` · stap ${currentContext.stepIndex + 1}: ${e(step.title)}` : ""
+    step ? ` · stap ${currentContext.stepIndex + 1}: ${e(step.title)}` : ` · ${progress.done}/${progress.total} stappen`
   }</span><button type="button" data-action="clear-context" aria-label="Context wissen">✕</button>`;
 }
 
-function openAI(context = null) {
+function openAI(context) {
   rememberFocus();
-  currentContext = context;
+  // Zonder nieuwe context blijft het project waar je naar kijkt staan.
+  if (context !== undefined) currentContext = context;
   renderAIContext();
   document.body.classList.add("ai-open");
   aiPanel.classList.add("open");
@@ -2265,12 +2604,16 @@ function buildContextPayload() {
   const idea = findIdea(currentContext.ideaId);
   if (!idea) return null;
   const step = Number.isInteger(currentContext.stepIndex) ? idea.steps[currentContext.stepIndex] : null;
+  const progress = ideaProgress(idea);
   return {
     idea: {
       title: idea.title,
       category: idea.category,
       level: idea.level,
-      summary: idea.summary
+      summary: idea.summary,
+      stepsDone: progress.done,
+      stepsTotal: progress.total,
+      isDone: progress.isDone
     },
     step: step
       ? {
@@ -3789,6 +4132,9 @@ document.addEventListener("click", (event) => {
       currentContext = null;
       renderAIContext();
     }
+    if (action === "print-diploma") {
+      printDiploma(actionEl);
+    }
     if (action === "delete-custom") {
       if (window.confirm("Weet je zeker dat je dit eigen project wilt verwijderen?")) {
         store.removeCustomIdea(actionEl.dataset.ideaId);
@@ -3963,16 +4309,68 @@ document.addEventListener("submit", (event) => {
 
 document.addEventListener("keydown", (event) => {
   trapModalFocus(event);
-  const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName);
+  const typing = ["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName) ||
+    Boolean(document.activeElement?.isContentEditable);
+  const modalOpen =
+    [settingsModal, generatorModal, donateModal, playgroundModal, installModal].some(
+      (modal) => modal && !modal.hidden
+    ) || aiPanel.classList.contains("open");
 
-  if (event.key === "/" && !typing) {
+  if (
+    event.key === "/" &&
+    !typing &&
+    !modalOpen &&
+    !event.ctrlKey &&
+    !event.metaKey &&
+    !event.altKey
+  ) {
     event.preventDefault();
-    document.querySelector("#home-search")?.focus();
+    const search = document.querySelector("#home-search");
+    if (search) {
+      search.focus();
+      search.select();
+    } else {
+      navigate("#/");
+      window.setTimeout(() => {
+        const later = document.querySelector("#home-search");
+        later?.focus();
+        later?.select();
+      }, 80);
+    }
   }
 
   if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
     event.preventDefault();
     openAI();
+  }
+
+  // Met de pijltjes ga je door de zoekresultaten. Enter opent het project.
+  const activeCard = document.activeElement?.closest?.("#idea-grid .idea-card");
+  const searchFocused = document.activeElement?.id === "home-search";
+  if ((event.key === "ArrowDown" || event.key === "ArrowUp") && (searchFocused || activeCard)) {
+    const cards = [...document.querySelectorAll("#idea-grid .idea-card")];
+    if (cards.length) {
+      event.preventDefault();
+      const current = activeCard ? cards.indexOf(activeCard) : -1;
+      if (event.key === "ArrowDown") {
+        const next = current < 0 ? 0 : Math.min(cards.length - 1, current + 1);
+        cards[next].focus();
+        cards[next].scrollIntoView({ block: "nearest" });
+      } else if (current <= 0) {
+        document.querySelector("#home-search")?.focus();
+      } else {
+        cards[current - 1].focus();
+        cards[current - 1].scrollIntoView({ block: "nearest" });
+      }
+    }
+  }
+
+  if (event.key === "Enter" && searchFocused) {
+    const first = document.querySelector("#idea-grid .idea-card");
+    if (first) {
+      event.preventDefault();
+      first.click();
+    }
   }
 
   if (event.key === "Escape") {
@@ -3982,6 +4380,19 @@ document.addEventListener("keydown", (event) => {
     else if (!playgroundModal.hidden) closePlayground();
     else if (!installModal.hidden) closeInstall();
     else if (aiPanel.classList.contains("open")) closeAI();
+    else if (searchFocused) {
+      const search = document.querySelector("#home-search");
+      if (search?.value) {
+        search.value = "";
+        homeState.q = "";
+        homeState.visible = 30;
+        applyHomeFilters();
+      } else {
+        search?.blur();
+      }
+    } else if (activeCard) {
+      document.querySelector("#home-search")?.focus();
+    }
   }
 
   if (event.target === aiInput && event.key === "Enter" && !event.shiftKey) {
@@ -4088,6 +4499,9 @@ function confirmInstall() {
   }
   updateInstallUI();
   checkInstall();
+  // Ook zonder account telt deze installatie mee.
+  counter.countInstall();
+  counter.countActiveApp();
   toast("Mooi! Je hebt bevestigd dat EasyCodey als app op je apparaat staat.");
 }
 
@@ -4331,6 +4745,7 @@ function initPWA() {
     counter.countInstall().then((value) => {
       if (value !== null) analytics.trackEvent("app-geinstalleerd");
     });
+    counter.countActiveApp();
     analytics.trackEvent("installatie");
     toast("EasyCodey staat als app op je apparaat.");
   });
@@ -4349,6 +4764,8 @@ function initPWA() {
     counter.countInstall().then((value) => {
       if (value !== null) analytics.trackEvent("app-geinstalleerd");
     });
+    // Eén keer per dag per toestel: zo zie je hoeveel apps vandaag actief zijn.
+    counter.countActiveApp();
   }
 
   registerServiceWorker();
@@ -4358,6 +4775,9 @@ function initPWA() {
 
 async function init() {
   window.__easycodeyBoot?.();
+  // Meteen weten of dit het toestel van de eigenaar is. Zo tellen diens
+  // bezoeken niet mee, ook niet in de analytische meting.
+  if (store.isActiveProfileOwner()) counter.markOwnerDevice();
   initTheme();
   applyTextSize(store.getSettings().textSize);
   cleanUsernameFromAddress();
@@ -4383,6 +4803,7 @@ async function init() {
     analytics.trackOnce(`start-${APP_VERSION}`);
   });
   counter.loadCounterConfig().then(() => {
+    if (counter.isOwnerDevice()) return;
     counter.countVisit();
     counter.countUniqueVisitor();
   });

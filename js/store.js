@@ -21,6 +21,10 @@ const DEFAULT_STATE = {
     textSize: "normaal"
   },
   customIdeas: [],
+  lastProject: {
+    ideaId: "",
+    at: 0
+  },
   editor: {
     code: "",
     projectId: "",
@@ -132,6 +136,10 @@ function normalizeState(parsed) {
     settings: { ...DEFAULT_STATE.settings, ...(source.settings || {}) },
     progress: source.progress && typeof source.progress === "object" ? source.progress : {},
     customIdeas: normalizeCustomIdeas(source.customIdeas),
+    lastProject: {
+      ideaId: typeof source.lastProject?.ideaId === "string" ? source.lastProject.ideaId : "",
+      at: Number(source.lastProject?.at) || 0
+    },
     editor: {
       code: typeof source.editor?.code === "string" ? source.editor.code : "",
       projectId: typeof source.editor?.projectId === "string" ? source.editor.projectId : "",
@@ -507,6 +515,7 @@ export function importBackup(value) {
     ...state,
     progress: normalized.progress,
     customIdeas: normalized.customIdeas,
+    lastProject: normalized.lastProject,
     editor: normalized.editor
   };
   persist();
@@ -617,6 +626,32 @@ export function getProgress(ideaId) {
   };
 }
 
+/* Het laatst geopende project. Zo kan de homepagina met één knop verdergaan
+   waar de leerling gebleven is. Het blijft per profiel op dit toestel. */
+export function getLastProject() {
+  return {
+    ideaId: typeof state.lastProject?.ideaId === "string" ? state.lastProject.ideaId : "",
+    at: Number(state.lastProject?.at) || 0
+  };
+}
+
+export function setLastProject(ideaId) {
+  const id = String(ideaId || "");
+  if (!id) return getLastProject();
+  const current = getLastProject();
+  // Niet bij elke hertekening opnieuw schrijven: hetzelfde project blijft
+  // gewoon bovenaan staan.
+  if (current.ideaId === id) return current;
+  state.lastProject = { ideaId: id, at: Date.now() };
+  persist();
+  return getLastProject();
+}
+
+export function clearLastProject() {
+  state.lastProject = { ideaId: "", at: 0 };
+  persist();
+}
+
 export function toggleStep(ideaId, index) {
   const current = getProgress(ideaId);
   const steps = current.steps.includes(index)
@@ -715,6 +750,9 @@ export function addCustomIdea(idea) {
 export function removeCustomIdea(ideaId) {
   state.customIdeas = state.customIdeas.filter((idea) => idea.id !== ideaId);
   delete state.progress[ideaId];
+  if (state.lastProject?.ideaId === ideaId) {
+    state.lastProject = { ideaId: "", at: 0 };
+  }
   persist();
 }
 

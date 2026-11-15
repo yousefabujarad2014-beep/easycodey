@@ -5,6 +5,7 @@
 
 const SITE_KEY = "easycodey.analytics.site.v1";
 const OPTOUT_KEY = "easycodey.analytics.optout.v1";
+const OWNER_DEVICE_KEY = "easycodey.owner.device.v1";
 const UPDATE_KEY = "easycodey.lastUpdate.v1";
 const SCRIPT_SRC = "https://gc.zgo.at/count.js";
 const MAX_QUEUE = 60;
@@ -83,6 +84,12 @@ export function isAnalyticsOptOut() {
   return read(OPTOUT_KEY) === "1";
 }
 
+/* Op het toestel van de eigenaar meten we niet mee. Zo blijven de cijfers
+   van echte bezoekers zuiver. */
+export function isOwnerDevice() {
+  return read(OWNER_DEVICE_KEY) === "1";
+}
+
 export function setAnalyticsOptOut(value) {
   if (value) {
     write(OPTOUT_KEY, "1");
@@ -155,6 +162,10 @@ function flush() {
 }
 
 export function initAnalytics() {
+  if (isOwnerDevice()) {
+    stopAnalytics();
+    return false;
+  }
   const info = analyticsInfo();
   if (!info.enabled) return false;
   if (loadedSite === info.site) {
@@ -188,7 +199,7 @@ export function initAnalytics() {
 }
 
 function send(payload) {
-  if (isAnalyticsOptOut()) return;
+  if (isAnalyticsOptOut() || isOwnerDevice()) return;
   if (!getAnalyticsSite()) {
     // De openbare sitecode wordt nog geladen: bewaar het event en stuur het
     // zodra de configuratie binnen is. Zonder sitecode versturen we niets.

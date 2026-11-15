@@ -131,6 +131,7 @@
         <a href="../../#/leerpad">Leerpad</a>
         <a href="../../#/programmeren">Programmeren</a>
         <a href="../../#/mijn-ideeen">Mijn ideeën</a>
+        <a href="../../#/voortgang">Voortgang</a>
         <a href="../../contact/">Contact</a>
       </nav>
       <div class="header-tools">
@@ -376,6 +377,10 @@ print(&quot;Klaar: rapport.xlsx&quot;)</code></pre>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="../../#/profiel">👤 Mijn profiel</a>
         <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/voortgang">📊 Voortgang</a>
+        <span aria-hidden="true">·</span>
+        <a class="link-btn" href="../../#/diploma">🎓 Diploma</a>
+        <span aria-hidden="true">·</span>
         <a class="link-btn" href="../../doneren/">♥ Doneren</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="../../contact/">✉ Contact</a>
@@ -394,6 +399,7 @@ print(&quot;Klaar: rapport.xlsx&quot;)</code></pre>
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
+      if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
       const response = await fetch("../../site-config.json", { cache: "no-store" });
       const config = await response.json();
 

@@ -11,11 +11,28 @@ const SESSION_KEY = "easycodey.counter.session.v1";
 const INSTALLED_KEY = "easycodey.installed.v1";
 const UNIQUE_KEY = "easycodey.uniqueVisitor.v1";
 const DEVICE_KEY = "easycodey.device.v1";
+const OWNER_DEVICE_KEY = "easycodey.owner.device.v1";
+const ACTIVE_DAY_KEY = "easycodey.activeAppDay.v1";
+const ACTIVE_PREFIX = "actieve-apps-";
+
+const REQUEST_TIMEOUT = 7000;
 
 let namespace = "";
 let counterApi = "";
 let configLoaded = false;
 let loadPromise = null;
+
+/* Een trage teller mag het paneel nooit laten hangen. Na 7 seconden stoppen
+   we het verzoek; de app werkt gewoon verder zonder cijfer. */
+async function fetchWithTimeout(url, options = {}) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 function read(key) {
   try {
@@ -55,6 +72,25 @@ export function isCounterOptedOut() {
   return read(OPTOUT_KEY) === "1";
 }
 
+/* Op het toestel van de eigenaar tellen we niets mee. Zo blijven de cijfers
+   van echte bezoekers zuiver. De vlag staat alleen op dat toestel. */
+export function isOwnerDevice() {
+  return read(OWNER_DEVICE_KEY) === "1";
+}
+
+export function markOwnerDevice() {
+  write(OWNER_DEVICE_KEY, "1");
+}
+
+/* De sleutel van vandaag, bijvoorbeeld actieve-apps-2026-11-15. Eén keer per
+   dag per toestel. Zo weten we hoeveel apps vandaag echt open waren. */
+function activeAppsKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${ACTIVE_PREFIX}${year}-${month}-${day}`;
+}
+
 export function counterInfo() {
   return {
     namespace,
@@ -70,7 +106,7 @@ export async function loadCounterConfig() {
   if (loadPromise) return loadPromise;
   loadPromise = (async () => {
     try {
-      const response = await fetch(`${CONFIG_FILE}?v=${Date.now()}`, { cache: "no-store" });
+      const response = await fetchWithTimeout(`${CONFIG_FILE}?v=${Date.now()}`, { cache: "no-store" });
       const config = await response.json();
       namespace = String(config?.publicCounter || "")
         .trim()
@@ -89,7 +125,7 @@ export async function loadCounterConfig() {
 }
 
 async function request(path) {
-  const response = await fetch(`${API}${path}`, {
+  const response = await fetchWithTimeout(`${API}${path}`, {
     cache: "no-store",
     headers: { Accept: "application/json" }
   });
@@ -102,7 +138,7 @@ async function request(path) {
 async function readFromWorker(key) {
   if (!counterApi) return null;
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${counterApi}/counts?keys=${encodeURIComponent(key)}`,
       { cache: "no-store", headers: { Accept: "application/json" } }
     );
@@ -118,7 +154,7 @@ async function readFromWorker(key) {
 async function hitWorker(key) {
   if (!counterApi) return null;
   try {
-    const response = await fetch(`${counterApi}/hit`, {
+    const response = await fetchWithTimeout(`${counterApi}/hit`, {
       method: "POST",
       cache: "no-store",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -144,7 +180,7 @@ export async function getCount(key) {
   if (!namespace) return null;
 
   try {
-    const response = await fetch(
+    const response = await fetchWithTimeout(
       `${API}/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
       { cache: "no-store", headers: { Accept: "application/json" } }
     );
@@ -177,19 +213,25 @@ export async function hitCount(key) {
 }
 
 export async function getTotals() {
-  const [visits, unique, installs, downloads] = await Promise.all([
+  const [visits, unique, installs, downloads, active] = await Promise.all([
     getCount("bezoeken-v1"),
     getCount("unieke-bezoekers-v1"),
     getCount("installaties-v1"),
-    getCount("apk-downloads-v1")
+    getCount("apk-downloads-v1"),
+    getCount(activeAppsKey())
   ]);
   return {
     visits,
     unique,
     installs,
     downloads,
+    active,
     available:
-      visits !== null || unique !== null || installs !== null || downloads !== null
+      visits !== null ||
+      unique !== null ||
+      installs !== null ||
+      downloads !== null ||
+      active !== null
   };
 }
 
@@ -197,7 +239,7 @@ export async function getTotals() {
    antwoordt, zodat een offline bezoek het later alsnog kan tellen. Dit is een
    benadering: iemand met twee toestellen of gewiste opslag telt opnieuw. */
 export async function countUniqueVisitor() {
-  if (isCounterOptedOut()) return null;
+  if (isCounterOptedOut() || isOwnerDevice()) return null;
   if (read(UNIQUE_KEY) === "1") return null;
   const value = await hitCount("unieke-bezoekers-v1");
   if (value !== null) write(UNIQUE_KEY, "1");
@@ -206,7 +248,7 @@ export async function countUniqueVisitor() {
 
 /* Eén bezoek per browsersessie, zodat herladen niet dubbel telt. */
 export async function countVisit() {
-  if (isCounterOptedOut()) return null;
+  if (isCounterOptedOut() || isOwnerDevice()) return null;
   try {
     if (sessionStorage.getItem(SESSION_KEY) === "1") return null;
     sessionStorage.setItem(SESSION_KEY, "1");
@@ -216,14 +258,32 @@ export async function countVisit() {
   return hitCount("bezoeken-v1");
 }
 
-/* Eén installatie per toestel. De vlag gaat pas aan als de teller antwoordt,
-   zodat een offline eerste start het later alsnog kan tellen. */
+/* Eén installatie per toestel. Dit werkt ook zonder account: zodra de app
+   als app opent of de installatie bevestigd wordt, telt het toestel mee.
+   De vlag gaat pas aan als de teller antwoordt, zodat een offline eerste
+   start het later alsnog kan tellen. */
 export async function countInstall() {
-  if (isCounterOptedOut()) return null;
+  if (isCounterOptedOut() || isOwnerDevice()) return null;
   if (read(INSTALLED_KEY) === "1") return null;
   const value = await hitCount("installaties-v1");
   if (value !== null) write(INSTALLED_KEY, "1");
   return value;
+}
+
+/* Een app die vandaag geopend is, telt één keer mee voor "actieve apps".
+   Zo zie je hoeveel apps er echt in gebruik zijn, niet hoeveel er ooit zijn
+   geïnstalleerd. */
+export async function countActiveApp() {
+  if (isCounterOptedOut() || isOwnerDevice()) return null;
+  const key = activeAppsKey();
+  if (read(ACTIVE_DAY_KEY) === key) return null;
+  const value = await hitCount(key);
+  if (value !== null) write(ACTIVE_DAY_KEY, key);
+  return value;
+}
+
+export async function getActiveApps() {
+  return getCount(activeAppsKey());
 }
 
 export async function countDownload() {

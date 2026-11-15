@@ -191,6 +191,13 @@ function contextToPrompt(context) {
       `- Project: "${context.idea.title}" (${context.idea.category}, niveau ${context.idea.level}).`
     );
     if (context.idea.summary) lines.push(`- Samenvatting: ${context.idea.summary}`);
+    if (Number.isFinite(context.idea.stepsTotal)) {
+      lines.push(
+        context.idea.isDone
+          ? `- De gebruiker heeft alle ${context.idea.stepsTotal} stappen van dit project al afgerond.`
+          : `- Voortgang: ${context.idea.stepsDone || 0} van ${context.idea.stepsTotal} stappen afgerond.`
+      );
+    }
   }
   if (context.step) {
     lines.push(
