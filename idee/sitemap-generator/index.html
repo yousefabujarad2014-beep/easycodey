@@ -411,25 +411,25 @@ print(&quot;De sitemap is geldige XML.&quot;)</code></pre>
         };
         let seen = false;
         try {
-          seen = sessionStorage.getItem("easycodey.counter.session.v1") === "1";
+          seen = sessionStorage.getItem("easycodey.counter.session.v2") === "1";
         } catch (error) {}
         if (!seen) {
           hit("bezoeken-v1").then((response) => {
             if (!response || !response.ok) return;
             try {
-              sessionStorage.setItem("easycodey.counter.session.v1", "1");
+              sessionStorage.setItem("easycodey.counter.session.v2", "1");
             } catch (error) {}
           });
         }
         let unique = false;
         try {
-          unique = localStorage.getItem("easycodey.uniqueVisitor.v1") === "1";
+          unique = localStorage.getItem("easycodey.uniqueVisitor.v2") === "1";
         } catch (error) {}
         if (!unique) {
           hit("unieke-bezoekers-v1").then((response) => {
             if (!response || !response.ok) return;
             try {
-              localStorage.setItem("easycodey.uniqueVisitor.v1", "1");
+              localStorage.setItem("easycodey.uniqueVisitor.v2", "1");
             } catch (error) {}
           });
         }

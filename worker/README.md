@@ -58,7 +58,7 @@ Je hebt een gratis Cloudflare-account nodig.
 
    ```json
    {
-     "publicCounter": "easycodey-yousef",
+     "publicCounter": "easycodey-yousef-v2",
      "counterApi": "https://easycodey-counter.jouw-naam.workers.dev"
    }
    ```

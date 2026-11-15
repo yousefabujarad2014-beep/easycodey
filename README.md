@@ -278,8 +278,7 @@ Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config
 
 ```json
 {
-  "analyticsSite": "",
-  "publicCounter": "easycodey-yousef",
+  "publicCounter": "easycodey-yousef-v2",
   "counterApi": "",
   "donateUrl": "",
   "donateLabel": "",
@@ -292,7 +291,6 @@ Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config
 
 - `publicCounter` is de naam van de ingebouwde anonieme teller. Laat je hem leeg, dan worden bezoeken, unieke bezoekers, unieke installaties en APK-downloads niet geteld.
 - `counterApi` is optioneel. Zet hier het adres van je eigen gratis Cloudflare Worker (zie `worker/README.md`). Laat je hem leeg, dan gebruikt de app Abacus.
-- `analyticsSite` is optioneel. Vul hier je gratis GoatCounter-sitecode in voor uitgebreidere inzichten (populaire projecten, versies, regio). Zonder code wordt er niets naar GoatCounter verstuurd.
 
 Commit en push daarna. De site gebruikt `site-config.json` automatisch als `/api/config` niet beschikbaar is.
 
@@ -335,7 +333,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 - Oude accounts met een PIN blijven werken: de PIN wordt bij het inlezen automatisch als wachtwoord gelezen.
 - Het contactveld bij registratie is **optioneel**. Het staat alleen in `easycodey.profiles.v1` op dit apparaat en wordt nooit verstuurd.
 - Het **eigenaarspaneel** op `#/eigenaar` is lokaal beveiligd met de eigenaarscode. De eigenaar kan ook inloggen met het eigenaarsaccount op **Mijn profiel**; dan opent het paneel zonder code en werkt dat op elk toestel. Na **Vergrendelen** opent zowel de eigenaarscode als het eigenaars-wachtwoord het paneel opnieuw. Het toont het aantal profielen op dit apparaat, hun voortgang en contactgegevens. Wachtwoorden zijn nooit zichtbaar.
-- **Anonieme bezoekcijfers** zijn standaard cookieloos en anoniem (ingebouwde teller via Abacus): bezoeken, unieke bezoekers (één per toestel/browser), unieke installaties en APK-downloads op de app én de vaste pagina's. Geen account nodig. Voor uitgebreidere inzichten (populaire projecten, versies, regio) kan de eigenaar daarnaast een gratis GoatCounter-sitecode instellen; die code voor álle bezoekers staat in `site-config.json` (`analyticsSite`). Een code in het paneel geldt alleen voor dat toestel. Zonder GoatCounter-code wordt er niets naar GoatCounter verstuurd. Iedereen kan alle meting uitzetten via **Mijn profiel → Privacy en statistieken**.
+- **Anonieme bezoekcijfers** zijn standaard cookieloos en anoniem (ingebouwde teller via Abacus): bezoeken, unieke bezoekers (één per toestel/browser), unieke installaties en APK-downloads op de app én de vaste pagina's. Geen account nodig en geen derdepartij-meetscript. Iedereen kan alle meting uitzetten via **Mijn profiel → Privacy en statistieken**.
 - **Voortgang is per apparaat en per browser.** Op een ander apparaat begin je leeg, tenzij je een back-up herstelt.
 - Gebruik **Back-up downloaden** en **Back-up herstellen** op `#/profiel` om voortgang, eigen projecten en editor-code mee te nemen. Op **Mijn ideeën** kun je daarnaast alleen je eigen projecten exporteren/importeren.
 

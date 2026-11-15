@@ -80,7 +80,7 @@ const APP_VERSION = "v16";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 const INSTALL_CONFIRMED_KEY = "easycodey.install.confirmed.v1";
-const COUNTER_SNAPSHOT_KEY = "easycodey.counter.snapshots.v1";
+const COUNTER_SNAPSHOT_KEY = "easycodey.counter.snapshots.v2";
 const COUNTER_SNAPSHOT_LIMIT = 240;
 const COUNTER_SNAPSHOT_GAP = 2 * 60 * 1000;
 

@@ -7,15 +7,18 @@
 const API = "https://abacus.jasoncameron.dev";
 const CONFIG_FILE = "site-config.json";
 const OPTOUT_KEY = "easycodey.analytics.optout.v1";
-const SESSION_KEY = "easycodey.counter.session.v1";
-const INSTALLED_KEY = "easycodey.installed.v1";
-const UNIQUE_KEY = "easycodey.uniqueVisitor.v1";
+/* v2 sinds de tellerreset: bestaande toestellen tellen opnieuw mee vanaf nul.
+   De opt-out- en eigenaarstoestel-vlaggen blijven op v1, zodat die keuzes
+   bewaard blijven. */
+const SESSION_KEY = "easycodey.counter.session.v2";
+const INSTALLED_KEY = "easycodey.installed.v2";
+const UNIQUE_KEY = "easycodey.uniqueVisitor.v2";
 const DEVICE_KEY = "easycodey.device.v1";
 const OWNER_DEVICE_KEY = "easycodey.owner.device.v1";
-const ACTIVE_DAY_KEY = "easycodey.activeAppDay.v1";
+const ACTIVE_DAY_KEY = "easycodey.activeAppDay.v2";
 const ACTIVE_PREFIX = "actieve-apps-";
 
-const LAST_TOTALS_KEY = "easycodey.counter.last.v1";
+const LAST_TOTALS_KEY = "easycodey.counter.last.v2";
 const REQUEST_TIMEOUT = 10000;
 const RETRY_DELAYS = [400, 1200];
 

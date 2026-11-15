@@ -1,11 +1,11 @@
 {
-  "publicCounter": "easycodey-yousef",
+  "publicCounter": "easycodey-yousef-v2",
   "counterApi": "",
   "counterBaseline": {
-    "visits": 146,
-    "unique": 174,
-    "installs": 2,
-    "downloads": 2
+    "visits": 0,
+    "unique": 0,
+    "installs": 0,
+    "downloads": 0
   },
   "donateUrl": "",
   "donateLabel": "",
