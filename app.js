@@ -1451,6 +1451,44 @@ function resetHomeState(params) {
   homeState.visible = 30;
 }
 
+/* Kleine badge met de dagelijkse leerserie. Verschijnt pas als er echt een
+   serie is, zodat de homepagina rustig blijft. */
+function renderStreakChip() {
+  const streak = store.getStreak();
+  if (streak.current < 1) return "";
+  const label = streak.current === 1 ? "dag" : "dagen";
+  return `<p class="streak-chip" title="Je leerserie: dagen op rij geoefend">
+    <span aria-hidden="true">🔥</span>
+    <strong>${streak.current}</strong> ${label} op rij${
+      streak.best > streak.current ? ` <span class="streak-chip-best">beste: ${streak.best}</span>` : ""
+    }
+  </p>`;
+}
+
+/* Grotere kaart op de voortgangspagina, met de beste serie en het totaal. */
+function renderStreakPanel() {
+  const streak = store.getStreak();
+  const message =
+    streak.current <= 1
+      ? "Vandaag is de eerste dag van je serie. Kom morgen terug om hem te verlengen."
+      : streak.activeToday
+        ? "Je hebt vandaag al geoefend. Mooi bezig — je serie blijft groeien!"
+        : "Oefen vandaag om je serie te verlengen.";
+  return `<section class="panel streak-panel" aria-label="Dagelijkse leerserie">
+    <div class="streak-head">
+      <span class="streak-flame" aria-hidden="true">${streak.activeToday ? "🔥" : "✨"}</span>
+      <div>
+        <h2>${streak.current} ${streak.current === 1 ? "dag" : "dagen"} op rij</h2>
+        <p class="panel-lead">${message}</p>
+      </div>
+    </div>
+    <div class="streak-meta">
+      <div class="stat"><strong>${streak.best}</strong><span>beste serie</span></div>
+      <div class="stat"><strong>${streak.totalDays}</strong><span>dagen geoefend</span></div>
+    </div>
+  </section>`;
+}
+
 function renderContinueCard() {
   const last = store.getLastProject();
   if (!last.ideaId) return "";
@@ -1525,6 +1563,7 @@ function renderHome(params) {
           ${ideas.length} Python-projecten met uitleg, code en een stappenplan.
           Bewaar je voortgang, programmeer zelf in de browser en vraag de AI-coach om hulp.
         </p>
+        ${renderStreakChip()}
         <div class="hero-actions">
           <a class="btn brand" href="#/programmeren">⌨ Programmeer zelf</a>
           <button class="btn ghost" type="button" data-action="open-playground">▶ Snel proberen</button>
@@ -2210,6 +2249,8 @@ function renderProgressOverview() {
       <div class="stat"><strong>${todayCount}</strong><span>vandaag actief</span></div>
       <div class="stat"><strong>${weekCount}</strong><span>deze week actief</span></div>
     </div>
+
+    ${renderStreakPanel()}
 
     <div class="overview-grid">
       <section class="panel overview-panel">
@@ -4742,6 +4783,8 @@ async function init() {
   if (store.isActiveProfileOwner()) counter.markOwnerDevice();
   initTheme();
   applyTextSize(store.getSettings().textSize);
+  // Eén keer per dag: houdt de leerserie bij (dagen op rij geoefend).
+  store.touchStreak();
   cleanUsernameFromAddress();
   initNetworkStatus();
   measurePerformance();

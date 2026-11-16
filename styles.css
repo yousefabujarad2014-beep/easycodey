@@ -8914,6 +8914,71 @@ select.pv-input option {
   margin-bottom: 18px;
 }
 
+/* ------------------------------ dagelijkse leerserie ------------------------------ */
+
+.streak-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 18px 0 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--gold) 34%, var(--line));
+  background: color-mix(in srgb, var(--accent-soft) 58%, var(--panel));
+  color: var(--gold-strong);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.streak-chip strong {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.streak-chip-best { font-weight: 600; opacity: 0.78; }
+
+[data-theme="dark"] .streak-chip { color: var(--gold); }
+
+.streak-panel { margin-bottom: 16px; }
+
+.streak-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.streak-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.streak-head .panel-lead { margin: 4px 0 0; }
+
+.streak-flame {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(184, 137, 59, 0.28));
+}
+
+.streak-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.streak-meta .stat {
+  flex: 1 1 140px;
+  padding: 14px 18px;
+  background: var(--panel-2);
+}
+
+.streak-meta .stat strong { font-size: 1.5rem; }
+
 .overview-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

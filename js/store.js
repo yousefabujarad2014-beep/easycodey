@@ -33,6 +33,13 @@ const DEFAULT_STATE = {
   chat: {
     messages: [],
     updatedAt: 0
+  },
+  /* Dagelijkse leerserie: hoeveel dagen op rij de leerling iets deed. */
+  streak: {
+    current: 0,
+    best: 0,
+    totalDays: 0,
+    lastDay: ""
   }
 };
 
@@ -145,7 +152,13 @@ function normalizeState(parsed) {
       projectId: typeof source.editor?.projectId === "string" ? source.editor.projectId : "",
       updatedAt: Number(source.editor?.updatedAt) || 0
     },
-    chat: normalizeChat(source.chat)
+    chat: normalizeChat(source.chat),
+    streak: {
+      current: Math.max(0, Number(source.streak?.current) || 0),
+      best: Math.max(0, Number(source.streak?.best) || 0),
+      totalDays: Math.max(0, Number(source.streak?.totalDays) || 0),
+      lastDay: typeof source.streak?.lastDay === "string" ? source.streak.lastDay : ""
+    }
   };
 }
 
@@ -696,6 +709,54 @@ export function getStats(ideas) {
     stepsTotal,
     percent: stepsTotal ? Math.round((stepsDone / stepsTotal) * 100) : 0
   };
+}
+
+/* ------------------------------ dagelijkse leerserie ------------------------------ */
+
+/* Lokale dag, bijvoorbeeld 2026-11-16. Bewust niet toISOString(), want dat
+   rekent in UTC en zou in België rond middernacht de verkeerde dag geven. */
+function dayStamp(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+export function getStreak() {
+  const saved = state.streak || {};
+  const today = dayStamp();
+  return {
+    current: Math.max(0, Number(saved.current) || 0),
+    best: Math.max(0, Number(saved.best) || 0),
+    totalDays: Math.max(0, Number(saved.totalDays) || 0),
+    lastDay: typeof saved.lastDay === "string" ? saved.lastDay : "",
+    activeToday: saved.lastDay === today,
+    today
+  };
+}
+
+/* Eén keer per dag bijwerken. De serie loopt door als de vorige dag gisteren
+   was; anders begint hij opnieuw bij 1. Zo telt elke geoefende dag precies
+   één keer, ook als de app meerdere keren op een dag opent. */
+export function touchStreak() {
+  const today = dayStamp();
+  const streak = getStreak();
+  if (streak.lastDay === today) return streak;
+
+  const yesterdayDate = new Date();
+  yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+  const yesterday = dayStamp(yesterdayDate);
+  const continues = streak.lastDay === yesterday;
+  const current = continues ? streak.current + 1 : 1;
+
+  state.streak = {
+    current,
+    best: Math.max(current, streak.best),
+    totalDays: streak.totalDays + 1,
+    lastDay: today
+  };
+  persist();
+  return getStreak();
 }
 
 export function getEditorDraft() {
