@@ -9390,6 +9390,16 @@ select.pv-input option {
   padding: 9px 16px;
 }
 
+.diploma-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.diploma-actions .diploma-print { margin-top: 0; }
+
 .diploma-card.is-locked {
   background: var(--panel-2);
   border-color: var(--line);

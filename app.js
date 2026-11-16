@@ -233,6 +233,61 @@ async function writeClipboard(text) {
   }
 }
 
+/* Delen via de deelknop van de telefoon of computer. Kan dat niet, dan komt
+   de tekst op het klembord. Er wordt pas iets verstuurd als de bezoeker zelf
+   op "Delen" klikt; de app verstuurt nooit iets vanzelf. */
+async function shareMessage({ title, text, url }) {
+  const shareUrl = url || LIVE_URL;
+  if (typeof navigator.share === "function") {
+    try {
+      await navigator.share({ title: title || "EasyCodey", text, url: shareUrl });
+      return;
+    } catch (error) {
+      if (error && error.name === "AbortError") return;
+      // Delen lukte niet (bijvoorbeeld geen app gevonden): val terug op kopiëren.
+    }
+  }
+  const copied = await writeClipboard(`${text}\n\n${shareUrl}`);
+  toast(
+    copied
+      ? "Deeltekst gekopieerd. Plak hem in WhatsApp, e-mail of een bericht."
+      : "Delen lukt hier niet. Kopieer de link uit de adresbalk."
+  );
+}
+
+/* Alleen het aantal projecten, stappen en de serie. Geen naam, geen profiel. */
+function shareProgress() {
+  const stats = store.getStats(allIdeas());
+  const streak = store.getStreak();
+  const lines = [
+    `Mijn EasyCodey-voortgang: ${stats.completed} van ${stats.total} projecten afgerond (${stats.percent}% van alle stappen).`
+  ];
+  if (streak.current > 1) lines.push(`Ik ben al ${streak.current} dagen op rij aan het oefenen.`);
+  lines.push("Leer gratis Python met 161 projecten op EasyCodey.");
+  return shareMessage({
+    title: "Mijn EasyCodey-voortgang",
+    text: lines.join(" "),
+    url: `${LIVE_URL}#/voortgang`
+  });
+}
+
+/* Een diploma delen mag alleen als het echt verdiend is. De naam komt van het
+   lokale profiel; zonder account staat er "Python-programmeur". */
+function shareDiploma(button) {
+  const title = button?.dataset.diplomaTitle || "EasyCodey-diploma";
+  const id = button?.dataset.diplomaId || "";
+  const active = store.getActiveProfile();
+  const name = active?.name?.trim() || "Python-programmeur";
+  const text = `${name} heeft het diploma "${title}"${
+    id ? ` (${id})` : ""
+  } van EasyCodey gehaald! Rond zelf 10 Python-projecten af en verdien ook een diploma.`;
+  return shareMessage({
+    title: `EasyCodey-diploma: ${title}`,
+    text,
+    url: `${LIVE_URL}#/diploma`
+  });
+}
+
 function toast(message) {
   toastEl.textContent = message;
   toastEl.classList.add("show");
@@ -2480,6 +2535,7 @@ function renderProgressOverview() {
         <p>Alles hier komt uit jouw eigen browser. Je voortgang wordt nooit verstuurd.</p>
         <div class="hero-actions">
           <a class="btn brand" href="#/diploma">🎓 ${stats.completed >= 10 ? "Bekijk je diploma" : "Op weg naar je diploma"}</a>
+          <button class="btn ghost" type="button" data-action="share-progress">🔗 Deel mijn voortgang</button>
           <a class="btn ghost" href="#/leerpad">Verder met het leerpad</a>
         </div>
         <p class="overview-diploma-hint">${e(diplomaHint)}</p>
@@ -2576,7 +2632,12 @@ function renderDiploma() {
                 <span class="diploma-seal" aria-hidden="true">★</span>
                 <span class="diploma-meta">${e(today)}<br />${e(id)}</span>
               </div>
-              <button class="btn ghost diploma-print no-print" type="button" data-action="print-diploma">🖨 Print of bewaar als pdf</button>`
+              <div class="diploma-actions no-print">
+                <button class="btn ghost diploma-print" type="button" data-action="print-diploma">🖨 Print of bewaar als pdf</button>
+                <button class="btn ghost diploma-print" type="button" data-action="share-diploma" data-diploma-title="${e(
+                  title
+                )}" data-diploma-id="${e(id)}">🔗 Deel dit diploma</button>
+              </div>`
             : `<div class="diploma-locked">
                 <span class="diploma-lock" aria-hidden="true">🔒</span>
                 <p>${e(lockedText)}</p>
@@ -2643,6 +2704,7 @@ function renderDiploma() {
         <li><strong>Niveau-diploma:</strong> 5 projecten in hetzelfde niveau afronden.</li>
         <li>Je naam komt van je profiel. Zonder account staat er <strong>Python-programmeur</strong>.</li>
         <li>Je voortgang blijft op dit toestel. Er wordt niets verstuurd.</li>
+        <li>Delen gaat via de deelknop van je toestel of zet de tekst op je klembord. Jij bepaalt zelf waar het naartoe gaat.</li>
       </ul>
       <p class="muted">Tip: druk op <kbd>Ctrl</kbd> + <kbd>P</kbd> en kies <strong>Bewaar als pdf</strong> als je geen printer hebt.</p>
     </section>
@@ -4434,6 +4496,12 @@ document.addEventListener("click", (event) => {
     }
     if (action === "print-diploma") {
       printDiploma(actionEl);
+    }
+    if (action === "share-progress") {
+      shareProgress();
+    }
+    if (action === "share-diploma") {
+      shareDiploma(actionEl);
     }
     if (action === "delete-custom") {
       if (window.confirm("Weet je zeker dat je dit eigen project wilt verwijderen?")) {
