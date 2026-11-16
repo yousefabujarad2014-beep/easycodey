@@ -238,6 +238,32 @@ button { cursor: pointer; }
 .icon-btn.small { width: 32px; height: 32px; font-size: 0.95rem; border: none; background: transparent; }
 .icon-btn.small:hover { background: var(--panel-2); }
 
+/* A− en A+ staan als één klein groepje naast het thema-knopje. */
+.text-size-tools {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--panel);
+}
+
+.text-size-tools .icon-btn {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.text-size-tools .icon-btn + .icon-btn { border-left: 1px solid var(--line); }
+.text-size-tools .icon-btn:hover:not(:disabled) { background: var(--panel-2); }
+.text-size-tools .icon-btn:disabled { opacity: 0.38; cursor: default; }
+
 .icon-moon { display: none; }
 [data-theme="dark"] .icon-sun { display: none; }
 [data-theme="dark"] .icon-moon { display: block; }
@@ -8690,6 +8716,11 @@ select.pv-input option {
   .icon-btn.small {
     width: 40px;
     height: 40px;
+  }
+
+  .text-size-tools .icon-btn {
+    width: 42px;
+    height: 42px;
   }
 }
 

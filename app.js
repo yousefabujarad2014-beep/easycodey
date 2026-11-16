@@ -2759,9 +2759,38 @@ function clearChat() {
   toast("Gesprek gewist.");
 }
 
+const TEXT_SIZE_STEPS = ["normaal", "groot", "extra"];
+
 function applyTextSize(size) {
   const value = ["normaal", "groot", "extra"].includes(size) ? size : "normaal";
   document.documentElement.dataset.textSize = value;
+}
+
+/* De twee knoppen in de kop (A− en A+) gaan één stand verder of terug.
+   De stand wordt meteen bewaard, dus ook na verversen blijft hij staan. */
+function updateTextSizeControls() {
+  const index = TEXT_SIZE_STEPS.indexOf(store.getSettings().textSize);
+  const smaller = document.querySelector('[data-action="text-smaller"]');
+  const bigger = document.querySelector('[data-action="text-bigger"]');
+  if (smaller) smaller.disabled = index <= 0;
+  if (bigger) bigger.disabled = index >= TEXT_SIZE_STEPS.length - 1;
+}
+
+function stepTextSize(delta) {
+  const settings = store.getSettings();
+  const current = Math.max(0, TEXT_SIZE_STEPS.indexOf(settings.textSize));
+  const nextIndex = Math.min(TEXT_SIZE_STEPS.length - 1, Math.max(0, current + delta));
+  if (nextIndex === current) {
+    toast(delta > 0 ? "De tekst is al op de grootste stand." : "De tekst is al op de kleinste stand.");
+    return;
+  }
+  const next = TEXT_SIZE_STEPS[nextIndex];
+  store.saveSettings({ ...settings, textSize: next });
+  applyTextSize(next);
+  const select = document.querySelector("#cfg-text-size");
+  if (select) select.value = next;
+  updateTextSizeControls();
+  toast(next === "normaal" ? "Tekstgrootte: normaal." : next === "groot" ? "Tekstgrootte: groot." : "Tekstgrootte: extra groot.");
 }
 
 function formatBytes(bytes) {
@@ -2845,6 +2874,7 @@ function saveSettings() {
     textSize: document.querySelector("#cfg-text-size").value
   });
   applyTextSize(store.getSettings().textSize);
+  updateTextSizeControls();
   closeSettings();
   updateAIStatus();
   toast("Instellingen opgeslagen.");
@@ -3933,6 +3963,8 @@ document.addEventListener("click", (event) => {
     const action = actionEl.dataset.action;
 
     if (action === "theme") toggleTheme();
+    if (action === "text-smaller") stepTextSize(-1);
+    if (action === "text-bigger") stepTextSize(1);
     if (action === "open-ai") openAI();
     if (action === "close-ai") closeAI();
     if (action === "settings") openSettings();
@@ -4783,6 +4815,7 @@ async function init() {
   if (store.isActiveProfileOwner()) counter.markOwnerDevice();
   initTheme();
   applyTextSize(store.getSettings().textSize);
+  updateTextSizeControls();
   // Eén keer per dag: houdt de leerserie bij (dagen op rij geoefend).
   store.touchStreak();
   cleanUsernameFromAddress();
