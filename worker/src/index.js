@@ -13,6 +13,13 @@ const ALLOWED_KEYS = new Set([
 
 const UNIQUE_KEYS = new Set(["unieke-bezoekers-v1", "installaties-v1"]);
 
+/* "Actieve apps" krijgt elke dag een eigen sleutel, bijvoorbeeld
+   actieve-apps-2026-11-16. Zo blijft "vandaag" altijd een schoon getal en
+   hoeft er niets te worden gereset. Oude dagen blijven staan als historie. */
+const ACTIVE_PREFIX = "actieve-apps-";
+const ACTIVE_PATTERN = /^actieve-apps-(\d{4})-(\d{2})-(\d{2})$/;
+const MAX_KEYS = 20;
+
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -33,6 +40,38 @@ function json(data, status = 200) {
 
 function validKey(key) {
   return typeof key === "string" && /^[a-z0-9-]{1,64}$/.test(key);
+}
+
+/* Alleen echte kalenderdagen tussen 2024 en 2100. Zo kan een bezoeker geen
+   willekeurige sleutels in de database zetten. */
+function activeAppsDay(key) {
+  const match = ACTIVE_PATTERN.exec(key);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+  if (year < 2024 || year > 2100) return null;
+  const date = new Date(Date.UTC(year, month - 1, day));
+  if (
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() !== month - 1 ||
+    date.getUTCDate() !== day
+  ) {
+    return null;
+  }
+  return `${match[1]}-${match[2]}-${match[3]}`;
+}
+
+function isActiveAppsKey(key) {
+  return activeAppsDay(key) !== null;
+}
+
+function isAllowedKey(key) {
+  return ALLOWED_KEYS.has(key) || isActiveAppsKey(key);
+}
+
+function isUniqueKey(key) {
+  return UNIQUE_KEYS.has(key) || isActiveAppsKey(key);
 }
 
 async function sha256(value) {
@@ -87,12 +126,12 @@ async function registerDevice(env, key, device) {
 async function handleHit(request, env) {
   const body = await request.json().catch(() => null);
   const key = String(body?.key || "");
-  if (!validKey(key) || !ALLOWED_KEYS.has(key)) {
+  if (!validKey(key) || !isAllowedKey(key)) {
     return json({ error: "Onbekende teller." }, 400);
   }
 
   const device = String(body?.device || "").slice(0, 128);
-  if (UNIQUE_KEYS.has(key) && device) {
+  if (isUniqueKey(key) && device) {
     const isNew = await registerDevice(env, key, device);
     if (!isNew) {
       const counts = await readCounts(env, [key]);
@@ -109,8 +148,8 @@ async function handleCounts(request, env) {
   const keys = (url.searchParams.get("keys") || "")
     .split(",")
     .map((key) => key.trim())
-    .filter((key) => validKey(key) && ALLOWED_KEYS.has(key));
-  const counts = await readCounts(env, [...new Set(keys)]);
+    .filter((key) => validKey(key) && isAllowedKey(key));
+  const counts = await readCounts(env, [...new Set(keys)].slice(0, MAX_KEYS));
   return json({ counts });
 }
 

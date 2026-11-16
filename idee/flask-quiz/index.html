@@ -400,7 +400,7 @@ def reset():
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
-      if (/^(localhost|127.0.0.1|0.0.0.0|::1|[::1])$/.test(location.hostname)) return;
+      if (["localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]"].includes(location.hostname)) return;
       if (location.protocol === "file:") return;
       const response = await fetch("../../site-config.json", { cache: "no-store" });
       const config = await response.json();
@@ -409,47 +409,81 @@ def reset():
         .trim()
         .toLowerCase()
         .replace(/[^a-z0-9._-]/g, "");
-      if (counter) {
-        const hit = (key, tries = 3) => {
-          const url =
-            "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
-          return new Promise((resolve) => {
-            const attempt = (left) => {
-              fetch(url, { cache: "no-store", keepalive: true })
-                .then((response) => resolve(response))
-                .catch(() => {
-                  if (left > 0) setTimeout(() => attempt(left - 1), 1200);
-                  else resolve(null);
-                });
-            };
-            attempt(tries - 1);
-          });
+      const rawApi = String((config && config.counterApi) || "").trim().replace(/\/+$/, "");
+      const api = /^https:\/\/[^\s]+$/i.test(rawApi) ? rawApi : "";
+      if (!counter && !api) return;
+
+      /* Eén willekeurig nummer per toestel. De eigen teller bewaart daar
+         alleen een onleesbare hash van, zodat één toestel niet dubbel telt. */
+      let device = "";
+      try {
+        device = localStorage.getItem("easycodey.device.v1") || "";
+        if (!device && api) {
+          const bytes = new Uint8Array(16);
+          crypto.getRandomValues(bytes);
+          device = [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+          localStorage.setItem("easycodey.device.v1", device);
+        }
+      } catch (error) {}
+
+      const hit = (key, tries = 3) => {
+        const abacus =
+          "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
+        const send = async () => {
+          if (api) {
+            try {
+              const own = await fetch(api + "/hit", {
+                method: "POST",
+                cache: "no-store",
+                keepalive: true,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ key, device })
+              });
+              if (own.ok) return own;
+            } catch (error) {}
+          }
+          if (!counter) return null;
+          return fetch(abacus, { cache: "no-store", keepalive: true });
         };
-        let seen = false;
-        try {
-          seen = sessionStorage.getItem("easycodey.counter.session.v2") === "1";
-        } catch (error) {}
-        if (!seen) {
-          hit("bezoeken-v1").then((response) => {
-            if (!response || !response.ok) return;
-            try {
-              sessionStorage.setItem("easycodey.counter.session.v2", "1");
-            } catch (error) {}
-          });
-        }
-        let unique = false;
-        try {
-          unique = localStorage.getItem("easycodey.uniqueVisitor.v2") === "1";
-        } catch (error) {}
-        if (!unique) {
-          hit("unieke-bezoekers-v1").then((response) => {
-            if (!response || !response.ok) return;
-            try {
-              localStorage.setItem("easycodey.uniqueVisitor.v2", "1");
-            } catch (error) {}
-          });
-        }
+        return new Promise((resolve) => {
+          const attempt = (left) => {
+            send()
+              .then((result) => resolve(result))
+              .catch(() => {
+                if (left > 0) setTimeout(() => attempt(left - 1), 1200);
+                else resolve(null);
+              });
+          };
+          attempt(tries - 1);
+        });
+      };
+
+      let seen = false;
+      try {
+        seen = sessionStorage.getItem("easycodey.counter.session.v2") === "1";
+      } catch (error) {}
+      if (!seen) {
+        hit("bezoeken-v1").then((result) => {
+          if (!result || !result.ok) return;
+          try {
+            sessionStorage.setItem("easycodey.counter.session.v2", "1");
+          } catch (error) {}
+        });
       }
+
+      let unique = false;
+      try {
+        unique = localStorage.getItem("easycodey.uniqueVisitor.v2") === "1";
+      } catch (error) {}
+      if (!unique) {
+        hit("unieke-bezoekers-v1").then((result) => {
+          if (!result || !result.ok) return;
+          try {
+            localStorage.setItem("easycodey.uniqueVisitor.v2", "1");
+          } catch (error) {}
+        });
+      }
+
     } catch (error) {}
   })();
 </script>

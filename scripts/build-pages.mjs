@@ -982,88 +982,29 @@ function renderDownloadPage() {
 `;
 }
 
-/* Meet APK-downloads op de downloadpagina. De ingebouwde teller werkt altijd
-   als publicCounter in site-config.json staat. Cookieloos, zonder
+/* Eén teller voor alle vaste pagina's. Werkt het liefst met de eigen
+   Cloudflare-teller (counterApi uit site-config.json). Is die er niet of
+   antwoordt hij niet, dan valt de pagina terug op Abacus. Cookieloos, zonder
    persoonsgegevens en met dezelfde opt-out als de app. Op een ontwikkel-
    computer en op het toestel van de eigenaar wordt niets geteld. */
-const DOWNLOAD_TRACKING = `<script>
-  (async () => {
-    try {
-      if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
-      if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
-      if (/^(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|\[::1\])$/.test(location.hostname)) return;
-      if (location.protocol === "file:") return;
-      const response = await fetch("../site-config.json", { cache: "no-store" });
-      const config = await response.json();
-
-      const counter = String((config && config.publicCounter) || "")
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9._-]/g, "");
-      if (counter) {
-        const hit = (key, tries = 3) => {
-          const url =
-            "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
-          return new Promise((resolve) => {
-            const attempt = (left) => {
-              fetch(url, { cache: "no-store", keepalive: true })
-                .then((response) => resolve(response))
-                .catch(() => {
-                  if (left > 0) setTimeout(() => attempt(left - 1), 1200);
-                  else resolve(null);
-                });
-            };
-            attempt(tries - 1);
-          });
-        };
-        let seen = false;
-        try {
-          seen = sessionStorage.getItem("easycodey.counter.session.v2") === "1";
-        } catch (error) {}
-        if (!seen) {
-          hit("bezoeken-v1").then((response) => {
-            if (!response || !response.ok) return;
-            try {
-              sessionStorage.setItem("easycodey.counter.session.v2", "1");
-            } catch (error) {}
-          });
-        }
-        let unique = false;
-        try {
-          unique = localStorage.getItem("easycodey.uniqueVisitor.v2") === "1";
-        } catch (error) {}
-        if (!unique) {
-          hit("unieke-bezoekers-v1").then((response) => {
-            if (!response || !response.ok) return;
-            try {
-              localStorage.setItem("easycodey.uniqueVisitor.v2", "1");
-            } catch (error) {}
-          });
-        }
-        document.addEventListener(
+function COUNTER_TRACKING(prefix, withDownload = false) {
+  const downloadPart = withDownload
+    ? `        document.addEventListener(
           "click",
           (event) => {
             if (!event.target.closest || !event.target.closest("a[download]")) return;
             hit("apk-downloads-v1");
           },
           true
-        );
-      }
-    } catch (error) {}
-  })();
-</script>`;
+        );`
+    : "";
 
-/* Telt op de vaste pagina's één bezoek per sessie met de ingebouwde teller.
-   Cookieloos, zonder persoonsgegevens en met dezelfde opt-out als de app.
-   Op een ontwikkelcomputer en op het toestel van de eigenaar wordt niets
-   geteld. */
-function SITE_TRACKING(prefix) {
   return `<script>
   (async () => {
     try {
       if (localStorage.getItem("easycodey.analytics.optout.v1") === "1") return;
       if (localStorage.getItem("easycodey.owner.device.v1") === "1") return;
-      if (/^(localhost|127\.0\.0\.1|0\.0\.0\.0|::1|\[::1\])$/.test(location.hostname)) return;
+      if (["localhost", "127.0.0.1", "0.0.0.0", "::1", "[::1]"].includes(location.hostname)) return;
       if (location.protocol === "file:") return;
       const response = await fetch("${prefix}site-config.json", { cache: "no-store" });
       const config = await response.json();
@@ -1072,50 +1013,92 @@ function SITE_TRACKING(prefix) {
         .trim()
         .toLowerCase()
         .replace(/[^a-z0-9._-]/g, "");
-      if (counter) {
-        const hit = (key, tries = 3) => {
-          const url =
-            "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
-          return new Promise((resolve) => {
-            const attempt = (left) => {
-              fetch(url, { cache: "no-store", keepalive: true })
-                .then((response) => resolve(response))
-                .catch(() => {
-                  if (left > 0) setTimeout(() => attempt(left - 1), 1200);
-                  else resolve(null);
-                });
-            };
-            attempt(tries - 1);
-          });
+      const rawApi = String((config && config.counterApi) || "").trim().replace(/\\/+$/, "");
+      const api = /^https:\\/\\/[^\\s]+$/i.test(rawApi) ? rawApi : "";
+      if (!counter && !api) return;
+
+      /* Eén willekeurig nummer per toestel. De eigen teller bewaart daar
+         alleen een onleesbare hash van, zodat één toestel niet dubbel telt. */
+      let device = "";
+      try {
+        device = localStorage.getItem("easycodey.device.v1") || "";
+        if (!device && api) {
+          const bytes = new Uint8Array(16);
+          crypto.getRandomValues(bytes);
+          device = [...bytes].map((b) => b.toString(16).padStart(2, "0")).join("");
+          localStorage.setItem("easycodey.device.v1", device);
+        }
+      } catch (error) {}
+
+      const hit = (key, tries = 3) => {
+        const abacus =
+          "https://abacus.jasoncameron.dev/hit/" + encodeURIComponent(counter) + "/" + key;
+        const send = async () => {
+          if (api) {
+            try {
+              const own = await fetch(api + "/hit", {
+                method: "POST",
+                cache: "no-store",
+                keepalive: true,
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ key, device })
+              });
+              if (own.ok) return own;
+            } catch (error) {}
+          }
+          if (!counter) return null;
+          return fetch(abacus, { cache: "no-store", keepalive: true });
         };
-        let seen = false;
-        try {
-          seen = sessionStorage.getItem("easycodey.counter.session.v2") === "1";
-        } catch (error) {}
-        if (!seen) {
-          hit("bezoeken-v1").then((response) => {
-            if (!response || !response.ok) return;
-            try {
-              sessionStorage.setItem("easycodey.counter.session.v2", "1");
-            } catch (error) {}
-          });
-        }
-        let unique = false;
-        try {
-          unique = localStorage.getItem("easycodey.uniqueVisitor.v2") === "1";
-        } catch (error) {}
-        if (!unique) {
-          hit("unieke-bezoekers-v1").then((response) => {
-            if (!response || !response.ok) return;
-            try {
-              localStorage.setItem("easycodey.uniqueVisitor.v2", "1");
-            } catch (error) {}
-          });
-        }
+        return new Promise((resolve) => {
+          const attempt = (left) => {
+            send()
+              .then((result) => resolve(result))
+              .catch(() => {
+                if (left > 0) setTimeout(() => attempt(left - 1), 1200);
+                else resolve(null);
+              });
+          };
+          attempt(tries - 1);
+        });
+      };
+
+      let seen = false;
+      try {
+        seen = sessionStorage.getItem("easycodey.counter.session.v2") === "1";
+      } catch (error) {}
+      if (!seen) {
+        hit("bezoeken-v1").then((result) => {
+          if (!result || !result.ok) return;
+          try {
+            sessionStorage.setItem("easycodey.counter.session.v2", "1");
+          } catch (error) {}
+        });
       }
+
+      let unique = false;
+      try {
+        unique = localStorage.getItem("easycodey.uniqueVisitor.v2") === "1";
+      } catch (error) {}
+      if (!unique) {
+        hit("unieke-bezoekers-v1").then((result) => {
+          if (!result || !result.ok) return;
+          try {
+            localStorage.setItem("easycodey.uniqueVisitor.v2", "1");
+          } catch (error) {}
+        });
+      }
+${downloadPart}
     } catch (error) {}
   })();
 </script>`;
+}
+
+/* Op de downloadpagina telt een klik op de APK ook mee. */
+const DOWNLOAD_TRACKING = COUNTER_TRACKING("../", true);
+
+/* Telt op de vaste pagina's één bezoek per sessie met dezelfde teller. */
+function SITE_TRACKING(prefix) {
+  return COUNTER_TRACKING(prefix, false);
 }
 
 function renderInstallPage() {

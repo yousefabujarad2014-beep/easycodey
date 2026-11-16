@@ -10,6 +10,7 @@
     "check": "node scripts/check-data.mjs",
     "pages": "node scripts/build-pages.mjs",
     "build": "node scripts/build-pages.mjs && node scripts/check-data.mjs",
+    "test:worker": "node worker/test.mjs",
     "icons": "node scripts/make-icons.mjs"
   },
   "engines": {

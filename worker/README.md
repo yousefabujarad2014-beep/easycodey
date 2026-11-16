@@ -9,6 +9,8 @@ server zelf bijhoudt welk toestel al eerder meetelde.
 
 - Een getal per teller: `bezoeken-v1`, `unieke-bezoekers-v1`,
   `installaties-v1` en `apk-downloads-v1`.
+- Per dag één teller voor actieve apps, bijvoorbeeld
+  `actieve-apps-2026-11-16`. Elk toestel telt daar één keer per dag mee.
 - Voor de unieke tellers: een onleesbare **SHA-256-hash** van een willekeurig
   nummer dat alleen op dat toestel staat.
 
@@ -74,13 +76,39 @@ Je hebt een gratis Cloudflare-account nodig.
 
 - `POST /hit` met `{ "key": "bezoeken-v1", "device": "willekeurig" }`
   hoogt de teller met één op.
-- Bij `unieke-bezoekers-v1` en `installaties-v1` telt een toestel maar één
-  keer mee. De server bewaart daarvoor alleen een hash.
-- `GET /counts?keys=bezoeken-v1,unieke-bezoekers-v1` geeft de stand terug.
+- Bij `unieke-bezoekers-v1`, `installaties-v1` en elke
+  `actieve-apps-YYYY-MM-DD` telt een toestel maar één keer mee. De server
+  bewaart daarvoor alleen een hash.
+- `GET /counts?keys=bezoeken-v1,actieve-apps-2026-11-16` geeft de stand terug.
+  Een teller die nog niet bestaat, is gewoon `0`.
 - `GET /health` laat zien dat de teller leeft.
 
 Lukt de eigen teller even niet? Dan valt de app automatisch terug op Abacus.
 Bezoekers merken daar niets van.
+
+## Lokaal testen (zonder Cloudflare-account)
+
+De Worker heeft een eigen test met een echte SQLite-database in het geheugen.
+Gebruik Node 22 of nieuwer:
+
+```powershell
+node worker/test.mjs
+```
+
+Je ziet dan stap voor stap of bezoeken, unieke bezoekers, installaties en de
+dagelijkse actieve apps goed tellen. Deze test raakt de live site niet.
+
+## Oude apparaathashes opruimen (optioneel)
+
+Voor elke dag komt er één hash per toestel bij. Dat is heel weinig. Wil je het
+toch klein houden, verwijder dan af en toe hashes die langer dan 120 dagen niet
+meer zijn gebruikt:
+
+```powershell
+npx wrangler d1 execute easycodey-counter --remote --command="DELETE FROM devices WHERE first_seen < datetime('now','-120 days')"
+```
+
+De totalen in `counters` blijven daarbij staan; alleen de oude hashes gaan weg.
 
 ## Kosten
 

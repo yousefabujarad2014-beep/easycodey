@@ -18,3 +18,5 @@ CREATE TABLE IF NOT EXISTS devices (
 );
 
 CREATE INDEX IF NOT EXISTS idx_devices_key ON devices (counter_key);
+-- Voor het opruimen van oude hashes (zie README).
+CREATE INDEX IF NOT EXISTS idx_devices_seen ON devices (first_seen);

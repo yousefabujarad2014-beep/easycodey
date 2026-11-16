@@ -292,7 +292,7 @@ function writeLastTotals(values) {
       unique: values.unique,
       installs: values.installs,
       downloads: values.downloads,
-      active: values.active
+      active: Number.isFinite(values.active) ? values.active : 0
     })
   );
 }
@@ -346,16 +346,17 @@ export async function getTotals() {
   const known = knownTotals();
   const sameDay = known.day === activeAppsKey();
   const fallback = (value, cached) => (value === null && Number.isFinite(cached) ? cached : value);
+  // "Actieve apps" gaat over vandaag. Na middernacht mag het cijfer van
+  // gisteren nooit als vandaag doorgaan: dan beginnen we weer bij 0.
+  const activeToday =
+    active !== null ? active : sameDay && Number.isFinite(known.active) ? known.active : 0;
 
   const totals = {
     visits: fallback(visits, known.visits),
     unique: fallback(unique, known.unique),
     installs: fallback(installs, known.installs),
     downloads: fallback(downloads, known.downloads),
-    // "Actieve apps" gaat over vandaag. Weet de teller het even niet, dan
-    // tonen we 0 in plaats van een streepje: vandaag is er dan nog niets geteld.
-    active:
-      active === null ? (sameDay && Number.isFinite(known.active) ? known.active : 0) : active,
+    active: activeToday,
     live: fresh.every((value) => value !== null),
     at: Number(known.at) || 0
   };
@@ -372,7 +373,7 @@ export async function getTotals() {
       unique: totals.unique,
       installs: totals.installs,
       downloads: totals.downloads,
-      active: sameDay ? totals.active : known.active
+      active: activeToday
     });
   }
 
