@@ -278,7 +278,7 @@ Op **GitHub Pages** is er geen server. Zet dezelfde gegevens dan in `site-config
 
 ```json
 {
-  "publicCounter": "easycodey-yousef-v2",
+  "publicCounter": "easycodey-yousef-v3",
   "counterApi": "",
   "donateUrl": "",
   "donateLabel": "",
