@@ -3697,6 +3697,38 @@ h1, h2, h3,
   background: var(--panel);
 }
 
+.search-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px;
+  margin: 10px 0 0;
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.search-note[hidden] { display: none; }
+
+.search-fix {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--brand);
+  font: inherit;
+  font-weight: 800;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.search-fix:hover { color: var(--gold-strong); }
+
+[data-theme="dark"] .search-fix { color: var(--accent); }
+[data-theme="dark"] .search-fix:hover { color: var(--gold); }
+
+.search-suggestion { text-align: left; }
+
 .stat {
   position: relative;
   overflow: hidden;

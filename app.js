@@ -127,6 +127,7 @@ let greetingShown = false;
 let currentContext = null;
 let homeBound = false;
 let searchTyped = false;
+let searchFeedback = { scores: new Map(), fuzzy: [], suggestions: [] };
 let toastTimer = null;
 let roadCategory = "Alle";
 let lastPythonError = null;
@@ -1575,7 +1576,8 @@ function renderHome(params) {
           </label>
           <button class="btn ghost" type="button" data-action="random-idea">🎲 Verras me</button>
         </div>
-        <p class="search-hint">Snel zoeken met <kbd>/</kbd> · kies met <kbd>↓</kbd> <kbd>↑</kbd> en open met <kbd>Enter</kbd>.</p>
+        <p class="search-hint">Typ een titel, vaardigheid of onderwerp — kleine typfouten zijn geen probleem. Snel zoeken met <kbd>/</kbd> · kies met <kbd>↓</kbd> <kbd>↑</kbd> en open met <kbd>Enter</kbd>.</p>
+        <p class="search-note" id="search-note" role="status" aria-live="polite" hidden></p>
       </div>
       <div class="hero-side">
         <div class="hero-aside">
@@ -1713,8 +1715,234 @@ function clearAutofilledSearch() {
   if (search.value !== homeState.q) search.value = homeState.q;
 }
 
+/* ------------------------------ slimmer zoeken ------------------------------ */
+
+/* Kleine woorden zeggen weinig over welk project je zoekt. Als er ook een
+   echt zoekwoord is, negeren we ze. Zo vindt "een spel maken" gewoon spellen. */
+const SEARCH_STOPWORDS = new Set([
+  "de", "het", "een", "en", "van", "voor", "met", "op", "in", "te", "om", "is",
+  "dat", "die", "je", "ik", "wat", "kan", "mijn", "maak", "maakt", "maken",
+  "leren", "leer", "hoe", "een", "ook", "graag", "willen", "wil"
+]);
+
+/* Alles klein, zonder accenten en zonder leestekens. Zo maakt "Café" en
+   "cafe" geen verschil, en telt "e-mail" hetzelfde als "e mail". */
+function normalizeSearch(value) {
+  return String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
+}
+
+/* Korte woorden moeten bijna precies kloppen; bij langere woorden mag er
+   wat meer misgaan. Twee letters verschil is bij een lang woord nog te raden. */
+function searchMaxDistance(word) {
+  return word.length >= 7 ? 2 : 1;
+}
+
+/* Hoeveel letters moeten veranderen om van a naar b te komen. */
+function searchDistance(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  let previous = Array.from({ length: b.length + 1 }, (_, index) => index);
+  for (let i = 1; i <= a.length; i += 1) {
+    const current = [i];
+    for (let j = 1; j <= b.length; j += 1) {
+      current[j] = Math.min(
+        previous[j] + 1,
+        current[j - 1] + 1,
+        previous[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)
+      );
+    }
+    previous = current;
+  }
+  return previous[b.length];
+}
+
+/* Zoekt het woord dat het dichtst bij het getypte woord ligt. Titels wegen
+   zwaarder dan vaardigheden, en die weer zwaarder dan de samenvatting. */
+function closestSearchWord(word, tokens, max) {
+  if (word.length < 4) return null;
+  let best = null;
+  const groups = [
+    { source: "title", words: tokens.titleWords, bonus: 3 },
+    { source: "skills", words: tokens.skillWords, bonus: 2 },
+    { source: "summary", words: tokens.summaryWords, bonus: 1 }
+  ];
+  for (const group of groups) {
+    for (const token of group.words || []) {
+      if (!token || token.length < 3) continue;
+      if (Math.abs(token.length - word.length) > max) continue;
+      const distance = searchDistance(word, token);
+      if (distance > max) continue;
+      if (
+        !best ||
+        distance < best.distance ||
+        (distance === best.distance && group.bonus > best.bonus)
+      ) {
+        best = { word: token, distance, source: group.source };
+      }
+    }
+  }
+  return best;
+}
+
+function searchTokensOf(idea) {
+  const title = normalizeSearch(idea.title);
+  const summary = normalizeSearch(`${idea.summary || ""} ${idea.description || ""}`);
+  const skills = normalizeSearch((idea.learn || []).join(" "));
+  return {
+    title,
+    titleWords: [...new Set(title.split(" "))],
+    summary,
+    summaryWords: [...new Set(summary.split(" "))],
+    skills,
+    skillWords: [...new Set(skills.split(" "))],
+    meta: normalizeSearch(`${idea.category || ""} ${idea.level || ""}`),
+    full: normalizeSearch(haystackOf(idea))
+  };
+}
+
+function effectiveSearchWords(query) {
+  const words = [...new Set(query.split(" ").filter(Boolean))];
+  const meaningful = words.filter((word) => !SEARCH_STOPWORDS.has(word));
+  return meaningful.length ? meaningful : words;
+}
+
+/* Zoekt eerst gewoon (een stukje van) het woord. Lukt dat niet, dan proberen
+   we woorden die er bijna hetzelfde uitzien: één of twee letters verschil. */
+function searchIdeas(list, query) {
+  const words = effectiveSearchWords(query);
+  const scored = [];
+  const fuzzy = [];
+
+  for (const idea of list) {
+    const tokens = searchTokensOf(idea);
+    let score =
+      tokens.title === query
+        ? 1000
+        : tokens.title.startsWith(query)
+          ? 500
+          : tokens.title.includes(query)
+            ? 250
+            : 0;
+    if (tokens.summary.includes(query)) score += 80;
+    if (tokens.skills.includes(query)) score += 60;
+    if (tokens.meta.includes(query)) score += 30;
+
+    const ideaFuzzy = [];
+    let matched = true;
+    for (const word of words) {
+      if (tokens.full.includes(word)) {
+        if (tokens.title.includes(word)) score += 40;
+        else if (tokens.skills.includes(word)) score += 30;
+        else if (tokens.summary.includes(word)) score += 15;
+        continue;
+      }
+      const max = searchMaxDistance(word);
+      const guess = closestSearchWord(word, tokens, max);
+      if (!guess) {
+        matched = false;
+        break;
+      }
+      score += guess.source === "title" ? 18 : guess.source === "skills" ? 12 : 6;
+      ideaFuzzy.push({ word, guess: guess.word });
+    }
+
+    if (matched) {
+      scored.push({ idea, score });
+      fuzzy.push(...ideaFuzzy);
+    }
+  }
+
+  scored.sort((a, b) => b.score - a.score || a.idea.title.localeCompare(b.idea.title, "nl"));
+  const seen = new Set();
+  const corrections = fuzzy.filter((item) => {
+    const key = `${item.word}>${item.guess}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  return {
+    list: scored.map((item) => item.idea),
+    scores: new Map(scored.map((item) => [item.idea.id, item.score])),
+    fuzzy: corrections,
+    suggestions: scored.length ? [] : suggestSearches(query, list)
+  };
+}
+
+/* Als niets gevonden wordt: welke titels of vaardigheden lijken het meest op
+   wat de bezoeker typte? Die tonen we als knoppen, zodat één klik verder helpt. */
+function suggestSearches(query, ideas) {
+  const words = effectiveSearchWords(query);
+  const candidates = [];
+  for (const idea of ideas) {
+    const title = normalizeSearch(idea.title);
+    const titleWords = [...new Set(title.split(" "))];
+    let score = 0;
+    for (const word of words) {
+      if (title.includes(word)) score += 6;
+      else {
+        const max = searchMaxDistance(word);
+        if (closestSearchWord(word, { titleWords }, max)) score += 4;
+      }
+    }
+    if (title.startsWith(query)) score += 8;
+    if (words.length === 1 && query.length >= 4) {
+      const distance = searchDistance(query, title);
+      if (distance <= Math.max(1, Math.floor(query.length / 3))) score += 4;
+    }
+    if (score > 0) candidates.push({ title: idea.title, score });
+  }
+
+  // Vaardigheden zijn vaak korter en daardoor makkelijker te raden.
+  for (const idea of ideas) {
+    for (const skill of idea.learn || []) {
+      const term = normalizeSearch(skill);
+      if (!term) continue;
+      const termWords = [...new Set(term.split(" "))];
+      let score = 0;
+      for (const word of words) {
+        if (term.includes(word)) score += 5;
+        else {
+          const max = searchMaxDistance(word);
+          if (closestSearchWord(word, { titleWords: termWords }, max)) score += 3;
+        }
+      }
+      if (score > 0) candidates.push({ title: skill, score });
+    }
+  }
+
+  const seen = new Set();
+  return candidates
+    .sort((a, b) => b.score - a.score || a.title.localeCompare(b.title, "nl"))
+    .filter((item) => {
+      const key = item.title.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 4)
+    .map((item) => item.title);
+}
+
+/* Vervangt de bijna-goede woorden door het gevonden woord, zodat de knop
+   "Bedoelde je …?" meteen de juiste zoekopdracht uitvoert. */
+function applySearchFixes(value, fixes) {
+  let fixed = String(value || "");
+  for (const fix of fixes) {
+    fixed = fixed.replace(new RegExp(`\\b${fix.word}\\b`, "gi"), fix.guess);
+  }
+  return fixed;
+}
+
 function filteredIdeas() {
-  const query = homeState.q.trim().toLowerCase();
+  const query = normalizeSearch(homeState.q);
   const selectedSkills = [...homeState.skills].map((skill) => skill.toLowerCase());
   let list = allIdeas();
 
@@ -1731,11 +1959,11 @@ function filteredIdeas() {
     list = list.filter((idea) => !ideaProgress(idea).isDone);
   }
   if (query) {
-    const words = query.split(/\s+/).filter(Boolean);
-    list = list.filter((idea) => {
-      const haystack = haystackOf(idea);
-      return words.every((word) => haystack.includes(word));
-    });
+    const found = searchIdeas(list, query);
+    list = found.list;
+    searchFeedback = found;
+  } else {
+    searchFeedback = { scores: new Map(), fuzzy: [], suggestions: [] };
   }
   if (selectedSkills.length) {
     list = list.filter((idea) =>
@@ -1744,26 +1972,19 @@ function filteredIdeas() {
   }
 
   const levelOrder = new Map(LEVELS.map((level, index) => [level, index]));
-  const relevance = (idea) => {
-    if (!query) return 0;
-    const title = idea.title.toLowerCase();
-    const summary = (idea.summary || "").toLowerCase();
-    let score = 0;
-    if (title === query) score += 100;
-    if (title.startsWith(query)) score += 50;
-    if (title.includes(query)) score += 25;
-    if (summary.includes(query)) score += 10;
-    if ((idea.learn || []).some((item) => item.toLowerCase().includes(query))) score += 5;
-    return score;
-  };
   return [...list].sort((a, b) => {
     if (homeState.sort === "kort") return minutesOf(a) - minutesOf(b) || a.title.localeCompare(b.title, "nl");
     if (homeState.sort === "moeilijk") {
       return (levelOrder.get(a.level) || 0) - (levelOrder.get(b.level) || 0) || a.title.localeCompare(b.title, "nl");
     }
     if (homeState.sort === "az") return a.title.localeCompare(b.title, "nl");
-    // Bij zoeken komen de beste titelmatch eerst. Zo vind je sneller wat je zoekt.
-    if (query) return relevance(b) - relevance(a) || a.title.localeCompare(b.title, "nl");
+    // Bij zoeken komen de beste matches eerst. Dat werkt ook bij kleine typfouten.
+    if (query) {
+      return (
+        (searchFeedback.scores.get(b.id) || 0) - (searchFeedback.scores.get(a.id) || 0) ||
+        a.title.localeCompare(b.title, "nl")
+      );
+    }
     return 0;
   });
 }
@@ -1791,16 +2012,44 @@ function applyHomeFilters() {
   const shown = list.slice(0, homeState.visible);
 
   const grid = document.querySelector("#idea-grid");
+  const suggestionButtons = searchFeedback.suggestions
+    .map(
+      (term) =>
+        `<button class="btn ghost search-suggestion" type="button" data-action="search-suggestion" data-query="${e(
+          term
+        )}">${e(term)}</button>`
+    )
+    .join("");
   grid.innerHTML = shown.length
     ? shown.map(renderCard).join("")
     : emptyState(
         "Geen projecten gevonden",
-        "Pas je filters aan of vraag de AI om een project op maat.",
+        searchFeedback.suggestions.length
+          ? "Kleine typfout? Misschien bedoelde je een van deze:"
+          : "Pas je filters aan of vraag de AI om een project op maat.",
         `<div class="empty-actions">
+          ${suggestionButtons}
           <button class="btn" type="button" data-action="clear-filters">Filters wissen</button>
           <button class="btn ghost" type="button" data-action="open-generator">✦ AI-idee maken</button>
         </div>`
       );
+
+  const searchNote = document.querySelector("#search-note");
+  if (searchNote) {
+    if (homeState.q.trim() && searchFeedback.fuzzy.length) {
+      const fixes = searchFeedback.fuzzy;
+      const fixedQuery = applySearchFixes(homeState.q, fixes);
+      const label =
+        fixes.length === 1 ? fixes[0].guess : [...new Set(fixes.map((fix) => fix.guess))].slice(0, 2).join(", ");
+      searchNote.hidden = false;
+      searchNote.innerHTML = `Bedoelde je <button class="search-fix" type="button" data-action="search-suggestion" data-query="${e(
+        fixedQuery
+      )}">${e(label)}</button>? Ik toon ook projecten die er dicht bij komen.`;
+    } else {
+      searchNote.hidden = true;
+      searchNote.textContent = "";
+    }
+  }
 
   document.querySelector("#result-count").textContent =
     list.length === allIdeas().length ? `${list.length} projecten` : `${list.length} van ${allIdeas().length} projecten`;
@@ -4220,6 +4469,16 @@ document.addEventListener("click", (event) => {
       if (search) search.value = "";
       applyHomeFilters();
     }
+    if (action === "search-suggestion") {
+      const query = actionEl.dataset.query || actionEl.textContent || "";
+      homeState.q = query;
+      homeState.visible = 30;
+      const search = document.querySelector("#home-search");
+      if (search) search.value = query;
+      searchTyped = true;
+      applyHomeFilters();
+      document.querySelector("#home-search")?.focus();
+    }
     if (action === "load-more") {
       homeState.visible += 30;
       applyHomeFilters();
@@ -4405,6 +4664,12 @@ document.addEventListener("keydown", (event) => {
     if (first) {
       event.preventDefault();
       first.click();
+    } else {
+      const suggestion = document.querySelector("#idea-grid .search-suggestion");
+      if (suggestion) {
+        event.preventDefault();
+        suggestion.click();
+      }
     }
   }
 
