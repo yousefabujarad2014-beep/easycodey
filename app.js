@@ -1545,6 +1545,33 @@ function renderStreakPanel() {
   </section>`;
 }
 
+/* Een nieuwe bezoeker ziet maar één vriendelijke suggestie. Zodra er echt
+   gewerkt is (of iemand op "Later" klikt) verdwijnt ze vanzelf. Geen extra
+   knoppen in de kop en geen lange uitleg. */
+const START_TIP_KEY = "easycodey.startTip.v1";
+
+function renderStartCard(stats) {
+  try {
+    if (localStorage.getItem(START_TIP_KEY) === "1") return "";
+  } catch {}
+  if (stats.completed > 0 || stats.stepsDone > 0 || store.getLastProject().ideaId) return "";
+  const idea = findIdea("raad-het-getal");
+  if (!idea) return "";
+
+  return `<section class="continue-card start-card" aria-label="Begin met een project">
+    <span class="continue-emoji" aria-hidden="true">${e(idea.emoji)}</span>
+    <div class="continue-copy">
+      <p class="continue-kicker">Nieuw hier?</p>
+      <h2>Begin met één klein project.</h2>
+      <p>${e(idea.title)}: ${idea.steps.length} korte stappen. Ik leg elke stap uit.</p>
+    </div>
+    <div class="start-actions">
+      <a class="btn brand" href="#/idee/${encodeURIComponent(idea.id)}">▶ Begin nu</a>
+      <button class="btn ghost" type="button" data-action="dismiss-start">Later</button>
+    </div>
+  </section>`;
+}
+
 function renderContinueCard() {
   const last = store.getLastProject();
   if (!last.ideaId) return "";
@@ -1654,6 +1681,7 @@ function renderHome(params) {
       </div>
     </section>
 
+    ${renderStartCard(stats)}
     ${renderContinueCard()}
 
     <section class="app-entry" id="app-entry" aria-label="EasyCodey als app">
@@ -4244,6 +4272,12 @@ document.addEventListener("click", (event) => {
     const action = actionEl.dataset.action;
 
     if (action === "theme") toggleTheme();
+    if (action === "dismiss-start") {
+      try {
+        localStorage.setItem(START_TIP_KEY, "1");
+      } catch {}
+      document.querySelector(".start-card")?.remove();
+    }
     if (action === "open-ai") openAI();
     if (action === "close-ai") closeAI();
     if (action === "settings") openSettings();

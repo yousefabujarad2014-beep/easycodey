@@ -55,7 +55,7 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **Optioneel account** (`#/profiel`): meld je snel aan zoals bij Kahoot, met alleen een naam en een wachtwoord. Elk account heeft eigen voortgang, eigen projecten en eigen editor-code. Zonder account werkt alles gewoon als gast. Je kunt optioneel een e-mailadres of telefoonnummer toevoegen; dat blijft lokaal en wordt nooit verstuurd.
 - **Chat met je coach**: zodra je bent ingelogd verschijnt er een chatknop in de footer en als zwevende knop rechtsonder. Op Android en laptop opent die direct EasyCoach. Je profielpagina heeft daarnaast een grote chatkaart.
 - **Back-up**: download je profieldata als JSON en zet die op een ander apparaat weer terug.
-- **Eigenaarspaneel** (`#/eigenaar`): log in als eigenaar op **Mijn profiel** (naam + wachtwoord) en het beheer opent zonder code; met de eigenaarscode kan het ook. Je ziet hoeveel profielen er op dit apparaat zijn, wat hun voortgang is, de app-status en optioneel anonieme bezoekcijfers via GoatCounter. Er is geen server: je ziet alleen dit apparaat.
+- **Eigenaarspaneel** (`#/eigenaar`): log in als eigenaar op **Mijn profiel** (naam + wachtwoord) en het beheer opent zonder code; met de eigenaarscode kan het ook. Je ziet hoeveel profielen er op dit apparaat zijn, wat hun voortgang is, de app-status en anonieme bezoekcijfers. Er is geen server: je ziet alleen dit apparaat.
 - **Gratis Android-app**: download de APK op `/download/` (versie 1.0.0, 1,89 MB) en installeer zonder Google Play. De app opent de website, werkt offline en houdt de inhoud automatisch actueel.
 - **Zoeken en filteren** op trefwoord, categorie, niveau, tijdsduur, meerdere vaardigheden, alleen niet-afgeronde projecten en sorteren.
 - **Filters in de URL**, bijvoorbeeld `#/?q=weer&categorie=Web&niveau=Gemiddeld&duur=kort`. Handig om een selectie te bewaren of te delen.
@@ -92,7 +92,7 @@ FLL/
 ├── offline.html            Pagina die verschijnt als je offline bent
 ├── js/
 │   ├── ai.js               Streaming, markdown, offline coach en generator
-│   ├── analytics.js        Optionele, cookieloze GoatCounter-meting
+│   ├── analytics.js        Privacykeuze en anonieme telling, zonder externe dienst
 │   ├── counter.js          Anonieme teller (Cloudflare Worker of Abacus)
 │   ├── previews.js         Interactieve app-previews en de schakelaar tussen app en code
 │   ├── python-errors.js    Engelse Python-fouten naar eenvoudig Nederlands

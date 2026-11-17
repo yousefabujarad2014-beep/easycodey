@@ -134,7 +134,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Alternatief: de eigenaarscode **of** het eigenaars-wachtwoord op `#/eigenaar`; de ontgrendeling geldt voor de sessie. Na **Vergrendelen** werkt het wachtwoord opnieuw.
 - **Inzicht en updates:** app-versie, actieve service worker, aantal offline bestanden, opslaggebruik, starttijd van de app en de laatste automatische update.
 - **Bezoekcijfers:** de ingebouwde anonieme teller toont meteen unieke bezoekers (één per toestel/browser), bezoeken, unieke installaties en APK-downloads. Geen account nodig en cookieloos.
-- **Bezoekers meten (optioneel):** daarnaast een gratis GoatCounter-sitecode instellen voor uitgebreidere inzichten: populairste projecten, versies en regio. De sitecode voor alle bezoekers staat in `site-config.json` (`analyticsSite`). Zonder sitecode wordt niets naar GoatCounter verstuurd; gebruikers kunnen alle meting uitzetten via **Mijn profiel → Privacy en statistieken**.
+- **Eigen teller (optioneel):** een gratis Cloudflare Worker met D1 kan de anonieme teller overnemen; het adres staat in `site-config.json` bij `counterApi`. Zonder dat adres valt de app terug op Abacus. Er is geen externe meetdienst meer; bezoekers kunnen telling uitzetten via **Mijn profiel → Privacy en statistieken**.
 - Toont het aantal lokale profielen en totalen voor gestarte/afgeronde projecten, stappen en eigen ideeën.
 - Profielentabel met naam, optioneel contact, aanmaakdatum, laatste activiteit en voortgang.
 - **Voortgang wissen** en **Verwijderen** per profiel, met bevestiging.
@@ -354,7 +354,7 @@ FLL/
 | Nieuwe flows lokaal | 46/46 checks: invoerhulp, app-entry, springlink, wachtwoordaccounts, chatknop, back-up, automatische updates, HTTPS, installatievenster met browserherkenning en bevestiging, en eigenaarspaneel |
 | AI-coach en installatiehulp lokaal | 29/29 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v16 |
 | AI-gesprek, foutuitleg en toegankelijkheid lokaal | 13/13 checks: gesprek bewaard na verversen, “Ik bedoelde iets anders” vult het invoerveld, NameError/SyntaxError/TypeError in eenvoudig Nederlands met regelnummer, focusbeheer en aria-expanded |
-| Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, GoatCounter-sitecode, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
+| Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, eigen teller, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
 | Gratis APK-download | ✅ `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |
 | Editor, privacy en netwerk (v16) | 25/25 checks: regelnummers, code-kleuren, cursorpositie, invoegknop, Tab, **Bekijk regel N**, tekstgrootte, privacyoverzicht, alles wissen, online/offline badge, AI-intake en de wissen-melding |

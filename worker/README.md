@@ -21,6 +21,21 @@ projectgegevens in de database.
 
 Je hebt een gratis Cloudflare-account nodig.
 
+### De makkelijke manier: één script
+
+Open een terminal in de hoofdmap van het project en draai:
+
+```powershell
+node worker/zet-eigen-teller-op.mjs
+```
+
+Het script logt in bij Cloudflare, maakt de database, vult het nummer in, maakt
+de tabellen, publiceert de teller en zet het adres automatisch in
+`site-config.json`. Je hoeft alleen in het browservenster op **Allow** te klikken.
+Daarna hoef je nog alleen de website te publiceren.
+
+### De stappen apart (als het script niet lukt)
+
 1. Open een terminal in deze map:
 
    ```powershell

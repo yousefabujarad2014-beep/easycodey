@@ -8813,6 +8813,15 @@ select.pv-input option {
 
 .continue-btn { flex: 0 0 auto; white-space: nowrap; }
 
+.start-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+.start-actions .btn { white-space: nowrap; }
+
 /* ------------------------------ voortgang ------------------------------ */
 
 .overview-page,
@@ -9469,6 +9478,12 @@ select.pv-input option {
     grid-column: 1 / -1;
     justify-content: center;
     text-align: center;
+  }
+
+  .start-actions {
+    grid-column: 1 / -1;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .bar-row {

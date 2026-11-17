@@ -21,7 +21,7 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | Optionele accounts | ✅ `#/profiel`, snelle aanmelding met naam + wachtwoord, optioneel contact en JSON-back-up |
 | Chatknop na inloggen | ✅ footer, zwevende knop en chatkaart op het profiel (geen dubbele knop in de header) |
 | Eigenaarspaneel | ✅ `#/eigenaar`, eigenaarslogin zonder code, lokale profielen, voortgang, mededeling, app-status en download |
-| Inzichten | ✅ ingebouwde anonieme teller voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; optioneel GoatCounter voor populairste projecten, versies en regio; opt-out per toestel |
+| Inzichten | ✅ ingebouwde anonieme teller voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; opt-out per toestel |
 | Eigen teller (optioneel) | ✅ gratis Cloudflare Worker + D1 in `worker/`, met automatische terugval op Abacus |
 | Gratis Android-download | ✅ `/download/` met ondertekende APK 1.0.0, SHA-256, installatie-uitleg en FAQ — zonder Google Play |
 | Invoerhulp | ✅ `input()` toont de vraag en een tekstvak in het venster bovenaan |
@@ -247,8 +247,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Toegankelijkheid: de springlink **Ga naar de inhoud** werkt, Tab blijft binnen een open venster en gaat na sluiten terug naar de knop, en **aria-expanded** klopt op de AI-knoppen.
 - [ ] **Bezoekcijfers** tonen getallen voor unieke bezoekers, bezoeken, unieke installaties en APK-downloads; **Cijfers verversen** haalt de nieuwste stand op.
 - [ ] **Cijferverloop** toont vandaag, sinds 7 dagen en sinds je vorige bezoek; de momentopname blijft alleen op dit toestel.
-- [ ] Een GoatCounter-sitecode opslaan toont “Meting is actief”; **Stop met meten** zet de meting uit; de opt-out op het profiel werkt.
-- [ ] Met `analyticsSite` in `site-config.json` meldt het paneel "actief voor alle bezoekers" en laadt het GoatCounter-script.
+- [ ] De opt-out op het profiel en **Stop met meten** in het eigenaarspaneel zetten de telling uit; er wordt dan niets verstuurd.
 - [ ] Met `counterApi` in `site-config.json` gebruikt de app de eigen Cloudflare-teller; zonder `counterApi` valt hij terug op Abacus.
 - [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.
 - [ ] Projectpagina: **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.

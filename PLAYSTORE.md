@@ -21,6 +21,25 @@ op één plek: de website. De Android-app volgt automatisch.
 | AAB bouwen | ⏳ `bubblewrap build` (zie hieronder) |
 | Play Console-account + upload + review | ⛔ **vereist een Google Play Developer-account (eenmalig $25) en identiteitsverificatie** |
 
+## Wat jij nog moet doen (in het kort)
+
+Alles wat de computer kon doen, is klaar. Deze vier stappen zijn alleen voor jou:
+
+1. **Developer-account.** Maak een Google Play Console-account, betaal eenmalig
+   $25 en rond de identiteitsverificatie af.
+2. **AAB uploaden.** Bouw het bestand met de onderstaande `bubblewrap build` -
+   de upload-keystore staat al klaar (zie *Ondertekeningssleutel*). Upload
+   `app-release-bundle.aab` bij **Productie → Nieuwe release**.
+3. **Play App Signing.** Kiest Google Play voor eigen sleutels, kopieer dan de
+   SHA-256 uit **Release → Setup → App signing** als **tweede** regel naar
+   `/.well-known/assetlinks.json`, commit en push. Zonder die tweede fingerprint
+   blijft de adresbalk zichtbaar.
+4. **Review afwachten.** Vul de store listing hieronder in en dien in. Eerste
+   review duurt meestal 1–7 dagen.
+
+> Je hoeft dit niet te doen om EasyCodey te gebruiken. De gratis APK op
+> `/download/` en de PWA werken nu al. Zie *Gratis verspreiden zonder Google Play*.
+
 ## App-gegevens
 
 | Veld | Waarde |

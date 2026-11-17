@@ -213,10 +213,9 @@ Je ziet dan:
   **unieke installaties** en **APK-downloads**. Geen account nodig; geen cookies of persoonsgegevens.
   Met **Cijfers verversen**
   haal je de nieuwste stand op;
-- **Bezoekers meten:** vul daarnaast je GoatCounter-sitecode in voor uitgebreidere inzichten:
-  populairste projecten, versies en regio. Zonder sitecode wordt er niets naar GoatCounter geladen
-  of verstuurd. De code in het vak geldt alleen op dit toestel; voor alle bezoekers zet je dezelfde
-  code in `site-config.json` bij `analyticsSite`;
+- **Eigen teller:** je kunt een gratis Cloudflare-teller koppelen (zie `worker/README.md`), zodat
+  de cijfers niet afhankelijk zijn van een externe dienst. Zonder eigen teller gebruikt de app de
+  eenvoudige anonieme teller; bezoekers merken geen verschil.
 - **Alles downloaden** als JSON met alle lokale profielen en hun voortgang.
 
 Het paneel is een lokale toegangspoort, geen serverbeveiliging. Er is geen database: andere telefoons en computers hebben hun eigen lokale profielen. Wachtwoorden zijn nooit zichtbaar.
@@ -230,7 +229,7 @@ EasyCodey is bewust rustig en veilig opgezet:
 - **HTTPS:** de live app werkt via `https://yousefabujarad2014-beep.github.io/easycodey/` met een geldig certificaat, HSTS en een automatische doorverwijzing van HTTP naar HTTPS.
 - **Lokaal:** voortgang, accounts en eigen projecten staan alleen in de opslag van je eigen browser. Er is geen database en geen server die je gegevens bewaart.
 - **Jij bepaalt wat er blijft:** in **Instellingen** zie je een overzicht van alle lokale gegevens en kun je met **🧹 Al mijn gegevens wissen** alles verwijderen. Je krijgt twee bevestigingen voordat er iets verdwijnt.
-- **Geen advertenties of trackers:** er zijn geen advertentienetwerken. Alleen als de eigenaar een GoatCounter-sitecode instelt, worden anonieme bezoekcijfers geteld — cookieloos, zonder persoonsgegevens en met een opt-out in **Mijn profiel → Privacy en statistieken**.
+- **Geen advertenties of trackers:** er zijn geen advertentienetwerken en geen externe meetdienst. De ingebouwde telling is cookieloos, telt geen persoonsgegevens en heeft een opt-out in **Mijn profiel → Privacy en statistieken**.
 - **Automatische updates:** de app controleert bij de start, elke 15 minuten, bij terugkeer naar de app, bij `pageshow` en zodra je weer online bent. Een nieuwe versie wordt automatisch geactiveerd.
 - **Geen sterke beveiliging:** het wachtwoord houdt accounts op hetzelfde apparaat uit elkaar. Gebruik geen belangrijk wachtwoord, want iemand met toegang tot je toestel kan bij de lokale opslag.
 - **Oude app verwijderen:** krijg je nog een melding over een oude versie, verwijder dan de oude app of snelkoppeling en installeer opnieuw via de HTTPS-link. Stap voor stap staat op `/installeren/#oude-app`.

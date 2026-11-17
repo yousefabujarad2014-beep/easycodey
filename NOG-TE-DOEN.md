@@ -58,93 +58,60 @@ je hem niet nodig.
 
 ---
 
-## Deel 3 — Gratis eigen teller (Cloudflare, ongeveer 10 minuten)
+## Deel 3 — Gratis eigen teller (Cloudflare, ongeveer 5 minuten)
 
 **Waarom:** de app telt nu bezoeken met een eenvoudige gratis dienst. Met een
 eigen teller zijn de cijfers nauwkeuriger en blijven ze van jou.
 
-**Wat je nodig hebt:** een gratis Cloudflare-account.
+**Wat je nodig hebt:** een gratis Cloudflare-account
+(**https://dash.cloudflare.com/sign-up**).
 
-1. Maak een account op **https://dash.cloudflare.com/sign-up**.
-2. Open op je computer de map van het project.
-3. Open daar de map **worker**.
-4. Klik in die map met de rechtermuisknop en kies **Openen in Terminal**.
-5. Typ dit en druk op Enter:
+1. Open op je computer een terminal in de **hoofdmap** van het project.
+2. Typ dit en druk op Enter:
 
    ```powershell
-   npx wrangler login
+   node worker/zet-eigen-teller-op.mjs
    ```
 
-   Er opent een browservenster. Klik op **Allow**.
-
-6. Typ dit en druk op Enter:
-
-   ```powershell
-   npx wrangler d1 create easycodey-counter
-   ```
-
-   Je ziet een regel met `database_id`. Kopieer dat nummer.
-
-7. Open het bestand **worker/wrangler.toml**. Vervang
-   `VUL_HIER_JE_DATABASE_ID_IN` door het nummer dat je hebt gekopieerd.
-   Bewaar het bestand.
-
-8. Typ dit en druk op Enter:
-
-   ```powershell
-   npx wrangler d1 execute easycodey-counter --remote --file=schema.sql
-   ```
-
-9. Typ dit en druk op Enter:
-
-   ```powershell
-   npx wrangler deploy
-   ```
-
-10. Je krijgt een adres zoals
-    `https://easycodey-counter.jouw-naam.workers.dev`.
-    Open dat adres in je browser met `/health` erachter. Je moet
-    `{"ok":true,...}` zien.
-
-11. Open het bestand **site-config.json** in de projectmap. Zet je adres bij
-    `counterApi`:
-
-    ```json
-    "counterApi": "https://easycodey-counter.jouw-naam.workers.dev"
-    ```
-
-12. Bewaar het bestand en vraag je assistent om het te publiceren (of doe het
-    zelf met Git).
+3. Er opent een browservenster. Klik op **Allow**.
+4. Verder gaat het vanzelf. Het script maakt de database, vult het nummer in,
+   maakt de tabellen, zet de teller live en schrijft het adres in
+   `site-config.json`.
+5. Vraag daarna je assistent om de website te publiceren.
 
 **Klaar als:** je in het eigenaarspaneel cijfers ziet en het adres met
 `/health` antwoordt.
 
-> Lukt de eigen teller even niet? De app valt automatisch terug op de
-> eenvoudige teller. Bezoekers merken daar niets van.
+> Lukt het script niet? In `worker/README.md` staan dezelfde stappen los achter
+> elkaar. En lukt de eigen teller even niet? Dan valt de app automatisch terug
+> op de eenvoudige teller. Bezoekers merken daar niets van.
 
 ---
 
-## Deel 4 — Bezoekcijfers met details (GoatCounter, ongeveer 5 minuten)
+## Deel 4 — Voortgang op meerdere toestellen (overweging)
 
-**Waarom:** dan zie je welke projecten het populairst zijn, welke versie mensen
-gebruiken en uit welke regio ze komen. Zonder account worden er **geen**
-gegevens naar GoatCounter gestuurd.
+**Waarom:** je voortgang staat nu bewust alleen op het toestel waar je leert.
+Dat is de privacyvriendelijkste keuze: er staat niets op een server en er is
+geen account in de cloud nodig.
 
-1. Maak een gratis account op **https://www.goatcounter.com/signup**.
-2. Kies een korte naam, bijvoorbeeld `easycodey`.
-3. Je krijgt een adres zoals `https://easycodey.goatcounter.com`.
-4. Open **site-config.json** en zet je naam bij `analyticsSite`:
+**Wat er nu al kan, zonder server:**
 
-   ```json
-   "analyticsSite": "easycodey"
-   ```
+1. Open **Mijn profiel** op het toestel waar je voortgang staat.
+2. Kies **⤓ Back-up downloaden**. Je krijgt een bestandje.
+3. Neem dat bestandje mee naar je andere toestel (bijvoorbeeld via e-mail aan
+   jezelf of een usb-stick).
+4. Kies daar **⤒ Back-up herstellen** en selecteer het bestandje.
 
-5. Bewaar het bestand en laat het publiceren.
+Zo neem je je voortgang mee zonder dat EasyCodey iets verstuurt.
 
-**Klaar als:** je je dashboard op `https://easycodey.goatcounter.com` ziet en
-er na een bezoek een cijfer bijkomt.
+**Echte automatische sync (telefoon ↔ computer):** dat kan technisch wel, maar
+dan moet er een beveiligde server en een database bij komen. Dat verandert het
+uitgangspunt "alles blijft lokaal". Er komen dan ook accounts met een wachtwoord
+op de server bij kijken, en jij wordt verantwoordelijk voor die gegevens.
 
-> EasyCodey is cookieloos en verstuurt geen namen, e-mails of profielen.
+> Wil je dat echt? Zeg het gerust. Dan teken ik eerst een kleine, privévriendelijke
+> opzet (alleen voortgang, versleuteld, geen namen of e-mails) en leg ik de keuzes
+> in gewone taal uit voordat er iets gebouwd wordt.
 
 ---
 
