@@ -623,6 +623,22 @@ function renderOverviewPage() {
       </div>
     </header>
 
+    ${(() => {
+      const first = IDEAS.find((idea) => idea.id === "raad-het-getal") || IDEAS[0];
+      return `<section class="continue-card start-card" id="start-card" aria-label="Begin met een project" hidden>
+        <span class="continue-emoji" aria-hidden="true">${esc(first.emoji)}</span>
+        <div class="continue-copy">
+          <p class="continue-kicker">Nieuw hier?</p>
+          <h2>Begin met één klein project.</h2>
+          <p>${esc(first.title)}: ${first.steps.length} korte stappen. Ik leg elke stap uit.</p>
+        </div>
+        <div class="start-actions">
+          <a class="btn brand" href="../idee/${first.id}/">▶ Begin nu</a>
+          <button class="btn ghost" type="button" id="start-later">Later</button>
+        </div>
+      </section>`;
+    })()}
+
     <div id="project-list">
         ${sections}
     </div>
@@ -637,6 +653,36 @@ function renderOverviewPage() {
       var input = document.getElementById("project-filter");
       var empty = document.getElementById("no-results");
       var sections = [].slice.call(document.querySelectorAll(".static-category"));
+
+      /* Zelfde rustige startkaart als in de app. De keuze "Later" en het
+         beginnen met een project delen we via dezelfde opslag, dus de kaart
+         verdwijnt op beide plekken tegelijk. */
+      var startCard = document.getElementById("start-card");
+      var START_KEY = "easycodey.startTip.v1";
+      function readState() {
+        try { return JSON.parse(localStorage.getItem("easycodey.v1") || "{}"); }
+        catch (error) { return {}; }
+      }
+      function hasProgress(state) {
+        var progress = state.progress || {};
+        return Object.keys(progress).some(function (id) {
+          var entry = progress[id];
+          return Boolean(entry && ((entry.steps && entry.steps.length) || entry.updatedAt));
+        });
+      }
+      if (startCard) {
+        var state = readState();
+        var dismissed = false;
+        try { dismissed = localStorage.getItem(START_KEY) === "1"; } catch (error) {}
+        var last = (state.lastProject && state.lastProject.ideaId) || "";
+        if (!dismissed && !hasProgress(state) && !last) startCard.hidden = false;
+        var later = document.getElementById("start-later");
+        if (later) later.addEventListener("click", function () {
+          try { localStorage.setItem(START_KEY, "1"); } catch (error) {}
+          startCard.hidden = true;
+        });
+      }
+
       if (!input) return;
       var typed = false;
       function apply() {
@@ -1200,6 +1246,17 @@ function renderInstallPage() {
       </section>
     </div>
 
+    <section class="panel install-section" id="kies-toestel">
+      <h2>Kies je toestel</h2>
+      <p class="static-lead">Je leest maar drie stappen. Kies hieronder je apparaat.</p>
+      <div class="static-actions">
+        <a class="btn brand" href="#android">📱 Android</a>
+        <a class="btn ghost" href="#iphone">🍎 iPhone of iPad</a>
+        <a class="btn ghost" href="#computer">💻 Computer</a>
+        <a class="btn ghost" href="#chromebook">🧑‍💻 Chromebook</a>
+      </div>
+    </section>
+
     <section class="panel install-section install-security" id="veiligheid">
       <h2><span class="h2-num">✓</span> Veilig en privé</h2>
       <p class="static-lead">
@@ -1234,7 +1291,7 @@ function renderInstallPage() {
       </p>
     </section>
 
-    <section class="panel install-section">
+    <section class="panel install-section" id="android">
       <h2><span class="h2-num">1</span> Android (Chrome)</h2>
       <ol class="install-steps">
         <li>
@@ -1256,7 +1313,7 @@ function renderInstallPage() {
       </p>
     </section>
 
-    <section class="panel install-section">
+    <section class="panel install-section" id="iphone">
       <h2><span class="h2-num">2</span> iPhone of iPad (Safari)</h2>
       <ol class="install-steps">
         <li>
@@ -1275,7 +1332,7 @@ function renderInstallPage() {
       <p class="install-note">iOS toont geen installatieprompt; <em>Zet op beginscherm</em> is de juiste manier.</p>
     </section>
 
-    <section class="panel install-section">
+    <section class="panel install-section" id="computer">
       <h2><span class="h2-num">3</span> Windows of macOS (Chrome of Edge)</h2>
       <ol class="install-steps">
         <li>
@@ -1284,9 +1341,9 @@ function renderInstallPage() {
         </li>
         <li>
           <strong>Klik op het installatie-icoon</strong>
-          Het staat rechts in de adresbalk (een klein scherm met een pijl). Zie je het niet? Klik op
-          <strong>⋮</strong> → <em>Cast, opslaan en delen</em> → <em>App installeren</em>. In Edge:
-          <strong>⋯</strong> → <em>Apps</em> → <em>Deze site als app installeren</em>.
+          Rechts in de adresbalk: een klein scherm met een pijltje. Zie je het niet? Gebruik het menu:<br />
+          <em>Chrome:</em> ⋮ → <em>App installeren</em>.<br />
+          <em>Edge:</em> ⋯ → <em>Apps</em> → <em>Deze site als app installeren</em>.
         </li>
         <li>
           <strong>Bevestig</strong>
@@ -1300,7 +1357,7 @@ function renderInstallPage() {
       </p>
     </section>
 
-    <section class="panel install-section">
+    <section class="panel install-section" id="chromebook">
       <h2><span class="h2-num">4</span> Chromebook (Chrome)</h2>
       <ol class="install-steps">
         <li>
@@ -1316,6 +1373,18 @@ function renderInstallPage() {
           EasyCodey staat in het launcher-menu en werkt daarna ook offline.
         </li>
       </ol>
+    </section>
+
+    <section class="panel install-section" id="gelukt">
+      <h2><span class="h2-num">✓</span> Is het gelukt?</h2>
+      <p class="static-lead">
+        Kijk op je startscherm, in je app-lijst of in je startmenu. Staat EasyCodey ertussen? Dan ben je klaar.
+      </p>
+      <div class="install-check warn" id="install-check" hidden></div>
+      <div class="static-actions">
+        <button class="btn brand" type="button" id="install-yes">✅ Ik zie EasyCodey in mijn apps</button>
+        <button class="btn ghost" type="button" id="install-no" hidden>Nog niet gelukt</button>
+      </div>
     </section>
 
     <section class="panel install-section">
@@ -1396,6 +1465,35 @@ function renderInstallPage() {
   ${footer(prefix)}
   ${SITE_TRACKING(prefix)}
   ${THEME_SCRIPT}
+  <script>
+    (function () {
+      var KEY = "easycodey.install.confirmed.v1";
+      var box = document.getElementById("install-check");
+      var yes = document.getElementById("install-yes");
+      var no = document.getElementById("install-no");
+      if (!box || !yes || !no) return;
+      function render(ok) {
+        box.hidden = false;
+        box.className = "install-check " + (ok ? "ok" : "warn");
+        box.innerHTML = ok
+          ? "<strong>✅ Gelukt!</strong> EasyCodey staat op je apparaat. Je hoeft niets meer te doen."
+          : "<strong>Nog niet gelukt.</strong> Gebruik Chrome, Edge of Safari en volg de drie stappen hierboven opnieuw.";
+        yes.hidden = ok;
+        no.hidden = !ok;
+      }
+      var confirmed = false;
+      try { confirmed = localStorage.getItem(KEY) === "1"; } catch (error) {}
+      if (confirmed) render(true);
+      yes.addEventListener("click", function () {
+        try { localStorage.setItem(KEY, "1"); } catch (error) {}
+        render(true);
+      });
+      no.addEventListener("click", function () {
+        try { localStorage.removeItem(KEY); } catch (error) {}
+        render(false);
+      });
+    })();
+  </script>
 </body>
 </html>
 `;

@@ -1101,6 +1101,19 @@
       </div>
     </header>
 
+    <section class="continue-card start-card" id="start-card" aria-label="Begin met een project" hidden>
+        <span class="continue-emoji" aria-hidden="true">🎯</span>
+        <div class="continue-copy">
+          <p class="continue-kicker">Nieuw hier?</p>
+          <h2>Begin met één klein project.</h2>
+          <p>Raad het getal: 5 korte stappen. Ik leg elke stap uit.</p>
+        </div>
+        <div class="start-actions">
+          <a class="btn brand" href="../idee/raad-het-getal/">▶ Begin nu</a>
+          <button class="btn ghost" type="button" id="start-later">Later</button>
+        </div>
+      </section>
+
     <div id="project-list">
         <section class="static-category" id="categorie-games" data-category="Games">
           <h2>🎮 Games <span class="count">36</span></h2>
@@ -2502,6 +2515,36 @@
       var input = document.getElementById("project-filter");
       var empty = document.getElementById("no-results");
       var sections = [].slice.call(document.querySelectorAll(".static-category"));
+
+      /* Zelfde rustige startkaart als in de app. De keuze "Later" en het
+         beginnen met een project delen we via dezelfde opslag, dus de kaart
+         verdwijnt op beide plekken tegelijk. */
+      var startCard = document.getElementById("start-card");
+      var START_KEY = "easycodey.startTip.v1";
+      function readState() {
+        try { return JSON.parse(localStorage.getItem("easycodey.v1") || "{}"); }
+        catch (error) { return {}; }
+      }
+      function hasProgress(state) {
+        var progress = state.progress || {};
+        return Object.keys(progress).some(function (id) {
+          var entry = progress[id];
+          return Boolean(entry && ((entry.steps && entry.steps.length) || entry.updatedAt));
+        });
+      }
+      if (startCard) {
+        var state = readState();
+        var dismissed = false;
+        try { dismissed = localStorage.getItem(START_KEY) === "1"; } catch (error) {}
+        var last = (state.lastProject && state.lastProject.ideaId) || "";
+        if (!dismissed && !hasProgress(state) && !last) startCard.hidden = false;
+        var later = document.getElementById("start-later");
+        if (later) later.addEventListener("click", function () {
+          try { localStorage.setItem(START_KEY, "1"); } catch (error) {}
+          startCard.hidden = true;
+        });
+      }
+
       if (!input) return;
       var typed = false;
       function apply() {
