@@ -7622,11 +7622,11 @@ function setView(view, mode) {
   const hint = view.querySelector("[data-view-hint]");
   if (hint) {
     hint.textContent = isCode
-      ? "Alle code van dit project, stap voor stap. Kies ▶ Speel dit idee om terug te gaan."
-      : "Kies ▶ Speel dit idee voor de app, of ⌨ Gebruik dit idee voor alle code.";
+      ? "Hier staat alle code met uitleg. Kies ▶ Speel de echte code om het programma te starten."
+      : "De demo werkt meteen, ook offline. Wil je het echte programma? Kies ▶ Speel de echte code.";
   }
 
-  // Sta je diep in de code en kies je opnieuw "Speel dit idee", dan brengen we
+  // Sta je diep in de code en kies je opnieuw "Probeer de demo", dan brengen we
   // de app-weergave in beeld in plaats van je bovenaan de code achter te laten.
   if (!isCode) {
     const panel = view.querySelector(".preview-panel");

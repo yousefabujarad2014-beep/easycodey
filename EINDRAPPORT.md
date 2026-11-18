@@ -87,12 +87,13 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - "Markeer als afgerond" en "Voortgang resetten".
 - Zijbalk met projectgegevens, vervolgprojecten en "Vraag AI om hulp".
 - Per stap: "Vraag AI over deze stap", inclusief project- en stapcontext.
-- Actiebalk met **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**.
-- **Speel dit idee** toont de speelbare app-weergave van het project, meteen in de pagina.
-- **Gebruik dit idee** toont in dezelfde plek alle code, stap voor stap.
+- Actiebalk met **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**.
+- **Probeer de demo** toont meteen een korte, interactieve demo in de pagina, ook offline en zonder Python.
+- **Bekijk de code** toont in dezelfde plek alle code en uitleg, stap voor stap.
+- **Speel de echte code** start het echte Python-programma met Pyodide.
 - **Programmeer zelf** opent de editor met alle stappen als één programma, met commentaar per stap.
 - **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm, waarin ook de **vraag van het programma** staat, en daarna op **Enter** drukt.
-- **App-weergave**: de pagina opent standaard in een schone preview zonder code. De knoppen **▶ Speel dit idee** en **⌨ Gebruik dit idee** zijn samen de schakelaar: app en code zitten dus in dezelfde twee acties. In de app-stand speel je meteen mee; in de code-stand zie je alle stappen en uitleg. De code blijft altijd in de HTML staan voor SEO en tests.
+- **Demo-weergave**: de pagina opent standaard in een korte demo zonder code. De knoppen **▶ Probeer de demo** en **📖 Bekijk de code** zijn samen de schakelaar. De demo is een snelle indruk; het echte programma start je met **▶ Speel de echte code**. De code blijft altijd in de HTML staan voor SEO en tests.
 - Elke preview is een echte, offline demo die bij het onderwerp past: Snake, Tetris, Pong, Galgje, rekenmachine, weer, portscanner, molecuulmassa, warmteverspreiding enz. Alle 161 projecten hebben een preview; waar nodig via een passende categorie-fallback.
 - Dezelfde uitleg staat op elke vaste projectpagina en in het Python-speelveld.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
@@ -331,7 +332,7 @@ FLL/
 | Editor na herladen | ✅ code blijft bewaard, ook bij een project |
 | Editor Ctrl + Enter | ✅ `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
 | Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
-| Projectacties op detailpagina | ✅ **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
+| Projectacties op detailpagina | ✅ **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
 | Projectcode in de editor | ✅ alle stappen met commentaar en projectbanner |
 | Kopiëren naar klembord | ✅ volledige projectcode op het klembord |
 | Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
@@ -341,7 +342,7 @@ FLL/
 | Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
 | Offline-cache gevuld | 42 bestanden |
 | Installatie-uitleg in de app | ✅ 3 platformstappen, sluit correct |
-| **Speel dit idee** op een projectpagina | ✅ speelbare app in de pagina; **Gebruik dit idee** toont alle code |
+| **Probeer de demo** op een projectpagina | ✅ korte demo in de pagina; **Bekijk de code** toont alle code; **Speel de echte code** start Pyodide |
 | **Programmeer zelf** met autoplay | ✅ volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
 | Site herladen zonder internet | ✅ laadt uit de cache |
 | Python uitvoeren zonder internet | ✅ werkt na eenmalig laden |
@@ -355,7 +356,7 @@ FLL/
 | AI-coach en installatiehulp lokaal | 29/29 checks: gratis online AI geeft een echt streaming antwoord, providerkeuze en statuslabel, vervolgvragen, offline modus met eigen uitleg en code, in-app-browserwaarschuwing, uitleg over Beveiligd en prive en cacheversie v16 |
 | AI-gesprek, foutuitleg en toegankelijkheid lokaal | 13/13 checks: gesprek bewaard na verversen, “Ik bedoelde iets anders” vult het invoerveld, NameError/SyntaxError/TypeError in eenvoudig Nederlands met regelnummer, focusbeheer en aria-expanded |
 | Eigenaarslogin en inzichten lokaal | 43/43 checks: login Yousef Abujarad, Eigenaar-label, beheer zonder code, wachtwoord op de vergrendelpoort, app-status, bezoekcijfers, eigen teller, opt-out, stop met meten, beschermd eigenaarsaccount en filters |
-| Gratis APK-download | ✅ `/download/` met versie 1.0.0, 1,89 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
+| Gratis APK-download | ✅ `/download/` met versie 1.0.0, 1,98 MB, SHA-256, installatie-uitleg, FAQ en een bereikbare APK |
 | Ingebouwde anonieme teller | 9/9 checks: bezoek en unieke bezoeker op een vaste projectpagina, niet dubbel bij herladen, gedeelde unieke-vlag met de SPA, APK-download, geen tweede unieke bezoeker op de downloadpagina, installatie één keer per toestel en geen dubbele installatiemelding |
 | Editor, privacy en netwerk (v16) | 25/25 checks: regelnummers, code-kleuren, cursorpositie, invoegknop, Tab, **Bekijk regel N**, tekstgrootte, privacyoverzicht, alles wissen, online/offline badge, AI-intake en de wissen-melding |
 | Zoekfix en slimme inspringing | 14/14 checks: autofill met focus en late autofill worden opgeruimd, de URL blijft schoon, echt typen werkt, Enter na `:` zet vier spaties, Enter neemt inspringing over, de telefoon-Enter doet hetzelfde, Shift+Tab haalt spaties weg en Ctrl+Enter voert nog uit |
@@ -364,7 +365,7 @@ FLL/
 | Invoer-pop-up met de echte vraag | ✅ 2/2 checks: vraag zichtbaar en antwoord bereikt Python |
 | Chique huisstijl in headless Chrome | ✅ Fraunces/Plus Jakarta Sans geladen, groen-goud-palet, geen horizontale overflow |
 | Nieuw logo en app-iconen | ✅ `logo.svg`, 4 PNG-iconen en Apple-touch-icoon opnieuw gegenereerd |
-| Vaste pagina's lokaal | 103/103 checks geslaagd, inclusief Speel dit idee / Gebruik dit idee, Snake-preview en de downloadpagina met QR |
+| Vaste pagina's lokaal | 103/103 checks geslaagd, inclusief Probeer de demo / Bekijk de code, Snake-preview en de downloadpagina met QR |
 | App-preview per project | ✅ 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
 | Weerbaarheid bij laadfouten | ✅ 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
 | Snake-preview | ✅ canvas, D-pad en toetsen; speelbaar in de browser |
@@ -373,10 +374,10 @@ FLL/
 | Projectpagina zonder slash | ✅ 301 naar de map met slash |
 | Overzicht `/projecten/` | ✅ 161 links, 10 categorieën, zoekfilter en `CollectionPage` |
 | Sitemap lokaal | ✅ geldige XML, 168 URL's, productie-startpagina aanwezig |
-| Speel dit idee vanaf vaste pagina | ✅ app-weergave in de pagina; **Programmeer zelf** opent `?play=1` met volledige code en Pyodide-uitvoer |
+| Demo en echte code vanaf vaste pagina | ✅ demo in de pagina; **Speel de echte code** opent `?play=1` met volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
-| Installatiepagina `/installeren/` | ✅ 8 secties, 3 Android-stappen, eigen titel en canonical |
+| Installatiepagina `/installeren/` | ✅ 10 secties, keuzeknoppen per toestel, "Is het gelukt?", eigen titel en canonical |
 | QR-code op installatiepagina | ✅ laadt als SVG en is zichtbaar op mobiel |
 | Installatiepagina mobiel | ✅ geen horizontale overflow, één kolom |
 | Contactpagina `/contact/` | ✅ telefoon/WhatsApp, e-mail, eigen titel, canonical en JSON-LD |

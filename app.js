@@ -2298,11 +2298,14 @@ function renderDetail(id) {
     <section class="project-view is-app" data-project-view data-idea-id="${e(idea.id)}">
       <div class="project-view-bar">
         <div class="view-tabs" role="tablist" aria-label="Weergave">
-          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">▶ Speel dit idee</button>
-          <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">⌨ Gebruik dit idee</button>
+          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">▶ Probeer de demo</button>
+          <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">📖 Bekijk de code</button>
         </div>
         <div class="view-extras">
-          <button class="btn brand" type="button" data-action="program-idea" data-idea-id="${e(
+          <button class="btn brand" type="button" data-action="play-idea" data-idea-id="${e(
+            idea.id
+          )}">▶ Speel de echte code</button>
+          <button class="btn ghost" type="button" data-action="program-idea" data-idea-id="${e(
             idea.id
           )}">⌨ Programmeer zelf</button>
           <button class="btn ghost" type="button" data-action="download-idea" data-idea-id="${e(
@@ -2314,7 +2317,7 @@ function renderDetail(id) {
           <a class="link-btn" href="idee/${encodeURIComponent(idea.id)}/">Vaste projectpagina</a>
         </div>
       </div>
-      <p class="view-hint" data-view-hint>Kies <strong>▶ Speel dit idee</strong> voor de app, of <strong>⌨ Gebruik dit idee</strong> voor alle code.</p>
+      <p class="view-hint" data-view-hint><strong>Probeer de demo</strong> werkt meteen, ook offline. Wil je het echte programma? Kies <strong>▶ Speel de echte code</strong>.</p>
       <div class="preview-panel" data-view-panel="app">
         <div class="preview-stage" data-preview-stage>
           <div class="preview-fallback">
@@ -2323,7 +2326,7 @@ function renderDetail(id) {
             <p>${e(idea.summary)}</p>
           </div>
         </div>
-        <p class="preview-caption"><strong>Dit is de app-weergave.</strong> Speel de demo of kies <em>⌨ Gebruik dit idee</em> voor alle code en uitleg.</p>
+        <p class="preview-caption"><strong>Dit is een korte demo.</strong> Alle code en uitleg staan bij <em>📖 Bekijk de code</em>. Het echte programma start je met <em>▶ Speel de echte code</em>.</p>
       </div>
 
     <div class="detail-grid">

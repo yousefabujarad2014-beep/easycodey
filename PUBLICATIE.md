@@ -196,7 +196,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `/projecten/` toont alle 161 projecten, gegroepeerd per categorie.
 - [ ] `/idee/<id>/` toont een eigen titel, description en canonical.
 - [ ] `/idee/<id>` zonder slash stuurt door naar `/idee/<id>/`.
-- [ ] **▶ Speel dit idee** op een vaste pagina toont de speelbare app in de pagina; **Programmeer zelf** opent `?play=1` en voert de code uit.
+- [ ] **▶ Probeer de demo** op een vaste pagina toont de korte demo in de pagina; **▶ Speel de echte code** opent `?play=1` en voert de code uit.
 - [ ] Zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren werken.
 - [ ] Filters staan in de URL en blijven na verversen bewaard.
 - [ ] Projectpagina toont stappen, code en tips.
@@ -250,8 +250,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De opt-out op het profiel en **Stop met meten** in het eigenaarspaneel zetten de telling uit; er wordt dan niets verstuurd.
 - [ ] Met `counterApi` in `site-config.json` gebruikt de app de eigen Cloudflare-teller; zonder `counterApi` valt hij terug op Abacus.
 - [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.
-- [ ] Projectpagina: **▶ Speel dit idee**, **⌨ Gebruik dit idee**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
-- [ ] **Speel dit idee** toont de app, **Gebruik dit idee** toont de code en **Programmeer zelf** voert het volledige project uit in het speelveld.
+- [ ] Projectpagina: **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
+- [ ] **Probeer de demo** toont de korte demo, **Bekijk de code** toont de code en **Speel de echte code** voert het volledige project uit in het speelveld.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
 - [ ] `/doneren/` toont IBAN **BE69 0638 3621 2278**, rekeninghouder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB** en de transparantie.
 - [ ] De doneerpagina linkt terug naar de app, contact en alle projecten.
