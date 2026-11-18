@@ -3551,6 +3551,16 @@ h1, h2, h3,
   border-color: var(--gold);
 }
 
+.donate-header-btn {
+  width: auto;
+  min-height: 38px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
 /* ------------------------------ knoppen & chips ------------------------------ */
 
 .btn {
@@ -9231,6 +9241,22 @@ select.pv-input option {
     linear-gradient(140deg, color-mix(in srgb, var(--accent-soft) 70%, var(--panel)), var(--panel));
   border: 1px solid color-mix(in srgb, var(--gold) 50%, var(--line));
   box-shadow: 0 30px 60px -46px rgba(35, 29, 18, 0.8);
+}
+
+.diploma-card.diploma-owner {
+  border-color: var(--gold);
+  background:
+    linear-gradient(140deg, color-mix(in srgb, var(--gold) 26%, var(--panel)), var(--panel));
+}
+
+.diploma-card.diploma-owner .diploma-inner {
+  background:
+    radial-gradient(620px 240px at 50% -10%, color-mix(in srgb, var(--gold) 28%, transparent), transparent 72%),
+    var(--panel);
+}
+
+.diploma-card.diploma-owner .diploma-seal {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--gold) 22%, transparent);
 }
 
 .diploma-card::before {

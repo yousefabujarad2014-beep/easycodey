@@ -173,10 +173,17 @@ async function request(path, tries = 3) {
   let lastError = null;
   for (let attempt = 0; attempt < tries; attempt += 1) {
     try {
-      const response = await fetchWithTimeout(`${API}${path}`, {
-        cache: "no-store",
-        headers: { Accept: "application/json" }
-      });
+      // Abacus antwoordt soms met een oude, gecachte fout (bijv. een 500)
+      // terwijl de sleutel gewoon bestaat. Een unieke parameter per poging
+      // dwingt een verse lezing af; dat mag geen tellingen beïnvloeden.
+      const separator = path.includes("?") ? "&" : "?";
+      const response = await fetchWithTimeout(
+        `${API}${path}${separator}t=${Date.now()}-${attempt}`,
+        {
+          cache: "no-store",
+          headers: { Accept: "application/json" }
+        }
+      );
       if (response.status === 404) return { status: 404, ok: false, data: null };
       if (response.ok) {
         return { status: response.status, ok: true, data: await response.json() };

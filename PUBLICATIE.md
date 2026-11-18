@@ -1,6 +1,6 @@
 # EasyCodey — publicatie op GitHub en Render
 
-**Laatst bijgewerkt:** 14 november 2026
+**Laatst bijgewerkt:** 18 november 2026
 **Projectmap:** `C:\Users\Home\Desktop\FLL`
 
 Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie naar GitHub en Render verloopt. Geheime waarden (tokens, sleutels, toegangscodes) staan **niet** in dit bestand.
@@ -11,7 +11,9 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 |---|---|
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
-| Laatste code-build | ✅ laatste commit op `main` (v16 + robuuste zoekfix + slimme inspringing); live gecontroleerd met 28/28 checks |
+| Laatste code-build | ✅ laatste commit op `main` (v17 + doneren in de app + eigenaarsdiploma + robuustere tellers); alle tests en audits groen |
+| Doneren in de app (v17) | ✅ zichtbare **♥ Doneren**-knop opent het IBAN-venster met kopieerknop, ook zonder server op GitHub Pages |
+| Eigenaarsdiploma (v17) | ✅ **Diploma Bedrijfseigenaar** staat op `#/diploma` voor het ingelogde eigenaarsaccount, buiten het beheerpaneel |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
 | Editor (v16) | ✅ regelnummers, code-kleuren, cursorpositie, telefoontoetsenbalk, **Bekijk regel N** en slimme inspringing (Enter na `:`, Shift+Tab) |
 | Privacy en leesbaarheid (v16) | ✅ privacyoverzicht, alles wissen met twee bevestigingen, tekstgrootte en meer contrast |

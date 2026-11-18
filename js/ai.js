@@ -259,24 +259,27 @@ const EMPTY_CONFIG = {
   donateBank: ""
 };
 
+async function fetchJsonConfig(url) {
+  const response = await fetch(url, {
+    cache: "no-store",
+    headers: { Accept: "application/json" }
+  });
+  if (!response.ok) throw new Error("config");
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("json")) throw new Error("config");
+  const data = await response.json();
+  if (!data || typeof data !== "object") throw new Error("config");
+  return data;
+}
+
 export async function fetchConfig() {
   // Eerst de Node-server (lokaal/Render). Die kent ook de online AI-coach.
   try {
-    const response = await fetch("/api/config", {
-      cache: "no-store",
-      headers: { Accept: "application/json" }
-    });
-    if (!response.ok) throw new Error("config");
-    return normalizeConfig(await response.json());
+    return normalizeConfig(await fetchJsonConfig("/api/config"));
   } catch {
     // GitHub Pages heeft geen server: gebruik de statische config voor donaties.
     try {
-      const response = await fetch("site-config.json", {
-        cache: "no-store",
-        headers: { Accept: "application/json" }
-      });
-      if (!response.ok) throw new Error("config");
-      return normalizeConfig(await response.json());
+      return normalizeConfig(await fetchJsonConfig("site-config.json"));
     } catch {
       return { ...EMPTY_CONFIG };
     }

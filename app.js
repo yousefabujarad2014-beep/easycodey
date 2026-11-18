@@ -76,7 +76,7 @@ function showCodeFallback(root) {
 }
 
 const LIVE_URL = "https://yousefabujarad2014-beep.github.io/easycodey/";
-const APP_VERSION = "v16";
+const APP_VERSION = "v17";
 const OWNER_CODE_HASH = "j0qwup";
 const OWNER_SESSION_KEY = "easycodey.owner.unlocked.v1";
 const INSTALL_CONFIRMED_KEY = "easycodey.install.confirmed.v1";
@@ -276,11 +276,14 @@ function shareProgress() {
 function shareDiploma(button) {
   const title = button?.dataset.diplomaTitle || "EasyCodey-diploma";
   const id = button?.dataset.diplomaId || "";
+  const kind = button?.dataset.diplomaKind || "";
   const active = store.getActiveProfile();
   const name = active?.name?.trim() || "Python-programmeur";
-  const text = `${name} heeft het diploma "${title}"${
-    id ? ` (${id})` : ""
-  } van EasyCodey gehaald! Rond zelf 10 Python-projecten af en verdien ook een diploma.`;
+  const label = `het diploma "${title}"${id ? ` (${id})` : ""}`;
+  const text =
+    kind === "owner"
+      ? `${name} heeft ${label} ontvangen en is daarmee de oprichter en eigenaar van EasyCodey.`
+      : `${name} heeft ${label} van EasyCodey gehaald! Rond zelf 10 Python-projecten af en verdien ook een diploma.`;
   return shareMessage({
     title: `EasyCodey-diploma: ${title}`,
     text,
@@ -673,6 +676,7 @@ function renderProfile() {
         </div>
         <div class="profile-actions">
           ${active.isOwner ? '<a class="btn brand" href="#/eigenaar">⚙ Eigenaarspaneel</a>' : ""}
+          ${active.isOwner ? '<a class="btn ghost" href="#/diploma">🎓 Eigenaarsdiploma</a>' : ""}
           <button class="btn ghost" type="button" data-action="profile-logout">Uitloggen</button>
           <button class="btn ghost" type="button" data-action="profile-delete">Account verwijderen</button>
         </div>
@@ -946,7 +950,10 @@ function renderOwner() {
           andere telefoons en computers hebben hun eigen lokale opslag.
         </p>
       </div>
-      <button class="btn ghost" type="button" data-action="owner-lock">Vergrendelen</button>
+      <div class="profile-actions">
+        <a class="btn brand" href="#/diploma">🎓 Eigenaarsdiploma</a>
+        <button class="btn ghost" type="button" data-action="owner-lock">Vergrendelen</button>
+      </div>
     </section>
 
     <div class="owner-stats">
@@ -1194,8 +1201,16 @@ async function loadOwnerCounter() {
 
   if (note) {
     if (totals.live) {
-      note.textContent =
-        "Actieve apps = toestellen die de app vandaag gebruikten. Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de downloadknop. Jouw eigen toestel telt niet mee.";
+      const checked = new Date(now).toLocaleTimeString("nl-BE", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+      const allZero = ["active", "visits", "unique", "installs", "downloads"].every(
+        (name) => !Number.isFinite(totals[name]) || totals[name] === 0
+      );
+      note.textContent = allZero
+        ? `De teller antwoordt correct (gecontroleerd om ${checked}). Alle cijfers staan op 0 omdat er nog geen bezoek is dat meetelt. Jouw eigen toestel, tests en ontwikkelcomputer worden nooit meegeteld. Echte bezoekers van andere toestellen verschijnen hier automatisch.`
+        : `Actieve apps = toestellen die de app vandaag gebruikten. Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de downloadknop. Jouw eigen toestel telt niet mee. Laatst gecontroleerd om ${checked}.`;
     } else if (totals.available) {
       const when = totals.at
         ? new Date(totals.at).toLocaleString("nl-BE", {
@@ -2648,15 +2663,30 @@ function renderDiploma() {
   const bigNeed = Math.max(0, 10 - stats.completed);
   const bigPct = Math.min(100, Math.round((stats.completed / 10) * 100));
 
-  const certificate = ({ id, title, unlocked, text, done, total, need, lockedText }) => {
+  const certificate = ({
+    id,
+    title,
+    unlocked,
+    text,
+    done,
+    total,
+    need,
+    lockedText,
+    kind = "",
+    hideProgress = false
+  }) => {
     const pct = total ? Math.min(100, Math.round((done / total) * 100)) : 0;
-    return `<article class="diploma-card${unlocked ? "" : " is-locked"} diploma-print-area" data-diploma-id="${e(id)}">
+    return `<article class="diploma-card${unlocked ? "" : " is-locked"}${
+      kind ? ` diploma-${kind}` : ""
+    } diploma-print-area" data-diploma-id="${e(id)}"${
+      kind ? ` data-diploma-kind="${e(kind)}"` : ""
+    }>
       <div class="diploma-inner">
         <div class="diploma-top">
           <span class="diploma-brand">✦ EasyCodey</span>
           <span class="diploma-id">${e(id)}</span>
         </div>
-        <p class="diploma-kicker">Diploma</p>
+        <p class="diploma-kicker">${kind === "owner" ? "Eigenaarsdiploma" : "Diploma"}</p>
         <h2>${e(title)}</h2>
         ${
           unlocked
@@ -2671,13 +2701,19 @@ function renderDiploma() {
                 <button class="btn ghost diploma-print" type="button" data-action="print-diploma">🖨 Print of bewaar als pdf</button>
                 <button class="btn ghost diploma-print" type="button" data-action="share-diploma" data-diploma-title="${e(
                   title
-                )}" data-diploma-id="${e(id)}">🔗 Deel dit diploma</button>
+                )}" data-diploma-id="${e(id)}" data-diploma-kind="${e(kind)}">🔗 Deel dit diploma</button>
               </div>`
             : `<div class="diploma-locked">
                 <span class="diploma-lock" aria-hidden="true">🔒</span>
                 <p>${e(lockedText)}</p>
-                <div class="progress-bar"><i style="width:${pct}%"></i></div>
-                <p class="diploma-locked-meta">${done} van ${total} klaar${need > 0 ? ` · nog ${need}` : ""}</p>
+                ${
+                  hideProgress
+                    ? ""
+                    : `<div class="progress-bar"><i style="width:${pct}%"></i></div>
+                <p class="diploma-locked-meta">${done} van ${total} klaar${
+                  need > 0 ? ` · nog ${need}` : ""
+                }</p>`
+                }
               </div>`
         }
       </div>
@@ -2694,6 +2730,23 @@ function renderDiploma() {
     need: bigNeed,
     lockedText: `Nog ${bigNeed} ${bigNeed === 1 ? "project" : "projecten"} tot je grote diploma.`
   });
+
+  // Het eigenaarsdiploma hoort bij het eigenaarsaccount, niet bij het
+  // beheerpaneel. Zo kan de eigenaar het gewoon bij de andere diploma's
+  // bekijken, printen en delen.
+  const ownerUnlocked = Boolean(active?.isOwner);
+  const ownerCertificate = ownerUnlocked
+    ? certificate({
+        id: `EC-${year}-OWNER`,
+        title: "Diploma Bedrijfseigenaar",
+        unlocked: true,
+        kind: "owner",
+        text: "Voor de oprichter en eigenaar van EasyCodey: voor het bouwen, beheren en blijven verbeteren van een gratis leerplek voor iedereen.",
+        done: 1,
+        total: 1,
+        need: 0
+      })
+    : "";
 
   const levelCertificates = LEVELS.map((level) => {
     const list = ideas.filter((idea) => idea.level === level);
@@ -2725,6 +2778,18 @@ function renderDiploma() {
     <div class="diploma-grid diploma-grid-main">
       ${bigCertificate}
     </div>
+
+    ${
+      ownerCertificate
+        ? `<div class="diploma-section-head">
+      <h2>Als eigenaar</h2>
+      <p>Dit diploma hoort bij het eigenaarsaccount en is alleen zichtbaar als je daarmee bent ingelogd.</p>
+    </div>
+    <div class="diploma-grid diploma-grid-main">
+      ${ownerCertificate}
+    </div>`
+        : ""
+    }
 
     <div class="diploma-section-head">
       <h2>Diploma per niveau</h2>

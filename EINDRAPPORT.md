@@ -1,8 +1,8 @@
 # EasyCodey — eindrapport
 
-**Datum:** 14 november 2026
+**Datum:** 18 november 2026
 **Map:** `C:\Users\Home\Desktop\FLL`
-**Status:** inhoudelijk klaar, live op GitHub Pages (versie v16)
+**Status:** inhoudelijk klaar, live op GitHub Pages (versie v17)
 
 ---
 
@@ -15,6 +15,11 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 ---
 
 ## 2. Wat er gebouwd is
+
+### Wat is nieuw in v17
+- **Doneren vanuit de app**: een zichtbare **♥ Doneren**-knop opent het IBAN-venster met kopieerknop, ook op GitHub Pages zonder server.
+- **Eigenaarsdiploma** op `#/diploma`, bereikbaar buiten het beheerpaneel voor het ingelogde eigenaarsaccount.
+- **Robuustere tellers**: cache-busting tegen oude Abacus-fouten en een duidelijke uitleg wanneer alle cijfers op 0 staan.
 
 ### Wat is nieuw in v16
 - **Editor met regelnummers, code-kleuren, cursorpositie en een telefoontoetsenbalk.**

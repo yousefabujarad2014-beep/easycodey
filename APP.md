@@ -1,6 +1,6 @@
 # EasyCodey als app
 
-**Laatst bijgewerkt:** 14 november 2026
+**Laatst bijgewerkt:** 18 november 2026
 
 EasyCodey is een **installeerbare webapp** (PWA). Je installeert dezelfde site als een app: met een eigen icoon, een eigen venster en offline ondersteuning. Er is geen app-store, account of download nodig.
 
@@ -13,6 +13,12 @@ Contact: https://yousefabujarad2014-beep.github.io/easycodey/contact/ — telefo
 Doneren: https://yousefabujarad2014-beep.github.io/easycodey/doneren/ — IBAN **BE69 0638 3621 2278**, houder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB**
 
 ---
+
+## Nieuw in v17
+
+- **Doneren vanuit de app.** De header heeft nu een duidelijke knop **♥ Doneren**. Die opent het doneervenster met het IBAN, de rekeninghouder en een kopieerknop. Ook als de site op GitHub Pages staat en er geen server is, worden de doneergegevens uit `site-config.json` geladen.
+- **Eigenaarsdiploma.** Ben je ingelogd met het eigenaarsaccount, dan staat **Diploma Bedrijfseigenaar** gewoon bij de andere diploma's op `#/diploma`. Je kunt het daar printen en delen, zonder eerst naar het beheerpaneel te gaan.
+- **Tellers robuuster.** Elke telleraanvraag krijgt een unieke cacheparameter. Zo kan een oude, gecachte fout van Abacus het echte cijfer niet meer verbergen. Staat alles op 0, dan legt het beheerpaneel uit dat jouw eigen toestel, tests en ontwikkelcomputer nooit meetellen.
 
 ## Nieuw in v16
 
@@ -115,7 +121,7 @@ Een nieuwe versie wordt automatisch geactiveerd en de pagina herlaadt zichzelf. 
 
 Krijg je een melding over een **oude versie**? Open dan altijd de beveiligde link **https://yousefabujarad2014-beep.github.io/easycodey/**. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). Gebruik geen oude snelkoppeling of lokaal bestand. De live app gebruikt HTTPS met HSTS; je browser toont een slotje. Zie je nog een oude app? Verwijder die en installeer opnieuw via de HTTPS-link.
 
-Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v16` naar `easycodey-v17`). De oude cache wordt dan bij de volgende start verwijderd.
+Voor ontwikkelaars: verhoog `VERSION` in `sw.js` (bijvoorbeeld van `easycodey-v17` naar `easycodey-v18`). De oude cache wordt dan bij de volgende start verwijderd.
 
 ### Als de app of website niet opent
 
@@ -169,7 +175,7 @@ Het script start zelf een tijdelijke headless Chrome. Staat Chrome ergens anders
 
 - **Chrome DevTools → Application → Manifest**: naam, iconen en start-URL moeten groen zijn.
 - **Application → Service Workers**: status *activated and is running*.
-- **Application → Cache Storage**: `easycodey-v16-shell` en `easycodey-runtime-v1`.
+- **Application → Cache Storage**: `easycodey-v17-shell` en `easycodey-runtime-v1`.
 - **Lighthouse → Progressive Web App**: controleert installeerbaarheid en offline werking.
 - `npm run check` controleert het manifest, de service worker, alle offline-bestanden, de 161 vaste pagina's en de sitemap.
 

@@ -34,6 +34,12 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 
 > Open de site via de server, niet via `file://`. De site gebruikt ES-modules en die werken niet als je `index.html` direct opent. Gebruik voor de echte app altijd de HTTPS-link hierboven; dan zie je het slotje in de adresbalk.
 
+## Wat is nieuw in v17?
+
+- **Doneren vanuit de app.** De **♥ Doneren**-knop in de header opent het doneervenster met IBAN, rekeninghouder en kopieerknop. De doneergegevens komen uit `site-config.json`, dus dit werkt ook op GitHub Pages zonder server.
+- **Eigenaarsdiploma.** Log in met het eigenaarsaccount en open `#/diploma`. Daar staat **Diploma Bedrijfseigenaar** bij de andere diploma's, met print- en deelknop.
+- **Robuustere tellers.** Telleraanvragen krijgen een unieke cacheparameter, zodat een oude gecachte fout het echte cijfer niet verbergt. Bij alle cijfers op 0 legt het beheerpaneel uit dat eigen toestel, tests en ontwikkelcomputer nooit meetellen.
+
 ## Wat is nieuw in v16?
 
 - **Editor met regelnummers en kleuren.** Je ziet meteen waar je bent, met een cursorindicator (regel en kolom) en een toetsenbalk voor je telefoon.

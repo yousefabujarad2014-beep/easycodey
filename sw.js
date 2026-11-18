@@ -1,7 +1,7 @@
 /* EasyCodey service worker — installeerbare app en offline modus.
    Bij een grote wijziging: verhoog VERSION, dan wordt de oude cache opgeruimd. */
 
-const VERSION = "easycodey-v16";
+const VERSION = "easycodey-v17";
 const SHELL_CACHE = `${VERSION}-shell`;
 /* De Python-runtime is groot (ongeveer 10 MB). Bewaar hem in een vaste cache,
    zodat een app-update hem niet opnieuw hoeft te downloaden. */
