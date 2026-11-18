@@ -25,7 +25,7 @@ print(kaarten)`),
     return kaarten[a] == kaarten[b]
 
 print(draai(kaarten, 0, 1))`),
-      step("Speel tot alle paren gevonden zijn", "Houd bij welke paren al gevonden zijn en stop wanneer alles open is.", `gevonden = set()
+      step("Ga door tot alle paren gevonden zijn", "Houd bij welke paren al gevonden zijn en stop wanneer alles open is.", `gevonden = set()
 
 while len(gevonden) < len(kaarten):
     a = int(input("Eerste kaart (0-7): "))
@@ -167,7 +167,7 @@ while True:
     "Je bouwt eerst een tekstversie van Snake en daarna een eenvoudige strategie die naar het voedsel toe beweegt. Zo combineer je spelregels met algoritmisch denken.",
     ["grid", "BFS", "collections.deque", "algoritme"],
     [
-      step("Bouw een tekstgrid", "Een lijst met lijsten is een simpel speelveld. Zet de slang en het voedsel erin.", `from collections import deque
+      step("Bouw een tekstgrid", "Een lijst met lijsten is een simpel bord. Zet de slang en het voedsel erin.", `from collections import deque
 
 breedte, hoogte = 12, 8
 slang = deque([(3, 3), (2, 3), (1, 3)])
@@ -396,7 +396,7 @@ if buizen and buizen[-1].x < 240:
     "Tetris vraagt een grid, vallende stukken en rij-detectie. Je leert een 2D-rooster en het roteren van vormen.",
     ["grid", "2D-lijsten", "collision", "rotatie"],
     [
-      step("Maak een leeg speelveld", "Een lijst met rijen vormt het bord. 0 betekent leeg.", `breedte, hoogte = 10, 20
+      step("Maak een leeg bord", "Een lijst met rijen vormt het bord. 0 betekent leeg.", `breedte, hoogte = 10, 20
 bord = [[0 for _ in range(breedte)] for _ in range(hoogte)]
 
 def toon():
@@ -461,7 +461,7 @@ def aantal_mijnen(x, y):
     return sum((bx, by) in mijnen for bx, by in buren(x, y))
 
 print(aantal_mijnen(3, 3))`),
-      step("Speel het spel", "Vraag om een vakje en stop bij een mijn. Houd gevonden veilige vakjes bij.", `veilig = set()
+      step("Voer het spel uit", "Vraag om een vakje en stop bij een mijn. Houd gevonden veilige vakjes bij.", `veilig = set()
 
 while True:
     x = int(input("X: "))
@@ -544,7 +544,7 @@ if gok == antwoord:
     print("Goed!")
 else:
     print("Het antwoord was:", antwoord)`),
-      step("Speel meerdere rondes", "Houd de score bij en stop na vijf vragen.", `score = 0
+      step("Doorloop meerdere rondes", "Houd de score bij en stop na vijf vragen.", `score = 0
 
 for _ in range(5):
     hint, antwoord = random.choice(list(vragen.items()))
@@ -606,7 +606,7 @@ print("Computer kiest:", computer_woord(letter, gebruikt))`)
     "Games",
     "Gemiddeld",
     "50 min",
-    "Speel 21 tegen de computer.",
+    "Probeer 21 tegen de computer te winnen.",
     "Je simuleert kaarten en een dealer. Je leert lijsten, functies en de spelregels van blackjack vereenvoudigen.",
     ["lists", "random.choice", "functies", "while"],
     [
@@ -627,7 +627,7 @@ print(trek(), trek())`),
 
 hand = [10, 11]
 print(score(hand))`),
-      step("Speel een ronde", "De speler mag kaarten blijven trekken. Daarna speelt de dealer.", `speler = [trek(), trek()]
+      step("Voer een ronde uit", "De speler mag kaarten blijven trekken. Daarna is de dealer aan de beurt.", `speler = [trek(), trek()]
 dealer = [trek(), trek()]
 
 while score(speler) < 21:
@@ -684,7 +684,7 @@ while not heeft_bingo():
 
 print("BINGO!")`)
     ],
-    ["Speel met meerdere kaarten.", "Controleer ook kolommen en diagonalen."]
+    ["Probeer met meerdere kaarten.", "Controleer ook kolommen en diagonalen."]
   ),
   idea(
     "doolhof",
@@ -798,7 +798,7 @@ if speler.top > 500:
     "Games",
     "Gemiddeld",
     "50 min",
-    "Speel een quiz tegen de computer.",
+    "Neem het op tegen de computer in een quiz.",
     "Je maakt een quiz met punten voor jou en de computer. Je leert dictionaries, random en een beurtensysteem.",
     ["dict", "random", "while", "score"],
     [
@@ -817,7 +817,7 @@ if antwoord == vraag["antwoord"]:
     print("Punt voor jou!")
 else:
     print("De computer krijgt een punt.")`),
-      step("Speel meerdere rondes", "Houd de scores bij en stop na vijf vragen.", `speler_score = 0
+      step("Doorloop meerdere rondes", "Houd de scores bij en stop na vijf vragen.", `speler_score = 0
 computer_score = 0
 
 for _ in range(5):

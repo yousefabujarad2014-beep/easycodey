@@ -431,13 +431,13 @@ function renderProjectPage(idea) {
           </div>
           <p class="detail-summary">${esc(idea.summary)}</p>
           <div class="static-actions">
-            <a class="btn brand" href="#project-view">▶ Probeer de demo</a>
+            <a class="btn brand" href="#project-view">👀 Bekijk de demo</a>
             <a class="btn ghost" href="${prefix}#/idee/${idea.id}">Open in EasyCodey</a>
           </div>
           <p class="static-note">
-            <strong>Probeer de demo</strong> laat meteen zien wat dit project doet, ook offline.
+            <strong>Bekijk de demo</strong> laat meteen zien wat dit project doet, ook offline.
             <strong>Bekijk de code</strong> toont alle code en uitleg.
-            <strong>Speel de echte code</strong> start het echte Python-programma.
+            <strong>Gebruik de code</strong> start het echte Python-programma.
             Je voortgang wordt lokaal in je browser bewaard.
             <br />
             <strong>Moet je iets typen?</strong> Vraagt dit project om invoer, dan verschijnt bovenaan je
@@ -450,15 +450,15 @@ function renderProjectPage(idea) {
       <section class="project-view is-app" id="project-view" data-project-view data-idea-id="${esc(idea.id)}">
         <div class="project-view-bar">
           <div class="view-tabs" role="tablist" aria-label="Weergave">
-            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">▶ Probeer de demo</button>
+            <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">👀 Bekijk de demo</button>
             <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">📖 Bekijk de code</button>
           </div>
           <div class="view-extras">
-            <a class="btn brand" href="${prefix}#/idee/${idea.id}?play=1">▶ Speel de echte code</a>
+            <a class="btn brand" href="${prefix}#/idee/${idea.id}?play=1">🚀 Gebruik de code</a>
             <a class="btn ghost" href="${prefix}#/programmeren?project=${idea.id}">⌨ Programmeer zelf</a>
           </div>
         </div>
-        <p class="view-hint" data-view-hint><strong>Probeer de demo</strong> werkt meteen, ook offline. Wil je het echte programma? Kies <strong>▶ Speel de echte code</strong>.</p>
+        <p class="view-hint" data-view-hint>De demo werkt meteen, ook offline. Wil je het echte programma? Kies <strong>🚀 Gebruik de code</strong>.</p>
         <div class="preview-panel" data-view-panel="app">
           <div class="preview-stage" data-preview-stage>
             <div class="preview-fallback">
@@ -467,7 +467,7 @@ function renderProjectPage(idea) {
               <p>${esc(idea.summary)}</p>
             </div>
           </div>
-          <p class="preview-caption"><strong>Dit is een korte demo.</strong> Alle code en uitleg staan bij <em>📖 Bekijk de code</em>. Het echte programma start je met <em>▶ Speel de echte code</em>.</p>
+          <p class="preview-caption"><strong>Dit is een korte demo.</strong> Alle code en uitleg staan bij <em>📖 Bekijk de code</em>. Het echte programma start je met <em>🚀 Gebruik de code</em>.</p>
         </div>
 
       <div class="detail-grid">
@@ -515,7 +515,7 @@ function renderProjectPage(idea) {
           <div class="side-card static-side-cta">
             <h3>Zelf proberen</h3>
             <p>Start het echte Python-programma en vink je stappen af.</p>
-            <a class="btn brand" href="${prefix}#/idee/${idea.id}?play=1">▶ Speel de echte code</a>
+            <a class="btn brand" href="${prefix}#/idee/${idea.id}?play=1">🚀 Gebruik de code</a>
           </div>
         </aside>
       </div>
@@ -1398,7 +1398,7 @@ function renderInstallPage() {
           <tr><td>Alle 161 projecten, uitleg, stappen en tips</td><td>✅</td></tr>
           <tr><td>Vaste projectpagina's en het overzicht</td><td>✅ na één keer online bezoek</td></tr>
           <tr><td>Voortgang, thema en eigen projecten</td><td>✅</td></tr>
-          <tr><td>Python-speelveld en editor</td><td>✅ na de eerste keer online</td></tr>
+          <tr><td>Python-uitvoer en editor</td><td>✅ na de eerste keer online</td></tr>
           <tr><td>Offline AI-coach</td><td>✅</td></tr>
           <tr><td>Online AI-coach (OpenAI)</td><td>❌ internet nodig</td></tr>
           <tr><td>Doneren per bank</td><td>❌ internet nodig</td></tr>
@@ -1406,8 +1406,8 @@ function renderInstallPage() {
       </table>
       <p class="static-note">
         De service worker bewaart de app bij de eerste installatie. De Python-runtime (ongeveer 10 MB)
-        wordt bewaard zodra je hem één keer gebruikt. Daarna werken <strong>▶ Probeer de demo</strong>,
-        <strong>▶ Speel de echte code</strong> en de editor ook zonder internet.
+        wordt bewaard zodra je hem één keer gebruikt. Daarna werken <strong>👀 Bekijk de demo</strong>,
+        <strong>🚀 Gebruik de code</strong> en de editor ook zonder internet.
       </p>
     </section>
 

@@ -152,7 +152,7 @@ WAT KUN JE MAKEN?
 - 161 projecten, van beginner tot gevorderd
 - Games, websites, rekenmachines, quizzen, simulaties, security-tools en meer
 - Elk project heeft uitleg, een stappenplan, code per stap en tips
-- Speel een project direct of open het in de programmeer-editor
+- Gebruik de code van een project direct of open het in de programmeer-editor
 - Elke projectpagina opent als een echte app-preview, met één tik naar de code
 
 VOOR WIE?

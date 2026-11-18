@@ -10,7 +10,7 @@ De site staat online op **GitHub Pages**:
 
 **https://yousefabujarad2014-beep.github.io/easycodey/**
 
-Op GitHub Pages werkt de hele site, inclusief de **gratis online AI-coach**: die gebruikt een gratis AI-dienst waarvoor je geen account of sleutel nodig hebt. Werkt die dienst even niet, dan valt de site automatisch terug op de offline coach. Het Python-speelveld, de programmeer-editor en alle 161 projecten werken volledig.
+Op GitHub Pages werkt de hele site, inclusief de **gratis online AI-coach**: die gebruikt een gratis AI-dienst waarvoor je geen account of sleutel nodig hebt. Werkt die dienst even niet, dan valt de site automatisch terug op de offline coach. De Python-uitvoer, de programmeer-editor en alle 161 projecten werken volledig.
 
 > **Wat moet ik nog doen?** De stappen die jouw eigen account of toestel nodig hebben (APK testen, gratis teller, Google, Play Store) staan in **[NOG-TE-DOEN.md](NOG-TE-DOEN.md)** in zeer eenvoudig Nederlands.
 
@@ -64,15 +64,15 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 - **AI-coach EasyCoach** in een zijpaneel, met context van het project en de stap die je bekijkt. Hij **begrijpt eerst je vraag**, stelt zo nodig 1 of 2 korte vragen en geeft daarna pas een concreet antwoord met code, uitleg en een volgende stap. Standaard via een **gratis online AI** (geen account of sleutel nodig). Je gesprek blijft **lokaal per profiel** bewaard, en met **Ik bedoelde iets anders** vult hij je invoerveld zodat je rustig kunt uitleggen wat je wél bedoelde.
 - **Offline coach**: werkt zonder internet of met de online AI uitgezet. Herkent je onderwerp, veelvoorkomende foutmeldingen en Python-begrippen, en geeft een stappenplan plus codevoorbeeld.
 - **AI-generator**: beschrijf een idee en krijg een compleet project met titel, niveau, duur, stappen, code en tips.
-- **Python-speelveld**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account. Een fout wordt in **eenvoudig Nederlands** uitgelegd met regelnummer, codefragment en tip; met **✦ Vraag EasyCoach om hulp** ga je meteen verder.
-- **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij het speelveld, op de projectpagina en op elke vaste projectpagina.
+- **Python-uitvoer**: typ Python en voer het direct in de browser uit via Pyodide (WebAssembly). Zonder server, zonder account. Een fout wordt in **eenvoudig Nederlands** uitgelegd met regelnummer, codefragment en tip; met **✦ Vraag EasyCoach om hulp** ga je meteen verder.
+- **Duidelijke invoerhulp**: vraagt een project om invoer, dan legt EasyCodey uit dat je je antwoord typt in het venster bovenaan je scherm. Dat venster toont de **vraag van het programma** en een tekstvak. Die uitleg staat bij de Python-ruimte, op de projectpagina en op elke vaste projectpagina.
 - **Programmeer-editor** (`#/programmeren`): een volledige editor met **regelnummers**, **code-kleuren**, een **toetsenbalk voor je telefoon** (:, haakjes, aanhalingstekens, 4 spaties, Enter), een cursorindicator (regel en kolom), uitvoerpaneel, voorbeelden, automatisch bewaren, downloaden als `.py` en kopiëren. Bij een fout opent **Bekijk regel N** meteen de juiste regel.
 - **Privacy-overzicht en wissen**: in **Instellingen** zie je precies hoeveel profielen, voortgang, eigen ideeën, chatberichten en editortekens er lokaal staan, plus hoeveel ruimte dat inneemt. Met **🧹 Al mijn gegevens wissen** ruim je alles in twee bevestigingen op.
 - **Leesbaar voor iedereen**: kies in de instellingen **Normaal**, **Groot** of **Extra groot**. De app respecteert ook `prefers-contrast: more` en `prefers-reduced-motion`.
 - **Online/offline badge**: bovenaan verschijnt een duidelijke melding als je offline bent, met de uitleg dat je werk bewaard blijft. Kom je terug online, dan meldt de app dat alles weer werkt.
 - **Optionele eigen teller**: naast de ingebouwde Abacus-teller kan de eigenaar een gratis **Cloudflare Worker + D1** koppelen (`worker/`). De app valt automatisch terug op Abacus als die teller even niet bereikbaar is.
-- **Projectcode in de editor**: elk project heeft **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. De demo is een snelle indruk, **Bekijk de code** toont alle code en uitleg, **Speel de echte code** start het echte Python-programma en **Programmeer zelf** opent het hele project als één programma in de editor, met commentaar per stap.
-- **Demo per project**: elke projectpagina opent standaard in een korte, interactieve demo zonder code. Met **▶ Probeer de demo** en **📖 Bekijk de code** schakel je tussen proberen en leren. De echte Python-uitvoer is een aparte, duidelijke knop: **▶ Speel de echte code**. De demo's zijn echte interactieve voorbeelden (Snake, Tetris, Pong, rekenmachine, weer, portscanner, simulaties enz.) en hebben voor alle 161 projecten een passende weergave.
+- **Projectcode in de editor**: elk project heeft **👀 Bekijk de demo**, **📖 Bekijk de code**, **🚀 Gebruik de code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. De demo is een snelle indruk, **Bekijk de code** toont alle code en uitleg, **Gebruik de code** start het echte Python-programma en **Programmeer zelf** opent het hele project als één programma in de editor, met commentaar per stap.
+- **Demo per project**: elke projectpagina opent standaard in een korte, interactieve demo zonder code. Met **👀 Bekijk de demo** en **📖 Bekijk de code** schakel je tussen proberen en leren. De echte Python-uitvoer is een aparte, duidelijke knop: **🚀 Gebruik de code**. De demo's zijn echte interactieve voorbeelden (Snake, Tetris, Pong, rekenmachine, weer, portscanner, simulaties enz.) en hebben voor alle 161 projecten een passende weergave.
 - **Installeerbare app (PWA)**: zet EasyCodey met een eigen icoon op je computer of telefoon. De app opent in een eigen venster en werkt na de eerste keer ook offline. De app controleert **automatisch** op updates (bij de start, elke 15 minuten, bij terugkeer naar de app en zodra je weer online bent) en werkt zichzelf bij. Je hoeft zelf niets te doen. Het installatievenster herkent je **browser en toestel**, toont alleen de stap die daarbij past en heeft een knop **✅ Is het gelukt?** om te controleren of de app echt geïnstalleerd is.
 - **Chique huisstijl**: warm ivoor, diepgroen en goud, met Fraunces voor koppen, verfijnde kaarten en donkere code- en footerblokken. Het logo is een eigen monogram (diepgroen vierkant, gouden rand en ivoren **E**).
 - **Doneren**: vaste pagina `/doneren/` met IBAN, naam van de rekeninghouder, bank, BIC, uitleg en transparantie. Optioneel koppel je daarnaast een externe doneerlink.
@@ -212,7 +212,7 @@ Beide zijn optioneel. Zonder `ACCESS_CODE` is de AI-coach openbaar bereikbaar zo
 
 ## Python uitproberen in de browser
 
-In de hero staat **⌨ Programmeer zelf** (naar de editor) en **▶ Snel proberen** (speelveld). In de footer staan **Programmeer zelf** en **Probeer Python**. Voor echt werk is er de volledige editor op **`#/programmeren`**, ook bereikbaar via de navigatie.
+In de hero staat **⌨ Programmeer zelf** (naar de editor) en **👀 Snel proberen** (Python-uitvoer). In de footer staan **Programmeer zelf** en **Probeer Python**. Voor echt werk is er de volledige editor op **`#/programmeren`**, ook bereikbaar via de navigatie.
 
 ### Programmeer-editor
 
@@ -229,9 +229,9 @@ In de hero staat **⌨ Programmeer zelf** (naar de editor) en **▶ Snel probere
 - Python draait via **Pyodide** (WebAssembly) in de browser.
 - De eerste keer wordt ongeveer 10 MB gedownload; daarna is het snel.
 - Code wordt niet naar de server gestuurd.
-- `input()` opent bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. Typ je antwoord daar en druk op **Enter**. EasyCodey toont die uitleg ook bij het speelveld en op de projectpagina's. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
-- Na de eerste keer bewaart de service worker de Python-runtime, zodat de editor en het speelveld ook offline werken.
-- Op een projectpagina toont **▶ Probeer de demo** de korte demo; **📖 Bekijk de code** toont alle code en **⌨ Programmeer zelf** opent dezelfde code in de editor. Met **▶ Speel de echte code** start je het echte Python-programma. De vaste projectpagina's hebben dezelfde knoppen.
+- `input()` opent bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. Typ je antwoord daar en druk op **Enter**. EasyCodey toont die uitleg ook bij de Python-ruimte en op de projectpagina's. Een oneindige loop kun je alleen stoppen door het tabblad of venster te sluiten.
+- Na de eerste keer bewaart de service worker de Python-runtime, zodat de editor en de Python-ruimte ook offline werken.
+- Op een projectpagina toont **👀 Bekijk de demo** de korte demo; **📖 Bekijk de code** toont alle code en **⌨ Programmeer zelf** opent dezelfde code in de editor. Met **🚀 Gebruik de code** start je het echte Python-programma. De vaste projectpagina's hebben dezelfde knoppen.
 
 Er zijn voorbeelden ingebouwd: hallo wereld, rekenen, loops, lijsten, functies en een variant van "Raad het getal" zonder `input()`.
 
@@ -246,7 +246,7 @@ EasyCodey is een installeerbare webapp. Je gebruikt dezelfde site en dezelfde vo
 
 Er is ook een aparte pagina **`/installeren/`** met een QR-code en uitleg per platform. Scan de QR-code met je Android-telefoon om de site meteen te openen.
 
-Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt, of met **📥 Offline klaarzetten** in het speelveld of de editor. Daarna zie je **✅ Python werkt nu ook offline**. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
+Daarna start je EasyCodey als een gewoon programma. De app werkt offline: alle projecten, je voortgang en de editor staan lokaal. Python werkt offline zodra je het één keer online hebt gebruikt, of met **📥 Offline klaarzetten** in de Python-ruimte of de editor. Daarna zie je **✅ Python werkt nu ook offline**. De online AI-coach blijft internet nodig hebben; de offline coach werkt altijd.
 
 EasyCodey haalt code en styles altijd eerst van het netwerk, zodat je nooit achter een oude versie blijft hangen. Een nieuwe service worker neemt automatisch over. Je hoeft zelf niets te doen. HTTP wordt automatisch naar HTTPS omgeleid (behalve op localhost). De live app gebruikt HTTPS met een geldig certificaat en HSTS.
 
@@ -352,7 +352,7 @@ Publiceren en aanmelden bij Google staat stap voor stap in **[GOOGLE.md](GOOGLE.
 11. Zet de online AI uit via ⚙ en stel opnieuw een vraag: je krijgt de offline coach met uitleg en code. Zet hem daarna weer aan.
 12. Stel eventueel een eigen sleutel in via ⚙ en stel een vraag.
 13. Open **Programmeren**, voer `print("Hallo")` uit en herlaad: je code moet bewaard blijven. Voer daarna `print(naam)` uit en controleer de Nederlandse uitleg met regelnummer en de knop **✦ Vraag EasyCoach om hulp**.
-14. Open een project en test **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
+14. Open een project en test **👀 Bekijk de demo**, **📖 Bekijk de code**, **🚀 Gebruik de code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**. Controleer dat de invoerhulp bij `input()` zichtbaar is.
 15. Maak op `#/profiel` een account met naam en wachtwoord, log uit en weer in, en test **Back-up downloaden** en **Back-up herstellen**. Controleer dat de chatknop verschijnt zodra je ingelogd bent.
 16. Open `#/eigenaar`, ontgrendel met de eigenaarscode en controleer het aantal profielen, de mededeling en **Alles downloaden**.
 17. Open **📲 Installeer als app**: controleer dat je browser en toestel genoemd worden, dat alleen de juiste stap zichtbaar is en dat **Is het gelukt?** eerlijk antwoord geeft. In DevTools → Application moet de service worker actief zijn.

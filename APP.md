@@ -79,13 +79,13 @@ iOS gebruikt hiervoor geen installatieprompt; de app opent daarna in een eigen v
 | Interactieve demo's en de knoppen Probeer de demo / Bekijk de code | ✅ |
 | Vaste projectpagina's `/idee/<id>/` en `/projecten/` | ✅ na één keer online bezoek |
 | Voortgang, thema, accounts en eigen projecten | ✅ |
-| Python-speelveld en editor | ✅ na de eerste keer online |
+| Python-uitvoer en editor | ✅ na de eerste keer online |
 | Offline AI-coach | ✅ |
 | Online AI-coach (gratis dienst) | ❌ internet nodig |
 | Online AI-coach met eigen OpenAI-sleutel | ❌ internet nodig |
 | Doneren per bank (pagina `/doneren/`) | ❌ internet nodig |
 
-De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldingen) bij de eerste installatie. De Python-runtime (Pyodide, ongeveer 10 MB) wordt bewaard zodra je hem één keer gebruikt, of met **📥 Offline klaarzetten**. Daarna werken **▶ Speel de echte code**, **▶ Probeer de demo** en de editor ook zonder internet, en zie je **✅ Python werkt nu ook offline**. De runtime-cache blijft bewaard bij een app-update.
+De service worker bewaart de app-shell (HTML, CSS, JavaScript, data en afbeeldingen) bij de eerste installatie. De Python-runtime (Pyodide, ongeveer 10 MB) wordt bewaard zodra je hem één keer gebruikt, of met **📥 Offline klaarzetten**. Daarna werken **🚀 Gebruik de code**, **👀 Bekijk de demo** en de editor ook zonder internet, en zie je **✅ Python werkt nu ook offline**. De runtime-cache blijft bewaard bij een app-update.
 
 Je voortgang staat per browser en per apparaat in `localStorage`. Met een optioneel account op `#/profiel` houd je gebruikers op hetzelfde apparaat gescheiden. Er is geen account op een server en geen automatische synchronisatie tussen apparaten; gebruik de back-up om je gegevens te verhuizen.
 

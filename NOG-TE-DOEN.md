@@ -20,7 +20,7 @@ https://yousefabujarad2014-beep.github.io/easycodey/
 2. Typ iets in de zoekbalk en druk op Enter. De projecten filteren meteen.
 3. Ververs de pagina met **F5**. Kijk of je gebruikersnaam **niet** in de
    zoekbalk staat. Dat was de laatste klacht; het is nu opgelost.
-4. Open een project en klik op **▶ Probeer de demo**.
+4. Open een project en klik op **👀 Bekijk de demo**.
 5. Klik op **⌨ Programmeer zelf** en druk op **Ctrl + Enter**. De code moet
    draaien.
 6. Open **Instellingen** en kies **Groot** of **Extra groot**. De tekst moet

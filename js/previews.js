@@ -256,7 +256,7 @@ function snakePreview(idea) {
       return;
     }
     started = true;
-    stateEl.textContent = aiOn ? "AI speelt" : "Bezig…";
+    stateEl.textContent = aiOn ? "AI is aan de beurt" : "Bezig…";
     if (!timer) timer = setInterval(step, 128);
   }
 
@@ -320,14 +320,14 @@ function snakePreview(idea) {
         "div",
         { class: "pv-col" },
         btn("▶ Start / pauze", start, "pv-btn-primary"),
-        aiIdea ? btn(aiOn ? "🤖 AI aan" : "🧠 AI uit", () => { aiOn = !aiOn; stateEl.textContent = aiOn ? "AI speelt" : "Jij speelt"; }, "pv-btn-ghost") : null,
+        aiIdea ? btn(aiOn ? "🤖 AI aan" : "🧠 AI uit", () => { aiOn = !aiOn; stateEl.textContent = aiOn ? "AI is aan de beurt" : "Jij bent aan de beurt"; }, "pv-btn-ghost") : null,
         btn("↻ Opnieuw", reset, "pv-btn-ghost")
       )
     ),
     h("p", { class: "pv-hint", text: "Pijltjes, WASD of de knoppen. Eet de oranje bolletjes." })
   ].filter(Boolean);
 
-  const root = frame(idea, { theme: "game", label: "Speelbaar", body: controls });
+  const root = frame(idea, { theme: "game", label: "Interactief", body: controls });
   reset();
   return root;
 }
@@ -453,7 +453,7 @@ function pongPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, scoreEl), stateEl),
       h("div", { class: "pv-canvas-wrap" }, c),
@@ -590,7 +590,7 @@ function game2048Preview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Score ", scoreEl), h("span", { class: "pv-state", text: "Schuif de tegels" })),
       wrap,
@@ -684,7 +684,7 @@ function galgjePreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-galgje" }, svg, h("div", { class: "pv-galgje-side" }, wordEl, stateEl)),
       lettersEl,
@@ -742,7 +742,7 @@ function guessPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-guess" }, h("span", { class: "pv-guess-icon", "aria-hidden": "true", text: "🔢" }), feedback),
       h("div", { class: "pv-row pv-center pv-gap" }, inputEl, btn("Raad", check, "pv-btn-primary")),
@@ -816,7 +816,7 @@ function higherLowerPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Reeks ", streakEl), h("span", { class: "pv-score" }, "Beste ", bestEl)),
       h("div", { class: "pv-card-stage" }, cardEl),
@@ -866,7 +866,7 @@ function rpsPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-rps-stage" }, h("div", { class: "pv-rps-side" }, h("span", { class: "pv-rps-label", text: "Jij" }), playerEl), h("span", { class: "pv-rps-vs", text: "VS" }), h("div", { class: "pv-rps-side" }, h("span", { class: "pv-rps-label", text: "Computer" }), cpuEl)),
       resultEl,
@@ -1009,7 +1009,7 @@ function ticTacToePreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: smart ? "Slimme AI" : "Speelbaar",
+    label: smart ? "Slimme AI" : "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Jij – computer ", scoreEl), btn("↻ Nieuw", reset, "pv-btn-ghost")),
       statusEl,
@@ -1106,7 +1106,7 @@ function quizPreview(idea) {
       if (index >= bank.length) {
         questionEl.textContent = `Klaar! Je score is ${score} / ${bank.length}.`;
         optionsEl.replaceChildren();
-        feedbackEl.textContent = score === bank.length ? "Perfect! 🏆" : "Goed gedaan! Speel opnieuw voor een betere score.";
+        feedbackEl.textContent = score === bank.length ? "Perfect! 🏆" : "Goed gedaan! Probeer opnieuw voor een betere score.";
         feedbackEl.className = "pv-feedback good";
         progressEl.textContent = "Klaar";
         optionsEl.append(btn("↻ Opnieuw", () => { index = 0; score = 0; render(); }, "pv-btn-primary"));
@@ -1120,7 +1120,7 @@ function quizPreview(idea) {
 
   return frame(idea, {
     theme: idea.category === "Onderwijs" ? "school" : "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, progressEl, h("span", { class: "pv-score" }, "Score ", scoreEl)),
       questionEl,
@@ -1180,7 +1180,7 @@ function dicePreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-dice-stage" }, diceEl),
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Totaal ", totalEl), historyEl),
@@ -1269,7 +1269,7 @@ function blackjackPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-blackjack" }, h("span", { class: "pv-hand-label", text: "Dealer" }), dealerEl, h("span", { class: "pv-hand-label", text: "Jij" }), playerEl),
       scoreEl,
@@ -1361,7 +1361,7 @@ function memoryPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Zetten ", movesEl), statusEl),
       grid,
@@ -1484,7 +1484,7 @@ function minesweeperPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "🚩 ", flagsEl), statusEl),
       grid,
@@ -1645,7 +1645,7 @@ function breakoutPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Stenen ", scoreEl), stateEl),
       h("div", { class: "pv-canvas-wrap" }, c),
@@ -1708,7 +1708,7 @@ function reactionPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       pad,
       resultEl,
@@ -1956,7 +1956,7 @@ function simonPreview(idea) {
 
   return frame(idea, {
     theme: "game",
-    label: "Speelbaar",
+    label: "Interactief",
     body: [
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Reeks ", scoreEl), btn("▶ Start", start, "pv-btn-primary")),
       board,
@@ -4243,7 +4243,7 @@ function posterPreview(idea) {
 
 function musicPreview(idea) {
   const notesEl = h("div", { class: "pv-notes" });
-  const stateEl = h("span", { class: "pv-state", text: "Klik op Speel" });
+  const stateEl = h("span", { class: "pv-state", text: "Klik op Start" });
   const scale = [261.63, 293.66, 329.63, 349.23, 392.0, 440.0, 493.88, 523.25];
   let context = null;
 
@@ -4276,7 +4276,7 @@ function musicPreview(idea) {
     label: "Audio",
     body: [
       notesEl,
-      h("div", { class: "pv-row pv-center pv-gap" }, btn("▶ Speel melodie", play, "pv-btn-primary"), stateEl),
+      h("div", { class: "pv-row pv-center pv-gap" }, btn("▶ Start melodie", play, "pv-btn-primary"), stateEl),
       h("p", { class: "pv-hint", text: "Elke klik maakt een nieuwe melodie met de Web Audio API." })
     ]
   });
@@ -5728,7 +5728,7 @@ function asteroidsPreview(idea) {
     body: [
       h("div", { class: "pv-canvas-wrap" }, c),
       h("div", { class: "pv-row pv-between" }, h("span", { class: "pv-score" }, "Score ", scoreEl), h("div", { class: "pv-row pv-gap" }, btn("↺", () => { ship.a -= 0.28; }, "pv-btn-ghost"), btn("🚀 Schiet", shoot, "pv-btn-primary"), btn("↻", () => { ship.a += 0.28; }, "pv-btn-ghost"))),
-      h("p", { class: "pv-hint", text: "Klik op het speelveld en gebruik ← → en de spatiebalk, of tik op de knoppen." })
+      h("p", { class: "pv-hint", text: "Klik op het veld en gebruik ← → en de spatiebalk, of tik op de knoppen." })
     ]
   });
 }
@@ -7622,11 +7622,11 @@ function setView(view, mode) {
   const hint = view.querySelector("[data-view-hint]");
   if (hint) {
     hint.textContent = isCode
-      ? "Hier staat alle code met uitleg. Kies ▶ Speel de echte code om het programma te starten."
-      : "De demo werkt meteen, ook offline. Wil je het echte programma? Kies ▶ Speel de echte code.";
+      ? "Hier staat alle code met uitleg. Kies 🚀 Gebruik de code om het programma te starten."
+      : "De demo werkt meteen, ook offline. Wil je het echte programma? Kies 🚀 Gebruik de code.";
   }
 
-  // Sta je diep in de code en kies je opnieuw "Probeer de demo", dan brengen we
+  // Sta je diep in de code en kies je opnieuw "Bekijk de demo", dan brengen we
   // de app-weergave in beeld in plaats van je bovenaan de code achter te laten.
   if (!isCode) {
     const panel = view.querySelector(".preview-panel");

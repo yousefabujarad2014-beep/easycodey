@@ -31,7 +31,7 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | Google Play (TWA) | ⏳ technisch voorbereid: TWA-project, keystore, `assetlinks.json`, AAB, iconen, screenshots en store-tekst. Publicatie wacht op een Play Developer-account |
 | Render (online AI-coach) | ⏳ optioneel voor een eigen server of OpenAI-sleutel; de gratis online AI werkt al zonder server |
 
-Op GitHub Pages draait alleen de statische site. De **gratis online AI-coach werkt daar wel**: hij gebruikt een gratis AI-dienst waarvoor geen account of sleutel nodig is. Alleen de server-doneerlink valt weg; de IBAN komt uit `site-config.json`. Werkt de gratis AI even niet, dan gebruikt de site automatisch de offline coach. Het Python-speelveld, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
+Op GitHub Pages draait alleen de statische site. De **gratis online AI-coach werkt daar wel**: hij gebruikt een gratis AI-dienst waarvoor geen account of sleutel nodig is. Alleen de server-doneerlink valt weg; de IBAN komt uit `site-config.json`. Werkt de gratis AI even niet, dan gebruikt de site automatisch de offline coach. Het Python-Python-ruimte, de programmeer-editor, alle 161 projecten en de installeerbare app werken volledig.
 
 ---
 
@@ -196,7 +196,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] `/projecten/` toont alle 161 projecten, gegroepeerd per categorie.
 - [ ] `/idee/<id>/` toont een eigen titel, description en canonical.
 - [ ] `/idee/<id>` zonder slash stuurt door naar `/idee/<id>/`.
-- [ ] **▶ Probeer de demo** op een vaste pagina toont de korte demo in de pagina; **▶ Speel de echte code** opent `?play=1` en voert de code uit.
+- [ ] **👀 Bekijk de demo** op een vaste pagina toont de korte demo in de pagina; **🚀 Gebruik de code** opent `?play=1` en voert de code uit.
 - [ ] Zoeken, categorie, niveau, duur, vaardigheden, verbergen en sorteren werken.
 - [ ] Filters staan in de URL en blijven na verversen bewaard.
 - [ ] Projectpagina toont stappen, code en tips.
@@ -216,7 +216,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] Met `ACCESS_CODE`: zonder code geen AI-antwoord via de eigen server.
 - [ ] Het installatievenster toont bij een in-app browser (WhatsApp/Instagram) een waarschuwing en legt uit dat “Beveiligd en privé” de installatie niet blokkeert.
 - [ ] Rate limiting geeft 429 na het maximum.
-- [ ] Python-speelveld opent en `print("Hallo")` geeft uitvoer.
+- [ ] Python-Python-ruimte opent en `print("Hallo")` geeft uitvoer.
 - [ ] **Programmeren** opent `#/programmeren` en `print("Hallo")` geeft uitvoer.
 - [ ] Editor bewaart code na herladen en **Download .py** levert een bestand op.
 - [ ] Editor toont **regelnummers** en **code-kleuren**; de cursorindicator toont **Regel N, kolom M**.
@@ -231,7 +231,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De **AI-intake** staat klaar bij een nieuw gesprek, verdwijnt na de eerste vraag en komt terug na **Gesprek wissen**.
 - [ ] De AI-coach probeert het bij drukte automatisch drie keer en houdt antwoorden kort.
 - [ ] Na verversen staat je **gebruikersnaam niet in het zoekveld** en niet in de URL, ook niet als het veld focus heeft of de browser pas later invult.
-- [ ] Invoerhulp is zichtbaar bij het speelveld en op een projectpagina; `input()` toont de vraag en een tekstvak in het venster bovenaan.
+- [ ] Invoerhulp is zichtbaar bij het Python-ruimte en op een projectpagina; `input()` toont de vraag en een tekstvak in het venster bovenaan.
 - [ ] **📥 Offline klaarzetten** laadt Python één keer en toont daarna **✅ Python werkt nu ook offline**; na een app-update blijft dat zo.
 - [ ] `#/profiel` laadt en legt uit dat een e-mailadres of telefoonnummer optioneel is.
 - [ ] Account aanmaken met naam + wachtwoord, uitloggen, opnieuw inloggen en een fout wachtwoord geven de juiste melding.
@@ -250,8 +250,8 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - [ ] De opt-out op het profiel en **Stop met meten** in het eigenaarspaneel zetten de telling uit; er wordt dan niets verstuurd.
 - [ ] Met `counterApi` in `site-config.json` gebruikt de app de eigen Cloudflare-teller; zonder `counterApi` valt hij terug op Abacus.
 - [ ] `/download/` laadt het meetscript en telt een klik op de APK als `/event/apk-download`.
-- [ ] Projectpagina: **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
-- [ ] **Probeer de demo** toont de korte demo, **Bekijk de code** toont de code en **Speel de echte code** voert het volledige project uit in het speelveld.
+- [ ] Projectpagina: **👀 Bekijk de demo**, **📖 Bekijk de code**, **🚀 Gebruik de code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code** werken.
+- [ ] **Probeer de demo** toont de korte demo, **Bekijk de code** toont de code en **Gebruik de code** voert het volledige project uit in het Python-ruimte.
 - [ ] Doneerknop verschijnt en toont het Belfius IBAN; **Kopieer IBAN** werkt.
 - [ ] `/doneren/` toont IBAN **BE69 0638 3621 2278**, rekeninghouder **Yousef Abujarad (EasyCodey)**, bank **Belfius**, BIC **GKCCBEBB** en de transparantie.
 - [ ] De doneerpagina linkt terug naar de app, contact en alle projecten.
@@ -283,7 +283,7 @@ Zet sleutels **alleen** in het Render-dashboard, nooit in de repository. `.env` 
 - Beperkt aantal gratis uren per maand.
 - Geen permanente schijf; gebruik geen server-side bestandsopslag voor gebruikersdata.
 - Voortgang, eigen projecten en editor-code staan in `localStorage` van de browser en zijn per apparaat.
-- De editor en het Python-speelveld laden Pyodide (±10 MB) de eerste keer vanaf een CDN.
+- De editor en het Python-Python-ruimte laden Pyodide (±10 MB) de eerste keer vanaf een CDN.
 
 ---
 

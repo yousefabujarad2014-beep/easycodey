@@ -2,7 +2,7 @@
   "name": "easycodey",
   "version": "2.0.0",
   "private": true,
-  "description": "EasyCodey - 161 Python-projecten met stap-voor-stap uitleg, een online Python-speelveld, voortgang, filters en een AI-coach",
+  "description": "EasyCodey - 161 Python-projecten met stap-voor-stap uitleg, een online Python-uitvoer, voortgang, filters en een AI-coach",
   "type": "module",
   "scripts": {
     "start": "node server.js",

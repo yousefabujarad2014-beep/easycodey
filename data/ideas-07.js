@@ -38,7 +38,7 @@ venster.after(random.randint(1500, 4000), maak_groen)`),
     label.config(text=f"{ms:.0f} ms", bg="#1f5eff")
 
 label.bind("<Button-1>", klik)`),
-      step("Speel opnieuw", "Reset de starttijd en plan een nieuwe ronde.", `def opnieuw(event=None):
+      step("Begin opnieuw", "Reset de starttijd en plan een nieuwe ronde.", `def opnieuw(event=None):
     global start
     start = 0
     label.config(text="Wacht...", bg="#e11d48")
@@ -115,7 +115,7 @@ geheim = random.choice(woorden)`),
         else:
             uitslag.append("⬜")
     return "".join(uitslag)`),
-      step("Speel het spel", "Geef de speler zes pogingen.", `for poging in range(6):
+      step("Voer het spel uit", "Geef de speler zes pogingen.", `for poging in range(6):
     gok = input("Raad een woord van 5 letters: ").lower().strip()
     if len(gok) != 5:
         print("Gebruik precies 5 letters.")
@@ -1065,11 +1065,11 @@ tk.Button(venster, text="Reset", command=reset).pack(side="left")`),
     "GUI",
     "Gemiddeld",
     "90 min",
-    "Speel een lokaal muziekbestand af met knoppen.",
+    "Beluister een lokaal muziekbestand met knoppen.",
     "Je leert pygame.mixer gebruiken en een bestandsdialoog openen. Je bouwt een eenvoudige speler voor je eigen muziek.",
     ["pygame", "mixer", "filedialog", "knoppen"],
     [
-      step("Start de mixer", "pygame.mixer speelt mp3 en ogg af.", `import pygame
+      step("Start de mixer", "pygame.mixer kan mp3 en ogg afspelen.", `import pygame
 
 pygame.mixer.init()
 print("Mixer klaar")`),

@@ -181,7 +181,7 @@ while loopt:
       },
       {
         title: "Teken alles en houd de snelheid vast",
-        text: "Vul het scherm, teken het eten en daarna elk stuk van de slang. Met klok.tick(10) speelt het spel tien stappen per seconde.",
+        text: "Vul het scherm, teken het eten en daarna elk stuk van de slang. Met klok.tick(10) loopt het spel tien stappen per seconde.",
         code: `    scherm.fill((18, 18, 22))
 
     pygame.draw.rect(scherm, (255, 107, 74),
@@ -217,7 +217,7 @@ pygame.quit()`
     learn: ["pygame.Rect", "collisions", "snelheid", "game loop", "AI"],
     steps: [
       {
-        title: "Zet het speelveld klaar",
+        title: "Zet het bord klaar",
         text: "Met pygame.Rect maak je rechthoeken voor de twee peddels en de bal. Een Rect heeft handige eigenschappen zoals top, bottom en colliderect().",
         code: `import pygame
 

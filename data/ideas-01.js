@@ -57,7 +57,7 @@ while True:
       },
       {
         title: "Vang foute invoer op",
-        text: "Als iemand 'abc' typt, crasht int(). Met try en except vang je die fout op en vraag je opnieuw. Zo wordt je spel pas echt speelbaar.",
+        text: "Als iemand 'abc' typt, crasht int(). Met try en except vang je die fout op en vraag je opnieuw. Zo werkt je spel pas echt goed.",
         code: `def vraag_gok():
     while True:
         try:
@@ -84,7 +84,7 @@ print("Je gokte:", gok)`
     category: "Games",
     level: "Beginner",
     time: "40 min",
-    summary: "Speel tegen de computer en houd de score bij over meerdere rondes.",
+    summary: "Neem het op tegen de computer en houd de score bij over meerdere rondes.",
     description:
       "Een klassieker die je leert werken met lijsten, willekeurige keuzes en een woordenboek als spelregel. Je bouwt het uit tot een wedstrijd van vijf rondes met een scorebord.",
     learn: ["lists", "random.choice()", "dict", "functies", "for-loop"],
@@ -122,11 +122,11 @@ else:
     print("De computer wint!")`
       },
       {
-        title: "Speel vijf rondes met een score",
+        title: "Vijf rondes met een score",
         text: "Stop de spelronde in een functie en roep die vijf keer aan. De scores houd je bij in een woordenboek buiten de functie.",
         code: `scores = {"jij": 0, "computer": 0}
 
-def speel_ronde():
+def ronde_uitvoeren():
     speler = input("steen, papier of schaar? ").lower()
     computer = random.choice(keuzes)
 
@@ -148,7 +148,7 @@ def speel_ronde():
 for ronde in range(5):
     print()
     print("Ronde", ronde + 1)
-    speel_ronde()`
+    ronde_uitvoeren()`
       },
       {
         title: "Maak de uitslag af",
@@ -377,7 +377,7 @@ else:
         print("Helaas, die letter zit er niet in.")`
       },
       {
-        title: "Speel met levens",
+        title: "Werk met levens",
         text: "Elke foute letter kost een leven. De loop stopt als de levens op zijn of als alle letters geraden zijn. all() controleert of elke letter in de set zit.",
         code: `levens = 6
 

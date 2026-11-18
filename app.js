@@ -175,7 +175,7 @@ function codeBlock(code, language = "python") {
     <div class="code-head">
       <span class="code-lang">${e(language)}</span>
       <div class="code-tools">
-        <button class="code-play" type="button" data-action="play-code">▶ Speel</button>
+        <button class="code-play" type="button" data-action="play-code">🚀 Voer uit</button>
         <button class="code-copy" type="button" data-action="copy-code">Kopieer</button>
       </div>
     </div>
@@ -2298,13 +2298,13 @@ function renderDetail(id) {
     <section class="project-view is-app" data-project-view data-idea-id="${e(idea.id)}">
       <div class="project-view-bar">
         <div class="view-tabs" role="tablist" aria-label="Weergave">
-          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">▶ Probeer de demo</button>
+          <button type="button" class="view-tab is-active" role="tab" aria-selected="true" data-view-tab="app">👀 Bekijk de demo</button>
           <button type="button" class="view-tab" role="tab" aria-selected="false" tabindex="-1" data-view-tab="code">📖 Bekijk de code</button>
         </div>
         <div class="view-extras">
           <button class="btn brand" type="button" data-action="play-idea" data-idea-id="${e(
             idea.id
-          )}">▶ Speel de echte code</button>
+          )}">🚀 Gebruik de code</button>
           <button class="btn ghost" type="button" data-action="program-idea" data-idea-id="${e(
             idea.id
           )}">⌨ Programmeer zelf</button>
@@ -2317,7 +2317,7 @@ function renderDetail(id) {
           <a class="link-btn" href="idee/${encodeURIComponent(idea.id)}/">Vaste projectpagina</a>
         </div>
       </div>
-      <p class="view-hint" data-view-hint><strong>Probeer de demo</strong> werkt meteen, ook offline. Wil je het echte programma? Kies <strong>▶ Speel de echte code</strong>.</p>
+      <p class="view-hint" data-view-hint>De demo werkt meteen, ook offline. Wil je het echte programma? Kies <strong>🚀 Gebruik de code</strong>.</p>
       <div class="preview-panel" data-view-panel="app">
         <div class="preview-stage" data-preview-stage>
           <div class="preview-fallback">
@@ -2326,7 +2326,7 @@ function renderDetail(id) {
             <p>${e(idea.summary)}</p>
           </div>
         </div>
-        <p class="preview-caption"><strong>Dit is een korte demo.</strong> Alle code en uitleg staan bij <em>📖 Bekijk de code</em>. Het echte programma start je met <em>▶ Speel de echte code</em>.</p>
+        <p class="preview-caption"><strong>Dit is een korte demo.</strong> Alle code en uitleg staan bij <em>📖 Bekijk de code</em>. Het echte programma start je met <em>🚀 Gebruik de code</em>.</p>
       </div>
 
     <div class="detail-grid">
@@ -3313,7 +3313,7 @@ function closeDonate() {
   restoreFocus();
 }
 
-/* ------------------------------ python-speelveld ------------------------------ */
+/* ------------------------------ python-uitvoer ------------------------------ */
 
 const PYODIDE_VERSION = "0.28.3";
 const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
@@ -3811,7 +3811,7 @@ function renderEditor(params) {
   app.innerHTML = `<div class="editor-page">
     <header class="editor-hero">
       <div>
-        <p class="eyebrow">Jouw speelveld</p>
+        <p class="eyebrow">Jouw Python-ruimte</p>
         <h1>Programmeer op EasyCodey</h1>
         <p>Schrijf Python, voer het meteen uit en bewaar je code in deze browser. Geen account nodig.</p>
       </div>

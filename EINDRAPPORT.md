@@ -76,7 +76,7 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Statistieken: aantal projecten, categorieën, afgeronde projecten en totale voortgang.
 - Sneltoets `/` focust het zoekveld.
 - **App-entry** bovenaan: een opvallend blok dat uitlegt dat je je leerpad overal mee naartoe kunt nemen, met knoppen naar de editor en het installeren van de app.
-- De hero-knop **â–¶ Snel proberen** opent het Python-speelveld.
+- De hero-knop **👀 Snel proberen** opent de Python-uitvoer.
 
 ### Projectpagina (`#/idee/:id`)
 - Omslagafbeelding, titel, categorie, niveau, duur en aantal stappen.
@@ -87,15 +87,15 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - "Markeer als afgerond" en "Voortgang resetten".
 - Zijbalk met projectgegevens, vervolgprojecten en "Vraag AI om hulp".
 - Per stap: "Vraag AI over deze stap", inclusief project- en stapcontext.
-- Actiebalk met **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**.
+- Actiebalk met **👀 Bekijk de demo**, **📖 Bekijk de code**, **🚀 Gebruik de code**, **⌨ Programmeer zelf**, **Download .py** en **Kopieer alle code**.
 - **Probeer de demo** toont meteen een korte, interactieve demo in de pagina, ook offline en zonder Python.
 - **Bekijk de code** toont in dezelfde plek alle code en uitleg, stap voor stap.
-- **Speel de echte code** start het echte Python-programma met Pyodide.
+- **Gebruik de code** start het echte Python-programma met Pyodide.
 - **Programmeer zelf** opent de editor met alle stappen als één programma, met commentaar per stap.
 - **Invoerhulp** onder de actiebalk: legt uit dat je bij `input()` je antwoord typt in het venster bovenaan je scherm, waarin ook de **vraag van het programma** staat, en daarna op **Enter** drukt.
-- **Demo-weergave**: de pagina opent standaard in een korte demo zonder code. De knoppen **▶ Probeer de demo** en **📖 Bekijk de code** zijn samen de schakelaar. De demo is een snelle indruk; het echte programma start je met **▶ Speel de echte code**. De code blijft altijd in de HTML staan voor SEO en tests.
+- **Demo-weergave**: de pagina opent standaard in een korte demo zonder code. De knoppen **👀 Bekijk de demo** en **📖 Bekijk de code** zijn samen de schakelaar. De demo is een snelle indruk; het echte programma start je met **🚀 Gebruik de code**. De code blijft altijd in de HTML staan voor SEO en tests.
 - Elke preview is een echte, offline demo die bij het onderwerp past: Snake, Tetris, Pong, Galgje, rekenmachine, weer, portscanner, molecuulmassa, warmteverspreiding enz. Alle 161 projecten hebben een preview; waar nodig via een passende categorie-fallback.
-- Dezelfde uitleg staat op elke vaste projectpagina en in het Python-speelveld.
+- Dezelfde uitleg staat op elke vaste projectpagina en in het Python-Python-ruimte.
 - Confetti bij het afronden van een project (met respect voor `prefers-reduced-motion`).
 
 ### Leerpad (`#/leerpad`)
@@ -179,17 +179,17 @@ De site is gebouwd zonder framework en zonder build-stap: vanilla JavaScript (ES
 - Het resultaat wordt opgeslagen in `localStorage` en geopend in de detailpagina.
 - Ongeldige of onvolledige AI-antwoorden vallen terug op de offline generator.
 
-### Python-speelveld
+### Python-Python-ruimte
 - Bereikbaar via **â–¶ Snel proberen** in de hero en **Probeer Python** in de footer.
 - Python draait via Pyodide (WebAssembly) volledig in de browser.
-- De runtime wordt pas geladen als iemand het speelveld opent en op **Uitvoeren** klikt.
+- De runtime wordt pas geladen als iemand het Python-ruimte opent en op **Uitvoeren** klikt.
 - Zes voorbeelden: hallo wereld, rekenen, loops, lijsten, functies en "Raad het getal" zonder `input()`.
 - Uitvoer en foutmeldingen verschijnen direct in het paneel.
 - Een Python-fout wordt in **eenvoudig Nederlands** uitgelegd met het **regelnummer**, het stukje code, wat er misgaat en een concrete tip. De technische melding blijft eronder staan voor gevorderden.
 - Bij een Python-fout verschijnt **✦ Vraag EasyCoach om hulp**, zodat je met één klik verder kunt.
 - Bij een fout verschijnt ook **Bekijk regel N**; in de editor springt die naar de juiste regel.
 - `input()` toont bovenaan je scherm een venster met de **vraag van het programma** en een tekstvak. De statusregel zegt **“Typ je antwoord in het venster bovenaan…”**.
-- Bij het speelveld, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
+- Bij het Python-ruimte, op de SPA-projectpagina en op elke vaste projectpagina staat dezelfde invoerhulp.
 - Geen code of uitvoer gaat naar de server.
 - Bij een netwerkfout verschijnt een duidelijke melding; de rest van de site blijft werken.
 - **📥 Offline klaarzetten** laadt de Python-runtime één keer en bewaart hem in een vaste cache. Daarna verschijnt **✅ Python werkt nu ook offline**, ook na een app-update.
@@ -323,8 +323,8 @@ FLL/
 | `/sitemap.xml` | ✅ 200, geldige XML met 168 URL's en `SITE_URL` |
 | Doneerknop zonder `DONATE_URL` | ✅ verborgen |
 | Doneerknop met `DONATE_URL` | ✅ zichtbaar, link en label kloppen |
-| Python-speelveld (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
-| Speelveld sluiten en heropenen | ✅ werkt, runtime blijft geladen |
+| Python-Python-ruimte (headless Chrome, Pyodide) | ✅ `print("Test", 2 + 3)` geeft `Test 5` |
+| Python-uitvoer sluiten en heropenen | ✅ werkt, runtime blijft geladen |
 | Programmeer-editor `#/programmeren` | ✅ editor, actieve nav, juiste titel |
 | Editor-uitvoer (headless Chrome, Pyodide) | ✅ `print("Editor test", 2 + 3)` geeft `Editor test 5` |
 | Editor automatisch bewaren | ✅ code staat direct in `localStorage` |
@@ -332,7 +332,7 @@ FLL/
 | Editor na herladen | ✅ code blijft bewaard, ook bij een project |
 | Editor Ctrl + Enter | ✅ `print("Sneltoets", 6 * 7)` geeft `Sneltoets 42` |
 | Editor voorbeelden, uitvoer wissen en downloaden | ✅ |
-| Projectacties op detailpagina | ✅ **▶ Probeer de demo**, **📖 Bekijk de code**, **▶ Speel de echte code**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
+| Projectacties op detailpagina | ✅ **👀 Bekijk de demo**, **📖 Bekijk de code**, **🚀 Gebruik de code**, **⌨ Programmeer zelf**, **Download .py**, **Kopieer alle code** |
 | Projectcode in de editor | ✅ alle stappen met commentaar en projectbanner |
 | Kopiëren naar klembord | ✅ volledige projectcode op het klembord |
 | Download `.py` vanaf detail en editor | ✅ bestanden bevatten de juiste code |
@@ -342,7 +342,7 @@ FLL/
 | Service worker actief en pagina onder controle | ✅ scope `/`, app-shell uit cache |
 | Offline-cache gevuld | 42 bestanden |
 | Installatie-uitleg in de app | ✅ 3 platformstappen, sluit correct |
-| **Probeer de demo** op een projectpagina | ✅ korte demo in de pagina; **Bekijk de code** toont alle code; **Speel de echte code** start Pyodide |
+| **Probeer de demo** op een projectpagina | ✅ korte demo in de pagina; **Bekijk de code** toont alle code; **Gebruik de code** start Pyodide |
 | **Programmeer zelf** met autoplay | ✅ volledige code (24 regels) en directe Pyodide-uitvoer via `?play=1` |
 | Site herladen zonder internet | ✅ laadt uit de cache |
 | Python uitvoeren zonder internet | ✅ werkt na eenmalig laden |
@@ -368,13 +368,13 @@ FLL/
 | Vaste pagina's lokaal | 103/103 checks geslaagd, inclusief Probeer de demo / Bekijk de code, Snake-preview en de downloadpagina met QR |
 | App-preview per project | ✅ 66/66 checks: app-stand standaard, preview zichtbaar, code verborgen, tabwissel, juiste thema per categorie |
 | Weerbaarheid bij laadfouten | ✅ 14/14 checks: code-vangnet zonder `previews.js`, werkende tabs, herstelscherm zonder `app.js`, daarna normale start |
-| Snake-preview | ✅ canvas, D-pad en toetsen; speelbaar in de browser |
+| Snake-preview | ✅ canvas, D-pad en toetsen; interactief in de browser |
 | Alle 161 projecten | ✅ elk project heeft een preview (135 eigen demo's + 26 nieuwe demo's; 0 fallbacks over) |
 | Projectpagina `/idee/dobbelsteen-simulator/` | ✅ eigen titel, description, canonical, H1, 3 stappen en 3 codeblokken |
 | Projectpagina zonder slash | ✅ 301 naar de map met slash |
 | Overzicht `/projecten/` | ✅ 161 links, 10 categorieën, zoekfilter en `CollectionPage` |
 | Sitemap lokaal | ✅ geldige XML, 168 URL's, productie-startpagina aanwezig |
-| Demo en echte code vanaf vaste pagina | ✅ demo in de pagina; **Speel de echte code** opent `?play=1` met volledige code en Pyodide-uitvoer |
+| Demo en echte code vanaf vaste pagina | ✅ demo in de pagina; **Gebruik de code** opent `?play=1` met volledige code en Pyodide-uitvoer |
 | Thema op vaste pagina | ✅ wisselt en wordt bewaard in `localStorage` |
 | Mobiel overzicht | ✅ geen horizontale overflow, één kolom |
 | Installatiepagina `/installeren/` | ✅ 10 secties, keuzeknoppen per toestel, "Is het gelukt?", eigen titel en canonical |
@@ -559,7 +559,7 @@ De site staat live:
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
 | Windows-snelkoppelingen | ✅ bureaublad + startmenu |
-| Python-speelveld op de live site | ✅ |
+| Python-Python-ruimte op de live site | ✅ |
 | Programmeer-editor op de live site | ✅ |
 | Installeerbare app (PWA) | ✅ manifest, service worker, offline-cache en **volledig automatische updates** |
 | Chique huisstijl + logo | ✅ ivoor/diepgroen/goud en eigen monogram |
@@ -593,7 +593,7 @@ Wat optioneel nog kan:
 - De offline coach is bewust algemeen en kan niet meedenken over willekeurige eigen code.
 - De rate limiter houdt tellers in het geheugen; na een herstart begint de telling opnieuw.
 - Er is geen automatische testrunner; `npm run check` controleert de data en de app-bestanden, niet de UI.
-- Het Python-speelveld en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
+- Het Python-Python-ruimte en de editor hebben een eenmalige download van ongeveer 10 MB nodig.
 - `input()` opent een venster bovenaan het scherm met de **vraag van het programma** en een tekstvak. Een oneindige loop stopt pas als je het tabblad of venster sluit.
 - Editor-code en profielen staan per browser/apparaat in `localStorage`; er is geen account op een server of automatische synchronisatie.
 - De geïnstalleerde app deelt de opslag met de website in dezelfde browser, maar niet met andere apparaten.

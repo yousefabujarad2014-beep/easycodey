@@ -503,7 +503,7 @@ def antwoord():
 
     session["nummer"] = nummer + 1
     return redirect("/")`),
-      step("Start opnieuw", "Een reset-route maakt de quiz speelbaar voor de volgende gebruiker.", `@app.get("/reset")
+      step("Start opnieuw", "Een reset-route maakt de quiz opnieuw bruikbaar voor de volgende gebruiker.", `@app.get("/reset")
 def reset():
     session.clear()
     return redirect("/")`)

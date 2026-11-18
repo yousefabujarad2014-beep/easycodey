@@ -79,7 +79,7 @@ https://yousefabujarad2014-beep.github.io/easycodey/idee/raad-het-getal/
 
 EasyCodey heeft twee lagen:
 
-1. **De interactieve app** gebruikt hash-routes, bijvoorbeeld `#/idee/raad-het-getal`. Daarin speel je code, vink je stappen af en programmeer je zelf.
+1. **De interactieve app** gebruikt hash-routes, bijvoorbeeld `#/idee/raad-het-getal`. Daarin gebruik je code, vink je stappen af en programmeer je zelf.
 2. **De vaste pagina's** hebben echte paden, bijvoorbeeld:
 
 ```
@@ -93,7 +93,7 @@ Die vaste pagina's worden gegenereerd door `scripts/build-pages.mjs` en bevatten
 - een canonical naar de productie-URL;
 - alle stappen, codeblokken, leerdoelen en tips;
 - JSON-LD van het type `LearningResource` en `BreadcrumbList`;
-- knoppen die met `?play=1` teruglinken naar de app, zodat het project direct speelt.
+- knoppen die met `?play=1` teruglinken naar de app, zodat het project meteen wordt uitgevoerd.
 
 Daardoor kan Google elk project apart indexeren. De hash-routes blijven bestaan voor de interactieve app; ze staan niet in de sitemap.
 
