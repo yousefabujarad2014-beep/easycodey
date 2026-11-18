@@ -455,10 +455,13 @@ function nextIdeasFor(idea, limit = 3) {
   return [...valid, ...sameCategory].slice(0, limit);
 }
 
-function emptyState(title, text, actions = "") {
+function emptyState(title, text, actions = "", level = 3) {
+  // De 404-route is een volledige pagina en heeft daarom een h1 nodig.
+  // Op plekken waar de pagina al een h1 heeft, blijft het een h3.
+  const tag = level === 1 ? "h1" : "h3";
   return `<div class="empty-state">
     <div class="big">🐍</div>
-    <h3>${e(title)}</h3>
+    <${tag}>${e(title)}</${tag}>
     <p>${e(text)}</p>
     ${actions}
   </div>`;
@@ -608,7 +611,8 @@ function renderRoute() {
   app.innerHTML = emptyState(
     "Deze pagina bestaat niet",
     "Ga terug naar de projectbibliotheek en kies een project.",
-    '<a class="btn" href="#/">Naar alle projecten</a>'
+    '<a class="btn" href="#/">Naar alle projecten</a>',
+    1
   );
   document.title = "Niet gevonden — EasyCodey";
 }

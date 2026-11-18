@@ -705,7 +705,7 @@ button { cursor: pointer; }
 }
 
 .empty-state .big { font-size: 2.4rem; }
-.empty-state h3 { margin: 8px 0 6px; font-size: 1.2rem; }
+.empty-state h3, .empty-state h1 { margin: 8px 0 6px; font-size: 1.2rem; line-height: 1.3; }
 .empty-state p { margin: 0 auto 18px; color: var(--muted); max-width: 44ch; }
 
 /* ------------------------------ detail ------------------------------ */

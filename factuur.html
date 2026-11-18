@@ -38,17 +38,17 @@
             <h2 class="text-lg font-semibold mb-4">Nieuwe taak toevoegen</h2>
             <form id="taakForm" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-medium text-slate-500 mb-1">Omschrijving</label>
+                    <label for="omschrijving" class="block text-xs font-medium text-slate-500 mb-1">Omschrijving</label>
                     <input type="text" id="omschrijving" required placeholder="Bijv. Website ontwerp bouwen" 
                            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-500 mb-1">Aantal uren</label>
+                    <label for="uren" class="block text-xs font-medium text-slate-500 mb-1">Aantal uren</label>
                     <input type="number" id="uren" step="0.25" min="0.25" required placeholder="2.5" 
                            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-500 mb-1">Uurtarief (€)</label>
+                    <label for="tarief" class="block text-xs font-medium text-slate-500 mb-1">Uurtarief (€)</label>
                     <div class="flex gap-2">
                         <input type="number" id="tarief" step="1" min="1" required value="75" 
                                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -68,7 +68,7 @@
                     <p class="text-sm text-slate-500 mt-1">Datum: <span id="huidigeDatum"></span></p>
                 </div>
                 <div class="text-right">
-                    <input type="text" value="Jouw Bedrijfsnaam" class="font-bold text-right text-slate-800 focus:outline-none focus:bg-slate-50 rounded px-1">
+                    <input type="text" value="Jouw Bedrijfsnaam" aria-label="Bedrijfsnaam op de factuur" class="font-bold text-right text-slate-800 focus:outline-none focus:bg-slate-50 rounded px-1">
                     <p class="text-sm text-slate-500">BTW-nummer: BE0123.456.789</p>
                 </div>
             </div>
