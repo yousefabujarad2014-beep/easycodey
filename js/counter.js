@@ -246,7 +246,7 @@ export async function getCount(key) {
   try {
     const result = await request(
       `/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
-      2
+      3
     );
     if (result.status === 404) return 0;
     const value = Number(result.data?.value);
@@ -365,8 +365,14 @@ export async function getTotals() {
     downloads: fallback(downloads, known.downloads),
     active: activeToday,
     live: fresh.every((value) => value !== null),
+    // Soms antwoordt één van de vijf tellers even niet. Dat mag het hele
+    // paneel niet meteen "geen antwoord" laten zeggen: de andere cijfers
+    // zijn dan wél net opgehaald.
+    answered: fresh.filter((value) => value !== null).length,
+    total: fresh.length,
     at: Number(known.at) || 0
   };
+  totals.partial = totals.answered > 0 && !totals.live;
   totals.available =
     totals.visits !== null ||
     totals.unique !== null ||

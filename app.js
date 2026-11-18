@@ -1211,6 +1211,19 @@ async function loadOwnerCounter() {
       note.textContent = allZero
         ? `De teller antwoordt correct (gecontroleerd om ${checked}). Alle cijfers staan op 0 omdat er nog geen bezoek is dat meetelt. Jouw eigen toestel, tests en ontwikkelcomputer worden nooit meegeteld. Echte bezoekers van andere toestellen verschijnen hier automatisch.`
         : `Actieve apps = toestellen die de app vandaag gebruikten. Unieke bezoekers = één per toestel/browser, geen echte personen. Bezoeken = nieuwe sessies. Unieke installaties = toestellen waarop de app als app start, ook zonder account. APK-downloads = klikken op de downloadknop. Jouw eigen toestel telt niet mee. Laatst gecontroleerd om ${checked}.`;
+    } else if (totals.answered > 0) {
+      // Vier van de vijf tellers antwoordden wel. Dat is geen storing: laat
+      // zien wat er net is opgehaald en probeer het bij de volgende ronde weer.
+      const checked = new Date(now).toLocaleTimeString("nl-BE", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+      const allZero = ["active", "visits", "unique", "installs", "downloads"].every(
+        (name) => !Number.isFinite(totals[name]) || totals[name] === 0
+      );
+      note.textContent = allZero
+        ? `De teller antwoordt (gecontroleerd om ${checked}). Alle cijfers staan op 0 omdat er nog geen bezoek is dat meetelt. Jouw eigen toestel, tests en ontwikkelcomputer worden nooit meegeteld. Eén losse teller kon net niet antwoorden; bij de volgende verversing probeert de app het opnieuw.`
+        : `De teller antwoordt, maar niet alle vijf cijfers kwamen net binnen. De getallen hierboven zijn deels vers en deels het laatst bekende cijfer. Probeer het zo opnieuw met de knop hierboven.`;
     } else if (totals.available) {
       const when = totals.at
         ? new Date(totals.at).toLocaleString("nl-BE", {
