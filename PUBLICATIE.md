@@ -12,7 +12,7 @@ Dit document beschrijft hoe EasyCodey lokaal is voorbereid en hoe de publicatie 
 | GitHub-repository | ✅ https://github.com/yousefabujarad2014-beep/easycodey (openbaar) |
 | GitHub Pages | ✅ https://yousefabujarad2014-beep.github.io/easycodey/ |
 | Laatste code-build | ✅ laatste commit op `main` (v17 + doneren in de app + eigenaarsdiploma + robuustere tellers); alle tests en audits groen |
-| Doneren in de app (v17) | ✅ zichtbare **♥ Doneren**-knop opent het IBAN-venster met kopieerknop, ook zonder server op GitHub Pages |
+| Doneren in de app (v17) | ✅ zichtbare **♥**-knop (tooltip **Doneer**) opent het IBAN-venster met kopieerknop, ook zonder server op GitHub Pages |
 | Eigenaarsdiploma (v17) | ✅ **Diploma Bedrijfseigenaar** staat op `#/diploma` voor het ingelogde eigenaarsaccount, buiten het beheerpaneel |
 | Chique huisstijl + nieuw logo | ✅ ivoor/diepgroen/goud, Fraunces en eigen monogram |
 | Editor (v16) | ✅ regelnummers, code-kleuren, cursorpositie, telefoontoetsenbalk, **Bekijk regel N** en slimme inspringing (Enter na `:`, Shift+Tab) |

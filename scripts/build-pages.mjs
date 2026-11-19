@@ -211,7 +211,7 @@ function footer(prefix) {
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}#/diploma">🎓 Diploma</a>
         <span aria-hidden="true">·</span>
-        <a class="link-btn" href="${prefix}doneren/">♥ Doneren</a>
+        <a class="link-btn" href="${prefix}doneren/" aria-label="Doneer aan EasyCodey" title="Doneer aan EasyCodey">♥</a>
         <span aria-hidden="true">·</span>
         <a class="link-btn" href="${prefix}contact/">✉ Contact</a>
         <span aria-hidden="true">·</span>

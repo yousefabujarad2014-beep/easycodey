@@ -16,7 +16,7 @@ Doneren: https://yousefabujarad2014-beep.github.io/easycodey/doneren/ — IBAN *
 
 ## Nieuw in v17
 
-- **Doneren vanuit de app.** De header heeft nu een duidelijke knop **♥ Doneren**. Die opent het doneervenster met het IBAN, de rekeninghouder en een kopieerknop. Ook als de site op GitHub Pages staat en er geen server is, worden de doneergegevens uit `site-config.json` geladen.
+- **Doneren vanuit de app.** De header heeft nu een **♥**-knop (tooltip **Doneer**). Die opent het doneervenster met het IBAN, de rekeninghouder en een kopieerknop. Ook als de site op GitHub Pages staat en er geen server is, worden de doneergegevens uit `site-config.json` geladen.
 - **Eigenaarsdiploma.** Ben je ingelogd met het eigenaarsaccount, dan staat **Diploma Bedrijfseigenaar** gewoon bij de andere diploma's op `#/diploma`. Je kunt het daar printen en delen, zonder eerst naar het beheerpaneel te gaan.
 - **Tellers robuuster.** Elke telleraanvraag krijgt een unieke cacheparameter. Zo kan een oude, gecachte fout van Abacus het echte cijfer niet meer verbergen. Staat alles op 0, dan legt het beheerpaneel uit dat jouw eigen toestel, tests en ontwikkelcomputer nooit meetellen.
 

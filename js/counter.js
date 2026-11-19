@@ -246,7 +246,7 @@ export async function getCount(key) {
   try {
     const result = await request(
       `/get/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}`,
-      3
+      2
     );
     if (result.status === 404) return 0;
     const value = Number(result.data?.value);

@@ -36,7 +36,7 @@ Open daarna **http://localhost:4173** in je browser. Op Windows kan dat ook met 
 
 ## Wat is nieuw in v17?
 
-- **Doneren vanuit de app.** De **♥ Doneren**-knop in de header opent het doneervenster met IBAN, rekeninghouder en kopieerknop. De doneergegevens komen uit `site-config.json`, dus dit werkt ook op GitHub Pages zonder server.
+- **Doneren vanuit de app.** De **♥**-knop in de header (tooltip **Doneer**) opent het doneervenster met IBAN, rekeninghouder en kopieerknop. De doneergegevens komen uit `site-config.json`, dus dit werkt ook op GitHub Pages zonder server.
 - **Eigenaarsdiploma.** Log in met het eigenaarsaccount en open `#/diploma`. Daar staat **Diploma Bedrijfseigenaar** bij de andere diploma's, met print- en deelknop.
 - **Robuustere tellers.** Telleraanvragen krijgen een unieke cacheparameter, zodat een oude gecachte fout het echte cijfer niet verbergt. Bij alle cijfers op 0 legt het beheerpaneel uit dat eigen toestel, tests en ontwikkelcomputer nooit meetellen.
 

@@ -3551,16 +3551,6 @@ h1, h2, h3,
   border-color: var(--gold);
 }
 
-.donate-header-btn {
-  width: auto;
-  min-height: 38px;
-  padding: 0 14px;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
 /* ------------------------------ knoppen & chips ------------------------------ */
 
 .btn {
